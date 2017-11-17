@@ -1,0 +1,507 @@
+$page_width: 775px;
+$page_padding: 25px;
+$page_third: floor($page_width/3);
+
+$region_margin: 10px;
+$region_third: floor((($page_third * 3) + ($region_margin * 2))/3);
+
+$font_tiny: 8px;
+$font_small: 12px;
+$font_normal: 16px;
+$font_large: 24px;
+$font_huge: 32px;
+body
+{
+  width: $page_width;
+  padding: $page_padding $page_padding $page_padding $page_padding * 2;
+  // margin: 0 auto;
+  font-size: $font_normal;
+  font-family: arial;
+
+  // debug;
+  margin: 25px auto;
+  border: 1px dotted green;
+  height: 1100px;
+}
+
+.heading
+{
+  float: left;
+  width: 100%;
+  margin-bottom: 15px;
+
+  .name
+  {
+    $height: 38px;
+    float: left;
+    height: $height;
+    line-height: $height;
+    width: $page_third;
+    // border: 1px solid black;
+    text-align: center;
+    font-size: $font_large;
+    border: 3px double black;
+    border-right: none;
+    margin-top: 18px;
+
+  }
+
+  $summary_margin: 10px;
+  $summary_width: ($page_third * 2);// - $summary_margin;
+  .summary
+  {
+    float: left;
+    padding: 5px;
+    width: $summary_width - 15px;
+    //margin-left: $summary_margin;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    .summary-top,
+    .summary-bottom
+    {
+      float: left;
+      width: $summary_width;
+    }
+
+    .summary-top
+    {
+      margin-bottom: 2px;
+    }
+
+    .class,
+    .background,
+    .player,
+    .race,
+    .alignment,
+    .xp
+    {
+      float: left;
+      width: ($summary_width - 15)/3;
+      .value
+      {
+        border-bottom: 1px solid black;
+      }
+      .label
+      {
+        font-size: $font_small;
+      }
+    }
+  }
+}
+
+.details
+{
+  clear: left;
+  width: $page_width;
+  // border: 1px dotted green;
+
+  td
+  {
+    vertical-align: top;
+    width: 33%;
+
+    &.left,
+    &.center
+    {
+      border-right: $region_margin solid transparent;
+    }
+
+    &.left
+    {
+      .attributes,
+      .modifiers
+      {
+        float: left;
+      }
+
+      .attributes
+      {
+        width: $region_third/4;
+        margin-right: 10px;
+        // margin-top: 30px;
+
+        .attribute
+        {
+          border: 1px solid black;
+          border-radius: 5px;
+          margin-bottom: 15px;
+          position: relative;
+
+          .label,
+          .modifier,
+          .score
+          {
+            text-align: center;
+          }
+
+          .label
+          {
+            // font-weight: 700;
+            padding-top: 5px;
+            font-size: $font_small;
+          }
+          .modifier
+          {
+            font-size: $font_huge;
+            line-height: 52px;
+            height: 69px;
+          }
+          .score
+          {
+            border: 1px solid black;
+            border-radius: 15px;
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            bottom: -10px;
+            background: white;
+            left: 18px;
+            line-height: 20px;
+          }
+        }
+      }
+      .modifiers
+      {
+        $modifier_width: $region_third * 3/4 - 32px;
+        width: $modifier_width;
+
+        .inspiration,
+        .pb
+        {
+          float: left;
+          clear: left;
+
+          .value
+          {
+            width: 30px;
+            height: 30px;
+            border: 1px solid black;
+            float: left;
+            text-align: center;
+            line-height: 30px;
+          }
+          .label
+          {
+            float: left;
+            padding: 3px;
+            margin-top: 5px;
+            border: 1px solid black;
+            border-left: none;
+            font-size: $font_small;
+            width: $modifier_width - 40px;
+            text-align: center;
+          }
+        }
+
+        .pb
+        {
+          margin-top: 10px;
+          position: relative;
+
+          .value
+          {
+            border-radius: 15px;
+          }
+          .label
+          {
+            left: 28px;
+            position: absolute;
+            padding-left: 6px;
+          }
+        }
+
+        .saving-throws,
+        .skills
+        {
+          margin-top: 10px;
+          border: 1px solid black;
+          border-radius: 5px;
+          width: 100%;
+          clear: left;
+          float: left;
+          padding-bottom: 6px;
+
+          td.proficiency
+          {
+            // border: 1px solid black;
+            width: 10px;
+            padding-right: 3px;
+
+            input
+            {
+              margin: 2px 0 0 0;
+            }
+          }
+          td.value
+          {
+            width: 15px;
+            border-bottom: 1px solid black;
+            text-align: center;
+            font-size: $font_small;
+            text-align: right;
+          }
+          td.label
+          {
+            padding-left: 3px;
+            width: auto;
+            font-size: $font_small;
+          }
+
+        }
+      }
+      .pas-prc
+      {
+        margin-top: 5px;
+        position: relative;
+        float: left;
+        clear: left;
+
+        .value
+        {
+          width: 40px;
+          height: 40px;
+          border: 1px solid black;
+          float: left;
+          text-align: center;
+          line-height: 40px;
+          border-radius: 20px;
+        }
+        .label
+        {
+          padding: 3px;
+          margin-top: 8px;
+          border: 1px solid black;
+          border-left: none;
+          text-align: center;
+
+          left: 38px;
+          position: absolute;
+          width: $region_third - 68px;
+          padding-left: 6px;
+        }
+      }
+    }
+    .proficiencies
+    {
+      margin-top: 10px;
+      float: left;
+      border: 1px solid black;
+      border-radius: 5px;
+      padding: 5px;
+
+      .proficiency
+      {
+        margin-top: 5px;
+        .label
+        {
+          font-weight: 700;
+        }
+
+        &:first-of-type
+        {
+          margin-top: 0;
+        }
+      }
+    }
+    &.center
+    {
+      .defense,
+      .hp,
+      .thp,
+      .life
+      {
+        float: left;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .defense
+      {
+        .stat
+        {
+          float: left;
+          width: ($region_third - 40px)/3;
+          height: 80px;
+          border: 1px solid black;
+          border-radius: 5px;
+
+          &.ac,
+          &.ini
+          {
+            margin-right: 5px;
+          }
+          &.ac
+          {
+            border-radius: 10px 10px 50px 50px;
+            .value
+            {
+              line-height: 40px;
+              padding-top: 10px;
+            }
+            .label
+            {
+              width: ($region_third - 40px)/3 - 30px;
+              margin: 0 auto 10px auto;
+            }
+          }
+
+          .value,
+          .label
+          {
+            text-align: center;
+          }
+          .value
+          {
+            font-size: $font_large;
+            line-height: 60px;
+          }
+          .label
+          {
+            font-size: $font_small;
+          }
+        }
+      }
+      .hp,
+      .thp,
+      {
+        margin-top: 10px;
+        border: 1px solid black;
+        padding: 5px;
+
+        .label
+        {
+          text-align: center;
+          font-size: $font_small;
+        }
+      }
+      .hp
+      {
+        border-radius: 5px 5px 0 0;
+        .max
+        {
+          .label,
+          .value
+          {
+            display: inline-block;
+            font-size: $font_small;
+          }
+
+          .value
+          {
+            width: $region_third - 145px;
+            margin-left: 5px;
+            padding-left: 5px;
+            //width: 100%;
+            border-bottom: 1px solid gray;
+          }
+        }
+        .space
+        {
+          height: 60px;
+        }
+      }
+      .thp
+      {
+        border-radius: 0 0 5px 5px;
+
+        .space
+        {
+          height: 40px;
+        }
+      }
+      .life
+      {
+        margin-top: 10px;
+        box-sizing: inherit;
+
+        .hd,
+        .ds
+        {
+          width: ($region_third - 54px)/2;
+          border: 1px solid black;
+          border-radius: 5px;
+          padding: 5px;
+          float: left;
+
+          .label
+          {
+            width: 100%;
+            text-align: center;
+            font-size: $font_small;
+          }
+        }
+        .hd
+        {
+          margin-right: 10px;
+
+          .max
+          {
+            .label,
+            .value
+            {
+              width: inherit;
+              float: left;
+              font-size: $font_small;
+            }
+            .value
+            {
+              padding-left: 5px;
+              margin-left: 5px;
+              width: 60px;
+              border-bottom: 1px solid black;
+              text-align: left;
+            }
+          }
+          .space
+          {
+            height: 40px;
+          }
+          .label
+          {
+            float: left;
+            clear: left;
+          }
+        }
+        .ds
+        {
+          .success,
+          .failure,
+          .label
+          {
+            float: left;
+            clear: left;
+          }
+          .success,
+          .failure
+          {
+            margin-bottom: 4px;
+            .label,
+            input
+            {
+              float: left;
+            }
+            .label
+            {
+              line-height: $font_small +4px;
+              width: 50px;
+              text-align: left;
+            }
+            input
+            {
+              margin: 2px 0 0 0;
+            }
+            .dash
+            {
+              display: block;
+              float: left;
+              border-bottom: 1px solid black;
+              width: 5px;
+              height: 1px;
+              margin: 7px 1px 0 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
