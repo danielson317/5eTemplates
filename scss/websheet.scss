@@ -502,6 +502,118 @@ body
           }
         }
       }
+      .atk
+      {
+        float: left;
+        clear: left;
+        margin-top: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        width: 100%;
+
+
+        .Weapons
+        {
+          width: 100%;
+          th
+          {
+            font-size: $font_small;
+          }
+          td.weapon
+          {
+            font-size: 1vw;
+          }
+          td.bonus,
+          td.damage,
+          {
+            text-align: right;
+          }
+        }
+        .space
+        {
+          float: left;
+          clear: left;
+          height: 138px;
+        }
+        .label
+        {
+          float: left;
+          clear: left;
+          width: 100%;
+          text-align: center;
+        }
+      }
+      .equipment
+      {
+        float: left;
+        clear: left;
+        width: 100%;
+        // height: 200px;
+        border: 1px solid black;
+        margin-top: 10px;
+        border-radius: 5px;
+        position: relative;
+
+        .coins
+        {
+          // width: 80px;
+          float: left;
+          position: absolute;
+          left: -8px;
+
+          .coin
+          {
+            float: left;
+            clear: left;
+            width: 100%;
+            margin-top: 15px;
+            background-color: white;
+            position: relative;
+
+            .label
+            {
+              font-size: $font_small;
+              // margin-top: 5px;
+              width: auto;
+              float: left;
+              border-right: 1px solid black;
+              border: 1px solid black;
+              border-right: none;
+              border-radius: 5px 0 0 5px;
+              padding: 2px 5px 2px 2px;
+
+            }
+            .amount
+            {
+              // font-size: $font_small;
+              border: 1px solid black;
+              border-radius: 10px;
+              float: left;
+              width: 45px;
+              text-align: center;
+              padding: 4px;
+              position: absolute;
+              left: 18px;
+              top: -4px;
+            }
+          }
+
+        }
+        .space
+        {
+          float: left;
+          // border-left: 1px solid black;
+          height: 200px;
+          margin-left: 70px;
+        }
+        .label
+        {
+          float: left;
+          clear: left;
+          width: 100%;
+          text-align: center;
+        }
+      }
     }
   }
 }

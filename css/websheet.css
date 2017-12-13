@@ -449,3 +449,103 @@ body {
   height: 1px;
   margin: 7px 1px 0 0;
 }
+/* line 505, ../scss/websheet.scss */
+.details td.center .atk {
+  float: left;
+  clear: left;
+  margin-top: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 100%;
+}
+/* line 515, ../scss/websheet.scss */
+.details td.center .atk .Weapons {
+  width: 100%;
+}
+/* line 518, ../scss/websheet.scss */
+.details td.center .atk .Weapons th {
+  font-size: 12px;
+}
+/* line 522, ../scss/websheet.scss */
+.details td.center .atk .Weapons td.weapon {
+  font-size: 1vw;
+}
+/* line 526, ../scss/websheet.scss */
+.details td.center .atk .Weapons td.bonus,
+.details td.center .atk .Weapons td.damage {
+  text-align: right;
+}
+/* line 532, ../scss/websheet.scss */
+.details td.center .atk .space {
+  float: left;
+  clear: left;
+  height: 138px;
+}
+/* line 538, ../scss/websheet.scss */
+.details td.center .atk .label {
+  float: left;
+  clear: left;
+  width: 100%;
+  text-align: center;
+}
+/* line 546, ../scss/websheet.scss */
+.details td.center .equipment {
+  float: left;
+  clear: left;
+  width: 100%;
+  border: 1px solid black;
+  margin-top: 10px;
+  border-radius: 5px;
+  position: relative;
+}
+/* line 557, ../scss/websheet.scss */
+.details td.center .equipment .coins {
+  float: left;
+  position: absolute;
+  left: -8px;
+}
+/* line 564, ../scss/websheet.scss */
+.details td.center .equipment .coins .coin {
+  float: left;
+  clear: left;
+  width: 100%;
+  margin-top: 15px;
+  background-color: white;
+  position: relative;
+}
+/* line 573, ../scss/websheet.scss */
+.details td.center .equipment .coins .coin .label {
+  font-size: 12px;
+  width: auto;
+  float: left;
+  border-right: 1px solid black;
+  border: 1px solid black;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+  padding: 2px 5px 2px 2px;
+}
+/* line 586, ../scss/websheet.scss */
+.details td.center .equipment .coins .coin .amount {
+  border: 1px solid black;
+  border-radius: 10px;
+  float: left;
+  width: 45px;
+  text-align: center;
+  padding: 4px;
+  position: absolute;
+  left: 18px;
+  top: -4px;
+}
+/* line 602, ../scss/websheet.scss */
+.details td.center .equipment .space {
+  float: left;
+  height: 200px;
+  margin-left: 70px;
+}
+/* line 609, ../scss/websheet.scss */
+.details td.center .equipment .label {
+  float: left;
+  clear: left;
+  width: 100%;
+  text-align: center;
+}
