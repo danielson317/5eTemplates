@@ -4,9 +4,6 @@ body {
   padding: 25px 25px 25px 50px;
   font-size: 16px;
   font-family: arial;
-  margin: 25px auto;
-  border: 1px dotted green;
-  height: 1100px;
 }
 
 /* line 27, ../scss/websheet.scss */
@@ -272,12 +269,14 @@ body {
 .details td.center .defense,
 .details td.center .hp,
 .details td.center .thp,
-.details td.center .life {
+.details td.center .life,
+.details td.center .attack,
+.details td.center .equipment {
   float: left;
   width: 100%;
   box-sizing: border-box;
 }
-/* line 320, ../scss/websheet.scss */
+/* line 322, ../scss/websheet.scss */
 .details td.center .defense .stat {
   float: left;
   width: 74.66667px;
@@ -285,86 +284,86 @@ body {
   border: 1px solid black;
   border-radius: 5px;
 }
-/* line 328, ../scss/websheet.scss */
+/* line 330, ../scss/websheet.scss */
 .details td.center .defense .stat.ac, .details td.center .defense .stat.ini {
-  margin-right: 5px;
+  margin-right: 7px;
 }
-/* line 333, ../scss/websheet.scss */
+/* line 335, ../scss/websheet.scss */
 .details td.center .defense .stat.ac {
   border-radius: 10px 10px 50px 50px;
 }
-/* line 336, ../scss/websheet.scss */
+/* line 338, ../scss/websheet.scss */
 .details td.center .defense .stat.ac .value {
   line-height: 40px;
   padding-top: 10px;
 }
-/* line 341, ../scss/websheet.scss */
+/* line 343, ../scss/websheet.scss */
 .details td.center .defense .stat.ac .label {
   width: 44.66667px;
   margin: 0 auto 10px auto;
 }
-/* line 348, ../scss/websheet.scss */
+/* line 350, ../scss/websheet.scss */
 .details td.center .defense .stat .value,
 .details td.center .defense .stat .label {
   text-align: center;
 }
-/* line 353, ../scss/websheet.scss */
+/* line 355, ../scss/websheet.scss */
 .details td.center .defense .stat .value {
   font-size: 24px;
   line-height: 60px;
 }
-/* line 358, ../scss/websheet.scss */
+/* line 360, ../scss/websheet.scss */
 .details td.center .defense .stat .label {
   font-size: 12px;
 }
-/* line 364, ../scss/websheet.scss */
+/* line 366, ../scss/websheet.scss */
 .details td.center .hp,
 .details td.center .thp {
   margin-top: 10px;
   border: 1px solid black;
   padding: 5px;
 }
-/* line 371, ../scss/websheet.scss */
+/* line 373, ../scss/websheet.scss */
 .details td.center .hp .label,
 .details td.center .thp .label {
   text-align: center;
   font-size: 12px;
 }
-/* line 377, ../scss/websheet.scss */
+/* line 379, ../scss/websheet.scss */
 .details td.center .hp {
   border-radius: 5px 5px 0 0;
 }
-/* line 382, ../scss/websheet.scss */
+/* line 384, ../scss/websheet.scss */
 .details td.center .hp .max .label,
 .details td.center .hp .max .value {
   display: inline-block;
   font-size: 12px;
 }
-/* line 389, ../scss/websheet.scss */
+/* line 391, ../scss/websheet.scss */
 .details td.center .hp .max .value {
   width: 119px;
   margin-left: 5px;
   padding-left: 5px;
   border-bottom: 1px solid gray;
 }
-/* line 398, ../scss/websheet.scss */
+/* line 400, ../scss/websheet.scss */
 .details td.center .hp .space {
   height: 60px;
 }
-/* line 403, ../scss/websheet.scss */
+/* line 405, ../scss/websheet.scss */
 .details td.center .thp {
   border-radius: 0 0 5px 5px;
 }
-/* line 407, ../scss/websheet.scss */
+/* line 409, ../scss/websheet.scss */
 .details td.center .thp .space {
   height: 40px;
 }
-/* line 412, ../scss/websheet.scss */
+/* line 414, ../scss/websheet.scss */
 .details td.center .life {
   margin-top: 10px;
   box-sizing: inherit;
 }
-/* line 417, ../scss/websheet.scss */
+/* line 419, ../scss/websheet.scss */
 .details td.center .life .hd,
 .details td.center .life .ds {
   width: 105px;
@@ -373,25 +372,25 @@ body {
   padding: 5px;
   float: left;
 }
-/* line 426, ../scss/websheet.scss */
+/* line 428, ../scss/websheet.scss */
 .details td.center .life .hd .label,
 .details td.center .life .ds .label {
   width: 100%;
   text-align: center;
   font-size: 12px;
 }
-/* line 433, ../scss/websheet.scss */
+/* line 435, ../scss/websheet.scss */
 .details td.center .life .hd {
   margin-right: 10px;
 }
-/* line 439, ../scss/websheet.scss */
+/* line 441, ../scss/websheet.scss */
 .details td.center .life .hd .max .label,
 .details td.center .life .hd .max .value {
   width: inherit;
   float: left;
   font-size: 12px;
 }
-/* line 446, ../scss/websheet.scss */
+/* line 448, ../scss/websheet.scss */
 .details td.center .life .hd .max .value {
   padding-left: 5px;
   margin-left: 5px;
@@ -399,47 +398,47 @@ body {
   border-bottom: 1px solid black;
   text-align: left;
 }
-/* line 455, ../scss/websheet.scss */
+/* line 457, ../scss/websheet.scss */
 .details td.center .life .hd .space {
   height: 40px;
 }
-/* line 459, ../scss/websheet.scss */
+/* line 461, ../scss/websheet.scss */
 .details td.center .life .hd .label {
   float: left;
   clear: left;
 }
-/* line 467, ../scss/websheet.scss */
+/* line 469, ../scss/websheet.scss */
 .details td.center .life .ds .success,
 .details td.center .life .ds .failure,
 .details td.center .life .ds .label {
   float: left;
   clear: left;
 }
-/* line 474, ../scss/websheet.scss */
+/* line 476, ../scss/websheet.scss */
 .details td.center .life .ds .success,
 .details td.center .life .ds .failure {
   margin-bottom: 4px;
 }
-/* line 478, ../scss/websheet.scss */
+/* line 480, ../scss/websheet.scss */
 .details td.center .life .ds .success .label,
 .details td.center .life .ds .success input,
 .details td.center .life .ds .failure .label,
 .details td.center .life .ds .failure input {
   float: left;
 }
-/* line 483, ../scss/websheet.scss */
+/* line 485, ../scss/websheet.scss */
 .details td.center .life .ds .success .label,
 .details td.center .life .ds .failure .label {
   line-height: 16px;
   width: 50px;
   text-align: left;
 }
-/* line 489, ../scss/websheet.scss */
+/* line 491, ../scss/websheet.scss */
 .details td.center .life .ds .success input,
 .details td.center .life .ds .failure input {
   margin: 2px 0 0 0;
 }
-/* line 493, ../scss/websheet.scss */
+/* line 495, ../scss/websheet.scss */
 .details td.center .life .ds .success .dash,
 .details td.center .life .ds .failure .dash {
   display: block;
@@ -449,62 +448,73 @@ body {
   height: 1px;
   margin: 7px 1px 0 0;
 }
-/* line 505, ../scss/websheet.scss */
-.details td.center .atk {
-  float: left;
-  clear: left;
+/* line 507, ../scss/websheet.scss */
+.details td.center .attack {
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 5px;
+}
+/* line 513, ../scss/websheet.scss */
+.details td.center .attack .weapons {
   width: 100%;
 }
-/* line 515, ../scss/websheet.scss */
-.details td.center .atk .Weapons {
-  width: 100%;
-}
-/* line 518, ../scss/websheet.scss */
-.details td.center .atk .Weapons th {
-  font-size: 12px;
+/* line 517, ../scss/websheet.scss */
+.details td.center .attack .weapons th {
+  font-size: 8px;
+  text-align: left;
 }
 /* line 522, ../scss/websheet.scss */
-.details td.center .atk .Weapons td.weapon {
+.details td.center .attack .weapons td {
+  background-color: #ddd;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* line 528, ../scss/websheet.scss */
+.details td.center .attack .weapons td.weapon {
   font-size: 1vw;
 }
-/* line 526, ../scss/websheet.scss */
-.details td.center .atk .Weapons td.bonus,
-.details td.center .atk .Weapons td.damage {
+/* line 532, ../scss/websheet.scss */
+.details td.center .attack .weapons td.bonus,
+.details td.center .attack .weapons td.damage {
   text-align: right;
 }
-/* line 532, ../scss/websheet.scss */
-.details td.center .atk .space {
+/* line 542, ../scss/websheet.scss */
+.details td.center .attack .weapons .column-2 {
+  width: 20%;
+}
+/* line 546, ../scss/websheet.scss */
+.details td.center .attack .weapons .column-3 {
+  width: 30%;
+}
+/* line 551, ../scss/websheet.scss */
+.details td.center .attack .space {
   float: left;
   clear: left;
-  height: 138px;
+  height: 158px;
+  padding: 5px;
 }
-/* line 538, ../scss/websheet.scss */
-.details td.center .atk .label {
+/* line 558, ../scss/websheet.scss */
+.details td.center .attack .label {
   float: left;
   clear: left;
   width: 100%;
   text-align: center;
+  font-size: 12px;
 }
-/* line 546, ../scss/websheet.scss */
+/* line 567, ../scss/websheet.scss */
 .details td.center .equipment {
-  float: left;
-  clear: left;
-  width: 100%;
   border: 1px solid black;
   margin-top: 10px;
   border-radius: 5px;
   position: relative;
 }
-/* line 557, ../scss/websheet.scss */
+/* line 574, ../scss/websheet.scss */
 .details td.center .equipment .coins {
   float: left;
   position: absolute;
   left: -8px;
 }
-/* line 564, ../scss/websheet.scss */
+/* line 581, ../scss/websheet.scss */
 .details td.center .equipment .coins .coin {
   float: left;
   clear: left;
@@ -513,7 +523,7 @@ body {
   background-color: white;
   position: relative;
 }
-/* line 573, ../scss/websheet.scss */
+/* line 590, ../scss/websheet.scss */
 .details td.center .equipment .coins .coin .label {
   font-size: 12px;
   width: auto;
@@ -524,7 +534,7 @@ body {
   border-radius: 5px 0 0 5px;
   padding: 2px 5px 2px 2px;
 }
-/* line 586, ../scss/websheet.scss */
+/* line 603, ../scss/websheet.scss */
 .details td.center .equipment .coins .coin .amount {
   border: 1px solid black;
   border-radius: 10px;
@@ -533,19 +543,101 @@ body {
   text-align: center;
   padding: 4px;
   position: absolute;
-  left: 18px;
+  left: 22px;
   top: -4px;
 }
-/* line 602, ../scss/websheet.scss */
+/* line 619, ../scss/websheet.scss */
 .details td.center .equipment .space {
   float: left;
   height: 200px;
   margin-left: 70px;
+  padding: 5px;
 }
-/* line 609, ../scss/websheet.scss */
+/* line 627, ../scss/websheet.scss */
 .details td.center .equipment .label {
   float: left;
   clear: left;
   width: 100%;
   text-align: center;
+  font-size: 12px;
+}
+/* line 639, ../scss/websheet.scss */
+.details td.right .personality,
+.details td.right .ideals,
+.details td.right .bonds,
+.details td.right .flaws,
+.details td.right .features {
+  width: 100%;
+  float: left;
+  clear: left;
+  border: 1px solid black;
+}
+/* line 651, ../scss/websheet.scss */
+.details td.right .personality .space,
+.details td.right .ideals .space,
+.details td.right .bonds .space,
+.details td.right .flaws .space,
+.details td.right .features .space {
+  float: left;
+  height: 80px;
+  padding: 5px;
+}
+/* line 657, ../scss/websheet.scss */
+.details td.right .personality .label,
+.details td.right .ideals .label,
+.details td.right .bonds .label,
+.details td.right .flaws .label,
+.details td.right .features .label {
+  float: left;
+  clear: left;
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
+}
+/* line 666, ../scss/websheet.scss */
+.details td.right .ideals,
+.details td.right .bonds,
+.details td.right .flaws,
+.details td.right .features {
+  margin-top: 10px;
+}
+/* line 674, ../scss/websheet.scss */
+.details td.right .personality {
+  border-radius: 5px 5px 0 0;
+}
+/* line 678, ../scss/websheet.scss */
+.details td.right .personality .space {
+  height: 120px;
+}
+/* line 684, ../scss/websheet.scss */
+.details td.right .flaws {
+  border-radius: 0 0 5px 5px;
+}
+/* line 688, ../scss/websheet.scss */
+.details td.right .features {
+  border-radius: 5px;
+}
+/* line 691, ../scss/websheet.scss */
+.details td.right .features .space {
+  height: 350px;
+}
+
+/* line 700, ../scss/websheet.scss */
+.bottom {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid black;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+}
+/* line 709, ../scss/websheet.scss */
+.bottom .space {
+  height: 80px;
+}
+/* line 713, ../scss/websheet.scss */
+.bottom .label {
+  width: 100%;
+  text-align: center;
+  font-size: 12px;
 }

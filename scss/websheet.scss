@@ -19,9 +19,9 @@ body
   font-family: arial;
 
   // debug;
-  margin: 25px auto;
-  border: 1px dotted green;
-  height: 1100px;
+  // margin: 25px auto;
+  // border: 1px dotted green;
+  // height: 1100px;
 }
 
 .heading
@@ -309,7 +309,9 @@ body
       .defense,
       .hp,
       .thp,
-      .life
+      .life,
+      .attack,
+      .equipment
       {
         float: left;
         width: 100%;
@@ -328,7 +330,7 @@ body
           &.ac,
           &.ini
           {
-            margin-right: 5px;
+            margin-right: 7px;
           }
           &.ac
           {
@@ -502,22 +504,26 @@ body
           }
         }
       }
-      .atk
+      .attack
       {
-        float: left;
-        clear: left;
         margin-top: 10px;
         border: 1px solid black;
         border-radius: 5px;
-        width: 100%;
 
-
-        .Weapons
+        .weapons
         {
+
           width: 100%;
           th
           {
-            font-size: $font_small;
+            font-size: $font_tiny;
+            text-align: left;
+          }
+          td
+          {
+            background-color: #ddd;
+            overflow: hidden;
+            white-space: nowrap;
           }
           td.weapon
           {
@@ -528,12 +534,26 @@ body
           {
             text-align: right;
           }
+
+          .column-1
+          {
+            // width: 40%;
+          }
+          .column-2
+          {
+            width: 20%;
+          }
+          .column-3
+          {
+            width: 30%
+          }
         }
         .space
         {
           float: left;
           clear: left;
-          height: 138px;
+          height: 158px;
+          padding: 5px;
         }
         .label
         {
@@ -541,14 +561,11 @@ body
           clear: left;
           width: 100%;
           text-align: center;
+          font-size: $font_small;
         }
       }
       .equipment
       {
-        float: left;
-        clear: left;
-        width: 100%;
-        // height: 200px;
         border: 1px solid black;
         margin-top: 10px;
         border-radius: 5px;
@@ -593,7 +610,7 @@ body
               text-align: center;
               padding: 4px;
               position: absolute;
-              left: 18px;
+              left: 22px;
               top: -4px;
             }
           }
@@ -605,6 +622,7 @@ body
           // border-left: 1px solid black;
           height: 200px;
           margin-left: 70px;
+          padding: 5px;
         }
         .label
         {
@@ -612,8 +630,90 @@ body
           clear: left;
           width: 100%;
           text-align: center;
+          font-size: $font_small;
         }
       }
     }
+    &.right
+    {
+      .personality,
+      .ideals,
+      .bonds,
+      .flaws,
+      .features
+      {
+        width: 100%;
+        float: left;
+        clear: left;
+        border: 1px solid black;
+
+
+        .space
+        {
+          float: left;
+          height: 80px;
+          padding: 5px;
+        }
+        .label
+        {
+          float: left;
+          clear: left;
+          width: 100%;
+          text-align: center;
+          font-size: $font_small;
+        }
+      }
+      .ideals,
+      .bonds,
+      .flaws,
+      .features
+      {
+        margin-top: 10px;
+      }
+
+      .personality
+      {
+        border-radius: 5px 5px 0 0;
+
+        .space
+        {
+          height: 120px;
+        }
+      }
+
+      .flaws
+      {
+        border-radius: 0 0 5px 5px;
+      }
+      .features
+      {
+        border-radius: 5px;
+        .space
+        {
+          height: 350px;
+        }
+      }
+    }
+  }
+}
+
+.bottom
+{
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid black;
+  margin-top: 10px;
+  padding: 5px;
+  border-radius: 5px;
+
+  .space
+  {
+    height: 80px;
+  }
+  .label
+  {
+    width: 100%;
+    text-align: center;
+    font-size: $font_small;
   }
 }
