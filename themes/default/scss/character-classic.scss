@@ -14,7 +14,7 @@ body
 {
   width: $page_width;
   padding: $page_padding $page_padding $page_padding $page_padding * 2;
-  // margin: 0 auto;
+  margin: 0 auto;
   font-size: $font_normal;
   font-family: arial;
 
@@ -289,6 +289,7 @@ body
       border: 1px solid black;
       border-radius: 5px;
       padding: 5px;
+      height: 250px;
 
       .proficiency
       {
@@ -620,7 +621,7 @@ body
         {
           float: left;
           // border-left: 1px solid black;
-          height: 200px;
+          height: 277px;
           margin-left: 70px;
           padding: 5px;
         }
@@ -690,30 +691,30 @@ body
         border-radius: 5px;
         .space
         {
-          height: 350px;
+          height: 416px;
         }
       }
     }
   }
 }
 
-.bottom
-{
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid black;
-  margin-top: 10px;
-  padding: 5px;
-  border-radius: 5px;
-
-  .space
-  {
-    height: 80px;
-  }
-  .label
-  {
-    width: 100%;
-    text-align: center;
-    font-size: $font_small;
-  }
-}
+// .bottom
+// {
+//   width: 100%;
+//   box-sizing: border-box;
+//   border: 1px solid black;
+//   margin-top: 10px;
+//   padding: 5px;
+//   border-radius: 5px;
+//
+//   .space
+//   {
+//     height: 80px;
+//   }
+//   .label
+//   {
+//     width: 100%;
+//     text-align: center;
+//     font-size: $font_small;
+//   }
+// }

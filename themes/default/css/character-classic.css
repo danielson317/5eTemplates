@@ -1,18 +1,19 @@
-/* line 13, ../scss/character.scss */
+/* line 13, ../scss/character-classic.scss */
 body {
   width: 775px;
   padding: 25px 25px 25px 50px;
+  margin: 0 auto;
   font-size: 16px;
   font-family: arial;
 }
 
-/* line 27, ../scss/character.scss */
+/* line 27, ../scss/character-classic.scss */
 .heading {
   float: left;
   width: 100%;
   margin-bottom: 15px;
 }
-/* line 33, ../scss/character.scss */
+/* line 33, ../scss/character-classic.scss */
 .heading .name {
   float: left;
   height: 38px;
@@ -24,7 +25,7 @@ body {
   border-right: none;
   margin-top: 18px;
 }
-/* line 51, ../scss/character.scss */
+/* line 51, ../scss/character-classic.scss */
 .heading .summary {
   float: left;
   padding: 5px;
@@ -32,17 +33,17 @@ body {
   border: 1px solid black;
   border-radius: 5px;
 }
-/* line 60, ../scss/character.scss */
+/* line 60, ../scss/character-classic.scss */
 .heading .summary .summary-top,
 .heading .summary .summary-bottom {
   float: left;
   width: 516px;
 }
-/* line 67, ../scss/character.scss */
+/* line 67, ../scss/character-classic.scss */
 .heading .summary .summary-top {
   margin-bottom: 2px;
 }
-/* line 72, ../scss/character.scss */
+/* line 72, ../scss/character-classic.scss */
 .heading .summary .class,
 .heading .summary .background,
 .heading .summary .player,
@@ -52,7 +53,7 @@ body {
   float: left;
   width: 167px;
 }
-/* line 81, ../scss/character.scss */
+/* line 81, ../scss/character-classic.scss */
 .heading .summary .class .value,
 .heading .summary .background .value,
 .heading .summary .player .value,
@@ -61,7 +62,7 @@ body {
 .heading .summary .xp .value {
   border-bottom: 1px solid black;
 }
-/* line 85, ../scss/character.scss */
+/* line 85, ../scss/character-classic.scss */
 .heading .summary .class .label,
 .heading .summary .background .label,
 .heading .summary .player .label,
@@ -71,55 +72,55 @@ body {
   font-size: 12px;
 }
 
-/* line 93, ../scss/character.scss */
+/* line 93, ../scss/character-classic.scss */
 .details {
   clear: left;
   width: 775px;
 }
-/* line 99, ../scss/character.scss */
+/* line 99, ../scss/character-classic.scss */
 .details td {
   vertical-align: top;
   width: 33%;
 }
-/* line 104, ../scss/character.scss */
+/* line 104, ../scss/character-classic.scss */
 .details td.left, .details td.center {
   border-right: 10px solid transparent;
 }
-/* line 112, ../scss/character.scss */
+/* line 112, ../scss/character-classic.scss */
 .details td.left .attributes,
 .details td.left .modifiers {
   float: left;
 }
-/* line 118, ../scss/character.scss */
+/* line 118, ../scss/character-classic.scss */
 .details td.left .attributes {
   width: 66px;
   margin-right: 10px;
 }
-/* line 124, ../scss/character.scss */
+/* line 124, ../scss/character-classic.scss */
 .details td.left .attributes .attribute {
   border: 1px solid black;
   border-radius: 5px;
   margin-bottom: 15px;
   position: relative;
 }
-/* line 131, ../scss/character.scss */
+/* line 131, ../scss/character-classic.scss */
 .details td.left .attributes .attribute .label,
 .details td.left .attributes .attribute .modifier,
 .details td.left .attributes .attribute .score {
   text-align: center;
 }
-/* line 138, ../scss/character.scss */
+/* line 138, ../scss/character-classic.scss */
 .details td.left .attributes .attribute .label {
   padding-top: 5px;
   font-size: 12px;
 }
-/* line 144, ../scss/character.scss */
+/* line 144, ../scss/character-classic.scss */
 .details td.left .attributes .attribute .modifier {
   font-size: 32px;
   line-height: 52px;
   height: 69px;
 }
-/* line 150, ../scss/character.scss */
+/* line 150, ../scss/character-classic.scss */
 .details td.left .attributes .attribute .score {
   border: 1px solid black;
   border-radius: 15px;
@@ -131,17 +132,17 @@ body {
   left: 18px;
   line-height: 20px;
 }
-/* line 164, ../scss/character.scss */
+/* line 164, ../scss/character-classic.scss */
 .details td.left .modifiers {
   width: 166px;
 }
-/* line 169, ../scss/character.scss */
+/* line 169, ../scss/character-classic.scss */
 .details td.left .modifiers .inspiration,
 .details td.left .modifiers .pb {
   float: left;
   clear: left;
 }
-/* line 175, ../scss/character.scss */
+/* line 175, ../scss/character-classic.scss */
 .details td.left .modifiers .inspiration .value,
 .details td.left .modifiers .pb .value {
   width: 30px;
@@ -151,7 +152,7 @@ body {
   text-align: center;
   line-height: 30px;
 }
-/* line 184, ../scss/character.scss */
+/* line 184, ../scss/character-classic.scss */
 .details td.left .modifiers .inspiration .label,
 .details td.left .modifiers .pb .label {
   float: left;
@@ -163,22 +164,22 @@ body {
   width: 126px;
   text-align: center;
 }
-/* line 197, ../scss/character.scss */
+/* line 197, ../scss/character-classic.scss */
 .details td.left .modifiers .pb {
   margin-top: 10px;
   position: relative;
 }
-/* line 202, ../scss/character.scss */
+/* line 202, ../scss/character-classic.scss */
 .details td.left .modifiers .pb .value {
   border-radius: 15px;
 }
-/* line 206, ../scss/character.scss */
+/* line 206, ../scss/character-classic.scss */
 .details td.left .modifiers .pb .label {
   left: 28px;
   position: absolute;
   padding-left: 6px;
 }
-/* line 214, ../scss/character.scss */
+/* line 214, ../scss/character-classic.scss */
 .details td.left .modifiers .saving-throws,
 .details td.left .modifiers .skills {
   margin-top: 10px;
@@ -189,18 +190,18 @@ body {
   float: left;
   padding-bottom: 6px;
 }
-/* line 225, ../scss/character.scss */
+/* line 225, ../scss/character-classic.scss */
 .details td.left .modifiers .saving-throws td.proficiency,
 .details td.left .modifiers .skills td.proficiency {
   width: 10px;
   padding-right: 3px;
 }
-/* line 231, ../scss/character.scss */
+/* line 231, ../scss/character-classic.scss */
 .details td.left .modifiers .saving-throws td.proficiency input,
 .details td.left .modifiers .skills td.proficiency input {
   margin: 2px 0 0 0;
 }
-/* line 236, ../scss/character.scss */
+/* line 236, ../scss/character-classic.scss */
 .details td.left .modifiers .saving-throws td.value,
 .details td.left .modifiers .skills td.value {
   width: 15px;
@@ -209,21 +210,21 @@ body {
   font-size: 12px;
   text-align: right;
 }
-/* line 244, ../scss/character.scss */
+/* line 244, ../scss/character-classic.scss */
 .details td.left .modifiers .saving-throws td.label,
 .details td.left .modifiers .skills td.label {
   padding-left: 3px;
   width: auto;
   font-size: 12px;
 }
-/* line 253, ../scss/character.scss */
+/* line 253, ../scss/character-classic.scss */
 .details td.left .pas-prc {
   margin-top: 5px;
   position: relative;
   float: left;
   clear: left;
 }
-/* line 260, ../scss/character.scss */
+/* line 260, ../scss/character-classic.scss */
 .details td.left .pas-prc .value {
   width: 40px;
   height: 40px;
@@ -233,7 +234,7 @@ body {
   line-height: 40px;
   border-radius: 20px;
 }
-/* line 270, ../scss/character.scss */
+/* line 270, ../scss/character-classic.scss */
 .details td.left .pas-prc .label {
   padding: 3px;
   margin-top: 8px;
@@ -245,27 +246,28 @@ body {
   width: 196px;
   padding-left: 6px;
 }
-/* line 285, ../scss/character.scss */
+/* line 285, ../scss/character-classic.scss */
 .details td .proficiencies {
   margin-top: 10px;
   float: left;
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
+  height: 250px;
 }
-/* line 293, ../scss/character.scss */
+/* line 294, ../scss/character-classic.scss */
 .details td .proficiencies .proficiency {
   margin-top: 5px;
 }
-/* line 296, ../scss/character.scss */
+/* line 297, ../scss/character-classic.scss */
 .details td .proficiencies .proficiency .label {
   font-weight: 700;
 }
-/* line 301, ../scss/character.scss */
+/* line 302, ../scss/character-classic.scss */
 .details td .proficiencies .proficiency:first-of-type {
   margin-top: 0;
 }
-/* line 309, ../scss/character.scss */
+/* line 310, ../scss/character-classic.scss */
 .details td.center .defense,
 .details td.center .hp,
 .details td.center .thp,
@@ -276,7 +278,7 @@ body {
   width: 100%;
   box-sizing: border-box;
 }
-/* line 322, ../scss/character.scss */
+/* line 323, ../scss/character-classic.scss */
 .details td.center .defense .stat {
   float: left;
   width: 74.66667px;
@@ -284,86 +286,86 @@ body {
   border: 1px solid black;
   border-radius: 5px;
 }
-/* line 330, ../scss/character.scss */
+/* line 331, ../scss/character-classic.scss */
 .details td.center .defense .stat.ac, .details td.center .defense .stat.ini {
   margin-right: 7px;
 }
-/* line 335, ../scss/character.scss */
+/* line 336, ../scss/character-classic.scss */
 .details td.center .defense .stat.ac {
   border-radius: 10px 10px 50px 50px;
 }
-/* line 338, ../scss/character.scss */
+/* line 339, ../scss/character-classic.scss */
 .details td.center .defense .stat.ac .value {
   line-height: 40px;
   padding-top: 10px;
 }
-/* line 343, ../scss/character.scss */
+/* line 344, ../scss/character-classic.scss */
 .details td.center .defense .stat.ac .label {
   width: 44.66667px;
   margin: 0 auto 10px auto;
 }
-/* line 350, ../scss/character.scss */
+/* line 351, ../scss/character-classic.scss */
 .details td.center .defense .stat .value,
 .details td.center .defense .stat .label {
   text-align: center;
 }
-/* line 355, ../scss/character.scss */
+/* line 356, ../scss/character-classic.scss */
 .details td.center .defense .stat .value {
   font-size: 24px;
   line-height: 60px;
 }
-/* line 360, ../scss/character.scss */
+/* line 361, ../scss/character-classic.scss */
 .details td.center .defense .stat .label {
   font-size: 12px;
 }
-/* line 366, ../scss/character.scss */
+/* line 367, ../scss/character-classic.scss */
 .details td.center .hp,
 .details td.center .thp {
   margin-top: 10px;
   border: 1px solid black;
   padding: 5px;
 }
-/* line 373, ../scss/character.scss */
+/* line 374, ../scss/character-classic.scss */
 .details td.center .hp .label,
 .details td.center .thp .label {
   text-align: center;
   font-size: 12px;
 }
-/* line 379, ../scss/character.scss */
+/* line 380, ../scss/character-classic.scss */
 .details td.center .hp {
   border-radius: 5px 5px 0 0;
 }
-/* line 384, ../scss/character.scss */
+/* line 385, ../scss/character-classic.scss */
 .details td.center .hp .max .label,
 .details td.center .hp .max .value {
   display: inline-block;
   font-size: 12px;
 }
-/* line 391, ../scss/character.scss */
+/* line 392, ../scss/character-classic.scss */
 .details td.center .hp .max .value {
   width: 119px;
   margin-left: 5px;
   padding-left: 5px;
   border-bottom: 1px solid gray;
 }
-/* line 400, ../scss/character.scss */
+/* line 401, ../scss/character-classic.scss */
 .details td.center .hp .space {
   height: 60px;
 }
-/* line 405, ../scss/character.scss */
+/* line 406, ../scss/character-classic.scss */
 .details td.center .thp {
   border-radius: 0 0 5px 5px;
 }
-/* line 409, ../scss/character.scss */
+/* line 410, ../scss/character-classic.scss */
 .details td.center .thp .space {
   height: 40px;
 }
-/* line 414, ../scss/character.scss */
+/* line 415, ../scss/character-classic.scss */
 .details td.center .life {
   margin-top: 10px;
   box-sizing: inherit;
 }
-/* line 419, ../scss/character.scss */
+/* line 420, ../scss/character-classic.scss */
 .details td.center .life .hd,
 .details td.center .life .ds {
   width: 105px;
@@ -372,25 +374,25 @@ body {
   padding: 5px;
   float: left;
 }
-/* line 428, ../scss/character.scss */
+/* line 429, ../scss/character-classic.scss */
 .details td.center .life .hd .label,
 .details td.center .life .ds .label {
   width: 100%;
   text-align: center;
   font-size: 12px;
 }
-/* line 435, ../scss/character.scss */
+/* line 436, ../scss/character-classic.scss */
 .details td.center .life .hd {
   margin-right: 10px;
 }
-/* line 441, ../scss/character.scss */
+/* line 442, ../scss/character-classic.scss */
 .details td.center .life .hd .max .label,
 .details td.center .life .hd .max .value {
   width: inherit;
   float: left;
   font-size: 12px;
 }
-/* line 448, ../scss/character.scss */
+/* line 449, ../scss/character-classic.scss */
 .details td.center .life .hd .max .value {
   padding-left: 5px;
   margin-left: 5px;
@@ -398,47 +400,47 @@ body {
   border-bottom: 1px solid black;
   text-align: left;
 }
-/* line 457, ../scss/character.scss */
+/* line 458, ../scss/character-classic.scss */
 .details td.center .life .hd .space {
   height: 40px;
 }
-/* line 461, ../scss/character.scss */
+/* line 462, ../scss/character-classic.scss */
 .details td.center .life .hd .label {
   float: left;
   clear: left;
 }
-/* line 469, ../scss/character.scss */
+/* line 470, ../scss/character-classic.scss */
 .details td.center .life .ds .success,
 .details td.center .life .ds .failure,
 .details td.center .life .ds .label {
   float: left;
   clear: left;
 }
-/* line 476, ../scss/character.scss */
+/* line 477, ../scss/character-classic.scss */
 .details td.center .life .ds .success,
 .details td.center .life .ds .failure {
   margin-bottom: 4px;
 }
-/* line 480, ../scss/character.scss */
+/* line 481, ../scss/character-classic.scss */
 .details td.center .life .ds .success .label,
 .details td.center .life .ds .success input,
 .details td.center .life .ds .failure .label,
 .details td.center .life .ds .failure input {
   float: left;
 }
-/* line 485, ../scss/character.scss */
+/* line 486, ../scss/character-classic.scss */
 .details td.center .life .ds .success .label,
 .details td.center .life .ds .failure .label {
   line-height: 16px;
   width: 50px;
   text-align: left;
 }
-/* line 491, ../scss/character.scss */
+/* line 492, ../scss/character-classic.scss */
 .details td.center .life .ds .success input,
 .details td.center .life .ds .failure input {
   margin: 2px 0 0 0;
 }
-/* line 495, ../scss/character.scss */
+/* line 496, ../scss/character-classic.scss */
 .details td.center .life .ds .success .dash,
 .details td.center .life .ds .failure .dash {
   display: block;
@@ -448,52 +450,52 @@ body {
   height: 1px;
   margin: 7px 1px 0 0;
 }
-/* line 507, ../scss/character.scss */
+/* line 508, ../scss/character-classic.scss */
 .details td.center .attack {
   margin-top: 10px;
   border: 1px solid black;
   border-radius: 5px;
 }
-/* line 513, ../scss/character.scss */
+/* line 514, ../scss/character-classic.scss */
 .details td.center .attack .weapons {
   width: 100%;
 }
-/* line 517, ../scss/character.scss */
+/* line 518, ../scss/character-classic.scss */
 .details td.center .attack .weapons th {
   font-size: 8px;
   text-align: left;
 }
-/* line 522, ../scss/character.scss */
+/* line 523, ../scss/character-classic.scss */
 .details td.center .attack .weapons td {
   background-color: #ddd;
   overflow: hidden;
   white-space: nowrap;
 }
-/* line 528, ../scss/character.scss */
+/* line 529, ../scss/character-classic.scss */
 .details td.center .attack .weapons td.weapon {
   font-size: 1vw;
 }
-/* line 532, ../scss/character.scss */
+/* line 533, ../scss/character-classic.scss */
 .details td.center .attack .weapons td.bonus,
 .details td.center .attack .weapons td.damage {
   text-align: right;
 }
-/* line 542, ../scss/character.scss */
+/* line 543, ../scss/character-classic.scss */
 .details td.center .attack .weapons .column-2 {
   width: 20%;
 }
-/* line 546, ../scss/character.scss */
+/* line 547, ../scss/character-classic.scss */
 .details td.center .attack .weapons .column-3 {
   width: 30%;
 }
-/* line 551, ../scss/character.scss */
+/* line 552, ../scss/character-classic.scss */
 .details td.center .attack .space {
   float: left;
   clear: left;
   height: 158px;
   padding: 5px;
 }
-/* line 558, ../scss/character.scss */
+/* line 559, ../scss/character-classic.scss */
 .details td.center .attack .label {
   float: left;
   clear: left;
@@ -501,20 +503,20 @@ body {
   text-align: center;
   font-size: 12px;
 }
-/* line 567, ../scss/character.scss */
+/* line 568, ../scss/character-classic.scss */
 .details td.center .equipment {
   border: 1px solid black;
   margin-top: 10px;
   border-radius: 5px;
   position: relative;
 }
-/* line 574, ../scss/character.scss */
+/* line 575, ../scss/character-classic.scss */
 .details td.center .equipment .coins {
   float: left;
   position: absolute;
   left: -8px;
 }
-/* line 581, ../scss/character.scss */
+/* line 582, ../scss/character-classic.scss */
 .details td.center .equipment .coins .coin {
   float: left;
   clear: left;
@@ -523,7 +525,7 @@ body {
   background-color: white;
   position: relative;
 }
-/* line 590, ../scss/character.scss */
+/* line 591, ../scss/character-classic.scss */
 .details td.center .equipment .coins .coin .label {
   font-size: 12px;
   width: auto;
@@ -534,7 +536,7 @@ body {
   border-radius: 5px 0 0 5px;
   padding: 2px 5px 2px 2px;
 }
-/* line 603, ../scss/character.scss */
+/* line 604, ../scss/character-classic.scss */
 .details td.center .equipment .coins .coin .amount {
   border: 1px solid black;
   border-radius: 10px;
@@ -546,14 +548,14 @@ body {
   left: 22px;
   top: -4px;
 }
-/* line 619, ../scss/character.scss */
+/* line 620, ../scss/character-classic.scss */
 .details td.center .equipment .space {
   float: left;
-  height: 200px;
+  height: 277px;
   margin-left: 70px;
   padding: 5px;
 }
-/* line 627, ../scss/character.scss */
+/* line 628, ../scss/character-classic.scss */
 .details td.center .equipment .label {
   float: left;
   clear: left;
@@ -561,7 +563,7 @@ body {
   text-align: center;
   font-size: 12px;
 }
-/* line 639, ../scss/character.scss */
+/* line 640, ../scss/character-classic.scss */
 .details td.right .personality,
 .details td.right .ideals,
 .details td.right .bonds,
@@ -572,7 +574,7 @@ body {
   clear: left;
   border: 1px solid black;
 }
-/* line 651, ../scss/character.scss */
+/* line 652, ../scss/character-classic.scss */
 .details td.right .personality .space,
 .details td.right .ideals .space,
 .details td.right .bonds .space,
@@ -582,7 +584,7 @@ body {
   height: 80px;
   padding: 5px;
 }
-/* line 657, ../scss/character.scss */
+/* line 658, ../scss/character-classic.scss */
 .details td.right .personality .label,
 .details td.right .ideals .label,
 .details td.right .bonds .label,
@@ -594,50 +596,30 @@ body {
   text-align: center;
   font-size: 12px;
 }
-/* line 666, ../scss/character.scss */
+/* line 667, ../scss/character-classic.scss */
 .details td.right .ideals,
 .details td.right .bonds,
 .details td.right .flaws,
 .details td.right .features {
   margin-top: 10px;
 }
-/* line 674, ../scss/character.scss */
+/* line 675, ../scss/character-classic.scss */
 .details td.right .personality {
   border-radius: 5px 5px 0 0;
 }
-/* line 678, ../scss/character.scss */
+/* line 679, ../scss/character-classic.scss */
 .details td.right .personality .space {
   height: 120px;
 }
-/* line 684, ../scss/character.scss */
+/* line 685, ../scss/character-classic.scss */
 .details td.right .flaws {
   border-radius: 0 0 5px 5px;
 }
-/* line 688, ../scss/character.scss */
+/* line 689, ../scss/character-classic.scss */
 .details td.right .features {
   border-radius: 5px;
 }
-/* line 691, ../scss/character.scss */
+/* line 692, ../scss/character-classic.scss */
 .details td.right .features .space {
-  height: 350px;
-}
-
-/* line 700, ../scss/character.scss */
-.bottom {
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid black;
-  margin-top: 10px;
-  padding: 5px;
-  border-radius: 5px;
-}
-/* line 709, ../scss/character.scss */
-.bottom .space {
-  height: 80px;
-}
-/* line 713, ../scss/character.scss */
-.bottom .label {
-  width: 100%;
-  text-align: center;
-  font-size: 12px;
+  height: 416px;
 }

@@ -1,0 +1,80 @@
+@import "_constants.scss";
+
+// body
+// {
+  // margin: 0 30px;
+// }
+.item
+{
+  width: 230px;
+  height: 325px;
+  float: left;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+
+  page-break-inside: avoid;
+
+  .name
+  {
+    text-align: center;
+    font-weight: bold;
+    font-size: $font_large;
+    background-color: $color_light_brown;
+    padding: 5px;
+  }
+  .attributes
+  {
+    height: 18px;
+    background-color: $color_tan;
+    padding: 5px;
+
+    .type,
+    .magic,
+    .attunement
+    {
+      float: left;
+    }
+    .type
+    {
+      width: 130px;
+    }
+    .value
+    {
+      float: right;
+      text-align: right;
+    }
+  }
+  .description
+  {
+    clear: left;
+    float: left;
+    // width: 100%;
+    padding: 5px;
+  }
+}
+
+table.item-list
+{
+  border-collapse: collapse;
+  th, td
+  {
+    border: 1px solid black;
+    padding: 2px 3px;
+  }
+
+  .column-1
+  {
+    width: 200px;
+  }
+  .column-2
+  {
+    width: 100px;
+  }
+  .column-3,
+  .column-4
+  {
+    text-align: right;
+  }
+}

@@ -1,0 +1,69 @@
+/* line 7, ../scss/item.scss */
+.item {
+  width: 230px;
+  height: 325px;
+  float: left;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  page-break-inside: avoid;
+}
+/* line 19, ../scss/item.scss */
+.item .name {
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  background-color: #D4B26A;
+  padding: 5px;
+}
+/* line 27, ../scss/item.scss */
+.item .attributes {
+  height: 18px;
+  background-color: #FFE3AA;
+  padding: 5px;
+}
+/* line 33, ../scss/item.scss */
+.item .attributes .type,
+.item .attributes .magic,
+.item .attributes .attunement {
+  float: left;
+}
+/* line 39, ../scss/item.scss */
+.item .attributes .type {
+  width: 130px;
+}
+/* line 43, ../scss/item.scss */
+.item .attributes .value {
+  float: right;
+  text-align: right;
+}
+/* line 49, ../scss/item.scss */
+.item .description {
+  clear: left;
+  float: left;
+  padding: 5px;
+}
+
+/* line 58, ../scss/item.scss */
+table.item-list {
+  border-collapse: collapse;
+}
+/* line 61, ../scss/item.scss */
+table.item-list th, table.item-list td {
+  border: 1px solid black;
+  padding: 2px 3px;
+}
+/* line 67, ../scss/item.scss */
+table.item-list .column-1 {
+  width: 200px;
+}
+/* line 71, ../scss/item.scss */
+table.item-list .column-2 {
+  width: 100px;
+}
+/* line 75, ../scss/item.scss */
+table.item-list .column-3,
+table.item-list .column-4 {
+  text-align: right;
+}

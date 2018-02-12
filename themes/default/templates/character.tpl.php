@@ -1,5 +1,5 @@
 <head>
-  <link href="/css/websheet.css" rel="stylesheet" type="text/css">
+  <link href="/themes/default/css/character-classic.css" rel="stylesheet" type="text/css">
 </head>
 <body>
   <div class="heading">
