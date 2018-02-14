@@ -2,13 +2,18 @@
 .field {
   float: left;
   clear: left;
+  margin-top: 10px;
 }
-/* line 8, ../scss/form.scss */
+/* line 9, ../scss/form.scss */
 .field label,
-.field input {
+.field input,
+.field select,
+.field textarea {
   float: left;
 }
-/* line 14, ../scss/form.scss */
-.field input {
+/* line 17, ../scss/form.scss */
+.field input,
+.field select,
+.field textarea {
   clear: left;
 }

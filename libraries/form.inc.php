@@ -1,10 +1,19 @@
 <?php
 
+/******************************************************************************
+ *
+ * Form
+ *
+ ******************************************************************************/
+
 class Form
 {
   protected $id;
   protected $attr = array();
   protected $fields = array();
+  protected $values = array();
+
+  protected $title = '';
 
   function __construct($id)
   {
@@ -13,24 +22,50 @@ class Form
 
   function __toString()
   {
-    $this->attr['id'] = $this->id;
-    $output = '<form' . buildAttr($this->attr) . '>';
+    $output = '';
+
+    // Title
+    if ($this->title)
+    {
+      $output .= htmlWrap('h1', $this->title);
+    }
+
+    // Fields.
+    $fields_output = '';
     foreach ($this->fields as $field)
     {
-      $output .= $field;
+      $fields_output .= $field;
     }
-    $output .= '</form>';
+
+    // Form.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['method'] = 'post';
+    $output .= htmlWrap('form', $fields_output, $attr);
     return $output;
   }
 
   function setAttr($name, $value)
   {
-    $this->attr[$name] = $vaue;
-    return '';
+    $this->attr[$name] = $value;
+  }
+
+  function setValues($values)
+  {
+    $this->values = $values;
+  }
+
+  function setTitle($title)
+  {
+    $this->title = $title;
   }
 
   function addField(Field $field)
   {
+    if (isset($this->values[$field->getId()]) && !$field->getValue())
+    {
+      $field->setValue($this->values[$field->getId()]);
+    }
     $this->fields[] = $field;
     return $field;
   }
@@ -40,6 +75,12 @@ class Form
     return isset($this->attr[$name]) ? $this->attr[$name] : FALSE;
   }
 }
+
+/******************************************************************************
+ *
+ * Fields.
+ *
+ ******************************************************************************/
 
 abstract class Field
 {
@@ -60,10 +101,39 @@ abstract class Field
     $this->label = $label;
     return $this;
   }
+
   function setValue($value)
   {
     $this->value = $value;
     return $this;
+  }
+
+  function getId()
+  {
+    return $this->id;
+  }
+
+  function getValue()
+  {
+    return $this->value;
+  }
+}
+
+class FieldHidden extends Field
+{
+  function __toString()
+  {
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'hidden';
+    if ($this->value)
+    {
+      $attr['value'] = $this->value;
+    }
+
+    $output = htmlSolo('input', $attr);
+    return $output;
   }
 }
 
@@ -71,29 +141,54 @@ class FieldText extends Field
 {
   function __toString()
   {
-    // Wrapper.
-    $attr = array('class' => array('field', 'text'));
-    $output = '<div' . buildAttr($attr) . '>';
+    $output = '';
 
     // Label.
-    $attr = array(
-      'class' => array('label', 'text'),
-      'for' => $this->id,
-    );
-    $output .= '<label' . buildAttr($attr) . '>' . $this->label . '</label>';
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
 
     // Input.
     $attr = $this->attr;
     $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
     $attr['type'] = 'text';
     if ($this->value)
     {
       $attr['value'] = $this->value;
     }
-    $output .= '<input' . buildAttr($attr) . '>';
+    $output .= htmlSolo('input', $attr);
 
-    // Close.
-    $output .= '</div>';
+    // Wrapper.
+    $attr = array('class' => array('field', 'text', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+}
+
+class FieldNumber extends Field
+{
+  function __toString()
+  {
+    $output = '';
+
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
+
+    // Input.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'number';
+    if ($this->value)
+    {
+      $attr['value'] = $this->value;
+    }
+    $output .= htmlSolo('input', $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'text', $this->id));
+    $output = htmlWrap('div', $output, $attr);
     return $output;
   }
 }
@@ -110,19 +205,34 @@ class FieldSelect extends Field
 
   function __toString()
   {
-    $this->attr['id'] = $this->id;
-    $this->attr['type'] = 'text';
+    $output = '';
 
-    $attr = array('class' => array('field', 'text'));
-    $output = '<div' . buildAttr($attr) . '>';
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
 
-    $attr = array(
-      'class' => array('labe', 'text'),
-      'for' => $this->id,
-    );
-    $output .= '<label' . buildAttr($attr) . '>' . $this->label . '</label>';
-    $output .= '<select' . buildAttr($this->attr) . '>';
-    $output .= '</div>';
+    // Options.
+    $select_options = '';
+    foreach($this->options as $id => $label)
+    {
+      $attr = array('value' => $id);
+      if ($id == $this->value)
+      {
+        $attr['selected'] = 'selected';
+      }
+      $select_options .= htmlWrap('option', $label, $attr);
+    }
+
+    // Select.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'text';
+    $output .= htmlWrap('select', $select_options, $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'select', $this->id));
+    $output = htmlWrap('div', $output, $attr);
     return $output;
   }
 
@@ -130,5 +240,101 @@ class FieldSelect extends Field
   {
     $this->options = $options;
     return $this;
+  }
+}
+
+class FieldCheckbox extends Field
+{
+  function __toString()
+  {
+    $output = '';
+
+    // Input.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'checkbox';
+    if ($this->value)
+    {
+      $attr['checked'] = 'checked';
+    }
+    $output .= htmlSolo('input', $attr);
+
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'select', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+}
+
+class FieldTextarea extends Field
+{
+  protected $rows = 5;
+  protected $cols = 100;
+
+  function __toString()
+  {
+    $output = '';
+
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
+
+    // Input.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['rows'] = $this->rows;
+    $attr['cols'] = $this->cols;
+    $output .= htmlWrap('textarea', $this->value, $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'textarea', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+
+  function setRows($rows)
+  {
+    $this->rows = $rows;
+    return $this;
+  }
+
+  function setCols($cols)
+  {
+    $this->cols = $cols;
+  }
+}
+
+class FieldSubmit extends Field
+{
+  function __construct($id, $value = '')
+  {
+    parent::__construct($id);
+    $this->value = $value;
+  }
+
+  function __toString()
+  {
+    // Input.
+    $attr = $this->attr;
+    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'submit';
+    if ($this->value)
+    {
+      $attr['value'] = $this->value;
+    }
+
+    $output = htmlSolo('input', $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'textarea', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
   }
 }

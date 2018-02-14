@@ -11,4 +11,4 @@ include ROOT_PATH . '/modules/item/item.inc.php';
 include ROOT_PATH . '/modules/item/item.db.php';
 
 GLOBAL $db;
-$db = new SQLite(ROOT_PATH . '/dnd.db');
+$db = new SQLite('C:\Users\DanielPHenry\Dropbox\Gaming\D&D5e\dnd.db');

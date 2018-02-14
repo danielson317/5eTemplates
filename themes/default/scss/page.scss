@@ -2,12 +2,20 @@
 
 *
 {
-  font-size: $font_normal;
-  font-family: arial;
+  font-family: arial, helvetica, sans-serif;
 }
 
 body
 {
-  // width: 825px;
-  // margin: 25px;
+  font-size: $font_normal;
+}
+
+h1
+{
+  font-size: $font_huge;
+
+  &.debug
+  {
+    color: rosybrown;
+  }
 }

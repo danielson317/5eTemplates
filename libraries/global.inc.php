@@ -1,23 +1,90 @@
 <?php
-/**
- * Template
+/******************************************************************************
  *
- * A class designed to handle all types of template output.
- */
+ * DEBUG Helpers
+ *
+ ******************************************************************************/
+function debugPrint($variable, $name = '', $die = TRUE)
+{
+  echo '<h1 class="debug">' . $name . '</h1>';
+  echo '<pre>';
+  print_r($variable);
+  echo '</pre>';
+  if ($die)
+  {
+    die();
+  }
+}
+
+/******************************************************************************
+ *
+ * URL Helpers
+ *
+ ******************************************************************************/
+function getUrlID($name, $default = FALSE)
+{
+  if (!isset($_GET[$name]) || !is_numeric($_GET[$name]))
+  {
+    return $default;
+  }
+
+  return abs($_GET[$name]);
+}
+
+/******************************************************************************
+ *
+ * HTML Helpers
+ *
+ ******************************************************************************/
+function buildAttr($attr)
+{
+  assert(is_array($attr), 'Attributes passed to buildAttr should be an array().');
+  $attr_string = '';
+  foreach ($attr as $name => $value)
+  {
+    if (is_array($value))
+    {
+      $value = implode(' ', $value);
+    }
+    $attr_string .= ' ' . $name . '="' . $value . '"';
+  }
+
+  return $attr_string;
+}
+
+function htmlWrap($tag, $content, $attr = array())
+{
+  return '<' . $tag . buildAttr($attr) . '>' . $content . '</' . $tag . '>';
+}
+
+function htmlSolo($tag, $attr)
+{
+  return '<' . $tag . buildAttr($attr) . '>';
+}
+
+/******************************************************************************
+ *
+ * HTML Templates
+ *
+ ******************************************************************************/
+
 Class TableTemplate
 {
   // Primary values.
   protected $header = array();
   protected $rows = array();
 
-  protected $class = '';
-  protected $id = '';
+  protected $attr = array();
 
   /**
    * Standard constructor. Pass the path to the template file.
    */
-  public function __construct()
+  public function __construct($id = FALSE)
   {
+    if ($id)
+    {
+      $attr['id'] = $id;
+    }
   }
 
   public function addHeader($header)
@@ -35,82 +102,56 @@ Class TableTemplate
     $this->rows[] = $row;
     return $this;
   }
-  public function addClass($class)
+  public function setAttr($name, $value)
   {
-    $this->class = $class;
+    $this->attr[$name] = $value;
   }
   public function __toString()
   {
     $output = '';
 
     // Generate table.
-    $output .= '<table class="' . $this->class . '">';
     $output .= $this->generateHTMLHeader();
     $output .= $this->generateHTMLRows();
-    $output .= '</table>';
 
-    // Yup.
+    $output = htmlWrap('table', $output, $this->attr);
     return $output;
   }
+
   private function generateHTMLHeader()
   {
-    $output = '<thead>';
-    $output .= '<tr>';
+    // Header columns.
+    $output = '';
     $count = 1;
     foreach ($this->header as $label)
     {
-      $output .= '<th class="column-' . $count . '">';
-      $output .= $label;
-      $output .= '</th>';
+      $attr = array('class' => array('column-' . $count));
+      $output .= htmlWrap('th', $label, $attr);
       $count++;
     }
-    $output .= '</tr></thead>';
+
+    // Header wrappers.
+    $output = htmlWrap('tr', $output);
+    $output = htmlWrap('thead', $output);
     return $output;
   }
+
   private function generateHTMLRows()
   {
-    $output = '<tbody>';
-
+    $output = '';
     foreach ($this->rows as $row)
     {
-      $output .= '<tr>';
+      $row_output = '';
       $count = 1;
       foreach ($row as $cell)
       {
-        $output .= '<td class="column-' . $count . '">';
-        $output .= $cell;
-        $output .= '</td>';
+        $attr = array('class' => array('column-' . $count));
+        $row_output .= htmlWrap('td', $cell, $attr);
         $count++;
       }
-      $output .= '</tr>';
+      $output .= htmlWrap('tr', $row_output);
     }
-    $output .= '</tbody>';
+    $output = htmlWrap('tbody', $output);
     return $output;
   }
-}
-
-function buildAttr($attr)
-{
-  assert(is_array($attr), 'Attributes passed to buildAttr should be an array().');
-  $attr_string = '';
-  foreach ($attr as $name => $value)
-  {
-    if (is_array($value))
-    {
-      $value = implode(' ', $value);
-    }
-    $attr_string .= ' ' . $name . '="' . $value . '"';
-  }
-
-  return $attr_string;
-}
-
-function getUrlID($name, $default = FALSE)
-{
-  if (!isset($_GET[$name]) || !is_numeric($_GET[$name]))
-  {
-    return $default;
-  }
-
-  return abs($_GET[$name]);
 }

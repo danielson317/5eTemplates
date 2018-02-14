@@ -1,5 +1,18 @@
 /* line 3, ../scss/page.scss */
 * {
+  font-family: arial, helvetica, sans-serif;
+}
+
+/* line 8, ../scss/page.scss */
+body {
   font-size: 14px;
-  font-family: arial;
+}
+
+/* line 13, ../scss/page.scss */
+h1 {
+  font-size: 36px;
+}
+/* line 17, ../scss/page.scss */
+h1.debug {
+  color: rosybrown;
 }

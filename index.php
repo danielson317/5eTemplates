@@ -71,7 +71,7 @@ function printItemChards()
             i.print AS count
           FROM items i
           LEFT JOIN item_types it on i.item_type_id = it.id';
-  $items = $db->executeQuery($sql);
+  $items = $db->select($sql);
   foreach($items as $item)
   {
     $item_object = new Item($item);
@@ -96,12 +96,12 @@ function printItemList()
   $output .= '<body>';
 
   $table = new TableTemplate();
-  $table->addClass('item-list');
+  $table->setAttr('class', array('item-list'));
   $table->addHeader(array('Owner', 'Name', 'Qty', 'Value', 'Description'));
 
   $query = new Query(Query::OPERATION_SELECT, 'items');
   $query->addField('name')->addField('print', 'count')->addField('value')->addField('description');
-  $items = $db->executeQuery($query);
+  $items = $db->select($query);
   foreach($items as $item)
   {
     // if (!$item['count'])

@@ -4,14 +4,19 @@
 {
   float: left;
   clear: left;
+  margin-top: 10px;
 
   label,
-  input
+  input,
+  select,
+  textarea
   {
     float: left;
   }
 
-  input
+  input,
+  select,
+  textarea
   {
     clear: left;
   }

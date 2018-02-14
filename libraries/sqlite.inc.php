@@ -16,24 +16,35 @@ class SQLite
     $this->db = new PDO($connect_string, $username, $password, $opt);
   }
 
-  function executeQuery(Query $query, $args = array())
+  function select(Query $query, $args = array())
   {
     $query = $this->db->prepare($query);
     $query->execute($args);
-
-    $results = array();
     return $query->fetchAll(PDO::FETCH_ASSOC);
+  }
+
+  function selectList(Query $query)
+  {
+    $query = $this->db->prepare($query);
+    $query->execute();
+
+    $list = array();
+    while($row = $query->fetch(PDO::FETCH_ASSOC))
+    {
+      $list[$row['id']] = $row['value'];
+    }
+    return $list;
+  }
+
+  function update(Query $query, $args = array())
+  {
+    $query = $this->db->prepare($query);
+    $query->execute($args);
   }
 }
 
-class Query
+abstract class Query
 {
-  protected $operation;
-  const OPERATION_SELECT = 1;
-  const OPERATION_CREATE = 2;
-  const OPERATION_UPDATE = 3;
-  const OPERATION_DELETE = 4;
-
   const COMPARE_EQUAL = 1;
   const COMPARE_NOT_EQUAL = 2;
   const COMPARE_LESS_THAN = 3;
@@ -43,55 +54,72 @@ class Query
   const COMPARE_NULL = 7;
   const COMPARE_NOT_NULL = 8;
 
-  // array(
-  //   'table_name' => array(
-  //     'alias' => 'tn',
-  //     'join' => 'join_table_alias',
-  //   )
-  // )
   protected $tables = array();
   protected $fields = array();
   protected $conditions = array();
 
-  function __construct($operation, $table)
+  function __construct($table, $alias = '')
   {
-    $this->operation = $operation;
-    $this->tables[$table] = array();
+    $this->addTable($table, $alias);
   }
 
+  abstract function __toString();
+
+  abstract function addField($name);
+
+  function addTable($table, $alias = '')
+  {
+    if (!$alias)
+    {
+      $alias = $table;
+    }
+    $this->tables[$alias] = array(
+      'name' => $table,
+    );
+  }
+
+  function addCondition($alias, $value = '', $comparison = self::COMPARE_EQUAL)
+  {
+    if (!$value)
+    {
+      $value = ':' . $alias;
+    }
+    $this->conditions[] = array(
+      'alias' => $alias,
+      'value' => $value,
+      'comparison' => $comparison,
+    );
+  }
+}
+
+class SelectQuery extends Query
+{
   function __toString()
   {
     $output = '';
-    switch($this->operation)
+    $output .= 'SELECT';
+    foreach ($this->fields as $alias => $details)
     {
-      case self::OPERATION_SELECT:
-      {
-        $output .= 'SELECT';
-        foreach ($this->fields as $alias => $details)
-        {
-          $output .= ' ' . $details['name'] . ' AS ' . $alias . ',';
-        }
-        $output = trim($output, ',');
-        $output .= ' FROM ' . key($this->tables);
+      $output .= ' ' . $details['name'] . ' AS ' . $alias . ',';
+    }
+    $output = trim($output, ',');
+    $output .= ' FROM ' . key($this->tables);
 
-        if ($this->conditions)
+    if ($this->conditions)
+    {
+      $output .= ' WHERE';
+      foreach($this->conditions as $condition)
+      {
+        $output .= ' ' . $condition['alias'];
+        switch($condition['comparison'])
         {
-          $output .= ' WHERE';
-          foreach($this->conditions as $condition)
+          case self::COMPARE_EQUAL:
           {
-            $output .= ' ' . $condition['alias'];
-            switch($condition['comparison'])
-            {
-              case self::COMPARE_EQUAL:
-              {
-                $output .= ' =';
-                break;
-              }
-            }
-            $output .= ' ' . $condition['value'];
+            $output .= ' =';
+            break;
           }
         }
-        break;
+        $output .= ' ' . $condition['value'];
       }
     }
     return $output;
@@ -108,13 +136,49 @@ class Query
     );
     return $this;
   }
+}
 
-  function addCondition($alias, $value, $comparison = self::COMPARE_EQUAL)
+class UpdateQuery extends Query
+{
+  function __toString()
   {
-    $this->conditions[] = array(
-      'alias' => $alias,
+    $output = '';
+    $output .= 'UPDATE '  . key($this->tables) . ' SET';
+    foreach ($this->fields as $name => $value)
+    {
+      $output .= ' ' . $name . ' = ' . $value . ',';
+    }
+    $output = trim($output, ',');
+
+    if ($this->conditions)
+    {
+      $output .= ' WHERE';
+      foreach($this->conditions as $condition)
+      {
+        $output .= ' ' . $condition['alias'];
+        switch($condition['comparison'])
+        {
+          case self::COMPARE_EQUAL:
+          {
+            $output .= ' =';
+            break;
+          }
+        }
+        $output .= ' ' . $condition['value'];
+      }
+    }
+    return $output;
+  }
+
+  function addField($name, $value = '')
+  {
+    if (!$value)
+    {
+      $value = ':' . $name;
+    }
+    $this->fields[$name] = array(
       'value' => $value,
-      'comparison' => $comparison,
     );
+    return $this;
   }
 }
