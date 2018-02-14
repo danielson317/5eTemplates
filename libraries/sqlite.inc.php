@@ -41,6 +41,16 @@ class SQLite
     $query = $this->db->prepare($query);
     $query->execute($args);
   }
+
+  static function buildArgs($args)
+  {
+    $new_args = array();
+    foreach ($args as $key => $value)
+    {
+      $new_args[':' . $key] = $value;
+    }
+    return $new_args;
+  }
 }
 
 abstract class Query
@@ -146,7 +156,7 @@ class UpdateQuery extends Query
     $output .= 'UPDATE '  . key($this->tables) . ' SET';
     foreach ($this->fields as $name => $value)
     {
-      $output .= ' ' . $name . ' = ' . $value . ',';
+      $output .= ' ' . $name . ' = ' . $value['value'] . ',';
     }
     $output = trim($output, ',');
 

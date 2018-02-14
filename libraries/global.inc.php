@@ -31,6 +31,12 @@ function getUrlID($name, $default = FALSE)
   return abs($_GET[$name]);
 }
 
+function redirect($path, $statusCode = '303')
+{
+  header('Location: ' . $path, TRUE, $statusCode);
+  die();
+}
+
 /******************************************************************************
  *
  * HTML Helpers

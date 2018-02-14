@@ -99,7 +99,7 @@ function printItemList()
   $table->setAttr('class', array('item-list'));
   $table->addHeader(array('Owner', 'Name', 'Qty', 'Value', 'Description'));
 
-  $query = new Query(Query::OPERATION_SELECT, 'items');
+  $query = new SelectQuery('items');
   $query->addField('name')->addField('print', 'count')->addField('value')->addField('description');
   $items = $db->select($query);
   foreach($items as $item)

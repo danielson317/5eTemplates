@@ -9,61 +9,63 @@ include '../../libraries/bootstrap.inc.php';
 
 if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
 {
-  debugPrint($_POST, 'Post Values', FALSE);
-  $item = new Item($_POST);
+  $item = $_POST;
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
+  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  unset($item['submit']);
+  updateItem($item);
 }
-else
+
+$item_id = getUrlID('id');
+
+$form = new Form('item_form');
+$title = 'Add New Item';
+if ($item_id)
 {
-  $item_id = getUrlID('id');
-
-  $form = new Form('item_form');
-  $title = 'Add New Item';
-  if ($item_id)
-  {
-    $item = getItem($item_id);
-    $form->setValues($item);
-    $title = 'Edit item ' . htmlWrap('em', $item['name']);
-  }
-  $form->setTitle($title);
-
-  // ID.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Name.
-  $field = new FieldText('name', 'Name');
-  $form->addField($field);
-
-  // Type.
-  $options = getItemTypeList();
-  $field = new FieldSelect('item_type_id', 'Type', $options);
-  $form->addField($field);
-
-  // Value.
-  $field = new FieldText('value', 'Value (GP)');
-  $form->addField($field);
-
-  // Magic.
-  $field = new FieldCheckbox('magic', 'Magical');
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldCheckbox('attunement', 'Requires Attunement');
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
-  $form->addField($field);
-
-  // Submit
-  $value = 'Create';
-  if ($item_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $form->addField($field);
-  echo $form;
+  $item = getItem($item_id);
+  $form->setValues($item);
+  $title = 'Edit item ' . htmlWrap('em', $item['name']);
 }
+$form->setTitle($title);
+
+// ID.
+$field = new FieldHidden('id');
+$form->addField($field);
+
+// Name.
+$field = new FieldText('name', 'Name');
+$form->addField($field);
+
+// Type.
+$options = getItemTypeList();
+$field = new FieldSelect('item_type_id', 'Type', $options);
+$form->addField($field);
+
+// Value.
+$field = new FieldText('value', 'Value (GP)');
+$form->addField($field);
+
+// Magic.
+$field = new FieldCheckbox('magic', 'Magical');
+$form->addField($field);
+
+// Attunement.
+$field = new FieldCheckbox('attunement', 'Requires Attunement');
+$form->addField($field);
+
+// Description.
+$field = new FieldTextarea('description', 'Description');
+$form->addField($field);
+
+// Submit
+$value = 'Create';
+if ($item_id)
+{
+  $value = 'Update';
+}
+$field = new FieldSubmit('submit', $value);
+$form->addField($field);
+echo $form;
+
 ?>
 </body>

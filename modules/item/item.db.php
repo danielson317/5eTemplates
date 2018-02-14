@@ -47,16 +47,18 @@ function updateItem($item)
   GLOBAL $db;
 
   $query = new UpdateQuery('items');
-  $query->addField('name', $item['name'])
-        ->addField('item_type_id', $item['item_type_id'])
-        ->addField('value', $item['value'])
-        ->addField('magic', $item['magic'])
-        ->addField('attunement', $item['attunement'])
-        ->addField('description', $item['description']);
+  $query->addField('name')
+        ->addField('item_type_id')
+        ->addField('value')
+        ->addField('magic')
+        ->addField('attunement')
+        ->addField('description');
   $query->addCondition('id');
-  $args = array(':id' => $id);
+  $args = SQLite::buildArgs($item);
 
-  $results = $db->update($query, $args);
+//  echo $query;
+//  debugPrint($args);
+  $db->update($query, $args);
 }
 
 function deleteItem($id)
