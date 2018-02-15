@@ -11,6 +11,30 @@ function installItem()
 
 }
 
+function getItemPager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('items');
+  $query->addField('id')
+    ->addField('name')
+    ->addField('item_type_id')
+    ->addField('value')
+    ->addField('magic')
+    ->addField('attunement')
+    ->addField('description');
+  $query->addOrder('item_type_id');
+  $query->addOrder('name');
+  $query->addPager($page);
+
+  $results = $db->select($query);
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
 function getItem($id)
 {
   GLOBAL $db;
@@ -37,9 +61,20 @@ function getItem($id)
   return $result;
 }
 
-function createItem($id)
+function createItem($item)
 {
+  GLOBAL $db;
 
+  $query = new InsertQuery('items');
+  $query->addField('name')
+        ->addField('item_type_id')
+        ->addField('value')
+        ->addField('magic')
+        ->addField('attunement')
+        ->addField('description');
+  $args = SQLite::buildArgs($item);
+
+  return $db->insert($query, $args);
 }
 
 function updateItem($item)
@@ -56,8 +91,6 @@ function updateItem($item)
   $query->addCondition('id');
   $args = SQLite::buildArgs($item);
 
-//  echo $query;
-//  debugPrint($args);
   $db->update($query, $args);
 }
 

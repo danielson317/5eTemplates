@@ -95,29 +95,6 @@ function printItemList()
   $output .= '</head>';
   $output .= '<body>';
 
-  $table = new TableTemplate();
-  $table->setAttr('class', array('item-list'));
-  $table->addHeader(array('Owner', 'Name', 'Qty', 'Value', 'Description'));
-
-  $query = new SelectQuery('items');
-  $query->addField('name')->addField('print', 'count')->addField('value')->addField('description');
-  $items = $db->select($query);
-  foreach($items as $item)
-  {
-    // if (!$item['count'])
-    // {
-    //   continue;
-    // }
-    $row = array();
-    $row[] = '';
-    $row[] = $item['name'];
-    $row[] = $item['count'];
-    $row[] = $item['value'];
-    // $row[] = $item['description'];
-    $row[] = substr($item['description'], 0, 60);
-    $table->addRow($row);
-  }
-  $output .= $table;
   $output .= '</body>';
   die($output);
 }

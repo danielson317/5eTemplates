@@ -13,8 +13,25 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   $item['magic'] = isset($_POST['magic']) ? 1 : 0;
   $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
   unset($item['submit']);
-  updateItem($item);
+
+  if ($item['id'])
+  {
+    updateItem($item);
+    echo htmlWrap('h3', 'Item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') updated.');
+  }
+  else
+  {
+    unset($item['id']);
+    $item['id'] = createItem($item);
+    echo htmlWrap('h3', 'New item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') created.');
+  }
 }
+
+// Links
+$attr = array(
+  'href' => '/modules/item/list.php',
+);
+echo htmlWrap('a', 'Item List', $attr);
 
 $item_id = getUrlID('id');
 

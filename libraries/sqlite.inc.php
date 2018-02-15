@@ -16,14 +16,14 @@ class SQLite
     $this->db = new PDO($connect_string, $username, $password, $opt);
   }
 
-  function select(Query $query, $args = array())
+  function select(SelectQuery $query, $args = array())
   {
     $query = $this->db->prepare($query);
     $query->execute($args);
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  function selectList(Query $query)
+  function selectList(SelectQuery $query)
   {
     $query = $this->db->prepare($query);
     $query->execute();
@@ -36,7 +36,14 @@ class SQLite
     return $list;
   }
 
-  function update(Query $query, $args = array())
+  function insert(InsertQuery $query, $args = array())
+  {
+    $query = $this->db->prepare($query);
+    $query->execute($args);
+    return $this->db->lastInsertId();
+  }
+
+  function update(UpdateQuery $query, $args = array())
   {
     $query = $this->db->prepare($query);
     $query->execute($args);
@@ -104,6 +111,10 @@ abstract class Query
 
 class SelectQuery extends Query
 {
+  protected $orders = array();
+  protected $page = FALSE;
+  protected $page_size = FALSE;
+
   function __toString()
   {
     $output = '';
@@ -115,6 +126,7 @@ class SelectQuery extends Query
     $output = trim($output, ',');
     $output .= ' FROM ' . key($this->tables);
 
+    // Where.
     if ($this->conditions)
     {
       $output .= ' WHERE';
@@ -132,6 +144,25 @@ class SelectQuery extends Query
         $output .= ' ' . $condition['value'];
       }
     }
+
+    // Order by.
+    if ($this->orders)
+    {
+      $output .= ' ORDER BY';
+      foreach ($this->orders as $alias => $dir)
+      {
+        $output .= ' ' . $alias . ' ' . $dir . ',';
+      }
+    }
+    $output = trim($output, ',');
+
+    // Pager
+    if ($this->page)
+    {
+      $output .= ' LIMIT ' . $this->page_size;
+      $output .= ' OFFSET ' . (($this->page_size * $this->page) - $this->page_size);
+    }
+
     return $output;
   }
 
@@ -145,6 +176,17 @@ class SelectQuery extends Query
       'name' => $name,
     );
     return $this;
+  }
+
+  function addOrder($alias, $dir = 'ASC')
+  {
+    $this->orders[$alias] = $dir;
+  }
+
+  function addPager($page = 1, $page_size = 100)
+  {
+    $this->page = $page;
+    $this->page_size = $page_size;
   }
 }
 
@@ -177,6 +219,42 @@ class UpdateQuery extends Query
         $output .= ' ' . $condition['value'];
       }
     }
+    return $output;
+  }
+
+  function addField($name, $value = '')
+  {
+    if (!$value)
+    {
+      $value = ':' . $name;
+    }
+    $this->fields[$name] = array(
+      'value' => $value,
+    );
+    return $this;
+  }
+}
+
+class InsertQuery extends Query
+{
+  function __toString()
+  {
+    $output = '';
+    $output .= 'INSERT INTO '  . key($this->tables) . ' (';
+    foreach ($this->fields as $name => $value)
+    {
+      $output .= ' ' . $name . ',';
+    }
+    $output = trim($output, ',');
+
+    $output .= ') VALUES (';
+    foreach ($this->fields as $name => $value)
+    {
+      $output .= ' ' . $value['value'] . ',';
+    }
+    $output = trim($output, ',');
+
+    $output .= ')';
     return $output;
   }
 
