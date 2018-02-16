@@ -49,6 +49,12 @@ class SQLite
     $query->execute($args);
   }
 
+  function create(CreateQuery $query, $args = array())
+  {
+    $query = $this->db->prepare($query);
+    $query->execute($args);
+  }
+
   static function buildArgs($args)
   {
     $new_args = array();
@@ -266,6 +272,63 @@ class InsertQuery extends Query
     }
     $this->fields[$name] = array(
       'value' => $value,
+    );
+    return $this;
+  }
+}
+
+class CreateQuery extends Query
+{
+  function __toString()
+  {
+    $output = '';
+    $output .= 'CREATE TABLE `'  . key($this->tables) . '` (';
+    foreach ($this->fields as $name => $value)
+    {
+      $output .= ' `' . $name . '` ' . $value['type'];
+      foreach ($value['flags'] as $flag)
+      {
+        if ($flag == 'N')
+        {
+          $output .= ' NOT NULL';
+        }
+        elseif ($flag == 'P')
+        {
+          $output .= ' PRIMARY KEY';
+        }
+        elseif ($flag == 'A')
+        {
+          $output .= ' AUTOINCREMENT';
+        }
+        elseif ($flag == 'U')
+        {
+          $output .= ' UNIQUE';
+        }
+      }
+
+      if ($value['default'] !== FALSE)
+      {
+        $output .= ' DEFAULT ' . $value['default'];
+      }
+      $output .= ',';
+    }
+    $output = trim($output, ',');
+
+    $output .= ')';
+    return $output;
+  }
+
+  // Flags:
+  // A = Auto Increment
+  // P = Primary Key
+  // N = Not Null
+  // U = Unique
+  function addField($name, $type = 'INTEGER', $flags = array(), $default = FALSE)
+  {
+    $this->fields[$name] = array(
+      'type' => $type,
+      'flags' => $flags,
+      'default' => $default
     );
     return $this;
   }

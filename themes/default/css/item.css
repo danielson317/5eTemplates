@@ -45,25 +45,40 @@
   padding: 5px;
 }
 
-/* line 58, ../scss/item.scss */
-table.item-list {
-  border-collapse: collapse;
-}
-/* line 61, ../scss/item.scss */
-table.item-list th, table.item-list td {
-  border: 1px solid black;
-  padding: 2px 3px;
-}
-/* line 67, ../scss/item.scss */
+/* line 60, ../scss/item.scss */
 table.item-list .column-1 {
   width: 200px;
 }
-/* line 71, ../scss/item.scss */
+/* line 64, ../scss/item.scss */
 table.item-list .column-2 {
   width: 100px;
 }
-/* line 75, ../scss/item.scss */
-table.item-list .column-3,
-table.item-list .column-4 {
+/* line 68, ../scss/item.scss */
+table.item-list .column-2,
+table.item-list .column-3 {
+  text-align: right;
+}
+
+/* line 77, ../scss/item.scss */
+table.item-print-list .column-1 {
+  width: 100px;
+}
+/* line 81, ../scss/item.scss */
+table.item-print-list .column-1 input.button {
+  width: 30px;
+}
+/* line 86, ../scss/item.scss */
+table.item-print-list .column-1 input.plus,
+table.item-print-list .column-1 input.minus {
+  width: 22px;
+  margin-left: 2px;
+}
+/* line 93, ../scss/item.scss */
+table.item-print-list .column-2 {
+  width: 200px;
+}
+/* line 97, ../scss/item.scss */
+table.item-print-list .column-3 {
+  width: 100px;
   text-align: right;
 }

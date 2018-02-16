@@ -8,7 +8,22 @@
  ******************************************************************************/
 function installItem()
 {
+  GLOBAL $db;
 
+  $query = new CreateQuery('items');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('item_type_id', 'INTEGER', array('N'), 0);
+  $query->addField('value', 'INTEGER', array('N'), 0);
+  $query->addField('magic', 'INTEGER', array('N'), 0);
+  $query->addField('attunement', 'INTEGER', array('N'), 0);
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  $query = new CreateQuery('item_types');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $db->create($query);
 }
 
 function getItemPager($page = 1)

@@ -1,22 +1,7 @@
 <?php
 include '/libraries/bootstrap.inc.php';
-// include('character.inc.php');
-// include('websheet.inc.php');
-// include('install.inc.php');
 
-// printItemChards();
-
-printItemList();
-
-// echo printCharacterSheet();
-// printSpellSheet();
-// printItemSheet();
-
-// $create = new CreateDB('dnd.db');
-// $create->createCharacterTable();
-// Character Sheet
-// Spell Card
-// Moster Stats
+echo menu();
 
 function printCharacterSheet()
 {
@@ -51,7 +36,7 @@ function printSpellSheet()
   die($output);
 }
 
-function printItemChards()
+function printItemCards()
 {
   GLOBAL $db;
 
@@ -61,17 +46,18 @@ function printItemChards()
   $output .= '</head>';
   $output .= '<body>';
 
-  $sql = 'SELECT
-            i.name AS name,
-            it.name AS item_type,
-            i.value AS value,
-            i.magic AS magic,
-            i.attunment AS attunment,
-            i.description AS description,
-            i.print AS count
-          FROM items i
-          LEFT JOIN item_types it on i.item_type_id = it.id';
-  $items = $db->select($sql);
+//  $sql = 'SELECT
+//            i.name AS name,
+//            it.name AS item_type,
+//            i.value AS value,
+//            i.magic AS magic,
+//            i.attunment AS attunment,
+//            i.description AS description,
+//            i.print AS count
+//          FROM items i
+//          LEFT JOIN item_types it on i.item_type_id = it.id';
+//  $items = $db->select($sql);
+  $items = getItemPager();
   foreach($items as $item)
   {
     $item_object = new Item($item);
@@ -80,20 +66,6 @@ function printItemChards()
       $output .= $item_object;
     }
   }
-
-  $output .= '</body>';
-  die($output);
-}
-
-function printItemList()
-{
-  GLOBAL $db;
-
-  $output = '<head>';
-  $output .= '<link href="/themes/default/css/page.css" rel="stylesheet" type="text/css">';
-  $output .= '<link href="/themes/default/css/item.css" rel="stylesheet" type="text/css">';
-  $output .= '</head>';
-  $output .= '<body>';
 
   $output .= '</body>';
   die($output);

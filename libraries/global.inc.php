@@ -161,3 +161,17 @@ Class TableTemplate
     return $output;
   }
 }
+
+function menu()
+{
+  $output = '';
+
+  $attr = array(
+    'href' => '/modules/item/list.php',
+  );
+  $output .= htmlWrap('a', 'Items', $attr);
+
+  $attr = array('class' => array('menu'));
+  $output = htmlWrap('div', $output, $attr);
+  return $output;
+}

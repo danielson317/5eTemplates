@@ -19,3 +19,34 @@ h1
     color: rosybrown;
   }
 }
+
+a
+{
+  text-decoration: none;
+  color: blue;
+}
+
+table
+{
+  font-size: $font_normal;
+  border-collapse: collapse;
+  th, td
+  {
+    border: 1px solid black;
+    padding: 2px 3px;
+  }
+}
+
+.menu,
+.operations
+{
+  a
+  {
+    margin-left: 10px;
+
+    &:first-of-type
+    {
+      margin: auto;
+    }
+  }
+}

@@ -57,13 +57,6 @@
 
 table.item-list
 {
-  border-collapse: collapse;
-  th, td
-  {
-    border: 1px solid black;
-    padding: 2px 3px;
-  }
-
   .column-1
   {
     width: 200px;
@@ -72,9 +65,38 @@ table.item-list
   {
     width: 100px;
   }
-  .column-3,
-  .column-4
+  .column-2,
+  .column-3
   {
+    text-align: right;
+  }
+}
+
+table.item-print-list
+{
+  .column-1
+  {
+    width: 100px;
+
+    input.button
+    {
+      width: 30px;
+    }
+
+    input.plus,
+    input.minus
+    {
+      width: 22px;
+      margin-left: 2px;
+    }
+  }
+  .column-2
+  {
+    width: 200px;
+  }
+  .column-3
+  {
+    width: 100px;
     text-align: right;
   }
 }

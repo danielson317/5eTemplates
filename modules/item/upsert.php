@@ -1,6 +1,7 @@
 <head>
   <link rel="stylesheet" href="/themes/default/css/page.css">
   <link rel="stylesheet" href="/themes/default/css/form.css">
+  <link rel="stylesheet" href="/themes/default/css/item.css">
 </head>
 <body class="spell-insert-form">
 <?php
@@ -27,11 +28,9 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   }
 }
 
-// Links
-$attr = array(
-  'href' => '/modules/item/list.php',
-);
-echo htmlWrap('a', 'Item List', $attr);
+$output = '';
+
+$output .= menu();
 
 $item_id = getUrlID('id');
 
@@ -82,7 +81,8 @@ if ($item_id)
 }
 $field = new FieldSubmit('submit', $value);
 $form->addField($field);
-echo $form;
+$output .= $form;
 
+echo $output;
 ?>
 </body>
