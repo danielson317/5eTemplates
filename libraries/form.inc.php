@@ -62,12 +62,11 @@ class Form
 
   function addField(Field $field)
   {
-    if (isset($this->values[$field->getId()]) && !$field->getValue())
+    if (isset($this->values[$field->getId()]))
     {
       $field->setValue($this->values[$field->getId()]);
     }
     $this->fields[] = $field;
-    return $field;
   }
 
   function getAttr($name)

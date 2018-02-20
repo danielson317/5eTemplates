@@ -171,6 +171,11 @@ function menu()
   );
   $output .= htmlWrap('a', 'Items', $attr);
 
+  $attr = array(
+    'href' => '/modules/spell/list.php',
+  );
+  $output .= htmlWrap('a', 'Spells', $attr);
+
   $attr = array('class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);
   return $output;

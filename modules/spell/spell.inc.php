@@ -1,89 +1,72 @@
 <?php
 
-class Spell
+function printSpellCard($spell)
 {
-  // Summary
-  protected $name;
-  protected $school;
-  protected $level;
-  protected $speed;
-  protected $range;
-  protected $components;
-  protected $duration;
-  protected $description;
-  protected $higher_levels;
-  protected $subject;
+  extract($spell);
 
-  /***************
-   * Operators
-   ***************/
-  public function __construct()
-  {
-  }
-  public function setSpell($spell)
-  {
-    $this->name = $spell['name'];
-    $this->school = $spell['school'];
-    $this->level = $spell['level'];
-    $this->speed = $spell['speed'];
-    $this->range = $spell['range'];
-    $this->components = $spell['components'];
-    $this->duration = $spell['duration'];
-    $this->description = $spell['description'];
-    $this->higher_levels = $spell['higher_levels'];
-    $this->subject = $spell['subject'];
-  }
-  public function __toString()
-  {
-    ob_start();
+  ob_start();
 
-    include ROOT_PATH . '/themes/default/templates/spell.tpl.php';
+  include ROOT_PATH . '/themes/default/templates/spell.tpl.php';
 
-    return ob_get_clean();
-  }
+  return ob_get_clean();
+}
 
-  /***************
-   * Setters
-   ***************/
-   public function setName($name)
-   {
-     $this->name = $name;
-   }
-   public function setSchool($school)
-   {
-     $this->school = $school;
-   }
-   public function setLevel($level)
-   {
-     $this->level = $level;
-   }
-   public function setSpeed($speed)
-   {
-     $this->speed = $speed;
-   }
-   public function setRange($range)
-   {
-     $this->range = $range;
-   }
-   public function setComponents($components)
-   {
-     $this->components = $components;
-   }
-   public function setDuration($duration)
-   {
-     $this->duration = $duration;
-   }
-   public function setDescription($description)
-   {
-     $this->description = $description;
-   }
-   public function setSubject($subject)
-   {
-     $this->subject = $subject;
-   }
+function getLevelList()
+{
+  return array(
+    0 => 'Cantrip',
+    1 => '1st',
+    2 => '2nd',
+    3 => '3rd',
+    4 => '4th',
+    5 => '5th',
+    6 => '6th',
+    7 => '7th',
+    8 => '8th',
+    9 => '9th',
+  );
+}
 
-   /**********************
-    * Getters.
-    **********************/
+function getSpeedList()
+{
+  return array(
+    0 => 'Permanent (Until Dispelled)',
+    1 => 'Instantaneous',
+    2 => 'Reaction',
+    3 => 'Bonus Action',
+    6 => 'Action',
+    60 => '1 Minute',
+    600 => 'Ritual (10 Minutes)',
+    3600 => 'Short Rest (1 Hour)',
+    7200 => '2 Hours',
+    28800 => 'Long Rest (8 Hours)',
+    43200 => '12 Hours',
+    86400 => '1 Day (24 Hours)',
+    604800 => '7 Days',
+    864000 => '10 Days',
+    2592000 => '30 Days',
+  );
+}
 
+function getRangeList()
+{
+  return array(
+    0 => 'unlimited',
+    1 => 'same plane',
+    2 => 'self',
+    3 => 'touch',
+    4 => 'sight',
+    5 => 'melee (5 feet)',
+    10 => '10 feet',
+    15 => '15 feet',
+    30 => '30 feet',
+    60 => '60 feet',
+    90 => '90 feet',
+    100 => '100 feet',
+    120 => '120 feet',
+    150 => '150 feet',
+    300 => '300 feet',
+    500 => '500 feet',
+    5280 => '1 mile',
+  );
 }
