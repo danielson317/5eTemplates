@@ -298,8 +298,19 @@ class CreateQuery extends Query
 {
   function __toString()
   {
+    $primary_key = array();
+    foreach($this->fields as $name => $value)
+    {
+      if (array_search('P', $value['flags']) !== FALSE)
+      {
+        $primary_key[] = $name;
+      }
+    }
+    $key_count = count($primary_key);
+
     $output = '';
     $output .= 'CREATE TABLE `'  . key($this->tables) . '` (';
+
     foreach ($this->fields as $name => $value)
     {
       $output .= ' `' . $name . '` ' . $value['type'];
@@ -309,7 +320,7 @@ class CreateQuery extends Query
         {
           $output .= ' NOT NULL';
         }
-        elseif ($flag == 'P')
+        elseif ($flag == 'P' && $key_count == 1)
         {
           $output .= ' PRIMARY KEY';
         }
@@ -328,6 +339,16 @@ class CreateQuery extends Query
         $output .= ' DEFAULT ' . $value['default'];
       }
       $output .= ',';
+    }
+    if ($key_count > 1)
+    {
+      $output .= ' PRIMARY KEY(';
+      foreach($primary_key as $key)
+      {
+        $output .= '`' . $key . '` ' . ', ';
+      }
+      $output = trim($output, ', ');
+      $output .= ')';
     }
     $output = trim($output, ',');
 
