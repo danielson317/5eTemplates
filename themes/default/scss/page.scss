@@ -50,3 +50,40 @@ table
     }
   }
 }
+
+table.print-list
+{
+  .column-1
+  {
+    width: 100px;
+
+    input.button
+    {
+      width: 30px;
+    }
+
+    input.plus,
+    input.minus
+    {
+      width: 22px;
+      margin-left: 2px;
+    }
+  }
+  .column-2
+  {
+    width: 200px;
+  }
+}
+
+.print-card
+{
+  width: 230px;
+  height: 325px;
+  float: left;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+
+  page-break-inside: avoid;
+}

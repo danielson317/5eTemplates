@@ -1,14 +1,24 @@
-<div class="spell">
-  <div class="name"><?php echo $this->name; ?></div>
-  <div class="school">Level <?php echo $this->level; ?> <?php echo $this->school; ?> </div>
+<div class="spell print-card">
+  <div class="name"><?php echo $name; ?></div>
+  <div class="school"><?php echo $school; ?> </div>
   <div class="attributes">
-    <div class="speed"><?php echo $this->speed; ?></div>
-    <div class="range"><?php echo $this->range; ?></div>
-    <div class="components"><?php echo $this->components; ?></div>
-    <div class="duration"><?php echo $this->duration; ?></div>
+    <table class="attributes">
+      <thead><tr><th>Speed</th><th>Range</th><th>Duration</th></tr></thead>
+      <tbody><tr>
+        <td class="speed"><?php echo $speed; ?></td>
+        <td class="range"><?php echo $range; ?></td>
+        <td class="duration"><?php echo $duration; ?><?php if ($concentration) :  ?><span class="concentration">C</span><?php endif; ?></td>
+      </tr></tbody>
+    </table>
   </div>
+  <div class="components"><?php echo $components; ?></div>
   <div class="description">
-    <?php echo $this->description; ?>
+    <?php echo $description; ?>
   </div>
-  <div class="subject"><?php echo $this->subject; ?></div>
+  <?php if ($alternate) : ?>
+    <div class="alternate-label">At Higher Levels</div>
+    <div class="alternate">
+      <?php echo $alternate; ?>
+    </div>
+  <?php endif; ?>
 </div>

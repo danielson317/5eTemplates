@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="/themes/default/css/page.css">
   <link rel="stylesheet" href="/themes/default/css/item.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="/modules/item/item_print.js"></script>
+  <script src="/themes/default/js/print_list.js"></script>
 </head>
 <body class="spell-print-page">
 <?php
@@ -24,6 +24,8 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
     {
       $item = getItem($item_id);
       $item['type'] = $item_types[$item['item_type_id']];
+      $item['magic'] = $item['magic'] ? 'M' : '';
+      $item['attunement'] = $item['attunement'] ? 'A' : '';
       echo printItemCard($item);
     }
   }
@@ -59,7 +61,7 @@ $output .= htmlWrap('h1', 'Set Quantity of cards to print.');
 
 // Table.
 $table = new TableTemplate();
-$table->setAttr('class', array('item-print-list'));
+$table->setAttr('class', array('item-print-list', 'print-list'));
 $table->addHeader(array('Qty', 'Name', 'Value', 'Type', 'Description'));
 
 $item_types = getItemTypeList();

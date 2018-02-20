@@ -1,0 +1,61 @@
+@import "_constants.scss";
+
+.print-card.spell
+{
+  .name
+  {
+    text-align: center;
+    font-weight: bold;
+    background-color: $color_light_brown;
+    padding: 5px 5px 0 5px;
+  }
+  .school
+  {
+    text-align: center;
+    font-size: $font_small;
+    background-color: $color_light_brown;
+    padding-bottom: 5px;
+
+  }
+  table.attributes
+  {
+    width: 100%;
+    background-color: $color_tan;
+    th, td
+    {
+      width: 33%;
+      text-align: center;
+      border: none;
+    }
+    .concentration
+    {
+      //display: inline-block;
+      padding: 0 3px 0 2px;
+      //font-size: $font_small;
+      border: 1px solid black;
+      border-radius: 3px;
+      background-color: white;
+      margin: 0 0 2px 3px;
+      line-height: 14px;
+    }
+  }
+  .components
+  {
+    font-size: $font_small;
+    background-color: $color_light_brown;
+    padding: 2px 5px 2px 5px;
+  }
+
+  .description,
+  .alternate
+  {
+    padding: 5px;
+  }
+  .alternate-label
+  {
+    font-size: $font_small;
+    padding: 2px 5px 2px 5px;
+    text-align: center;
+    background-color: $color_light_brown;
+  }
+}

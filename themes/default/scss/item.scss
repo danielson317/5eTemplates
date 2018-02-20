@@ -1,21 +1,7 @@
 @import "_constants.scss";
 
-// body
-// {
-  // margin: 0 30px;
-// }
-.item
+.print-card.item
 {
-  width: 230px;
-  height: 325px;
-  float: left;
-  padding: 5px;
-  border: 1px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-
-  page-break-inside: avoid;
-
   .name
   {
     text-align: center;
@@ -24,6 +10,7 @@
     background-color: $color_light_brown;
     padding: 5px;
   }
+
   .attributes
   {
     height: 18px;
@@ -74,26 +61,6 @@ table.item-list
 
 table.item-print-list
 {
-  .column-1
-  {
-    width: 100px;
-
-    input.button
-    {
-      width: 30px;
-    }
-
-    input.plus,
-    input.minus
-    {
-      width: 22px;
-      margin-left: 2px;
-    }
-  }
-  .column-2
-  {
-    width: 200px;
-  }
   .column-3
   {
     width: 100px;

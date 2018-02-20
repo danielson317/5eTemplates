@@ -1,83 +1,54 @@
-/* line 7, ../scss/item.scss */
-.item {
-  width: 230px;
-  height: 325px;
-  float: left;
-  padding: 5px;
-  border: 1px solid black;
-  border-radius: 10px;
-  overflow: hidden;
-  page-break-inside: avoid;
-}
-/* line 19, ../scss/item.scss */
-.item .name {
+/* line 5, ../scss/item.scss */
+.print-card.item .name {
   text-align: center;
   font-weight: bold;
   font-size: 18px;
   background-color: #D4B26A;
   padding: 5px;
 }
-/* line 27, ../scss/item.scss */
-.item .attributes {
+/* line 14, ../scss/item.scss */
+.print-card.item .attributes {
   height: 18px;
   background-color: #FFE3AA;
   padding: 5px;
 }
-/* line 33, ../scss/item.scss */
-.item .attributes .type,
-.item .attributes .magic,
-.item .attributes .attunement {
+/* line 20, ../scss/item.scss */
+.print-card.item .attributes .type,
+.print-card.item .attributes .magic,
+.print-card.item .attributes .attunement {
   float: left;
 }
-/* line 39, ../scss/item.scss */
-.item .attributes .type {
+/* line 26, ../scss/item.scss */
+.print-card.item .attributes .type {
   width: 130px;
 }
-/* line 43, ../scss/item.scss */
-.item .attributes .value {
+/* line 30, ../scss/item.scss */
+.print-card.item .attributes .value {
   float: right;
   text-align: right;
 }
-/* line 49, ../scss/item.scss */
-.item .description {
+/* line 36, ../scss/item.scss */
+.print-card.item .description {
   clear: left;
   float: left;
   padding: 5px;
 }
 
-/* line 60, ../scss/item.scss */
+/* line 47, ../scss/item.scss */
 table.item-list .column-1 {
   width: 200px;
 }
-/* line 64, ../scss/item.scss */
+/* line 51, ../scss/item.scss */
 table.item-list .column-2 {
   width: 100px;
 }
-/* line 68, ../scss/item.scss */
+/* line 55, ../scss/item.scss */
 table.item-list .column-2,
 table.item-list .column-3 {
   text-align: right;
 }
 
-/* line 77, ../scss/item.scss */
-table.item-print-list .column-1 {
-  width: 100px;
-}
-/* line 81, ../scss/item.scss */
-table.item-print-list .column-1 input.button {
-  width: 30px;
-}
-/* line 86, ../scss/item.scss */
-table.item-print-list .column-1 input.plus,
-table.item-print-list .column-1 input.minus {
-  width: 22px;
-  margin-left: 2px;
-}
-/* line 93, ../scss/item.scss */
-table.item-print-list .column-2 {
-  width: 200px;
-}
-/* line 97, ../scss/item.scss */
+/* line 64, ../scss/item.scss */
 table.item-print-list .column-3 {
   width: 100px;
   text-align: right;

@@ -1,0 +1,52 @@
+/* line 5, ../scss/spell.scss */
+.print-card.spell .name {
+  text-align: center;
+  font-weight: bold;
+  background-color: #D4B26A;
+  padding: 5px 5px 0 5px;
+}
+/* line 12, ../scss/spell.scss */
+.print-card.spell .school {
+  text-align: center;
+  font-size: 10px;
+  background-color: #D4B26A;
+  padding-bottom: 5px;
+}
+/* line 20, ../scss/spell.scss */
+.print-card.spell table.attributes {
+  width: 100%;
+  background-color: #FFE3AA;
+}
+/* line 24, ../scss/spell.scss */
+.print-card.spell table.attributes th, .print-card.spell table.attributes td {
+  width: 33%;
+  text-align: center;
+  border: none;
+}
+/* line 30, ../scss/spell.scss */
+.print-card.spell table.attributes .concentration {
+  padding: 0 3px 0 2px;
+  border: 1px solid black;
+  border-radius: 3px;
+  background-color: white;
+  margin: 0 0 2px 3px;
+  line-height: 14px;
+}
+/* line 42, ../scss/spell.scss */
+.print-card.spell .components {
+  font-size: 10px;
+  background-color: #D4B26A;
+  padding: 2px 5px 2px 5px;
+}
+/* line 49, ../scss/spell.scss */
+.print-card.spell .description,
+.print-card.spell .alternate {
+  padding: 5px;
+}
+/* line 54, ../scss/spell.scss */
+.print-card.spell .alternate-label {
+  font-size: 10px;
+  padding: 2px 5px 2px 5px;
+  text-align: center;
+  background-color: #D4B26A;
+}

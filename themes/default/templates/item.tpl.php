@@ -1,4 +1,4 @@
-<div class="item">
+<div class="item print-card">
   <div class="name"><?php echo $name; ?></div>
   <div class="attributes">
     <div class="type"><?php echo $type; ?></div>

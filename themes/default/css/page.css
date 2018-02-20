@@ -44,3 +44,34 @@ table th, table td {
 .operations a:first-of-type {
   margin: auto;
 }
+
+/* line 56, ../scss/page.scss */
+table.print-list .column-1 {
+  width: 100px;
+}
+/* line 60, ../scss/page.scss */
+table.print-list .column-1 input.button {
+  width: 30px;
+}
+/* line 65, ../scss/page.scss */
+table.print-list .column-1 input.plus,
+table.print-list .column-1 input.minus {
+  width: 22px;
+  margin-left: 2px;
+}
+/* line 72, ../scss/page.scss */
+table.print-list .column-2 {
+  width: 200px;
+}
+
+/* line 78, ../scss/page.scss */
+.print-card {
+  width: 230px;
+  height: 325px;
+  float: left;
+  padding: 5px;
+  border: 1px solid black;
+  border-radius: 10px;
+  overflow: hidden;
+  page-break-inside: avoid;
+}

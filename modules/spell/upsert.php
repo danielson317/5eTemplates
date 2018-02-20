@@ -54,6 +54,12 @@ $form->addField($field);
 $field = new FieldText('name', 'Name');
 $form->addField($field);
 
+// Source.
+$options = getSourceList();
+$field = new FieldSelect('source_id', 'Source', $options);
+$field->setValue(1);
+$form->addField($field);
+
 // School.
 $options = getSchoolList();
 $field = new FieldSelect('school_id', 'School', $options);
@@ -90,7 +96,7 @@ $field = new FieldCheckbox('verbal', 'Verbal');
 $form->addField($field);
 
 // Semantic.
-$field = new FieldCheckbox('concentration', 'Semantic (gesture)');
+$field = new FieldCheckbox('semantic', 'Semantic (gesture)');
 $form->addField($field);
 
 // Material.

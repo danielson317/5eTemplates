@@ -113,6 +113,23 @@ abstract class Query
       'comparison' => $comparison,
     );
   }
+
+  static function concatenate()
+  {
+    $string = '';
+    $args = func_get_args();
+    foreach($args as $arg)
+    {
+      $string .= ' || ' . $arg;
+    }
+    $string = trim($string, ' |');
+    return $string;
+  }
+
+  static function literal($string)
+  {
+    return '\'' . $string . '\'';
+  }
 }
 
 class SelectQuery extends Query

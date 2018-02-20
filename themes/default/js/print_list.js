@@ -1,7 +1,7 @@
 $= jQuery;
 $(document).ready(function()
 {
-  var $table = $('table.item-print-list');
+  var $table = $('table.print-list');
   $table.on('click', '.plus', function()
   {
     var $control = $(this).siblings('.button');

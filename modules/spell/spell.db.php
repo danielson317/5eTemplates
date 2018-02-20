@@ -13,6 +13,7 @@ function installSpell()
   $query = new CreateQuery('spells');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
+  $query->addField('source_id', 'INTEGER', array('N'), 0);
   $query->addField('school_id', 'INTEGER', array('N'), 0);
   $query->addField('level', 'INTEGER', array('N'), 0);
   $query->addField('speed', 'INTEGER', array('N'), 0);
@@ -29,7 +30,7 @@ function installSpell()
   $query->addField('alternate', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('aoes');
+  $query = new CreateQuery('schools');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('description', 'TEXT');
@@ -39,6 +40,12 @@ function installSpell()
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  $query = new CreateQuery('sources');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('code', 'TEXT', array('N'));
+  $query->addField('name', 'TEXT', array('N'));
   $db->create($query);
 }
 
@@ -52,7 +59,6 @@ function getSpellPager($page = 1)
     ->addField('school_id')
     ->addField('level')
     ->addField('description');
-  $query->addOrder('school_id');
   $query->addOrder('name');
   $query->addPager($page);
 
@@ -71,6 +77,7 @@ function getSpell($id)
   $query = new SelectQuery('spells');
   $query->addField('id')
     ->addField('name')
+    ->addField('source_id')
     ->addField('school_id')
     ->addField('level')
     ->addField('speed')
@@ -105,6 +112,7 @@ function createSpell($spell)
 
   $query = new InsertQuery('spells');
   $query->addField('name')
+    ->addField('source_id')
     ->addField('school_id')
     ->addField('level')
     ->addField('speed')
@@ -130,6 +138,7 @@ function updateSpell($spell)
 
   $query = new UpdateQuery('spells');
   $query->addField('name')
+    ->addField('source_id')
     ->addField('school_id')
     ->addField('level')
     ->addField('speed')
@@ -177,6 +186,16 @@ function getAoeList()
 
   $query = new SelectQuery('aoes');
   $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
+}
+
+function getSourceList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('sources');
+  $query->addField('id')->addField($query::concatenate('code', $query::literal(' - '), 'name'), 'value');
 
   return $db->selectList($query);
 }
