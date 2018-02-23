@@ -1,5 +1,12 @@
 <?php
 
+function printCharacterSheet()
+{
+  ob_start();
+  include ROOT_PATH . '/themes/default/templates/character.tpl.php';
+  return ob_get_clean();
+}
+
 function getAlignmentList()
 {
   return array(

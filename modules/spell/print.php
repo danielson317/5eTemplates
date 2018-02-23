@@ -28,14 +28,18 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
       $spell = getSpell($spell_id);
 
       // School.
-      $spell['school'] = $schools[$spell['school_id']];
-      if ($spell['level'] == 0)
+//      $spell['school'] = $schools[$spell['school_id']];
+      if ($spell['level'] <= 0)
       {
-        $spell['school'] .= ' ' . $levels[$spell['level']];
+        $spell['school'] = $schools[$spell['school_id']] . ' ' . $levels[$spell['level']];
+      }
+      elseif ($spell['level'] <= 9)
+      {
+        $spell['school'] = $levels[$spell['level']] . '-level ' . $schools[$spell['school_id']];
       }
       else
       {
-        $spell['school'] = $levels[$spell['level']] . '-level ' . $spell['school'];
+        $spell['school'] = $levels[$spell['level']];
       }
 
       // Attributes.
@@ -58,6 +62,9 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
         $spell['components'] .= ', M (' . $spell['material'] . ')';
       }
       $spell['components'] = trim($spell['components'], ' ,');
+
+      // Text fields.
+      $spell['description'] = str_replace("\n", '<br>', $spell['description']);
       echo printSpellCard($spell);
     }
   }

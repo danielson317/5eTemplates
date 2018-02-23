@@ -1,72 +1,58 @@
 <?php
 include '/libraries/bootstrap.inc.php';
 
-echo menu();
+//echo menu();
 
-function printCharacterSheet()
+// Retrieve body.
+$url = new URL();
+//debugPrint($url->getPath(), 'path', FALSE);
+//debugPrint($url->getQuery(), 'query');
+$function = getRegistry($url->getPath());
+//echo $function;
+echo $function();
+
+
+/**
+ * @param bool|FALSE $path
+ * @return array|string
+ */
+function getRegistry($path = FALSE)
 {
-  ob_start();
-  include ROOT_PATH . '/themes/default/templates/character.tpl.php';
-  return ob_get_clean();
-}
-
-function printSpellSheet()
-{
-  $output = '<head>';
-  $output .= '<link href="/themes/default/css/spell.css" rel="stylesheet" type="text/css">';
-  $output .= '</head>';
-  $output .= '<body>';
-  $spell = new Spell();
-
-  $divine_smite = array(
-    'name' => 'Divine Smite',
-    'level' => 2,
-    'school' => 'Skill',
-    'speed' => 'action',
-    'range' => '5',
-    'components' => 'N/A',
-    'duration' => 'instant',
-    'description' => 'When you hit a creature with a melee weapon attack, you can expend one spell slot to deal radiant damage to the target, in addition to the weapon\'s damage. The extra damage is 2d8 for a 1st-level spell slot. The damage increases by 1d8 for undead and fiend.',
-    'higher_levels' => 'Add 1d8 radiant damage for each spell level above the first to a maximum of 5d8.',
-    'subject' => 'Paladin',
+  $registry = array(
+    '/' => 'home',
+    'unknown' => 'unknown',
+    'item' => 'itemUpsertForm',
+    'items' => 'itemList',
+    'items/print' => 'itemPrintForm',
   );
-  $spell->setSpell($divine_smite);
-  $output .= $spell;
-  $output .= '</body>';
-  die($output);
+
+  if ($path)
+  {
+    if (!isset($registry[$path]))
+    {
+      return $registry['unknown'];
+    }
+    return $registry[$path];
+  }
+  return $registry;
 }
 
-function printItemCards()
+function home()
 {
-  GLOBAL $db;
+  $template = new HTMLTemplate();
+  $template->setTitle('D\'s D&D DB');
+  $template->setBody(menu() . htmlWrap('h1', 'Welcome to Daniel\'s Dungeons and Dragons Database'));
 
-  $output = '<head>';
-  $output .= '<link href="/themes/default/css/page.css" rel="stylesheet" type="text/css">';
-  $output .= '<link href="/themes/default/css/item.css" rel="stylesheet" type="text/css">';
-  $output .= '</head>';
-  $output .= '<body>';
+  echo $template;
+}
 
-//  $sql = 'SELECT
-//            i.name AS name,
-//            it.name AS item_type,
-//            i.value AS value,
-//            i.magic AS magic,
-//            i.attunment AS attunment,
-//            i.description AS description,
-//            i.print AS count
-//          FROM items i
-//          LEFT JOIN item_types it on i.item_type_id = it.id';
-//  $items = $db->select($sql);
-  $items = getItemPager();
-  foreach($items as $item)
-  {
-    $item_object = new Item($item);
-    for ($k = 0; $k < $item['count']; $k++)
-    {
-      $output .= $item_object;
-    }
-  }
+function unknown()
+{
+  header("HTTP/1.1 404 Not Found");
 
-  $output .= '</body>';
-  die($output);
+  $template = new HTMLTemplate();
+  $template->setTitle('dnd');
+  $template->setBody(menu() . htmlWrap('h1', 'Page Not Found'));
+
+  echo $template;
 }

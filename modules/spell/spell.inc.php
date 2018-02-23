@@ -24,6 +24,8 @@ function getLevelList()
     7 => '7th',
     8 => '8th',
     9 => '9th',
+    10 => 'Racial Skill',
+    11 => 'Class Skill',
   );
 }
 
@@ -33,7 +35,7 @@ function getSpeedList()
     0 => 'Until Dispelled',
     1 => 'Instant',
     2 => 'Reaction',
-    3 => 'Bonus Action',
+    3 => 'BA',
     6 => 'Action',
     60 => '1 Minute',
     600 => '10 Minutes',
@@ -53,9 +55,9 @@ function getRangeList()
   return array(
     0 => 'unlimited',
     1 => 'same plane',
-    2 => 'self',
-    3 => 'touch',
-    4 => 'sight',
+    2 => 'Self',
+    3 => 'Touch',
+    4 => 'Sight',
     5 => '5 feet',
     10 => '10 feet',
     15 => '15 feet',
@@ -68,5 +70,6 @@ function getRangeList()
     300 => '300 feet',
     500 => '500 feet',
     5280 => '1 mile',
+    26400 => '5 miles',
   );
 }

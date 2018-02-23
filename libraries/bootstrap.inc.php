@@ -4,9 +4,10 @@ DEFINE('ROOT_PATH', __DIR__ . '/..');
 include ROOT_PATH . '/libraries/global.inc.php';
 include ROOT_PATH . '/libraries/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
+include ROOT_PATH . '/libraries/template.inc.php';
 
-include ROOT_PATH . '/modules/item/item.inc.php';
 include ROOT_PATH . '/modules/item/item.db.php';
+include ROOT_PATH . '/modules/item/item.pg.php';
 
 include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';

@@ -73,6 +73,11 @@ class Form
   {
     return isset($this->attr[$name]) ? $this->attr[$name] : FALSE;
   }
+
+  function getTitle()
+  {
+    return $this->title;
+  }
 }
 
 /******************************************************************************

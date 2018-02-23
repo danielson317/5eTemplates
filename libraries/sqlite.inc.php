@@ -206,7 +206,7 @@ class SelectQuery extends Query
     $this->orders[$alias] = $dir;
   }
 
-  function addPager($page = 1, $page_size = 100)
+  function addPager($page = 1, $page_size = DEFAULT_PAGER_SIZE)
   {
     $this->page = $page;
     $this->page_size = $page_size;

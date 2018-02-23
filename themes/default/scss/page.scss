@@ -8,6 +8,7 @@
 body
 {
   font-size: $font_normal;
+  margin: 0;
 }
 
 h1
@@ -37,7 +38,20 @@ table
   }
 }
 
-.menu,
+#menu
+{
+  width: 100%;
+  //height: 25px;
+  background-color: $color_tan;
+  font-size: $font_large;
+
+  a
+  {
+    display: inline-block;
+    margin: 5px;
+  }
+}
+
 .operations
 {
   a
@@ -77,8 +91,11 @@ table.print-list
 
 .print-card
 {
-  width: 230px;
-  height: 325px;
+  // 247px x 350px - Too tall but desired.
+  // 222px x 315px - 8 in landscape but only 6 in portrait.
+  // 212px x 300px - Too short but works.
+  width: 212px;
+  height: 300px;
   float: left;
   padding: 5px;
   border: 1px solid black;
