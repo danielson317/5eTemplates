@@ -29,27 +29,6 @@ function getLevelList()
   );
 }
 
-function getSpeedList()
-{
-  return array(
-    0 => 'Until Dispelled',
-    1 => 'Instant',
-    2 => 'Reaction',
-    3 => 'BA',
-    6 => 'Action',
-    60 => '1 Minute',
-    600 => '10 Minutes',
-    3600 => '1 Hour',
-    7200 => '2 Hours',
-    28800 => '8 Hours',
-    43200 => '12 Hours',
-    86400 => '24 Hours',
-    604800 => '7 Days',
-    864000 => '10 Days',
-    2592000 => '30 Days',
-  );
-}
-
 function getRangeList()
 {
   return array(

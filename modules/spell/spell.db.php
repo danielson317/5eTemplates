@@ -47,6 +47,20 @@ function installSpell()
   $query->addField('code', 'TEXT', array('N'));
   $query->addField('name', 'TEXT', array('N'));
   $db->create($query);
+
+  $query = new CreateQuery('damage_types');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('code', 'TEXT', array('N'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  $query = new CreateQuery('speed');
+  $query->addField('id', 'INTEGER', array('P', 'U'));
+  $query->addField('casting_time', 'TEXT', array('N'));
+  $query->addField('duration', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
 }
 
 function getSpellPager($page = 1)
@@ -198,4 +212,26 @@ function getSourceList()
   $query->addField('id')->addField($query::concatenate('code', $query::literal(' - '), 'name'), 'value');
 
   return $db->selectList($query);
+}
+
+function getCastingTimeList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('speed');
+  $query->addField('id')->addField('casting_time', 'value');
+  return $db->selectList($query);
+}
+
+function getDurationList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('speed');
+  $query->addField('id')->addField('duration', 'value');
+  $query->addCondition('duration', FALSE, $query::COMPARE_NOT_EQUAL);
+
+  $args = array(':duration' => '');
+
+  return $db->selectList($query, $args);
 }

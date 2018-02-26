@@ -15,7 +15,8 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   unset($spells['print']);
   $schools = getSchoolList();
   $levels = getLevelList();
-  $speeds = getSpeedList();
+  $casting_times = getCastingTimeList();
+  $duration = getDurationList();
   $ranges = getRangeList();
   foreach($spells as $spell_id => $qty)
   {
@@ -43,9 +44,9 @@ if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
       }
 
       // Attributes.
-      $spell['speed'] = $speeds[$spell['speed']];
+      $spell['speed'] = $casting_times[$spell['speed']];
       $spell['range'] = $ranges[$spell['range']];
-      $spell['duration'] = $speeds[$spell['duration']];
+      $spell['duration'] = $duration[$spell['duration']];
 
       // Components.
       $spell['components'] = '';

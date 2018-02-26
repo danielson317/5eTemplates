@@ -23,10 +23,10 @@ class SQLite
     return $query->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  function selectList(SelectQuery $query)
+  function selectList(SelectQuery $query, $args = array())
   {
     $query = $this->db->prepare($query);
-    $query->execute();
+    $query->execute($args);
 
     $list = array();
     while($row = $query->fetch(PDO::FETCH_ASSOC))
@@ -161,6 +161,11 @@ class SelectQuery extends Query
           case self::COMPARE_EQUAL:
           {
             $output .= ' =';
+            break;
+          }
+          case self::COMPARE_NOT_EQUAL:
+          {
+            $output .= ' !=';
             break;
           }
         }

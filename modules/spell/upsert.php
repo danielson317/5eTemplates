@@ -72,7 +72,7 @@ $field->setValue(1);
 $form->addField($field);
 
 // Speed.
-$options = getSpeedList();
+$options = getCastingTimeList();
 $field = new FieldSelect('speed', 'Casting Time', $options);
 $field->setValue('6');
 $form->addField($field);
@@ -104,7 +104,7 @@ $field = new FieldText('material', 'Materials');
 $form->addField($field);
 
 // Duration
-$options = getSpeedList();
+$options = getDurationList();
 $field = new FieldSelect('duration', 'Duration', $options);
 $field->setValue(1);
 $form->addField($field);
