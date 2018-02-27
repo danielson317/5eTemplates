@@ -55,10 +55,16 @@ function installSpell()
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('speed');
+  $query = new CreateQuery('speeds');
   $query->addField('id', 'INTEGER', array('P', 'U'));
   $query->addField('casting_time', 'TEXT', array('N'));
   $query->addField('duration', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  $query = new CreateQuery('ranges');
+  $query->addField('id', 'INTEGER', array('P', 'U'));
+  $query->addField('name', 'TEXT', array('N'));
   $query->addField('description', 'TEXT');
   $db->create($query);
 }
@@ -218,7 +224,7 @@ function getCastingTimeList()
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('speed');
+  $query = new SelectQuery('speeds');
   $query->addField('id')->addField('casting_time', 'value');
   return $db->selectList($query);
 }
@@ -227,11 +233,21 @@ function getDurationList()
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('speed');
+  $query = new SelectQuery('speeds');
   $query->addField('id')->addField('duration', 'value');
   $query->addCondition('duration', FALSE, $query::COMPARE_NOT_EQUAL);
 
   $args = array(':duration' => '');
 
   return $db->selectList($query, $args);
+}
+
+function getRangeList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('ranges');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
 }

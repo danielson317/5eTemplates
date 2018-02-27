@@ -40,3 +40,13 @@ function getClassList()
 
   return $db->selectList($query);
 }
+
+function getSubclassList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('subclasses');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
+}

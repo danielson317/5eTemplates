@@ -133,12 +133,17 @@ function menu()
   $output = '';
 
   $attr = array(
+    'href' => '/characters',
+  );
+  $output .= htmlWrap('a', 'Characters', $attr);
+
+  $attr = array(
     'href' => '/items',
   );
   $output .= htmlWrap('a', 'Items', $attr);
 
   $attr = array(
-    'href' => '/modules/spell/list.php',
+    'href' => '/spells',
   );
   $output .= htmlWrap('a', 'Spells', $attr);
 

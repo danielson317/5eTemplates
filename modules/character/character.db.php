@@ -9,7 +9,7 @@ function installCharacter()
 {
   GLOBAL $db;
 
-  $query = new CreateQuery('character');
+  $query = new CreateQuery('characters');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('xp', 'INTEGER', array('N', 0));
@@ -90,4 +90,59 @@ function installCharacter()
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('item_id', 'INTEGER', array('P', 'N'));
   $db->create($query);
+
+  $query = new CreateQuery('players');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $db->create($query);
+
+}
+
+function getCharacterPager($page)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('characters');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('race_id');
+  $query->addField('player_id');
+  $query->addField('background');
+  $query->addPager($page);
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getCharacterClasses($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_class');
+  $query->addField('class_id');
+  $query->addField('subclass_id');
+  $query->addField('level');
+  $query->addCondition('character_id');
+  $args = array(':character_id' => $id);
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getPlayerList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('players');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
 }

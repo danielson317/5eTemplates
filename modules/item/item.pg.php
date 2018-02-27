@@ -28,7 +28,7 @@ function itemList()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($items) > DEFAULT_PAGER_SIZE)
+  if (count($items) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),

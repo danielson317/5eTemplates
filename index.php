@@ -21,9 +21,15 @@ function getRegistry($path = FALSE)
   $registry = array(
     '/' => 'home',
     'unknown' => 'unknown',
+    'character' => 'characterUpsertForm',
+    'character/print' => 'characterPrint',
+    'characters' => 'characterList',
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
+    'spell' => 'spellUpsertForm',
+    'spells' => 'spellList',
+    'spells/print' => 'spellPrintForm',
   );
 
   if ($path)
