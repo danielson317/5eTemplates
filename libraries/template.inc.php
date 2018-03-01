@@ -179,7 +179,7 @@ Class TableTemplate
     }
   }
 
-  public function addHeader($header)
+  public function setHeader($header)
   {
     $this->header = $header;
     return $this;

@@ -121,6 +121,24 @@ abstract class Field
   {
     return $this->value;
   }
+
+  function setAttr($name, $value)
+  {
+    $this->attr[$name] = $value;
+    return $this;
+  }
+
+  function setRequired($required = TRUE)
+  {
+    if ($required)
+    {
+      $this->attr['required'] = $required;
+    }
+    elseif ($this->attr['required'])
+    {
+      unset($this->attr['required']);
+    }
+  }
 }
 
 class FieldHidden extends Field
@@ -338,6 +356,35 @@ class FieldSubmit extends Field
 
     // Wrapper.
     $attr = array('class' => array('field', 'textarea', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+}
+
+class FieldMarkup extends Field
+{
+  function __construct($id, $label = '', $value = '')
+  {
+    parent::__construct($id, $label);
+    $this->value = $value;
+  }
+
+  function __toString()
+  {
+    $output = '';
+
+    // Label.
+    if ($this->label)
+    {
+      $attr = array('class' => array('label'), 'for' => $this->id);
+      $output .= htmlWrap('label', $this->label, $attr);
+    }
+
+    // Output.
+    $output .= htmlWrap('div', $this->value, array('class' => 'markup-value'));
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'text', $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }

@@ -24,6 +24,7 @@ function getRegistry($path = FALSE)
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
+    'character/class' => 'characterClassUpsertForm',
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',

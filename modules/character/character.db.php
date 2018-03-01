@@ -2,7 +2,7 @@
 
 /******************************************************************************
  *
- *  Character.
+ *  Install.
  *
  ******************************************************************************/
 function installCharacter()
@@ -98,6 +98,12 @@ function installCharacter()
 
 }
 
+/******************************************************************************
+ *
+ *  Character.
+ *
+ ******************************************************************************/
+
 function getCharacterPager($page)
 {
   GLOBAL $db;
@@ -118,7 +124,34 @@ function getCharacterPager($page)
   return $results;
 }
 
-function getCharacterClasses($id)
+function getCharacter($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('characters');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('race_id');
+  $query->addField('player_id');
+  $query->addField('background');
+  $query->addCondition('id');
+  $args = array(':id' => $id);
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return FALSE;
+  }
+  $result = array_shift($results);
+  return $result;
+}
+/******************************************************************************
+ *
+ *  Character Class.
+ *
+ ******************************************************************************/
+
+function getCharacterClasses($character_id)
 {
   GLOBAL $db;
 
@@ -127,7 +160,7 @@ function getCharacterClasses($id)
   $query->addField('subclass_id');
   $query->addField('level');
   $query->addCondition('character_id');
-  $args = array(':character_id' => $id);
+  $args = array(':character_id' => $character_id);
   $results = $db->select($query, $args);
 
   if (!$results)
@@ -136,6 +169,37 @@ function getCharacterClasses($id)
   }
   return $results;
 }
+
+function getCharacterClass($character_id, $class_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_class');
+  $query->addField('class_id');
+  $query->addField('subclass_id');
+  $query->addField('level');
+  $query->addCondition('character_id');
+  $query->addCondition('class_id');
+  $args = array(
+    ':character_id' => $character_id,
+    ':class_id' => $class_id,
+  );
+  echo $query;
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+/******************************************************************************
+ *
+ *  Player.
+ *
+ ******************************************************************************/
 
 function getPlayerList()
 {

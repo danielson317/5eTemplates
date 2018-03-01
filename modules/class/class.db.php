@@ -41,12 +41,18 @@ function getClassList()
   return $db->selectList($query);
 }
 
-function getSubclassList()
+function getSubclassList($class_id = FALSE)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('subclasses');
   $query->addField('id')->addField('name', 'value');
+  $args = array();
+  if ($class_id)
+  {
+    $query->addCondition('class_id');
+    $args[':class_id'] = $class_id;
+  }
 
-  return $db->selectList($query);
+  return $db->selectList($query, $args);
 }

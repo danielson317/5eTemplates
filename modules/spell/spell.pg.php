@@ -44,7 +44,7 @@ function spellList()
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('spell-list'));
-  $table->addHeader(array('Name', 'Level', 'School', 'Description'));
+  $table->setHeader(array('Name', 'Level', 'School', 'Description'));
 
   $schools = getSchoolList();
   $spells = getSpellPager($page);
@@ -253,7 +253,7 @@ function spellPrintForm()
   // List.
   $table = new TableTemplate();
   $table->setAttr('class', array('spell-print-list', 'print-list'));
-  $table->addHeader(array('Qty', 'Name', 'Level', 'Type', 'Description'));
+  $table->setHeader(array('Qty', 'Name', 'Level', 'Type', 'Description'));
 
   $schools = getSchoolList();
   $levels = getLevelList();

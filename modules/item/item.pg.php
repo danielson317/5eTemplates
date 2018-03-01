@@ -44,7 +44,7 @@ function itemList()
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('item-list'));
-  $table->addHeader(array('Name', 'Value', 'Type', 'Description'));
+  $table->setHeader(array('Name', 'Value', 'Type', 'Description'));
 
   $item_types = getItemTypeList();
   foreach($items as $item)
@@ -196,7 +196,7 @@ function itemPrintForm()
   // List.
   $table = new TableTemplate();
   $table->setAttr('class', array('item-print-list', 'print-list'));
-  $table->addHeader(array('Qty', 'Name', 'Value', 'Type', 'Description'));
+  $table->setHeader(array('Qty', 'Name', 'Value', 'Type', 'Description'));
 
   $item_types = getItemTypeList();
   foreach($items as $item)
