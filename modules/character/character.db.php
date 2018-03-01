@@ -145,6 +145,7 @@ function getCharacter($id)
   $result = array_shift($results);
   return $result;
 }
+
 /******************************************************************************
  *
  *  Character Class.
@@ -160,6 +161,7 @@ function getCharacterClasses($character_id)
   $query->addField('subclass_id');
   $query->addField('level');
   $query->addCondition('character_id');
+  $query->addOrder('level', 'DESC');
   $args = array(':character_id' => $character_id);
   $results = $db->select($query, $args);
 
@@ -175,6 +177,7 @@ function getCharacterClass($character_id, $class_id)
   GLOBAL $db;
 
   $query = new SelectQuery('character_class');
+  $query->addField('character_id');
   $query->addField('class_id');
   $query->addField('subclass_id');
   $query->addField('level');
@@ -184,7 +187,6 @@ function getCharacterClass($character_id, $class_id)
     ':character_id' => $character_id,
     ':class_id' => $class_id,
   );
-  echo $query;
   $results = $db->select($query, $args);
 
   if (!$results)
@@ -193,6 +195,44 @@ function getCharacterClass($character_id, $class_id)
   }
   $result = array_shift($results);
   return $result;
+}
+
+function createCharacterClass($character_class)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('character_class');
+  $query->addField('character_id');
+  $query->addField('class_id');
+  $query->addField('subclass_id');
+  $query->addField('level');
+  $db->insert($query, SQLite::buildArgs($character_class));
+}
+
+function updateCharacterClass($character_class)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('character_class');
+  $query->addField('subclass_id');
+  $query->addField('level');
+  $query->addCondition('character_id');
+  $query->addCondition('class_id');
+  $db->update($query, SQLite::buildArgs($character_class));
+}
+
+function deleteCharacterClass($character_class)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('character_class');
+  $query->addCondition('character_id');
+  $query->addCondition('class_id');
+  $args = array(
+    'character_id' => $character_class['character_id'],
+    'class_id' => $character_class['class_id'],
+  );
+  $db->delete($query, $args);
 }
 
 /******************************************************************************

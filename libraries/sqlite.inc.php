@@ -49,6 +49,13 @@ class SQLite
     $query->execute($args);
   }
 
+  function delete(DeleteQuery $query, $args = array())
+  {
+    $query = $this->db->prepare($query);
+    $query->execute($args);
+  }
+
+  // Structure
   function create(CreateQuery $query, $args = array())
   {
     $query = $this->db->prepare($query);
@@ -77,9 +84,13 @@ abstract class Query
   const COMPARE_NULL = 7;
   const COMPARE_NOT_NULL = 8;
 
+  const GROUP_AND = 1;
+  const GROUP_OR = 2;
+
   protected $tables = array();
   protected $fields = array();
   protected $conditions = array();
+  protected $condition_groups = array();
 
   function __construct($table, $alias = '')
   {
@@ -87,8 +98,6 @@ abstract class Query
   }
 
   abstract function __toString();
-
-  abstract function addField($name);
 
   function addTable($table, $alias = '')
   {
@@ -101,7 +110,15 @@ abstract class Query
     );
   }
 
-  function addCondition($alias, $value = '', $comparison = self::COMPARE_EQUAL)
+  function addConditionGroup($group_name = 'default', $type = Query::GROUP_AND, $parent_group = 'default')
+  {
+    $this->condition_groups[$group_name] = array(
+      'type' => $type,
+      'parent' => $parent_group,
+    );
+  }
+
+  function addCondition($alias, $value = '', $comparison = Query::COMPARE_EQUAL, $group = 'default')
   {
     if (!$value)
     {
@@ -111,7 +128,56 @@ abstract class Query
       'alias' => $alias,
       'value' => $value,
       'comparison' => $comparison,
+      'group' => $group,
     );
+  }
+
+  function buildConditionGroup($group_name = 'default', $type = Query::GROUP_AND)
+  {
+    $conditions = array();
+    foreach($this->conditions as $condition)
+    {
+      if ($condition['group'] == $group_name)
+      {
+        $conditions[] = $this->buildCondition($condition);
+      }
+    }
+
+    foreach($this->condition_groups as $subgroup_name => $condition_group)
+    {
+      if ($condition_group['parent'] == $group_name)
+      {
+        $conditions[] = '(' . $this->buildConditionGroup($subgroup_name, $condition_group['type']) . ')';
+      }
+    }
+
+    $join = ' AND ';
+    if ($type == Query::GROUP_OR)
+    {
+      $join = ' OR ';
+    }
+    return implode($join, $conditions);
+  }
+
+  static function buildCondition($condition)
+  {
+    $output = $condition['alias'];
+    switch($condition['comparison'])
+    {
+      case self::COMPARE_EQUAL:
+      {
+        $output .= ' =';
+        break;
+      }
+      case self::COMPARE_NOT_EQUAL:
+      {
+        $output .= ' !=';
+        break;
+      }
+    }
+    $output .= ' ' . $condition['value'];
+
+    return $output;
   }
 
   static function concatenate()
@@ -152,25 +218,7 @@ class SelectQuery extends Query
     // Where.
     if ($this->conditions)
     {
-      $output .= ' WHERE';
-      foreach($this->conditions as $condition)
-      {
-        $output .= ' ' . $condition['alias'];
-        switch($condition['comparison'])
-        {
-          case self::COMPARE_EQUAL:
-          {
-            $output .= ' =';
-            break;
-          }
-          case self::COMPARE_NOT_EQUAL:
-          {
-            $output .= ' !=';
-            break;
-          }
-        }
-        $output .= ' ' . $condition['value'];
-      }
+      $output .= ' WHERE ' . $this->buildConditionGroup();
     }
 
     // Order by.
@@ -218,51 +266,6 @@ class SelectQuery extends Query
   }
 }
 
-class UpdateQuery extends Query
-{
-  function __toString()
-  {
-    $output = '';
-    $output .= 'UPDATE '  . key($this->tables) . ' SET';
-    foreach ($this->fields as $name => $value)
-    {
-      $output .= ' ' . $name . ' = ' . $value['value'] . ',';
-    }
-    $output = trim($output, ',');
-
-    if ($this->conditions)
-    {
-      $output .= ' WHERE';
-      foreach($this->conditions as $condition)
-      {
-        $output .= ' ' . $condition['alias'];
-        switch($condition['comparison'])
-        {
-          case self::COMPARE_EQUAL:
-          {
-            $output .= ' =';
-            break;
-          }
-        }
-        $output .= ' ' . $condition['value'];
-      }
-    }
-    return $output;
-  }
-
-  function addField($name, $value = '')
-  {
-    if (!$value)
-    {
-      $value = ':' . $name;
-    }
-    $this->fields[$name] = array(
-      'value' => $value,
-    );
-    return $this;
-  }
-}
-
 class InsertQuery extends Query
 {
   function __toString()
@@ -296,6 +299,57 @@ class InsertQuery extends Query
       'value' => $value,
     );
     return $this;
+  }
+}
+
+class UpdateQuery extends Query
+{
+  function __toString()
+  {
+    $output = '';
+    $output .= 'UPDATE '  . key($this->tables) . ' SET';
+    foreach ($this->fields as $name => $value)
+    {
+      $output .= ' ' . $name . ' = ' . $value['value'] . ',';
+    }
+    $output = trim($output, ',');
+
+    // Where.
+    if ($this->conditions)
+    {
+      $output .= ' WHERE ' . $this->buildConditionGroup();
+    }
+
+    return $output;
+  }
+
+  function addField($name, $value = '')
+  {
+    if (!$value)
+    {
+      $value = ':' . $name;
+    }
+    $this->fields[$name] = array(
+      'value' => $value,
+    );
+    return $this;
+  }
+}
+
+class DeleteQuery extends Query
+{
+  function __toString()
+  {
+    $output = '';
+    $output .= 'DELETE FROM '  . key($this->tables);
+
+    // Where.
+    if ($this->conditions)
+    {
+      $output .= ' WHERE ' . $this->buildConditionGroup();
+    }
+
+    return $output;
   }
 }
 

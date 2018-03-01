@@ -229,18 +229,23 @@ function characterClassUpsertForm()
   $character_classes = getCharacterClasses($character_id);
 
   $form = new Form('character_class_form');
-  $title = 'Add New Class to ' . htmlWrap('em', $character['name']);
   if ($class_id)
   {
     $character_class = getCharacterClass($character_id, $class_id);
     $form->setValues($character_class);
     $title = 'Edit character ' . htmlWrap('em', $character['name']) . '\'s class ' . htmlWrap('em', $classes[$character_class['class_id']]);
+
+    $field = new FieldHidden('operation', 'update');
+    $form->addField($field);
+  }
+  else
+  {
+    $title = 'Add New Class to ' . htmlWrap('em', $character['name']);
+
+    $field = new FieldHidden('operation', 'create');
+    $form->addField($field);
   }
   $form->setTitle($title);
-
-  // Character ID.
-  $field = new FieldHidden('character_id');
-  $form->addField($field);
 
   // Class List.
   $table = new TableTemplate('character-class');
@@ -261,15 +266,29 @@ function characterClassUpsertForm()
   $field = new FieldMarkup('classes', '', $table . $link);
   $form->addField($field);
 
-  // Class.
-  $options = $classes;
-  foreach ($character_classes as $character_class)
-  {
-    unset($options[$character_class['class_id']]);
-  }
-  $field = new FieldSelect('class_id', 'Class', $options);
+  // Character ID.
+  $field = new FieldHidden('character_id');
+  $field->setValue($character_id);
   $form->addField($field);
 
+  // Class.
+  if (!$class_id)
+  {
+    $options = array(0 => '--Select One--') + $classes;
+    foreach ($character_classes as $character_class)
+    {
+      unset($options[$character_class['class_id']]);
+    }
+    $field = new FieldSelect('class_id', 'Class', $options);
+    $form->addField($field);
+  }
+  else
+  {
+    $field = new FieldHidden('class_id');
+    $form->addField($field);
+  }
+
+  // Subclass.
   $options = array(0 => '--Select One--') + getSubclassList($class_id);
   $field = new FieldSelect('subclass_id', 'Subclass', $options);
   $field->setRequired();
@@ -288,6 +307,9 @@ function characterClassUpsertForm()
   $field = new FieldSubmit('submit', $value);
   $form->addField($field);
 
+  $field = new FieldSubmit('delete', 'Delete');
+  $form->addField($field);
+
   $template->setForm($form);
 
   return $template;
@@ -295,22 +317,28 @@ function characterClassUpsertForm()
 
 function characterClassUpsertSubmit()
 {
-  $spell = $_POST;
-  $spell['ritual'] = isset($_POST['ritual']) ? 1 : 0;
-  $spell['concentration'] = isset($_POST['concentration']) ? 1 : 0;
-  $spell['verbal'] = isset($_POST['verbal']) ? 1 : 0;
-  $spell['semantic'] = isset($_POST['semantic']) ? 1 : 0;
-  unset($spell['submit']);
+  $character_class = array(
+    'character_id' => $_POST['character_id'],
+    'class_id' => $_POST['class_id'],
+    'subclass_id' => $_POST['subclass_id'],
+    'level' => $_POST['level'],
+  );
 
-  if ($spell['id'])
+  if (isset($_POST['delete']))
   {
-    updateCharacter($spell);
-    return htmlWrap('h3', 'Character ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') updated.');
+    deleteCharacterClass($character_class);
+    redirect('/character?id=' . $_POST['character_id']);
   }
+  // Update.
+  elseif ($_POST['operation'] == 'update')
+  {
+    updateCharacterClass($character_class);
+    return htmlWrap('h3', 'Updated.');
+  }
+  // Create.
   else
   {
-    unset($spell['id']);
-    $spell['id'] = createCharacter($spell);
-    return htmlWrap('h3', 'New character ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') created.');
+    createCharacterClass($character_class);
+    return htmlWrap('h3', 'Created.');
   }
 }

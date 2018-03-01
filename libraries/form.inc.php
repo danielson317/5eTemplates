@@ -143,6 +143,12 @@ abstract class Field
 
 class FieldHidden extends Field
 {
+  function __construct($id, $value = '', $label = '')
+  {
+    parent::__construct($id, $label);
+    $this->value = $value;
+  }
+
   function __toString()
   {
     $attr = $this->attr;
