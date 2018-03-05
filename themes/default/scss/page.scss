@@ -14,6 +14,7 @@ body
 h1
 {
   font-size: $font_huge;
+  margin-left: 20px;
 
   &.debug
   {
@@ -31,6 +32,12 @@ table
 {
   font-size: $font_normal;
   border-collapse: collapse;
+
+  body > &
+  {
+    margin-left: 20px;
+  }
+
   th, td
   {
     border: 1px solid black;
@@ -54,6 +61,11 @@ table
 
 .operations
 {
+  body > &
+  {
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
   a
   {
     margin-left: 10px;

@@ -12,6 +12,7 @@ class Form
   protected $attr = array();
   protected $fields = array();
   protected $values = array();
+  protected $groups = array();
 
   protected $title = '';
 
@@ -31,11 +32,7 @@ class Form
     }
 
     // Fields.
-    $fields_output = '';
-    foreach ($this->fields as $field)
-    {
-      $fields_output .= $field;
-    }
+    $fields_output = $this->buildGroup();
 
     // Form.
     $attr = $this->attr;
@@ -60,6 +57,12 @@ class Form
     $this->title = $title;
   }
 
+  function addGroup($group, $parent_group = 'default')
+  {
+    $this->groups[$group] = $parent_group;
+    return $this;
+  }
+
   function addField(Field $field)
   {
     if (isset($this->values[$field->getId()]))
@@ -78,6 +81,31 @@ class Form
   {
     return $this->title;
   }
+
+  function buildGroup($group_name = 'default')
+  {
+    $fields = array();
+    foreach($this->fields as $field)
+    {
+      if ($field->getGroup() == $group_name)
+      {
+        $fields[] = $field->__toString();
+      }
+    }
+
+    foreach($this->groups as $group => $group_parent)
+    {
+      if ($group_parent == $group_name)
+      {
+        $attr = array(
+          'class' => array('field_group', $group),
+        );
+        $fields[] = htmlWrap('div', $this->buildGroup($group), $attr);
+      }
+    }
+
+    return implode('', $fields);
+  }
 }
 
 /******************************************************************************
@@ -92,6 +120,7 @@ abstract class Field
   protected $attr = array();
   protected $label = '';
   protected $value = '';
+  protected $group = '';
 
   function __construct($id, $label = '')
   {
@@ -111,6 +140,11 @@ abstract class Field
     $this->value = $value;
     return $this;
   }
+  function setGroup($group)
+  {
+    $this->group = $group;
+    return $this;
+  }
 
   function getId()
   {
@@ -126,6 +160,14 @@ abstract class Field
   {
     $this->attr[$name] = $value;
     return $this;
+  }
+  function getGroup()
+  {
+    if (!$this->group)
+    {
+      return 'default';
+    }
+    return $this->group;
   }
 
   function setRequired($required = TRUE)

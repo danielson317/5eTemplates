@@ -1,5 +1,12 @@
 @import "_constants.scss";
 
+.field_group
+{
+  float: left;
+  width: 250px;
+  margin-left: 20px;
+}
+
 .field
 {
   float: left;

@@ -12,70 +12,80 @@ body {
 /* line 14, ../scss/page.scss */
 h1 {
   font-size: 36px;
+  margin-left: 20px;
 }
-/* line 18, ../scss/page.scss */
+/* line 19, ../scss/page.scss */
 h1.debug {
   color: rosybrown;
 }
 
-/* line 24, ../scss/page.scss */
+/* line 25, ../scss/page.scss */
 a {
   text-decoration: none;
   color: blue;
 }
 
-/* line 30, ../scss/page.scss */
+/* line 31, ../scss/page.scss */
 table {
   font-size: 14px;
   border-collapse: collapse;
 }
-/* line 34, ../scss/page.scss */
+/* line 36, ../scss/page.scss */
+body > table {
+  margin-left: 20px;
+}
+/* line 41, ../scss/page.scss */
 table th, table td {
   border: 1px solid black;
   padding: 2px 3px;
 }
 
-/* line 41, ../scss/page.scss */
+/* line 48, ../scss/page.scss */
 #menu {
   width: 100%;
   background-color: #FFE3AA;
   font-size: 18px;
 }
-/* line 48, ../scss/page.scss */
+/* line 55, ../scss/page.scss */
 #menu a {
   display: inline-block;
   margin: 5px;
 }
 
-/* line 57, ../scss/page.scss */
+/* line 64, ../scss/page.scss */
+body > .operations {
+  margin-left: 20px;
+  margin-bottom: 5px;
+}
+/* line 69, ../scss/page.scss */
 .operations a {
   margin-left: 10px;
 }
-/* line 61, ../scss/page.scss */
+/* line 73, ../scss/page.scss */
 .operations a:first-of-type {
   margin: auto;
 }
 
-/* line 70, ../scss/page.scss */
+/* line 82, ../scss/page.scss */
 table.print-list .column-1 {
   width: 100px;
 }
-/* line 74, ../scss/page.scss */
+/* line 86, ../scss/page.scss */
 table.print-list .column-1 input.button {
   width: 30px;
 }
-/* line 79, ../scss/page.scss */
+/* line 91, ../scss/page.scss */
 table.print-list .column-1 input.plus,
 table.print-list .column-1 input.minus {
   width: 22px;
   margin-left: 2px;
 }
-/* line 86, ../scss/page.scss */
+/* line 98, ../scss/page.scss */
 table.print-list .column-2 {
   width: 200px;
 }
 
-/* line 92, ../scss/page.scss */
+/* line 104, ../scss/page.scss */
 .print-card {
   width: 212px;
   height: 300px;

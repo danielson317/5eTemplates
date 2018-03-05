@@ -134,6 +134,17 @@ function getCharacter($id)
   $query->addField('race_id');
   $query->addField('player_id');
   $query->addField('background');
+  $query->addField('xp');
+  $query->addField('alignment');
+  $query->addField('hp');
+  $query->addField('pb');
+  $query->addField('speed');
+  $query->addField('personality');
+  $query->addField('ideals');
+  $query->addField('bonds');
+  $query->addField('flaws');
+  $query->addField('features');
+
   $query->addCondition('id');
   $args = array(':id' => $id);
   $results = $db->select($query, $args);
@@ -144,6 +155,53 @@ function getCharacter($id)
   }
   $result = array_shift($results);
   return $result;
+}
+
+function createCharacter($character)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('characters');
+  $query->addField('name');
+  $query->addField('race_id');
+  $query->addField('player_id');
+  $query->addField('background');
+  $query->addField('xp');
+  $query->addField('alignment');
+  $query->addField('hp');
+  $query->addField('pb');
+  $query->addField('speed');
+  $query->addField('personality');
+  $query->addField('ideals');
+  $query->addField('bonds');
+  $query->addField('flaws');
+  $query->addField('features');
+
+  return $db->insert($query, SQLite::buildArgs($character));
+}
+
+function updateCharacter($character)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('characters');
+  $query->addField('name');
+  $query->addField('race_id');
+  $query->addField('player_id');
+  $query->addField('background');
+  $query->addField('xp');
+  $query->addField('alignment');
+  $query->addField('hp');
+  $query->addField('pb');
+  $query->addField('speed');
+  $query->addField('personality');
+  $query->addField('ideals');
+  $query->addField('bonds');
+  $query->addField('flaws');
+  $query->addField('features');
+
+  $query->addCondition('id');
+  $db->update($query, SQLite::buildArgs($character));
 }
 
 /******************************************************************************

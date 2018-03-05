@@ -100,7 +100,7 @@ function characterUpsertForm()
 
   $character_id = getUrlID('id');
 
-  $form = new Form('spell_form');
+  $form = new Form('character_form');
   $title = 'Add New Character';
   if ($character_id)
   {
@@ -114,8 +114,15 @@ function characterUpsertForm()
   $field = new FieldHidden('id');
   $form->addField($field);
 
+  /*****************
+   * Header Group
+   *****************/
+  $group = 'header';
+  $form->addGroup($group);
+
   // Name.
   $field = new FieldText('name', 'Name');
+  $field->setGroup($group)->setRequired();
   $form->addField($field);
 
   // Classes
@@ -145,24 +152,104 @@ function characterUpsertForm()
     $link = htmlWrap('a', 'Add New Class', $attr);
 
     $field = new FieldMarkup('classes', 'Classes', $table . $link);
+    $field->setGroup($group);
     $form->addField($field);
   }
 
   // Race.
   $options = array(0 => '--Select One--') + getRaceList();
   $field = new FieldSelect('race_id', 'Race', $options);
+  $field->setGroup($group);
   $field->setRequired();
   $form->addField($field);
 
   // Player.
   $options = array(0 => '--Select One--') + getPlayerList();
   $field = new FieldSelect('player_id', 'Player', $options);
+  $field->setGroup($group);
   $field->setRequired();
   $form->addField($field);
 
   // Background.
   $field = new FieldText('background', 'Background');
+  $field->setGroup($group);
   $form->addField($field);
+
+  // XP.
+  $field = new FieldNumber('xp', 'Experience Points');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Alignment.
+  $options = array(0 => '--Select One--') + getAlignmentList();
+  $field = new FieldSelect('alignment', 'Alignment', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*****************
+   * Stats Group
+   *****************/
+  $group = 'stats';
+  $form->addGroup($group);
+
+  // Max HP.
+  $field = new FieldNumber('hp', 'Max HP');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Proficiency Bonus.
+  $field = new FieldNumber('pb', 'Proficiency Bonus');
+  $field->setValue(2);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Speed.
+  $field = new FieldNumber('speed', 'Speed');
+  $field->setValue(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*********************
+   * Personality Group
+   *********************/
+  $group = 'personality';
+  $form->addGroup($group);
+
+  // Personality Traits.
+  $field = new FieldTextarea('personality', 'Personality Traits');
+  $field->setAttr('maxlength', '150')->setCols(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Ideals.
+  $field = new FieldTextarea('ideals', 'Ideals');
+  $field->setAttr('maxlength', '150')->setCols(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Bonds.
+  $field = new FieldTextarea('bonds', 'Bonds');
+  $field->setAttr('maxlength', '150')->setCols(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Flaws.
+  $field = new FieldTextarea('flaws', 'Flaws');
+  $field->setAttr('maxlength', '150')->setCols(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Features.
+  $field = new FieldTextarea('features', 'Features');
+  $field->setAttr('maxlength', '1000')->setRows(30)->setCols(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*********************
+   * Operations Group
+   *********************/
+  $group = 'operations';
+  $form->addGroup($group);
 
   // Submit
   $value = 'Create';
@@ -171,6 +258,7 @@ function characterUpsertForm()
     $value = 'Update';
   }
   $field = new FieldSubmit('submit', $value);
+  $field->setGroup($group);
   $form->addField($field);
 
   $template->setForm($form);
@@ -180,23 +268,19 @@ function characterUpsertForm()
 
 function characterUpsertSubmit()
 {
-  $spell = $_POST;
-  $spell['ritual'] = isset($_POST['ritual']) ? 1 : 0;
-  $spell['concentration'] = isset($_POST['concentration']) ? 1 : 0;
-  $spell['verbal'] = isset($_POST['verbal']) ? 1 : 0;
-  $spell['semantic'] = isset($_POST['semantic']) ? 1 : 0;
-  unset($spell['submit']);
+  $character = $_POST;
+  unset($character['submit']);
 
-  if ($spell['id'])
+  if ($character['id'])
   {
-    updateCharacter($spell);
-    return htmlWrap('h3', 'Character ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') updated.');
+    updateCharacter($character);
+    return htmlWrap('h3', 'Character ' . htmlWrap('em', $character['name']) . ' (' . $character['id'] . ') updated.');
   }
   else
   {
-    unset($spell['id']);
-    $spell['id'] = createCharacter($spell);
-    return htmlWrap('h3', 'New character ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') created.');
+    unset($character['id']);
+    $character['id'] = createCharacter($character);
+    return htmlWrap('h3', 'New character ' . htmlWrap('em', $character['name']) . ' (' . $character['id'] . ') created.');
   }
 }
 
@@ -299,8 +383,8 @@ function characterClassUpsertForm()
   $form->addField($field);
 
   // Submit
-  $value = 'Create';
-  if ($character_id)
+  $value = 'Add';
+  if ($class_id)
   {
     $value = 'Update';
   }
