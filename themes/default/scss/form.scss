@@ -1,5 +1,13 @@
 @import "_constants.scss";
 
+form
+{
+  body > &
+  {
+    margin-left: 20px;
+  }
+}
+
 .field_group
 {
   float: left;

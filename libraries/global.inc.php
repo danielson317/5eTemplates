@@ -147,6 +147,11 @@ function menu()
   );
   $output .= htmlWrap('a', 'Spells', $attr);
 
+  $attr = array(
+    'href' => '/players',
+  );
+  $output .= htmlWrap('a', 'Players', $attr);
+
   $attr = array('id' => 'menu', 'class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);
   return $output;

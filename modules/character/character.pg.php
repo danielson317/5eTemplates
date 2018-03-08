@@ -9,7 +9,7 @@
 function characterList()
 {
   $page = getUrlID('page', 1);
-  $spells = getSpellPager($page);
+  $characters = getCharacterPager($page);
 
   $template = new ListTemplate('Characters');
   $template->addCssFilePath('/themes/default/css/character.css');
@@ -28,7 +28,7 @@ function characterList()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($spells) >= DEFAULT_PAGER_SIZE)
+  if (count($characters) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),
@@ -41,7 +41,6 @@ function characterList()
   $table->setAttr('class', array('character-list'));
   $table->setHeader(array('Name', 'Class', 'Subclass', 'Level', 'Race', 'Background', 'Player', 'Ops'));
 
-  $characters = getCharacterPager($page);
   $classes = getClassList();
   $subclasses = getSubclassList();
   $races = getRaceList();

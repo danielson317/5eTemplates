@@ -67,10 +67,10 @@ function installCharacter()
   $query = new CreateQuery('character_attribute');
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('attribute_id', 'INTEGER', array('P', 'N'));
-  $query->addField('score', 'INTEGER', array('N'), 0);
-  $query->addField('modifier', 'INTEGER', array('N'), 0);
-  $query->addField('st_pb', 'INTEGER', array('N'), 0);
-  $query->addField('st', 'INTEGER', array('N'), 0);
+  $query->addField('score', 'INTEGER', array('N'), 8);
+  $query->addField('modifier', 'INTEGER', array('N'), -1);
+  $query->addField('proficiency', 'INTEGER', array('N'), 0);
+  $query->addField('saving_throw', 'INTEGER', array('N'), -1);
   $db->create($query);
 
   $query = new CreateQuery('character_skill');
@@ -295,16 +295,27 @@ function deleteCharacterClass($character_class)
 
 /******************************************************************************
  *
- *  Player.
+ *  Character Attributes.
  *
  ******************************************************************************/
-
-function getPlayerList()
+function getCharacterAttributes($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('players');
-  $query->addField('id')->addField('name', 'value');
+  $query = new SelectQuery('character_attribute');
+  $query->addField('attribute_id');
+  $query->addField('score');
+  $query->addField('modifier');
+  $query->addField('proficiency');
+  $query->addField('saving_throw');
+  $query->addCondition('character_id');
+  $query->addOrder('attribute_id', 'ASC');
+  $args = array(':character_id' => $character_id);
+  $results = $db->select($query, $args);
 
-  return $db->selectList($query);
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
 }
