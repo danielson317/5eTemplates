@@ -257,6 +257,7 @@ class SelectQuery extends Query
   function addOrder($alias, $dir = 'ASC')
   {
     $this->orders[$alias] = $dir;
+    return $this;
   }
 
   function addPager($page = 1, $page_size = DEFAULT_PAGER_SIZE)

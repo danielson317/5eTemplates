@@ -95,7 +95,6 @@ function installCharacter()
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $db->create($query);
-
 }
 
 /******************************************************************************

@@ -14,6 +14,7 @@ include ROOT_PATH . '/modules/character/character.pg.php';
 
 include ROOT_PATH . '/modules/class/class.db.php';
 include ROOT_PATH . '/modules/class/class.inc.php';
+include ROOT_PATH . '/modules/class/class.pg.php';
 
 include ROOT_PATH . '/modules/item/item.db.php';
 include ROOT_PATH . '/modules/item/item.pg.php';

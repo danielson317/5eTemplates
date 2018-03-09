@@ -25,6 +25,8 @@ function getRegistry($path = FALSE)
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
     'character/class' => 'characterClassUpsertForm',
+    'classes' => 'classList',
+    'class' => 'classUpsertForm',
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
@@ -33,6 +35,8 @@ function getRegistry($path = FALSE)
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
+    'subclasses' => 'subclassList',
+    'subclass' => 'subclassUpsertForm',
   );
 
   if ($path)

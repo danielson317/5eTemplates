@@ -148,6 +148,11 @@ function menu()
   $output .= htmlWrap('a', 'Spells', $attr);
 
   $attr = array(
+    'href' => '/classes',
+  );
+  $output .= htmlWrap('a', 'Classes', $attr);
+
+  $attr = array(
     'href' => '/players',
   );
   $output .= htmlWrap('a', 'Players', $attr);
@@ -155,4 +160,24 @@ function menu()
   $attr = array('id' => 'menu', 'class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);
   return $output;
+}
+
+/******************************************************************************
+ *
+ * Global Lists.
+ *
+ ******************************************************************************/
+
+function getDiceList()
+{
+  return array(
+    '2' => 'd2',
+    '4' => 'd4',
+    '6' => 'd6',
+    '8' => 'd8',
+    '10' => 'd10',
+    '12' => 'd12',
+    '20' => 'd20',
+    '100' => 'd100'
+  );
 }
