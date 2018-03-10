@@ -2,5 +2,23 @@
 
 #character_form
 {
+  .field_group
+  {
+    &.header
+    {
+      width: 100%;
 
+      .field
+      {
+        clear: none;
+        margin-right: 10px;
+
+        &.classes,
+        &.race_id
+        {
+          clear: left;
+        }
+      }
+    }
+  }
 }

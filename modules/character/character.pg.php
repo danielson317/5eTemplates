@@ -155,11 +155,9 @@ function characterUpsertForm()
     $form->addField($field);
   }
 
-  // Race.
-  $options = array(0 => '--Select One--') + getRaceList();
-  $field = new FieldSelect('race_id', 'Race', $options);
+  // Background.
+  $field = new FieldText('background', 'Background');
   $field->setGroup($group);
-  $field->setRequired();
   $form->addField($field);
 
   // Player.
@@ -169,9 +167,11 @@ function characterUpsertForm()
   $field->setRequired();
   $form->addField($field);
 
-  // Background.
-  $field = new FieldText('background', 'Background');
+  // Race.
+  $options = array(0 => '--Select One--') + getRaceList();
+  $field = new FieldSelect('race_id', 'Race', $options);
   $field->setGroup($group);
+  $field->setRequired();
   $form->addField($field);
 
   // XP.
@@ -182,6 +182,39 @@ function characterUpsertForm()
   // Alignment.
   $options = array(0 => '--Select One--') + getAlignmentList();
   $field = new FieldSelect('alignment', 'Alignment', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*****************
+   * Attributes Group
+   *****************/
+  $group = 'attributes';
+  $form->addGroup($group);
+
+  $attributes = getAttributeList();
+  $character_attributes = getCharacterAttributes($character_id);
+  $table = new TableTemplate();
+  $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
+  foreach($character_attributes as $character_attribute)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
+    );
+    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
+    $row[] = $character_attribute['score'];
+    $row[] = $character_attribute['modifier'];
+    $row[] = $character_attribute['proficiency'];
+    $row[] = $character_attribute['saving_throw'];
+    $table->addRow($row);
+  }
+
+  $attr = array(
+    'href' => '/character/attribute?character_id=' . $character_id,
+  );
+  $link = htmlWrap('a', 'Add New Attribute', $attr);
+
+  $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -292,6 +325,7 @@ function characterClassUpsertForm()
 {
   $template = new FormTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
+  $template->addJsFilePath('/modules/character/character.js');
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -372,7 +406,7 @@ function characterClassUpsertForm()
   }
 
   // Subclass.
-  $options = array(0 => '--Select One--') + getSubclassList($class_id);
+  $options = array(0 => 'Select a class first.');
   $field = new FieldSelect('subclass_id', 'Subclass', $options);
   $field->setRequired();
   $form->addField($field);
@@ -422,6 +456,170 @@ function characterClassUpsertSubmit()
   else
   {
     createCharacterClass($character_class);
+    return htmlWrap('h3', 'Created.');
+  }
+}
+
+/******************************************************************************
+ *
+ * Character Attribute Upsert
+ *
+ ******************************************************************************/
+function characterAttributeUpsertForm()
+{
+  $template = new FormTemplate();
+  $template->addCssFilePath('/themes/default/css/character.css');
+  $template->addJsFilePath('/modules/character/character.js');
+
+  // Submit.
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    $template->addMessage(characterAttributeUpsertSubmit());
+  }
+
+  $character_id = getUrlID('character_id');
+  if (!$character_id)
+  {
+    $template->addMessage('Missing parameter character_id.');
+    return $template;
+  }
+  $character = getCharacter($character_id);
+  $attribute_id = getUrlID('attribute_id');
+  $attributes = getAttributeList();
+  $character_attributes = getCharacterAttributes($character_id);
+
+  $form = new Form('character_attribute_form');
+  if ($attribute_id)
+  {
+    $character_attribute = getCharacterAttribute($character_id, $attribute_id);
+    $form->setValues($character_attribute);
+    $title = 'Edit character ' . htmlWrap('em', $character['name']) . '\'s attribute ' . htmlWrap('em', $attributes[$character_attribute['attribute_id']]);
+
+    $field = new FieldHidden('operation', 'update');
+    $form->addField($field);
+  }
+  else
+  {
+    $title = 'Add New Attribute to ' . htmlWrap('em', $character['name']);
+
+    $field = new FieldHidden('operation', 'create');
+    $form->addField($field);
+  }
+  $form->setTitle($title);
+
+  $markup = htmlWrap('span', $character['pb'], array('class' => array('pb')));
+  $field = new FieldMarkup('pb', 'Proficiency Bonus', $markup);
+  $form->addField($field);
+
+  // Attribute List.
+  $table = new TableTemplate();
+  $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
+  foreach($character_attributes as $character_attribute)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
+    );
+    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
+    $row[] = $character_attribute['score'];
+    $row[] = $character_attribute['modifier'];
+    $row[] = $character_attribute['proficiency'];
+    $row[] = $character_attribute['saving_throw'];
+    $table->addRow($row);
+  }
+
+  $attr = array(
+    'href' => '/character/attribute?character_id=' . $character_id,
+  );
+  $link = htmlWrap('a', 'Add New Attribute', $attr);
+
+  $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
+  $form->addField($field);
+
+  // Character.
+  $field = new FieldHidden('character_id');
+  $field->setValue($character_id);
+  $form->addField($field);
+
+  // Attribute.
+  if (!$attribute_id)
+  {
+    $options = array(0 => '--Select One--') + $attributes;
+    foreach ($character_attributes as $character_attribute)
+    {
+      unset($options[$character_attribute['attribute_id']]);
+    }
+    $field = new FieldSelect('attribute_id', 'Attribute', $options);
+    $form->addField($field);
+  }
+  else
+  {
+    $field = new FieldHidden('attribute_id');
+    $form->addField($field);
+  }
+
+  // Score.
+  $field = new FieldNumber('score', 'Score');
+  $field->setValue(8);
+  $form->addField($field);
+
+  // Modifier.
+  $field = new FieldNumber('modifier', 'Modifier');
+  $field->setValue(-1);
+  $form->addField($field);
+
+  // Proficiency.
+  $field = new FieldNumber('proficiency', 'Saving Throw Proficiency Multiplier');
+  $field->setValue(0);
+  $form->addField($field);
+
+  // Saving Throw.
+  $field = new FieldNumber('saving_throw', 'Saving Throw');
+  $field->setValue(-1);
+  $form->addField($field);
+
+  // Submit
+  $value = 'Add';
+  if ($attribute_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $form->addField($field);
+
+  if ($attribute_id)
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+
+  $template->setForm($form);
+
+  return $template;
+}
+
+function characterAttributeUpsertSubmit()
+{
+  $character_attribute = $_POST;
+  unset($character_attribute['submit']);
+  unset($character_attribute['operation']);
+
+//  debugPrint($character_attribute);
+  if (isset($_POST['delete']))
+  {
+    deleteCharacterAttribute($character_attribute);
+    redirect('/character?id=' . $character_attribute['character_id']);
+  }
+  // Update.
+  elseif ($_POST['operation'] == 'update')
+  {
+    updateCharacterAttribute($character_attribute);
+    return htmlWrap('h3', 'Updated.');
+  }
+  // Create.
+  else
+  {
+    createCharacterAttribute($character_attribute);
     return htmlWrap('h3', 'Created.');
   }
 }

@@ -1,0 +1,13 @@
+/* line 7, ../scss/character.scss */
+#character_form .field_group.header {
+  width: 100%;
+}
+/* line 11, ../scss/character.scss */
+#character_form .field_group.header .field {
+  clear: none;
+  margin-right: 10px;
+}
+/* line 16, ../scss/character.scss */
+#character_form .field_group.header .field.classes, #character_form .field_group.header .field.race_id {
+  clear: left;
+}

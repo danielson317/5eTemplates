@@ -318,3 +318,72 @@ function getCharacterAttributes($character_id)
   }
   return $results;
 }
+
+function getCharacterAttribute($character_id, $attribute_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_attribute');
+  $query->addField('character_id');
+  $query->addField('attribute_id');
+  $query->addField('score');
+  $query->addField('modifier');
+  $query->addField('proficiency');
+  $query->addField('saving_throw');
+  $query->addCondition('character_id');
+  $query->addCondition('attribute_id');
+  $args = array(
+    ':character_id' => $character_id,
+    ':attribute_id' => $attribute_id,
+  );
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createCharacterAttribute($character_attribute)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('character_attribute');
+  $query->addField('character_id');
+  $query->addField('attribute_id');
+  $query->addField('score');
+  $query->addField('modifier');
+  $query->addField('proficiency');
+  $query->addField('saving_throw');
+  $db->insert($query, SQLite::buildArgs($character_attribute));
+}
+
+function updateCharacterAttribute($character_attribute)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('character_attribute');
+  $query->addField('score');
+  $query->addField('modifier');
+  $query->addField('proficiency');
+  $query->addField('saving_throw');
+  $query->addCondition('character_id');
+  $query->addCondition('attribute_id');
+  $db->update($query, SQLite::buildArgs($character_attribute));
+}
+
+function deleteCharacterAttribute($character_attribute)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('character_attribute');
+  $query->addCondition('character_id');
+  $query->addCondition('attribute_id');
+  $args = array(
+    'character_id' => $character_attribute['character_id'],
+    'attribute_id' => $character_attribute['attribute_id'],
+  );
+  $db->delete($query, $args);
+}

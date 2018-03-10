@@ -128,6 +128,23 @@ function stringToAttr($string)
   return strtolower(str_replace($replace, '-', $string));
 }
 
+function optionList($list, $selected = FALSE)
+{
+  $output = '';
+  foreach ($list as $key => $value)
+  {
+    $attr = array(
+      'value' => $key,
+    );
+    if ($key == $selected)
+    {
+      $attr['selected'] = 'selected';
+    }
+    $output .= htmlWrap('option', $value, $attr);
+  }
+  return $output;
+}
+
 /******************************************************************************
  *
  * Global Lists.

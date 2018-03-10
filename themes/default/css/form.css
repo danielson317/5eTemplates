@@ -7,7 +7,6 @@ body > form {
 .field_group {
   float: left;
   width: 250px;
-  margin-left: 20px;
 }
 
 /* line 18, ../scss/form.scss */
