@@ -35,6 +35,8 @@ function getRegistry($path = FALSE)
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
+    'sources' => 'sourceList',
+    'source' => 'sourceUpsertForm',
     'subclasses' => 'subclassList',
     'subclass' => 'subclassUpsertForm',
   );
@@ -48,6 +50,45 @@ function getRegistry($path = FALSE)
     return $registry[$path];
   }
   return $registry;
+}
+
+function menu()
+{
+  $output = '';
+
+  $attr = array(
+    'href' => '/characters',
+  );
+  $output .= htmlWrap('a', 'Characters', $attr);
+
+  $attr = array(
+    'href' => '/items',
+  );
+  $output .= htmlWrap('a', 'Items', $attr);
+
+  $attr = array(
+    'href' => '/spells',
+  );
+  $output .= htmlWrap('a', 'Spells', $attr);
+
+  $attr = array(
+    'href' => '/classes',
+  );
+  $output .= htmlWrap('a', 'Classes', $attr);
+
+  $attr = array(
+    'href' => '/players',
+  );
+  $output .= htmlWrap('a', 'Players', $attr);
+
+  $attr = array(
+    'href' => '/sources',
+  );
+  $output .= htmlWrap('a', 'Sources', $attr);
+
+  $attr = array('id' => 'menu', 'class' => array('menu'));
+  $output = htmlWrap('div', $output, $attr);
+  return $output;
 }
 
 function home()

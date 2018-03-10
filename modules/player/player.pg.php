@@ -2,7 +2,7 @@
 
 /******************************************************************************
  *
- * List
+ * Player List
  *
  ******************************************************************************/
 function playerList()
@@ -54,10 +54,63 @@ function playerList()
 
 /******************************************************************************
  *
+ * Source List
+ *
+ ******************************************************************************/
+function sourceList()
+{
+  $page = getUrlID('page', 1);
+  $sources = getSourcePager($page);
+
+  $template = new ListTemplate('Sources');
+
+  // Operations.
+  $attr = array(
+    'href' => 'source',
+  );
+  $template->addOperation(htmlWrap('a', 'New Source', $attr));
+
+  if ($page > 1)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page - 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+  }
+
+  if (count($sources) >= DEFAULT_PAGER_SIZE)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page + 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+  }
+
+  // List
+  $table = new TableTemplate();
+  $table->setAttr('class', array('source-list'));
+  $table->setHeader(array('Name', 'Code'));
+
+  foreach ($sources as $source)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/source?id=' . $source['id'],
+    );
+    $row[] = htmlWrap('a', $source['name'], $attr);
+    $row[] = $source['code'];
+    $table->addRow($row);
+  }
+  $template->setList($table);
+  return $template;
+}
+
+/******************************************************************************
+ *
  * Upsert
  *
  ******************************************************************************/
-function PlayerUpsertForm()
+function playerUpsertForm()
 {
   $template = new FormTemplate();
 
@@ -97,8 +150,11 @@ function PlayerUpsertForm()
   $form->addField($field);
 
   // Delete.
-  $field = new FieldSubmit('delete', 'Delete');
-  $form->addField($field);
+  if ($player_id)
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
 
   // Template.
   $template->setForm($form);
@@ -131,5 +187,92 @@ function playerUpsertSubmit()
     );
     $player['id'] = createPlayer($player);
     return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') created.');
+  }
+}
+
+/******************************************************************************
+ *
+ * Source Upsert
+ *
+ ******************************************************************************/
+function sourceUpsertForm()
+{
+  $template = new FormTemplate();
+
+  // Submit.
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    $template->addMessage(sourceUpsertSubmit());
+  }
+
+  $source_id = getUrlID('id');
+
+  $form = new Form('character_form');
+  $title = 'Add New source';
+  if ($source_id)
+  {
+    $source = getSource($source_id);
+    $form->setValues($source);
+    $title = 'Edit source ' . htmlWrap('em', $source['name']);
+  }
+  $form->setTitle($title);
+
+  // ID.
+  $field = new FieldHidden('id');
+  $form->addField($field);
+
+  // Name
+  $field = new FieldText('name', 'Name');
+  $form->addField($field);
+
+  // Name
+  $field = new FieldText('code', 'Code');
+  $form->addField($field);
+
+  // Submit
+  $value = 'Add';
+  if ($source_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $form->addField($field);
+
+  // Delete.
+  if ($source_id)
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+
+  // Template.
+  $template->setForm($form);
+  return $template;
+}
+
+function sourceUpsertSubmit()
+{
+  $source = $_POST;
+  unset($source['submit']);
+
+  if (isset($_POST['delete']))
+  {
+    deleteSource($source['id']);
+    redirect('/sources');
+  }
+
+//  debugPrint($source);
+  // Update.
+  if ($_POST['id'])
+  {
+    updateSource($source);
+    return htmlWrap('h3', 'Source ' . htmlWrap('em', $source['name']) . ' (' . $source['id'] . ') updated.');
+  }
+  // Create.
+  else
+  {
+    unset($source['id']);
+    $source['id'] = createSource($source);
+    return htmlWrap('h3', 'Source ' . htmlWrap('em', $source['name']) . ' (' . $source['id'] . ') created.');
   }
 }

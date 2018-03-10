@@ -42,12 +42,6 @@ function installSpell()
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('sources');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $db->create($query);
-
   $query = new CreateQuery('damage_types');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('code', 'TEXT', array('N'));
@@ -206,16 +200,6 @@ function getAoeList()
 
   $query = new SelectQuery('aoes');
   $query->addField('id')->addField('name', 'value');
-
-  return $db->selectList($query);
-}
-
-function getSourceList()
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('sources');
-  $query->addField('id')->addField($query::concatenate('code', $query::literal(' - '), 'name'), 'value');
 
   return $db->selectList($query);
 }
