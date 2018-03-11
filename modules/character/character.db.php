@@ -64,7 +64,7 @@ function installCharacter()
   $query->addField('level', 'INTEGER', array('N'), 0);
   $db->create($query);
 
-  $query = new CreateQuery('character_attribute');
+  $query = new CreateQuery('character_attributes');
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('attribute_id', 'INTEGER', array('P', 'N'));
   $query->addField('score', 'INTEGER', array('N'), 8);
@@ -73,12 +73,11 @@ function installCharacter()
   $query->addField('saving_throw', 'INTEGER', array('N'), -1);
   $db->create($query);
 
-  $query = new CreateQuery('character_skill');
+  $query = new CreateQuery('character_skills');
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('skill_id', 'INTEGER', array('P', 'N'));
-  $query->addField('pb', 'INTEGER', array('N'), 0);
+  $query->addField('proficiency', 'INTEGER', array('N'), 0);
   $query->addField('modifier', 'INTEGER', array('N'), 0);
-  $query->addField('add', 'INTEGER', array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_proficiency');
@@ -301,7 +300,7 @@ function getCharacterAttributes($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attribute');
+  $query = new SelectQuery('character_attributes');
   $query->addField('attribute_id');
   $query->addField('score');
   $query->addField('modifier');
@@ -323,7 +322,7 @@ function getCharacterAttribute($character_id, $attribute_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attribute');
+  $query = new SelectQuery('character_attributes');
   $query->addField('character_id');
   $query->addField('attribute_id');
   $query->addField('score');
@@ -350,7 +349,7 @@ function createCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_attribute');
+  $query = new InsertQuery('character_attributes');
   $query->addField('character_id');
   $query->addField('attribute_id');
   $query->addField('score');
@@ -364,7 +363,7 @@ function updateCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_attribute');
+  $query = new UpdateQuery('character_attributes');
   $query->addField('score');
   $query->addField('modifier');
   $query->addField('proficiency');
@@ -378,12 +377,100 @@ function deleteCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_attribute');
+  $query = new DeleteQuery('character_attributes');
   $query->addCondition('character_id');
   $query->addCondition('attribute_id');
   $args = array(
     'character_id' => $character_attribute['character_id'],
     'attribute_id' => $character_attribute['attribute_id'],
+  );
+  $db->delete($query, $args);
+}
+
+/******************************************************************************
+ *
+ *  Character Skills.
+ *
+ ******************************************************************************/
+function getCharacterSkills($character_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_skills');
+  $query->addField('skill_id');
+  $query->addField('proficiency');
+  $query->addField('modifier');
+  $query->addCondition('character_id');
+  $query->addOrder('skill_id', 'ASC');
+  $args = array(':character_id' => $character_id);
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getCharacterSkill($character_id, $skill_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_skills');
+  $query->addField('character_id');
+  $query->addField('skill_id');
+  $query->addField('proficiency');
+  $query->addField('modifier');
+  $query->addCondition('character_id');
+  $query->addCondition('skill_id');
+  $args = array(
+    ':character_id' => $character_id,
+    ':skill_id' => $skill_id,
+  );
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createCharacterSkill($skill_id)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('character_skills');
+  $query->addField('character_id');
+  $query->addField('skill_id');
+  $query->addField('proficiency');
+  $query->addField('modifier');
+  $db->insert($query, SQLite::buildArgs($skill_id));
+}
+
+function updateCharacterSkill($skill_id)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('character_skills');
+  $query->addField('proficiency');
+  $query->addField('modifier');
+  $query->addCondition('character_id');
+  $query->addCondition('skill_id');
+  $db->update($query, SQLite::buildArgs($skill_id));
+}
+
+function deleteCharacterSkill($skill_id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('character_skills');
+  $query->addCondition('character_id');
+  $query->addCondition('skill_id');
+  $args = array(
+    'character_id' => $skill_id['character_id'],
+    'skill_id' => $skill_id['skill_id'],
   );
   $db->delete($query, $args);
 }
