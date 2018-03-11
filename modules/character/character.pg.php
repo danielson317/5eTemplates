@@ -406,7 +406,14 @@ function characterClassUpsertForm()
   }
 
   // Subclass.
-  $options = array(0 => 'Select a class first.');
+  if ($class_id)
+  {
+    $options = array(0 => '--Select One--') + getSubclassList($class_id);
+  }
+  else
+  {
+    $options = array(0 => 'Select a class first.');
+  }
   $field = new FieldSelect('subclass_id', 'Subclass', $options);
   $field->setRequired();
   $form->addField($field);
@@ -531,9 +538,14 @@ function characterAttributeUpsertForm()
   $attr = array(
     'href' => '/character/attribute?character_id=' . $character_id,
   );
-  $link = htmlWrap('a', 'Add New Attribute', $attr);
+  $links = htmlWrap('a', 'Add New Attribute', $attr) . '<br>';
 
-  $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
+  $attr = array(
+    'href' => '/character?id=' . $character_id,
+  );
+  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
+
+  $field = new FieldMarkup('attributes', 'Attributes', $table . $links);
   $form->addField($field);
 
   // Character.
@@ -544,7 +556,7 @@ function characterAttributeUpsertForm()
   // Attribute.
   if (!$attribute_id)
   {
-    $options = array(0 => '--Select One--') + $attributes;
+    $options = $attributes;
     foreach ($character_attributes as $character_attribute)
     {
       unset($options[$character_attribute['attribute_id']]);

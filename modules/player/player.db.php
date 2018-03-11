@@ -31,7 +31,9 @@ function getPlayerPager($page = 1)
   GLOBAL $db;
 
   $query = new SelectQuery('players');
-  $query->addField('id')->addField('name')->addPager($page);
+  $query->addField('id');
+  $query->addField('name');
+  $query->addPager($page);
 
   $results = $db->select($query);
 

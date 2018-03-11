@@ -5,10 +5,7 @@ include '/libraries/bootstrap.inc.php';
 
 // Retrieve body.
 $url = new URL();
-//debugPrint($url->getPath(), 'path', FALSE);
-//debugPrint($url->getQuery(), 'query');
 $function = getRegistry($url->getPath());
-//echo $function;
 echo $function();
 
 
@@ -22,6 +19,8 @@ function getRegistry($path = FALSE)
     '/' => 'home',
     'unknown' => 'unknown',
     'ajax/subclass' => 'subclassAjax',
+    'attribute' => 'attributeUpsertForm',
+    'attributes' => 'attributeList',
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
@@ -34,6 +33,8 @@ function getRegistry($path = FALSE)
     'items/print' => 'itemPrintForm',
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
+    'skill' => 'skillUpsertForm',
+    'skills' => 'skillList',
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
@@ -73,6 +74,13 @@ function menu()
   );
   $output .= htmlWrap('a', 'Spells', $attr);
 
+  $output .= htmlWrap('a', '-');
+
+  $attr = array(
+    'href' => '/attributes',
+  );
+  $output .= htmlWrap('a', 'Attributes', $attr);
+
   $attr = array(
     'href' => '/classes',
   );
@@ -82,6 +90,11 @@ function menu()
     'href' => '/players',
   );
   $output .= htmlWrap('a', 'Players', $attr);
+
+  $attr = array(
+    'href' => '/skills',
+  );
+  $output .= htmlWrap('a', 'Skills', $attr);
 
   $attr = array(
     'href' => '/sources',

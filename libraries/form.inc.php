@@ -65,7 +65,7 @@ class Form
 
   function addField(Field $field)
   {
-    if (isset($this->values[$field->getId()]))
+    if (array_key_exists($field->getId(), $this->values))
     {
       $field->setValue($this->values[$field->getId()]);
     }

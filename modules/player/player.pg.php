@@ -54,60 +54,7 @@ function playerList()
 
 /******************************************************************************
  *
- * Source List
- *
- ******************************************************************************/
-function sourceList()
-{
-  $page = getUrlID('page', 1);
-  $sources = getSourcePager($page);
-
-  $template = new ListTemplate('Sources');
-
-  // Operations.
-  $attr = array(
-    'href' => 'source',
-  );
-  $template->addOperation(htmlWrap('a', 'New Source', $attr));
-
-  if ($page > 1)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page - 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
-  }
-
-  if (count($sources) >= DEFAULT_PAGER_SIZE)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page + 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
-  }
-
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('source-list'));
-  $table->setHeader(array('Name', 'Code'));
-
-  foreach ($sources as $source)
-  {
-    $row = array();
-    $attr = array(
-      'href' => '/source?id=' . $source['id'],
-    );
-    $row[] = htmlWrap('a', $source['name'], $attr);
-    $row[] = $source['code'];
-    $table->addRow($row);
-  }
-  $template->setList($table);
-  return $template;
-}
-
-/******************************************************************************
- *
- * Upsert
+ * Player Upsert
  *
  ******************************************************************************/
 function playerUpsertForm()
@@ -163,31 +110,81 @@ function playerUpsertForm()
 
 function playerUpsertSubmit()
 {
+  $player = $_POST;
+  unset($player['submit']);
+
   if (isset($_POST['delete']))
   {
-    deletePlayer($_POST['id']);
+    deletePlayer($player['id']);
     redirect('/players');
   }
 
   // Update.
-  if ($_POST['id'])
+  if ($player['id'])
   {
-    $player = array(
-      'id' => $_POST['id'],
-      'name' => $_POST['name'],
-    );
     updatePlayer($player);
     return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') updated.');
   }
   // Create.
   else
   {
-    $player = array(
-      'name' => $_POST['name'],
-    );
+    unset($player['id']);
     $player['id'] = createPlayer($player);
     return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') created.');
   }
+}
+
+/******************************************************************************
+ *
+ * Source List
+ *
+ ******************************************************************************/
+function sourceList()
+{
+  $page = getUrlID('page', 1);
+  $sources = getSourcePager($page);
+
+  $template = new ListTemplate('Sources');
+
+  // Operations.
+  $attr = array(
+    'href' => 'source',
+  );
+  $template->addOperation(htmlWrap('a', 'New Source', $attr));
+
+  if ($page > 1)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page - 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+  }
+
+  if (count($sources) >= DEFAULT_PAGER_SIZE)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page + 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+  }
+
+  // List
+  $table = new TableTemplate();
+  $table->setAttr('class', array('source-list'));
+  $table->setHeader(array('Name', 'Code'));
+
+  foreach ($sources as $source)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/source?id=' . $source['id'],
+    );
+    $row[] = htmlWrap('a', $source['name'], $attr);
+    $row[] = $source['code'];
+    $table->addRow($row);
+  }
+  $template->setList($table);
+  return $template;
 }
 
 /******************************************************************************
@@ -261,7 +258,6 @@ function sourceUpsertSubmit()
     redirect('/sources');
   }
 
-//  debugPrint($source);
   // Update.
   if ($_POST['id'])
   {
