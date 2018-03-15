@@ -24,6 +24,7 @@ include ROOT_PATH . '/modules/player/player.db.php';
 include ROOT_PATH . '/modules/player/player.pg.php';
 
 include ROOT_PATH . '/modules/race/race.db.php';
+include ROOT_PATH . '/modules/race/race.pg.php';
 
 include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';

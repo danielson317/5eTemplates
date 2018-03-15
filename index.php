@@ -19,6 +19,7 @@ function getRegistry($path = FALSE)
     '/' => 'home',
     'unknown' => 'unknown',
     'ajax/subclass' => 'subclassAjax',
+    'ajax/subrace' => 'subraceAjax',
     'attribute' => 'attributeUpsertForm',
     'attributes' => 'attributeList',
     'character' => 'characterUpsertForm',
@@ -27,22 +28,26 @@ function getRegistry($path = FALSE)
     'character/attribute' => 'characterAttributeUpsertForm',
     'character/class' => 'characterClassUpsertForm',
     'character/skill' => 'characterSkillUpsertForm',
-    'classes' => 'classList',
     'class' => 'classUpsertForm',
+    'classes' => 'classList',
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
+    'race' => 'raceUpsertForm',
+    'races' => 'raceList',
     'skill' => 'skillUpsertForm',
     'skills' => 'skillList',
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
-    'sources' => 'sourceList',
     'source' => 'sourceUpsertForm',
-    'subclasses' => 'subclassList',
+    'sources' => 'sourceList',
+    'subrace' => 'subraceUpsertForm',
+    'subraces' => 'subraceList',
     'subclass' => 'subclassUpsertForm',
+    'subclasses' => 'subclassList',
   );
 
   if ($path)
@@ -60,47 +65,18 @@ function menu()
 {
   $output = '';
 
-  $attr = array(
-    'href' => '/characters',
-  );
-  $output .= htmlWrap('a', 'Characters', $attr);
-
-  $attr = array(
-    'href' => '/items',
-  );
-  $output .= htmlWrap('a', 'Items', $attr);
-
-  $attr = array(
-    'href' => '/spells',
-  );
-  $output .= htmlWrap('a', 'Spells', $attr);
+  $output .= htmlWrap('a', 'Characters', array('href' => '/characters'));
+  $output .= htmlWrap('a', 'Items', array('href' => '/items'));
+  $output .= htmlWrap('a', 'Spells', array('href' => '/spells'));
 
   $output .= htmlWrap('a', '-');
 
-  $attr = array(
-    'href' => '/attributes',
-  );
-  $output .= htmlWrap('a', 'Attributes', $attr);
-
-  $attr = array(
-    'href' => '/classes',
-  );
-  $output .= htmlWrap('a', 'Classes', $attr);
-
-  $attr = array(
-    'href' => '/players',
-  );
-  $output .= htmlWrap('a', 'Players', $attr);
-
-  $attr = array(
-    'href' => '/skills',
-  );
-  $output .= htmlWrap('a', 'Skills', $attr);
-
-  $attr = array(
-    'href' => '/sources',
-  );
-  $output .= htmlWrap('a', 'Sources', $attr);
+  $output .= htmlWrap('a', 'Attributes', array('href' => '/attributes'));
+  $output .= htmlWrap('a', 'Classes', array('href' => '/classes'));
+  $output .= htmlWrap('a', 'Players', array('href' => '/players'));
+  $output .= htmlWrap('a', 'Races', array('href' => '/races'));
+  $output .= htmlWrap('a', 'Skills', array('href' => '/skills'));
+  $output .= htmlWrap('a', 'Sources', array('href' => '/sources'));
 
   $attr = array('id' => 'menu', 'class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);
