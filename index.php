@@ -33,10 +33,14 @@ function getRegistry($path = FALSE)
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
+    'language' => 'languageUpsertForm',
+    'languages' => 'languageList',
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
     'race' => 'raceUpsertForm',
     'races' => 'raceList',
+    'script' => 'scriptUpsertForm',
+    'scripts' => 'scriptList',
     'skill' => 'skillUpsertForm',
     'skills' => 'skillList',
     'spell' => 'spellUpsertForm',
@@ -73,8 +77,10 @@ function menu()
 
   $output .= htmlWrap('a', 'Attributes', array('href' => '/attributes'));
   $output .= htmlWrap('a', 'Classes', array('href' => '/classes'));
+  $output .= htmlWrap('a', 'Languages', array('href' => '/languages'));
   $output .= htmlWrap('a', 'Players', array('href' => '/players'));
   $output .= htmlWrap('a', 'Races', array('href' => '/races'));
+  $output .= htmlWrap('a', 'Scripts', array('href' => '/scripts'));
   $output .= htmlWrap('a', 'Skills', array('href' => '/skills'));
   $output .= htmlWrap('a', 'Sources', array('href' => '/sources'));
 

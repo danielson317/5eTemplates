@@ -42,7 +42,7 @@ function installRace()
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('script');
+  $query = new CreateQuery('scripts');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('source_id', 'INTEGER');
@@ -252,6 +252,198 @@ function deleteSubrace($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('subraces');
+  $query->addCondition('id');
+  $args = array(':id' => $id);
+
+  $db->delete($query, $args);
+}
+
+/******************************************************************************
+ *
+ *  Script.
+ *
+ ******************************************************************************/
+function getScriptPager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('scripts');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('description');
+  $query->addPager($page);
+
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getScriptList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('scripts');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
+}
+
+function getScript($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('scripts');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('description');
+  $query->addCondition('id');
+  $args = array(':id' => $id);
+
+  $results = $db->select($query, $args);
+  if (!$results)
+  {
+    return FALSE;
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createScript($script)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('scripts');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('description');
+  $args = $db->buildArgs($script);
+
+  return $db->insert($query, $args);
+}
+
+function updateScript($script)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('scripts');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('description');
+  $query->addCondition('id');
+  $args = $db->buildArgs($script);
+
+  $db->update($query, $args);
+}
+
+function deleteScript($id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('scripts');
+  $query->addCondition('id');
+  $args = array(':id' => $id);
+
+  $db->delete($query, $args);
+}
+
+/******************************************************************************
+ *
+ *  Language.
+ *
+ ******************************************************************************/
+function getLanguagePager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+  $query->addPager($page);
+
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getLanguageList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
+}
+
+function getLanguage($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+  $query->addCondition('id');
+  $args = array(':id' => $id);
+
+  $results = $db->select($query, $args);
+  if (!$results)
+  {
+    return FALSE;
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('languages');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+  $args = $db->buildArgs($language);
+
+  return $db->insert($query, $args);
+}
+
+function updateLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('languages');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+  $query->addCondition('id');
+  $args = $db->buildArgs($language);
+
+  $db->update($query, $args);
+}
+
+function deleteLanguage($id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('languages');
   $query->addCondition('id');
   $args = array(':id' => $id);
 

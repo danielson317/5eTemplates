@@ -71,7 +71,7 @@ function attributeUpsertForm()
 
   $attribute_id = getUrlID('id');
 
-  $form = new Form('character_form');
+  $form = new Form('attribute_form');
   $title = 'Add New Attribute';
   if ($attribute_id)
   {
@@ -218,7 +218,7 @@ function skillUpsertForm()
 
   $skill_id = getUrlID('id');
 
-  $form = new Form('character_form');
+  $form = new Form('skill_form');
   $title = 'Add New skill';
   if ($skill_id)
   {

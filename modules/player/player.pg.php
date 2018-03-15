@@ -69,7 +69,7 @@ function playerUpsertForm()
 
   $player_id = getUrlID('id');
 
-  $form = new Form('character_form');
+  $form = new Form('player_form');
   $title = 'Add New Player';
   if ($player_id)
   {
@@ -204,7 +204,7 @@ function sourceUpsertForm()
 
   $source_id = getUrlID('id');
 
-  $form = new Form('character_form');
+  $form = new Form('source_form');
   $title = 'Add New source';
   if ($source_id)
   {

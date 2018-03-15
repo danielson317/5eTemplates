@@ -323,3 +323,298 @@ function subraceUpsertSubmit()
     return htmlWrap('h3', 'Subrace ' . htmlWrap('em', $subrace['name']) . ' (' . $subrace['id'] . ') created.');
   }
 }
+
+/******************************************************************************
+ *
+ * Script List
+ *
+ ******************************************************************************/
+function scriptList()
+{
+  $page = getUrlID('page', 1);
+  $scripts = getScriptPager($page);
+
+  $template = new ListTemplate('Scripts');
+
+  // Operations.
+  $attr = array(
+    'href' => 'script',
+  );
+  $template->addOperation(htmlWrap('a', 'New Script', $attr));
+
+  if ($page > 1)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page - 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+  }
+
+  if (count($scripts) >= DEFAULT_PAGER_SIZE)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page + 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+  }
+
+  // List
+  $table = new TableTemplate();
+  $table->setAttr('class', array('script-list'));
+  $table->setHeader(array('Name', 'Description'));
+
+  foreach ($scripts as $script)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/script?id=' . $script['id'],
+    );
+    $row[] = htmlWrap('a', $script['name'], $attr);
+    $row[] = $script['description'];
+    $table->addRow($row);
+  }
+  $template->setList($table);
+  return $template;
+}
+
+/******************************************************************************
+ *
+ * Script Upsert
+ *
+ ******************************************************************************/
+function scriptUpsertForm()
+{
+  $template = new FormTemplate();
+
+  // Submit.
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    $template->addMessage(scriptUpsertSubmit());
+  }
+
+  $script_id = getUrlID('id');
+
+  $form = new Form('script_form');
+  $title = 'Add New Script';
+  if ($script_id)
+  {
+    $script = getScript($script_id);
+    $form->setValues($script);
+    $title = 'Edit script ' . htmlWrap('em', $script['name']);
+  }
+  $form->setTitle($title);
+
+  // ID.
+  $field = new FieldHidden('id');
+  $form->addField($field);
+
+  // Name
+  $field = new FieldText('name', 'Name');
+  $form->addField($field);
+
+  // Source
+  $options = array(0 => '--Select One--') + getSourceList();
+  $field = new FieldSelect('source_id', 'Source', $options);
+  $form->addField($field);
+
+  // Description.
+  $field = new FieldTextarea('description', 'Description');
+  $form->addField($field);
+
+  // Submit
+  $value = 'Add';
+  if ($script_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $form->addField($field);
+
+  // Delete.
+  if ($script_id)
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+
+  // Template.
+  $template->setForm($form);
+  return $template;
+}
+
+function scriptUpsertSubmit()
+{
+  $script = $_POST;
+  unset($script['submit']);
+
+  if (isset($_POST['delete']))
+  {
+    deleteScript($script['id']);
+    redirect('/scripts');
+  }
+
+  // Update.
+  if ($script['id'])
+  {
+    updateScript($script);
+    return htmlWrap('h3', 'Script ' . htmlWrap('em', $script['name']) . ' (' . $script['id'] . ') updated.');
+  }
+  // Create.
+  else
+  {
+    unset($script['id']);
+    $script['id'] = createScript($script);
+    return htmlWrap('h3', 'Script ' . htmlWrap('em', $script['name']) . ' (' . $script['id'] . ') created.');
+  }
+}
+
+/******************************************************************************
+ *
+ * Language List
+ *
+ ******************************************************************************/
+function languageList()
+{
+  $page = getUrlID('page', 1);
+  $languages = getLanguagePager($page);
+
+  $template = new ListTemplate('Languages');
+
+  // Operations.
+  $attr = array(
+    'href' => 'language',
+  );
+  $template->addOperation(htmlWrap('a', 'New Language', $attr));
+
+  if ($page > 1)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page - 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+  }
+
+  if (count($languages) >= DEFAULT_PAGER_SIZE)
+  {
+    $attr = array(
+      'href' => '?page=' . ($page + 1),
+    );
+    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+  }
+
+  // List
+  $table = new TableTemplate();
+  $table->setAttr('class', array('language-list'));
+  $table->setHeader(array('Name', 'Script', 'Description'));
+
+  $scripts = getScriptList();
+  foreach ($languages as $language)
+  {
+    $row = array();
+    $attr = array(
+      'href' => '/language?id=' . $language['id'],
+    );
+    $row[] = htmlWrap('a', $language['name'], $attr);
+    $row[] = $scripts[$language['script_id']];
+    $row[] = $language['description'];
+    $table->addRow($row);
+  }
+  $template->setList($table);
+  return $template;
+}
+
+/******************************************************************************
+ *
+ * Language Upsert
+ *
+ ******************************************************************************/
+function languageUpsertForm()
+{
+  $template = new FormTemplate();
+
+  // Submit.
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    $template->addMessage(languageUpsertSubmit());
+  }
+
+  $language_id = getUrlID('id');
+
+  $form = new Form('language_form');
+  $title = 'Add New Language';
+  if ($language_id)
+  {
+    $language = getLanguage($language_id);
+    $form->setValues($language);
+    $title = 'Edit language ' . htmlWrap('em', $language['name']);
+  }
+  $form->setTitle($title);
+
+  // ID.
+  $field = new FieldHidden('id');
+  $form->addField($field);
+
+  // Name
+  $field = new FieldText('name', 'Name');
+  $form->addField($field);
+
+  // Script
+  $options = array(0 => '--Select One--') + getScriptList();
+  $field = new FieldSelect('script_id', 'Script', $options);
+  $form->addField($field);
+
+  // Source
+  $options = array(0 => '--Select One--') + getSourceList();
+  $field = new FieldSelect('source_id', 'Source', $options);
+  $form->addField($field);
+
+  // Description.
+  $field = new FieldTextarea('description', 'Description');
+  $form->addField($field);
+
+  // Submit
+  $value = 'Add';
+  if ($language_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $form->addField($field);
+
+  // Delete.
+  if ($language_id)
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+
+  // Template.
+  $template->setForm($form);
+  return $template;
+}
+
+function languageUpsertSubmit()
+{
+  $language = $_POST;
+  unset($language['submit']);
+
+  if (isset($_POST['delete']))
+  {
+    deleteLanguage($language['id']);
+    redirect('/languages');
+  }
+
+  // Update.
+  if ($language['id'])
+  {
+    updateLanguage($language);
+    return htmlWrap('h3', 'Language ' . htmlWrap('em', $language['name']) . ' (' . $language['id'] . ') updated.');
+  }
+  // Create.
+  else
+  {
+    unset($language['id']);
+    $language['id'] = createLanguage($language);
+    return htmlWrap('h3', 'Language ' . htmlWrap('em', $language['name']) . ' (' . $language['id'] . ') created.');
+  }
+}
