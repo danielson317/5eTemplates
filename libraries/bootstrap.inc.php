@@ -1,6 +1,8 @@
 <?php
 DEFINE('ROOT_PATH', __DIR__ . '/..');
 
+include ROOT_PATH . '/platform.inc.php';
+
 include ROOT_PATH . '/libraries/global.inc.php';
 include ROOT_PATH . '/libraries/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
@@ -31,4 +33,4 @@ include ROOT_PATH . '/modules/spell/spell.db.php';
 include ROOT_PATH . '/modules/spell/spell.pg.php';
 
 GLOBAL $db;
-$db = new SQLite('C:\Users\DanielPHenry\Dropbox\Gaming\D&D5e\dnd.db');
+$db = new SQLite(DB_PATH);
