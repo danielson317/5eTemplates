@@ -117,7 +117,7 @@ function htmlWrap($tag, $content, $attr = array())
   return '<' . $tag . buildAttr($attr) . '>' . $content . '</' . $tag . '>';
 }
 
-function htmlSolo($tag, $attr)
+function htmlSolo($tag, $attr = array())
 {
   return '<' . $tag . buildAttr($attr) . '>';
 }

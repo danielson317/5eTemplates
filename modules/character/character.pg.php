@@ -185,9 +185,9 @@ function characterUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
-  /*****************
+  /********************
    * Attributes Group
-   *****************/
+   ********************/
   $group = 'attributes';
   $form->addGroup($group);
 
@@ -218,6 +218,7 @@ function characterUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  // Skills
   $skills = getSkillList();
   $character_skills = getCharacterSkills($character_id);
   $table = new TableTemplate();
@@ -240,6 +241,28 @@ function characterUpsertForm()
   $link = htmlWrap('a', 'Add New Skill', $attr);
 
   $field = new FieldMarkup('skills', 'Skills', $table . $link);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Languages
+  $languages = getLanguageList();
+  $character_languages = getCharacterLanguages($character_id);
+
+  $list = array();
+  foreach($character_languages as $character_language)
+  {
+    $attr = array(
+      'href' => '/character/language?character_id=' . $character_id . '&language_id=' . $character_language['language_id'],
+    );
+    $list[] = htmlWrap('a', $languages[$character_language['language_id']], $attr);
+  }
+
+  $attr = array(
+    'href' => '/character/language?character_id=' . $character_id,
+  );
+  $link = htmlWrap('a', 'Add New Language', $attr);
+
+  $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $link);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -819,6 +842,128 @@ function characterSkillUpsertSubmit()
   else
   {
     createCharacterSkill($character_skill);
+    return htmlWrap('h3', 'Created.');
+  }
+}
+
+/******************************************************************************
+ *
+ * Character language Upsert
+ *
+ ******************************************************************************/
+function characterLanguageUpsertForm()
+{
+  $template = new FormTemplate();
+  $template->addCssFilePath('/themes/default/css/character.css');
+  $template->addJsFilePath('/modules/character/character.js');
+
+  // Submit.
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    $template->addMessage(characterLanguageUpsertSubmit());
+  }
+
+  $character_id = getUrlID('character_id');
+  if (!$character_id)
+  {
+    $template->addMessage('Missing parameter character_id.');
+    return $template;
+  }
+  $character = getCharacter($character_id);
+  $language_id = getUrlID('language_id');
+  $languages = getlanguageList();
+  $character_languages = getCharacterlanguages($character_id);
+
+  $form = new Form('character_language_form');
+  if ($language_id)
+  {
+    $character_language = getCharacterlanguage($character_id, $language_id);
+    $form->setValues($character_language);
+    $title = 'Delete character ' . htmlWrap('em', $character['name']) . '\'s language ' . htmlWrap('em', $languages[$character_language['language_id']]);
+
+    $field = new FieldHidden('operation', 'delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $title = 'Add New language to ' . htmlWrap('em', $character['name']);
+
+    $field = new FieldHidden('operation', 'create');
+    $form->addField($field);
+  }
+  $form->setTitle($title);
+
+  // Language list.
+  $list = array();
+  foreach($character_languages as $character_language)
+  {
+    $attr = array(
+      'href' => '/character/language?character_id=' . $character_id . '&language_id=' . $character_language['language_id'],
+    );
+    $list[] = htmlWrap('a', $languages[$character_language['language_id']], $attr);
+  }
+
+  $attr = array(
+    'href' => '/character/language?character_id=' . $character_id,
+  );
+  $links = htmlWrap('a', 'Add New language', $attr) . '<br>';
+
+  $attr = array(
+    'href' => '/character?id=' . $character_id,
+  );
+  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
+
+  $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $links);
+  $form->addField($field);
+
+  // Character.
+  $field = new FieldHidden('character_id');
+  $field->setValue($character_id);
+  $form->addField($field);
+
+  // Submit
+  if ($language_id)
+  {
+    $field = new FieldHidden('language_id');
+    $form->addField($field);
+
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $options = $languages;
+    foreach ($character_languages as $character_language)
+    {
+      unset($options[$character_language['language_id']]);
+    }
+    $field = new FieldSelect('language_id', 'language', $options);
+    $form->addField($field);
+
+    $field = new FieldSubmit('submit', 'Add');
+    $form->addField($field);
+  }
+
+  $template->setForm($form);
+
+  return $template;
+}
+
+function characterLanguageUpsertSubmit()
+{
+  $character_language = $_POST;
+  unset($character_language['submit']);
+  unset($character_language['operation']);
+
+  if (isset($_POST['delete']))
+  {
+    deleteCharacterlanguage($character_language);
+    redirect('/character?id=' . $character_language['character_id']);
+  }
+  // Create.
+  else
+  {
+    createCharacterlanguage($character_language);
     return htmlWrap('h3', 'Created.');
   }
 }

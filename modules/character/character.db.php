@@ -27,21 +27,6 @@ function installCharacter()
   $query->addField('features', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('attributes');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('skills');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('attribute_id', 'INTEGER', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
   $query = new CreateQuery('proficiencies');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('code', 'TEXT', array('N'));
@@ -57,7 +42,7 @@ function installCharacter()
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('character_class');
+  $query = new CreateQuery('character_classes');
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('class_id', 'INTEGER', array('P', 'N'));
   $query->addField('subclass_id', 'INTEGER', array('N'));
@@ -78,6 +63,11 @@ function installCharacter()
   $query->addField('skill_id', 'INTEGER', array('P', 'N'));
   $query->addField('proficiency', 'INTEGER', array('N'), 0);
   $query->addField('modifier', 'INTEGER', array('N'), 0);
+  $db->create($query);
+
+  $query = new CreateQuery('character_languages');
+  $query->addField('character_id', 'INTEGER', array('P', 'N'));
+  $query->addField('language_id', 'INTEGER', array('P', 'N'));
   $db->create($query);
 
   $query = new CreateQuery('character_proficiency');
@@ -212,7 +202,7 @@ function getCharacterClasses($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_class');
+  $query = new SelectQuery('character_classes');
   $query->addField('class_id');
   $query->addField('subclass_id');
   $query->addField('level');
@@ -232,7 +222,7 @@ function getCharacterClass($character_id, $class_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_class');
+  $query = new SelectQuery('character_classes');
   $query->addField('character_id');
   $query->addField('class_id');
   $query->addField('subclass_id');
@@ -257,7 +247,7 @@ function createCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_class');
+  $query = new InsertQuery('character_classes');
   $query->addField('character_id');
   $query->addField('class_id');
   $query->addField('subclass_id');
@@ -269,7 +259,7 @@ function updateCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_class');
+  $query = new UpdateQuery('character_classes');
   $query->addField('subclass_id');
   $query->addField('level');
   $query->addCondition('character_id');
@@ -281,7 +271,7 @@ function deleteCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_class');
+  $query = new DeleteQuery('character_classes');
   $query->addCondition('character_id');
   $query->addCondition('class_id');
   $args = array(
@@ -437,7 +427,7 @@ function getCharacterSkill($character_id, $skill_id)
   return $result;
 }
 
-function createCharacterSkill($skill_id)
+function createCharacterSkill($skill)
 {
   GLOBAL $db;
 
@@ -446,10 +436,10 @@ function createCharacterSkill($skill_id)
   $query->addField('skill_id');
   $query->addField('proficiency');
   $query->addField('modifier');
-  $db->insert($query, SQLite::buildArgs($skill_id));
+  $db->insert($query, SQLite::buildArgs($skill));
 }
 
-function updateCharacterSkill($skill_id)
+function updateCharacterSkill($skill)
 {
   GLOBAL $db;
 
@@ -458,10 +448,10 @@ function updateCharacterSkill($skill_id)
   $query->addField('modifier');
   $query->addCondition('character_id');
   $query->addCondition('skill_id');
-  $db->update($query, SQLite::buildArgs($skill_id));
+  $db->update($query, SQLite::buildArgs($skill));
 }
 
-function deleteCharacterSkill($skill_id)
+function deleteCharacterSkill($skill)
 {
   GLOBAL $db;
 
@@ -469,8 +459,78 @@ function deleteCharacterSkill($skill_id)
   $query->addCondition('character_id');
   $query->addCondition('skill_id');
   $args = array(
-    'character_id' => $skill_id['character_id'],
-    'skill_id' => $skill_id['skill_id'],
+    'character_id' => $skill['character_id'],
+    'skill_id' => $skill['skill_id'],
+  );
+  $db->delete($query, $args);
+}
+
+/******************************************************************************
+ *
+ *  Character Languages.
+ *
+ ******************************************************************************/
+function getCharacterLanguages($character_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_languages');
+  $query->addField('language_id');
+  $query->addCondition('character_id');
+  $query->addOrder('language_id', 'ASC');
+  $args = array(':character_id' => $character_id);
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+function getCharacterLanguage($character_id, $language_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_languages');
+  $query->addField('character_id');
+  $query->addField('language_id');
+  $query->addCondition('character_id');
+  $query->addCondition('language_id');
+  $args = array(
+    'character_id' => $character_id,
+    'language_id' => $language_id,
+  );
+  $results = $db->select($query, $args);
+
+  if (!$results)
+  {
+    return array();
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createCharacterLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('character_languages');
+  $query->addField('character_id');
+  $query->addField('language_id');
+  $db->insert($query, SQLite::buildArgs($language));
+}
+
+function deleteCharacterLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('character_languages');
+  $query->addCondition('character_id');
+  $query->addCondition('language_id');
+  $args = array(
+    'character_id' => $language['character_id'],
+    'language_id' => $language['language_id'],
   );
   $db->delete($query, $args);
 }
