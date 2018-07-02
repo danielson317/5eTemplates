@@ -354,8 +354,22 @@ function getLanguagePager($page = 1)
   $query->addField('source_id');
   $query->addField('script_id');
   $query->addField('description');
-  $query->addCondition(new QueryCondition('id', 'languages', Database::COMPARE_GREATER_THAN, 1));
-  $query->addCondition(new QueryCondition('script_id', 'languages', Database::COMPARE_GREATER_THAN, 1));
+
+  // Join scripts.
+//  $condition = new QueryCondition('script_id', 'languages');
+//  $condition->setValueField('id', 'scripts');
+//  $table = new QueryTable('scripts', 'scripts', QueryTable::INNER_JOIN, $condition);
+//  $query->addTable($table);
+
+  // Filter based on script text.
+//  $condition = new QueryCondition('name', 'scripts', QueryCondition::COMPARE_EQUAL, 'Dwarvish');
+//  $query->addCondition($condition);
+
+//  $query->addCondition(new QueryCondition('id', 'languages', QueryCondition::COMPARE_GREATER_THAN, 1));
+//  $query->addCondition(new QueryCondition('script_id', 'languages', QueryCondition::COMPARE_GREATER_THAN, 1));
+//  $condition = new QueryCondition('id', 'languages', QueryCondition::COMPARE_EQUAL, FALSE);
+//  $condition->setValueField('script_id', 'languages');
+//  $query->addCondition($condition);
   $query->addPager($page);
 
   $results = $db->select($query);

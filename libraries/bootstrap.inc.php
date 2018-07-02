@@ -4,6 +4,7 @@ DEFINE('ROOT_PATH', __DIR__ . '/..');
 include ROOT_PATH . '/platform.inc.php';
 
 include ROOT_PATH . '/libraries/global.inc.php';
+include ROOT_PATH . '/libraries/database.inc.php';
 include ROOT_PATH . '/libraries/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
 include ROOT_PATH . '/libraries/template.inc.php';
