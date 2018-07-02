@@ -100,10 +100,9 @@ function getRace($id)
   $query->addField('speed');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -136,10 +135,9 @@ function updateRace($race)
   $query->addField('speed');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = $db->buildArgs($race);
+  $query->addConditionSimple('id', $id);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteRace($id)
@@ -147,10 +145,9 @@ function deleteRace($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('races');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -168,11 +165,9 @@ function getSubracePager($race_id, $page = 1)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('race_id');
+  $query->addConditionSimple('race_id', $race_id);
   $query->addPager($page);
-  $args = array(':race_id' => $race_id);
-
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -190,11 +185,10 @@ function getSubraceList($race_id = FALSE)
   $args = array();
   if ($race_id)
   {
-    $query->addCondition('race_id');
-    $args[':race_id'] = $race_id;
+    $query->addConditionSimple('race_id', $race_id);
   }
 
-  return $db->selectList($query, $args);
+  return $db->selectList($query);
 }
 
 function getSubrace($id)
@@ -207,10 +201,9 @@ function getSubrace($id)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -241,10 +234,9 @@ function updateSubrace($race)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = $db->buildArgs($race);
+  $query->addConditionSimple('id', $race['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteSubrace($id)
@@ -252,10 +244,9 @@ function deleteSubrace($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('subraces');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -302,10 +293,8 @@ function getScript($id)
   $query->addField('name');
   $query->addField('source_id');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
-
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -335,10 +324,9 @@ function updateScript($script)
   $query->addField('name');
   $query->addField('source_id');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = $db->buildArgs($script);
+  $query->addConditionSimple('id', $script['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteScript($id)
@@ -346,10 +334,9 @@ function deleteScript($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('scripts');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -367,6 +354,8 @@ function getLanguagePager($page = 1)
   $query->addField('source_id');
   $query->addField('script_id');
   $query->addField('description');
+  $query->addCondition(new QueryCondition('id', 'languages', Database::COMPARE_GREATER_THAN, 1));
+  $query->addCondition(new QueryCondition('script_id', 'languages', Database::COMPARE_GREATER_THAN, 1));
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -398,10 +387,9 @@ function getLanguage($id)
   $query->addField('source_id');
   $query->addField('script_id');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -433,10 +421,9 @@ function updateLanguage($language)
   $query->addField('source_id');
   $query->addField('script_id');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = $db->buildArgs($language);
+  $query->addConditionSimple('id', $language['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteLanguage($id)

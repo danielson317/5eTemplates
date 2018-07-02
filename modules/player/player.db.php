@@ -61,10 +61,9 @@ function getPlayer($id)
   $query = new SelectQuery('players');
   $query->addField('id');
   $query->addField('name');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -90,10 +89,9 @@ function updatePlayer($player)
 
   $query = new UpdateQuery('players');
   $query->addField('name');
-  $query->addCondition('id');
-  $args = $db->buildArgs($player);
+  $query->addConditionSimple('id', $player['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deletePlayer($id)
@@ -101,10 +99,9 @@ function deletePlayer($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('players');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -136,7 +133,7 @@ function getSourceList()
   GLOBAL $db;
 
   $query = new SelectQuery('sources');
-  $query->addField('id')->addField($query::concatenate('code', $query::literal(' - '), 'name'), 'value');
+  $query->addField('id')->addField($db->concatenate('code', $db->literal(' - '), 'name'), 'value');
 
   return $db->selectList($query);
 }
@@ -149,10 +146,9 @@ function getSource($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('code');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -180,10 +176,9 @@ function updateSource($source)
   $query = new UpdateQuery('sources');
   $query->addField('name');
   $query->addField('code');
-  $query->addCondition('id');
-  $args = $db->buildArgs($source);
+  $query->addConditionSimple('id', $source['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteSource($id)
@@ -191,8 +186,7 @@ function deleteSource($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('sources');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }

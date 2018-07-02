@@ -62,12 +62,8 @@ function getItem($id)
         ->addField('magic')
         ->addField('attunement')
         ->addField('description');
-  $query->addCondition('id', ':id');
-  $args = array(
-    ':id' => $id,
-  );
-
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -103,10 +99,9 @@ function updateItem($item)
         ->addField('magic')
         ->addField('attunement')
         ->addField('description');
-  $query->addCondition('id');
-  $args = SQLite::buildArgs($item);
+  $query->addConditionSimple('id', $item['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteItem($id)

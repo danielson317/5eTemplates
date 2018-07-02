@@ -70,10 +70,9 @@ function getAttribute($id)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -103,10 +102,9 @@ function updateAttribute($attribute)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addCondition('id');
-  $args = $db->buildArgs($attribute);
+  $query->addConditionSimple('id', $attribute['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteAttribute($id)
@@ -114,10 +112,9 @@ function deleteAttribute($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('attributes');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $db->delete($query, $args);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -166,10 +163,9 @@ function getSkill($id)
   $query->addField('code');
   $query->addField('description');
   $query->addField('attribute_id');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -201,10 +197,9 @@ function updateSkill($skill)
   $query->addField('code');
   $query->addField('description');
   $query->addField('attribute_id');
-  $query->addCondition('id');
-  $args = $db->buildArgs($skill);
+  $query->addConditionSimple('id', $skill['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteSkill($id)
@@ -212,8 +207,6 @@ function deleteSkill($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('skills');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
-
-  $db->delete($query, $args);
+  $query->addConditionSimple('id', $id);
+  $db->delete($query);
 }

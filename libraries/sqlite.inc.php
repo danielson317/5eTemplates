@@ -1,8 +1,53 @@
 <?php
 
-class SQLite
+abstract class Database
 {
-  private $db;
+  const COMPARE_EQUAL = 1;
+  const COMPARE_NOT_EQUAL = 2;
+  const COMPARE_LESS_THAN = 3;
+  const COMPARE_LESS_THAN_EQUAL = 4;
+  const COMPARE_GREATER_THAN = 5;
+  const COMPARE_GREATER_THAN_EQUAL = 6;
+  const COMPARE_NULL = 7;
+  const COMPARE_NOT_NULL = 8;
+
+  const GROUP_AND = 1;
+  const GROUP_OR = 2;
+
+  protected $db;
+
+  // VCrUD operations.
+  abstract function select(SelectQuery $query, $args = array());
+  function selectList(SelectQuery $query, $args = array())
+  {
+    $results = $this->select($query, $args);
+
+    $list = array();
+    foreach($results as $result)
+    {
+      $list[$result['id']] = $result['value'];
+    }
+    return $list;
+  }
+  abstract function insert(InsertQuery $query, $args = array());
+  abstract function update(UpdateQuery $query, $args = array());
+  abstract function delete(DeleteQuery $query, $args = array());
+
+  // Database structure.
+  abstract function create(CreateQuery $query, $args = array());
+
+  // Helpers.
+  abstract protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = Database::GROUP_AND);
+  abstract protected function _buildCondition(Query $query, QueryCondition $condition);
+
+  // String manipulation.
+  abstract function concatenate();
+  abstract function literal($string);
+}
+
+class SQLite extends Database
+{
+  const PLACEHOLDER_TOKEN = ':';
 
   function __construct($db_path, $username = '', $password = '')
   {
@@ -18,50 +63,178 @@ class SQLite
 
   function select(SelectQuery $query, $args = array())
   {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
-    return $query->fetchAll(PDO::FETCH_ASSOC);
-  }
-
-  function selectList(SelectQuery $query, $args = array())
-  {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
-
-    $list = array();
-    while($row = $query->fetch(PDO::FETCH_ASSOC))
+    $sql  = '';
+    $sql .= 'SELECT';
+    foreach ($query->getFields() as $alias => $details)
     {
-      $list[$row['id']] = $row['value'];
+      $sql .= ' ' . $details['table_alias'] . '.' . $details['name'] . ' AS ' . $alias . ',';
     }
-    return $list;
+    $sql = trim($sql, ',');
+
+    // Add tables.
+    $tables = $query->getTables();
+    reset($tables);
+    $sql .= ' FROM ' . current($tables)['name'] . ' ' . key($tables);
+//    next($tables);
+//    while (next($tables))
+//    {
+//      $tables
+//    }
+
+    // Where.
+    if ($query->getConditions())
+    {
+      $sql .= ' WHERE ' . $this->_buildConditionGroup($query);
+    }
+
+    // Order by.
+    if ($query->getOrders())
+    {
+      $sql .= ' ORDER BY';
+      foreach ($query->getOrders() as $alias => $dir)
+      {
+        $sql .= ' ' . $alias . ' ' . $dir . ',';
+      }
+    }
+    $sql = trim($sql, ',');
+
+    // Pager
+    if ($query->getPage())
+    {
+      $sql .= ' LIMIT ' . $query->getPageSize();
+      $sql .= ' OFFSET ' . (($query->getPageSize() * $query->getPage()) - $query->getPageSize());
+    }
+
+    $prepared_statement = $this->db->prepare($sql);
+    $prepared_statement->execute($query->getValues());
+    return $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
   function insert(InsertQuery $query, $args = array())
   {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
+    $sql = '';
+    $sql .= 'INSERT INTO '  . key($query->getTables()) . ' (';
+    foreach ($query->getFields() as $name => $value)
+    {
+      $sql .= ' ' . $name . ',';
+    }
+    $sql = trim($sql, ',');
+
+    $sql .= ') VALUES (';
+    foreach ($query->getFields() as $name => $value)
+    {
+      $sql .= ' ' . $value['value'] . ',';
+    }
+    $sql = trim($sql, ',');
+
+    $sql .= ')';
+
+    $prepared_statement = $this->db->prepare($sql);
+    $prepared_statement->execute($args);
     return $this->db->lastInsertId();
   }
 
   function update(UpdateQuery $query, $args = array())
   {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
+    $sql = '';
+    $sql .= 'UPDATE '  . key($query->getTables()) . ' SET';
+    foreach ($query->getFields() as $name => $value)
+    {
+      $sql .= ' ' . $name . ' = ' . $value['value'] . ',';
+    }
+    $sql = trim($sql, ',');
+
+    // Where.
+    if ($query->getConditions())
+    {
+      $sql .= ' WHERE ' . $this->_buildConditionGroup($query);
+    }
+
+    $prepared_statement = $this->db->prepare($sql);
+    $prepared_statement->execute($args);
   }
 
   function delete(DeleteQuery $query, $args = array())
   {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
+    $sql = '';
+    $sql .= 'DELETE FROM '  . key($query->getTables());
+
+    // Where.
+    if ($query->getConditions())
+    {
+      $sql .= ' WHERE ' . $this->_buildConditionGroup($query);
+    }
+
+    $prepared_statement = $this->db->prepare($sql);
+    $prepared_statement->execute($args);
   }
 
   // Structure
   function create(CreateQuery $query, $args = array())
   {
-    $query = $this->db->prepare($query);
-    $query->execute($args);
+    $primary_key = array();
+    foreach($query->getFields() as $name => $value)
+    {
+      if (array_search('P', $value['flags']) !== FALSE)
+      {
+        $primary_key[] = $name;
+      }
+    }
+    $key_count = count($primary_key);
+
+    $sql = '';
+    $sql .= 'CREATE TABLE `'  . key($query->getTables()) . '` (';
+
+    foreach ($query->getFields() as $name => $value)
+    {
+      $sql .= ' `' . $name . '` ' . $value['type'];
+      foreach ($value['flags'] as $flag)
+      {
+        if ($flag == 'N')
+        {
+          $sql .= ' NOT NULL';
+        }
+        elseif ($flag == 'P' && $key_count == 1)
+        {
+          $sql .= ' PRIMARY KEY';
+        }
+        elseif ($flag == 'A')
+        {
+          $sql .= ' AUTOINCREMENT';
+        }
+        elseif ($flag == 'U')
+        {
+          $sql .= ' UNIQUE';
+        }
+      }
+
+      if ($value['default'] !== FALSE)
+      {
+        $sql .= ' DEFAULT ' . $value['default'];
+      }
+      $sql .= ',';
+    }
+    if ($key_count > 1)
+    {
+      $sql .= ' PRIMARY KEY(';
+      foreach($primary_key as $key)
+      {
+        $sql .= '`' . $key . '` ' . ', ';
+      }
+      $sql = trim($sql, ', ');
+      $sql .= ')';
+    }
+    $sql = trim($sql, ',');
+
+    $sql .= ')';
+
+    $prepared_statement = $this->db->prepare($sql);
+    $prepared_statement->execute($args);
   }
 
+  /***************************
+   * Helpers
+   ***************************/
   static function buildArgs($args)
   {
     $new_args = array();
@@ -71,116 +244,89 @@ class SQLite
     }
     return $new_args;
   }
-}
 
-abstract class Query
-{
-  const COMPARE_EQUAL = 1;
-  const COMPARE_NOT_EQUAL = 2;
-  const COMPARE_LESS_THAN = 3;
-  const COMPARE_LESS_THAN_EQUAL = 4;
-  const COMPARE_MORE_THAN = 5;
-  const COMPARE_MORE_THAN_EQUAL = 6;
-  const COMPARE_NULL = 7;
-  const COMPARE_NOT_NULL = 8;
-
-  const GROUP_AND = 1;
-  const GROUP_OR = 2;
-
-  protected $tables = array();
-  protected $fields = array();
-  protected $conditions = array();
-  protected $condition_groups = array();
-
-  function __construct($table, $alias = '')
-  {
-    $this->addTable($table, $alias);
-  }
-
-  abstract function __toString();
-
-  function addTable($table, $alias = '')
-  {
-    if (!$alias)
-    {
-      $alias = $table;
-    }
-    $this->tables[$alias] = array(
-      'name' => $table,
-    );
-  }
-
-  function addConditionGroup($group_name = 'default', $type = Query::GROUP_AND, $parent_group = 'default')
-  {
-    $this->condition_groups[$group_name] = array(
-      'type' => $type,
-      'parent' => $parent_group,
-    );
-  }
-
-  function addCondition($alias, $value = '', $comparison = Query::COMPARE_EQUAL, $group = 'default')
-  {
-    if (!$value)
-    {
-      $value = ':' . $alias;
-    }
-    $this->conditions[] = array(
-      'alias' => $alias,
-      'value' => $value,
-      'comparison' => $comparison,
-      'group' => $group,
-    );
-  }
-
-  function buildConditionGroup($group_name = 'default', $type = Query::GROUP_AND)
+  protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = Database::GROUP_AND)
   {
     $conditions = array();
-    foreach($this->conditions as $condition)
+    foreach($query->getConditions() as $condition)
     {
-      if ($condition['group'] == $group_name)
+      if ($condition->getGroup() == $group_name)
       {
-        $conditions[] = $this->buildCondition($condition);
+        $conditions[] = $this->_buildCondition($query, $condition);
       }
     }
 
-    foreach($this->condition_groups as $subgroup_name => $condition_group)
+    foreach($query->getConditionGroups() as $subgroup_name => $condition_group)
     {
-      if ($condition_group['parent'] == $group_name)
+      if ($condition_group->getParent() == $group_name)
       {
-        $conditions[] = '(' . $this->buildConditionGroup($subgroup_name, $condition_group['type']) . ')';
+        $conditions[] = '(' . $this->_buildConditionGroup($query, $subgroup_name, $condition_group->getType()) . ')';
       }
     }
 
     $join = ' AND ';
-    if ($type == Query::GROUP_OR)
+    if ($type == Database::GROUP_OR)
     {
       $join = ' OR ';
     }
     return implode($join, $conditions);
   }
 
-  static function buildCondition($condition)
+  protected function _buildCondition(Query $query, QueryCondition $condition)
   {
-    $output = $condition['alias'];
-    switch($condition['comparison'])
+    $sql = $condition->getTable() . '.' . $condition->getField();
+    $placeholder =  self::PLACEHOLDER_TOKEN . $condition->getTable() . '_' . $condition->getField();
+    switch($condition->getComparison())
     {
-      case self::COMPARE_EQUAL:
+      case Database::COMPARE_EQUAL:
       {
-        $output .= ' =';
+        $sql .= ' =';
         break;
       }
-      case self::COMPARE_NOT_EQUAL:
+      case Database::COMPARE_NOT_EQUAL:
       {
-        $output .= ' !=';
+        $sql .= ' !=';
+        break;
+      }
+      case Database::COMPARE_LESS_THAN:
+      {
+        $sql .= ' >';
+        break;
+      }
+      case Database::COMPARE_LESS_THAN_EQUAL:
+      {
+        $sql .= ' >';
+        break;
+      }
+      case Database::COMPARE_GREATER_THAN:
+      {
+        $sql .= ' >';
+        break;
+      }
+      case Database::COMPARE_GREATER_THAN_EQUAL:
+      {
+        $sql .= ' >=';
+        break;
+      }
+      case Database::COMPARE_NULL:
+      {
+        $sql .= ' = NULL';
+        break;
+      }
+      case Database::COMPARE_NOT_NULL:
+      {
+        $sql .= ' != NULL';
         break;
       }
     }
-    $output .= ' ' . $condition['value'];
+    $sql .= ' ' . $placeholder;
 
-    return $output;
+    $query->addValue($placeholder, $condition->getValue());
+
+    return $sql;
   }
 
-  static function concatenate()
+  function concatenate()
   {
     $string = '';
     $args = func_get_args();
@@ -192,9 +338,177 @@ abstract class Query
     return $string;
   }
 
-  static function literal($string)
+  function literal($string)
   {
     return '\'' . $string . '\'';
+  }
+}
+
+abstract class Query
+{
+  protected $tables = array();
+  protected $fields = array();
+  protected $conditions = array();
+  protected $condition_groups = array();
+  protected $values = array();
+
+  // Getters
+  function getTables()
+  {
+    return $this->tables;
+  }
+  function getFields()
+  {
+    return $this->fields;
+  }
+  function getValues()
+  {
+    return $this->values;
+  }
+
+  /**
+   * @return QueryCondition[]
+   */
+  function getConditions()
+  {
+    return $this->conditions;
+  }
+
+  /**
+   * @return QueryConditionGroup[]
+   */
+  function getConditionGroups()
+  {
+    return $this->condition_groups;
+  }
+
+  // Overload.
+  function __construct($table, $alias = '')
+  {
+    $this->addTable($table, $alias);
+  }
+
+  // Setters.
+  function addTable($table, $alias = '')
+  {
+    if (!$alias)
+    {
+      $alias = $table;
+    }
+    $this->tables[$alias] = array(
+      'name' => $table,
+    );
+  }
+
+  function addConditionGroup(QueryConditionGroup $group)
+  {
+    $this->condition_groups[$group->getName()] = $group;
+  }
+
+  function addCondition(QueryCondition $condition)
+  {
+    $this->conditions[] = $condition;
+  }
+
+  function addConditionSimple($field_alias, $value, $comparison = Database::COMPARE_EQUAL)
+  {
+    $this->conditions[] = new QueryCondition($field_alias, key($this->getTables()), $comparison, $value);
+  }
+
+  function addValue($placeholder, $value)
+  {
+    $this->values[$placeholder] = $value;
+  }
+}
+
+class QueryCondition
+{
+  protected $field_alias;
+  protected $table_alias;
+  protected $comparison;
+  protected $value;
+  protected $group;
+
+  function __construct($field_alias, $table_alias, $comparison, $value)
+  {
+    $this->field_alias = $field_alias;
+    $this->table_alias = $table_alias;
+    $this->comparison = $comparison;
+    $this->value = $value;
+    $this->group = 'default';
+  }
+
+  function setValue($value)
+  {
+    $this->value = $value;
+  }
+
+  function setGroup($group)
+  {
+    $this->group = $group;
+  }
+
+  function getField()
+  {
+    return $this->field_alias;
+  }
+
+  function getTable()
+  {
+    return $this->table_alias;
+  }
+
+  function getComparison()
+  {
+    return $this->comparison;
+  }
+
+  function getValue()
+  {
+    return $this->value;
+  }
+
+  function getGroup()
+  {
+    return $this->group;
+  }
+}
+
+class QueryConditionGroup
+{
+  protected $name;
+  protected $type;
+  protected $parent;
+
+  function __construct($name, $type = Database::GROUP_AND, $parent = 'default')
+  {
+    $this->name = $name;
+    $this->type = $type;
+    $this->parent = $parent;
+  }
+
+  function setParent($parent)
+  {
+    $this->parent = $parent;
+  }
+
+  function setType($type)
+  {
+    $this->type = $type;
+  }
+
+  function getName()
+  {
+    return $this->name;
+  }
+  function getType()
+  {
+    return $this->type;
+  }
+
+  function getParent()
+  {
+    return $this->parent;
   }
 }
 
@@ -204,42 +518,17 @@ class SelectQuery extends Query
   protected $page = FALSE;
   protected $page_size = FALSE;
 
-  function __toString()
+  function getOrders()
   {
-    $output = '';
-    $output .= 'SELECT';
-    foreach ($this->fields as $alias => $details)
-    {
-      $output .= ' ' . $details['name'] . ' AS ' . $alias . ',';
-    }
-    $output = trim($output, ',');
-    $output .= ' FROM ' . key($this->tables);
-
-    // Where.
-    if ($this->conditions)
-    {
-      $output .= ' WHERE ' . $this->buildConditionGroup();
-    }
-
-    // Order by.
-    if ($this->orders)
-    {
-      $output .= ' ORDER BY';
-      foreach ($this->orders as $alias => $dir)
-      {
-        $output .= ' ' . $alias . ' ' . $dir . ',';
-      }
-    }
-    $output = trim($output, ',');
-
-    // Pager
-    if ($this->page)
-    {
-      $output .= ' LIMIT ' . $this->page_size;
-      $output .= ' OFFSET ' . (($this->page_size * $this->page) - $this->page_size);
-    }
-
-    return $output;
+    return $this->orders;
+  }
+  function getPage()
+  {
+    return $this->page;
+  }
+  function getPageSize()
+  {
+    return $this->page_size;
   }
 
   function addField($name, $alias = '', $table_alias = '')
@@ -248,8 +537,13 @@ class SelectQuery extends Query
     {
       $alias = $name;
     }
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
+    }
     $this->fields[$alias] = array(
       'name' => $name,
+      'table_alias' => $table_alias,
     );
     return $this;
   }
@@ -269,27 +563,6 @@ class SelectQuery extends Query
 
 class InsertQuery extends Query
 {
-  function __toString()
-  {
-    $output = '';
-    $output .= 'INSERT INTO '  . key($this->tables) . ' (';
-    foreach ($this->fields as $name => $value)
-    {
-      $output .= ' ' . $name . ',';
-    }
-    $output = trim($output, ',');
-
-    $output .= ') VALUES (';
-    foreach ($this->fields as $name => $value)
-    {
-      $output .= ' ' . $value['value'] . ',';
-    }
-    $output = trim($output, ',');
-
-    $output .= ')';
-    return $output;
-  }
-
   function addField($name, $value = '')
   {
     if (!$value)
@@ -305,25 +578,6 @@ class InsertQuery extends Query
 
 class UpdateQuery extends Query
 {
-  function __toString()
-  {
-    $output = '';
-    $output .= 'UPDATE '  . key($this->tables) . ' SET';
-    foreach ($this->fields as $name => $value)
-    {
-      $output .= ' ' . $name . ' = ' . $value['value'] . ',';
-    }
-    $output = trim($output, ',');
-
-    // Where.
-    if ($this->conditions)
-    {
-      $output .= ' WHERE ' . $this->buildConditionGroup();
-    }
-
-    return $output;
-  }
-
   function addField($name, $value = '')
   {
     if (!$value)
@@ -339,83 +593,10 @@ class UpdateQuery extends Query
 
 class DeleteQuery extends Query
 {
-  function __toString()
-  {
-    $output = '';
-    $output .= 'DELETE FROM '  . key($this->tables);
-
-    // Where.
-    if ($this->conditions)
-    {
-      $output .= ' WHERE ' . $this->buildConditionGroup();
-    }
-
-    return $output;
-  }
 }
 
 class CreateQuery extends Query
 {
-  function __toString()
-  {
-    $primary_key = array();
-    foreach($this->fields as $name => $value)
-    {
-      if (array_search('P', $value['flags']) !== FALSE)
-      {
-        $primary_key[] = $name;
-      }
-    }
-    $key_count = count($primary_key);
-
-    $output = '';
-    $output .= 'CREATE TABLE `'  . key($this->tables) . '` (';
-
-    foreach ($this->fields as $name => $value)
-    {
-      $output .= ' `' . $name . '` ' . $value['type'];
-      foreach ($value['flags'] as $flag)
-      {
-        if ($flag == 'N')
-        {
-          $output .= ' NOT NULL';
-        }
-        elseif ($flag == 'P' && $key_count == 1)
-        {
-          $output .= ' PRIMARY KEY';
-        }
-        elseif ($flag == 'A')
-        {
-          $output .= ' AUTOINCREMENT';
-        }
-        elseif ($flag == 'U')
-        {
-          $output .= ' UNIQUE';
-        }
-      }
-
-      if ($value['default'] !== FALSE)
-      {
-        $output .= ' DEFAULT ' . $value['default'];
-      }
-      $output .= ',';
-    }
-    if ($key_count > 1)
-    {
-      $output .= ' PRIMARY KEY(';
-      foreach($primary_key as $key)
-      {
-        $output .= '`' . $key . '` ' . ', ';
-      }
-      $output = trim($output, ', ');
-      $output .= ')';
-    }
-    $output = trim($output, ',');
-
-    $output .= ')';
-    return $output;
-  }
-
   // Flags:
   // A = Auto Increment
   // P = Primary Key
