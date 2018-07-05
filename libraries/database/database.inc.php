@@ -30,10 +30,12 @@ abstract class Database
   // Helpers.
   abstract protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
   abstract protected function _buildCondition(Query $query, QueryCondition $condition);
+  abstract protected function _buildJoins(Query $query, $tables);
 
   // String manipulation.
   abstract function concatenate();
   abstract function literal($string);
+  abstract function likeEscape($string);
 }
 
 /**
@@ -48,8 +50,8 @@ abstract class Query
   protected $values = array();
 
   /**
-   * @param string $table
-   * @param string $alias
+   * @param string $table_name
+   * @param string $table_alias
    */
   function __construct($table_name, $table_alias = '')
   {
@@ -117,6 +119,23 @@ abstract class Query
     $this->conditions[] = new QueryCondition($field_alias, key($this->getTables()), $comparison, $value);
   }
 
+  function addField($name, $alias = '', $table_alias = '')
+  {
+    if (!$alias)
+    {
+      $alias = $name;
+    }
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
+    }
+    $this->fields[$alias] = array(
+      'name' => $name,
+      'table_alias' => $table_alias,
+    );
+    return $this;
+  }
+
   function addValue($placeholder, $value)
   {
     $this->values[$placeholder] = $value;
@@ -180,13 +199,19 @@ class SelectQuery extends Query
  */
 class InsertQuery extends Query
 {
-  function addField($name, $value = '')
+  function addField($name, $value, $alias = '', $table_alias = '')
   {
-    if (!$value)
+    if (!$alias)
     {
-      $value = ':' . $name;
+      $alias = $name;
+    }
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
     }
     $this->fields[$name] = array(
+      'alias' => $alias,
+      'table_alias' => $table_alias,
       'value' => $value,
     );
     return $this;
@@ -198,13 +223,19 @@ class InsertQuery extends Query
  */
 class UpdateQuery extends Query
 {
-  function addField($name, $value = '')
+  function addField($name, $value, $alias = '', $table_alias = '')
   {
-    if (!$value)
+    if (!$alias)
     {
-      $value = ':' . $name;
+      $alias = $name;
+    }
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
     }
     $this->fields[$name] = array(
+      'alias' => $alias,
+      'table_alias' => $table_alias,
       'value' => $value,
     );
     return $this;

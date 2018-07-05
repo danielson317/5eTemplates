@@ -266,6 +266,11 @@ class SQLite extends Database
         $sql .= ' != NULL';
         break;
       }
+      case QueryCondition::COMPARE_LIKE:
+      {
+        $sql .= ' LIKE ';
+        break;
+      }
     }
 
     if ($condition->isValueField())
@@ -344,5 +349,11 @@ class SQLite extends Database
   function literal($string)
   {
     return '\'' . $string . '\'';
+  }
+
+  function likeEscape($string)
+  {
+    $string = str_replace('%', '\\%', $string);
+    return str_replace('_', '\\_', $string);
   }
 }
