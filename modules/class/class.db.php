@@ -81,10 +81,9 @@ function getClass($id)
   $query->addField('stp2');
   $query->addField('subclass_name');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -122,10 +121,9 @@ function updateClass($class)
   $query->addField('stp2');
   $query->addField('subclass_name');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = $db->buildArgs($class);
+  $query->addConditionSimple('id', $class['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteClass($id)
@@ -133,10 +131,8 @@ function deleteClass($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('classes');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
-
-  $db->delete($query, $args);
+  $query->addConditionSimple('id', $id);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -153,11 +149,9 @@ function getSubclassPager($class_id, $page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addCondition('class_id');
+  $query->addConditionSimple('class_id', $class_id);
   $query->addPager($page);
-  $args = array(':class_id' => $class_id);
-
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -175,8 +169,7 @@ function getSubclassList($class_id = FALSE)
   $args = array();
   if ($class_id)
   {
-    $query->addCondition('class_id');
-    $args[':class_id'] = $class_id;
+    $query->addConditionSimple('class_id', $class_id);
   }
 
   return $db->selectList($query, $args);
@@ -192,10 +185,9 @@ function getSubclass($id)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -226,10 +218,9 @@ function updateSubclass($class)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addCondition('id');
-  $args = $db->buildArgs($class);
+  $query->addConditionSimple('id', $class['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteSubclass($id)
@@ -237,8 +228,6 @@ function deleteSubclass($id)
   GLOBAL $db;
 
   $query = new DeleteQuery('subclasses');
-  $query->addCondition('id');
-  $args = array(':id' => $id);
-
-  $db->delete($query, $args);
+  $query->addConditionSimple('id', $id);
+  $db->delete($query);
 }

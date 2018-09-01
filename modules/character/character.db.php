@@ -96,9 +96,10 @@ function getCharacterPager($page)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('characters');
+  $query = new SelectQuery('characters', 'c');
   $query->addField('id');
   $query->addField('name');
+  $query->addTable('races', 'r');
   $query->addField('race_id');
   $query->addField('player_id');
   $query->addField('background');
@@ -133,9 +134,8 @@ function getCharacter($id)
   $query->addField('flaws');
   $query->addField('features');
 
-  $query->addCondition('id');
-  $args = array(':id' => $id);
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -188,8 +188,8 @@ function updateCharacter($character)
   $query->addField('flaws');
   $query->addField('features');
 
-  $query->addCondition('id');
-  $db->update($query, SQLite::buildArgs($character));
+  $query->addConditionSimple('id', $character['id']);
+  $db->update($query);
 }
 
 /******************************************************************************
@@ -206,10 +206,9 @@ function getCharacterClasses($character_id)
   $query->addField('class_id');
   $query->addField('subclass_id');
   $query->addField('level');
-  $query->addCondition('character_id');
+  $query->addConditionSimple('character_id', $character_id);
   $query->addOrder('level', 'DESC');
-  $args = array(':character_id' => $character_id);
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -227,13 +226,9 @@ function getCharacterClass($character_id, $class_id)
   $query->addField('class_id');
   $query->addField('subclass_id');
   $query->addField('level');
-  $query->addCondition('character_id');
-  $query->addCondition('class_id');
-  $args = array(
-    ':character_id' => $character_id,
-    ':class_id' => $class_id,
-  );
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addConditionSimple('class_id', $class_id);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -262,9 +257,9 @@ function updateCharacterClass($character_class)
   $query = new UpdateQuery('character_classes');
   $query->addField('subclass_id');
   $query->addField('level');
-  $query->addCondition('character_id');
-  $query->addCondition('class_id');
-  $db->update($query, SQLite::buildArgs($character_class));
+  $query->addConditionSimple('character_id', $character_class['character_id']);
+  $query->addConditionSimple('class_id', $character_class['class_id']);
+  $db->update($query);
 }
 
 function deleteCharacterClass($character_class)
@@ -272,13 +267,9 @@ function deleteCharacterClass($character_class)
   GLOBAL $db;
 
   $query = new DeleteQuery('character_classes');
-  $query->addCondition('character_id');
-  $query->addCondition('class_id');
-  $args = array(
-    'character_id' => $character_class['character_id'],
-    'class_id' => $character_class['class_id'],
-  );
-  $db->delete($query, $args);
+  $query->addConditionSimple('character_id', $character_class['character_id']);
+  $query->addConditionSimple('class_id', $character_class['class_id']);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -296,10 +287,9 @@ function getCharacterAttributes($character_id)
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
-  $query->addCondition('character_id');
+  $query->addConditionSimple('character_id', $character_id);
   $query->addOrder('attribute_id', 'ASC');
-  $args = array(':character_id' => $character_id);
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -319,13 +309,9 @@ function getCharacterAttribute($character_id, $attribute_id)
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
-  $query->addCondition('character_id');
-  $query->addCondition('attribute_id');
-  $args = array(
-    ':character_id' => $character_id,
-    ':attribute_id' => $attribute_id,
-  );
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('id', $character_id);
+  $query->addConditionSimple('id', $attribute_id);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -358,9 +344,9 @@ function updateCharacterAttribute($character_attribute)
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
-  $query->addCondition('character_id');
-  $query->addCondition('attribute_id');
-  $db->update($query, SQLite::buildArgs($character_attribute));
+  $query->addConditionSimple('character_id', $character_attribute['character_id']);
+  $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
+  $db->update($query);
 }
 
 function deleteCharacterAttribute($character_attribute)
@@ -368,13 +354,9 @@ function deleteCharacterAttribute($character_attribute)
   GLOBAL $db;
 
   $query = new DeleteQuery('character_attributes');
-  $query->addCondition('character_id');
-  $query->addCondition('attribute_id');
-  $args = array(
-    'character_id' => $character_attribute['character_id'],
-    'attribute_id' => $character_attribute['attribute_id'],
-  );
-  $db->delete($query, $args);
+  $query->addConditionSimple('character_id', $character_attribute['character_id']);
+  $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -390,10 +372,9 @@ function getCharacterSkills($character_id)
   $query->addField('skill_id');
   $query->addField('proficiency');
   $query->addField('modifier');
-  $query->addCondition('character_id');
+  $query->addConditionSimple('character_id', $character_id);
   $query->addOrder('skill_id', 'ASC');
-  $args = array(':character_id' => $character_id);
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -411,13 +392,9 @@ function getCharacterSkill($character_id, $skill_id)
   $query->addField('skill_id');
   $query->addField('proficiency');
   $query->addField('modifier');
-  $query->addCondition('character_id');
-  $query->addCondition('skill_id');
-  $args = array(
-    ':character_id' => $character_id,
-    ':skill_id' => $skill_id,
-  );
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addConditionSimple('skill_id', $skill_id);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -439,30 +416,26 @@ function createCharacterSkill($skill)
   $db->insert($query, SQLite::buildArgs($skill));
 }
 
-function updateCharacterSkill($skill)
+function updateCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('character_skills');
   $query->addField('proficiency');
   $query->addField('modifier');
-  $query->addCondition('character_id');
-  $query->addCondition('skill_id');
-  $db->update($query, SQLite::buildArgs($skill));
+  $query->addConditionSimple('character_id', $character_skill['character_id']);
+  $query->addConditionSimple('skill_id', $character_skill['skill_id']);
+  $db->update($query);
 }
 
-function deleteCharacterSkill($skill)
+function deleteCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
   $query = new DeleteQuery('character_skills');
-  $query->addCondition('character_id');
-  $query->addCondition('skill_id');
-  $args = array(
-    'character_id' => $skill['character_id'],
-    'skill_id' => $skill['skill_id'],
-  );
-  $db->delete($query, $args);
+  $query->addConditionSimple('character_id', $character_skill['character_id']);
+  $query->addConditionSimple('character_id', $character_skill['skill_id']);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -476,7 +449,7 @@ function getCharacterLanguages($character_id)
 
   $query = new SelectQuery('character_languages');
   $query->addField('language_id');
-  $query->addCondition('character_id');
+  $query->addConditionSimple('character_id', $character_id);
   $query->addOrder('language_id', 'ASC');
   $args = array(':character_id' => $character_id);
   $results = $db->select($query, $args);
@@ -495,13 +468,9 @@ function getCharacterLanguage($character_id, $language_id)
   $query = new SelectQuery('character_languages');
   $query->addField('character_id');
   $query->addField('language_id');
-  $query->addCondition('character_id');
-  $query->addCondition('language_id');
-  $args = array(
-    'character_id' => $character_id,
-    'language_id' => $language_id,
-  );
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addConditionSimple('language_id', $language_id);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -511,26 +480,22 @@ function getCharacterLanguage($character_id, $language_id)
   return $result;
 }
 
-function createCharacterLanguage($language)
+function createCharacterLanguage($character_language)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('character_languages');
   $query->addField('character_id');
   $query->addField('language_id');
-  $db->insert($query, SQLite::buildArgs($language));
+  $db->insert($query, SQLite::buildArgs($character_language));
 }
 
-function deleteCharacterLanguage($language)
+function deleteCharacterLanguage($character_language)
 {
   GLOBAL $db;
 
   $query = new DeleteQuery('character_languages');
-  $query->addCondition('character_id');
-  $query->addCondition('language_id');
-  $args = array(
-    'character_id' => $language['character_id'],
-    'language_id' => $language['language_id'],
-  );
-  $db->delete($query, $args);
+  $query->addConditionSimple('character_id', $character_language['character_id']);
+  $query->addConditionSimple('language_id', $character_language['language_id']);
+  $db->delete($query);
 }

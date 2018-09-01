@@ -106,12 +106,9 @@ function getSpell($id)
     ->addField('aoe_range')
     ->addField('description')
     ->addField('alternate');
-  $query->addCondition('id', ':id');
-  $args = array(
-    ':id' => $id,
-  );
+  $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -167,10 +164,9 @@ function updateSpell($spell)
     ->addField('aoe_range')
     ->addField('description')
     ->addField('alternate');
-  $query->addCondition('id');
-  $args = SQLite::buildArgs($spell);
+  $query->addConditionSimple('id', $spell['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteSpell($id)
@@ -219,11 +215,9 @@ function getDurationList()
 
   $query = new SelectQuery('speeds');
   $query->addField('id')->addField('duration', 'value');
-  $query->addCondition('duration', FALSE, $query::COMPARE_NOT_EQUAL);
+  $query->addConditionSimple('duration', '', $query::COMPARE_NOT_EQUAL);
 
-  $args = array(':duration' => '');
-
-  return $db->selectList($query, $args);
+  return $db->selectList($query);
 }
 
 function getRangeList()

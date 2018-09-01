@@ -38,9 +38,10 @@ function getItemPager($page = 1)
     ->addField('magic')
     ->addField('attunement')
     ->addField('description');
-  $query->addOrder('item_type_id');
-  $query->addOrder('name');
-  $query->addPager($page);
+  $query->addOrder('id');
+//  $query->addOrder('item_type_id');
+//  $query->addOrder('name');
+//  $query->addPager($page);
 
   $results = $db->select($query);
   if (!$results)
@@ -62,12 +63,8 @@ function getItem($id)
         ->addField('magic')
         ->addField('attunement')
         ->addField('description');
-  $query->addCondition('id', ':id');
-  $args = array(
-    ':id' => $id,
-  );
-
-  $results = $db->select($query, $args);
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
   if (!$results)
   {
     return FALSE;
@@ -81,15 +78,14 @@ function createItem($item)
   GLOBAL $db;
 
   $query = new InsertQuery('items');
-  $query->addField('name')
-        ->addField('item_type_id')
-        ->addField('value')
-        ->addField('magic')
-        ->addField('attunement')
-        ->addField('description');
-  $args = SQLite::buildArgs($item);
+  $query->addField('name', $item['name'])
+        ->addField('item_type_id', $item['item_type_id'])
+        ->addField('value', $item['value'])
+        ->addField('magic', $item['magic'])
+        ->addField('attunement', $item['attunement'])
+        ->addField('description', $item['description']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
 function updateItem($item)
@@ -97,16 +93,15 @@ function updateItem($item)
   GLOBAL $db;
 
   $query = new UpdateQuery('items');
-  $query->addField('name')
-        ->addField('item_type_id')
-        ->addField('value')
-        ->addField('magic')
-        ->addField('attunement')
-        ->addField('description');
-  $query->addCondition('id');
-  $args = SQLite::buildArgs($item);
+  $query->addField('name', $item['name'])
+        ->addField('item_type_id', $item['item_type_id'])
+        ->addField('value', $item['value'])
+        ->addField('magic', $item['magic'])
+        ->addField('attunement', $item['attunement'])
+        ->addField('description', $item['description']);
+  $query->addConditionSimple('id', $item['id']);
 
-  $db->update($query, $args);
+  $db->update($query);
 }
 
 function deleteItem($id)

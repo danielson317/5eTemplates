@@ -10,7 +10,8 @@ if (!file_exists($platform_path))
 include $platform_path;
 
 include ROOT_PATH . '/libraries/global.inc.php';
-include ROOT_PATH . '/libraries/sqlite.inc.php';
+include ROOT_PATH . '/libraries/database/database.inc.php';
+include ROOT_PATH . '/libraries/database/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
 include ROOT_PATH . '/libraries/template.inc.php';
 
