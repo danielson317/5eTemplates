@@ -16,7 +16,7 @@ class SQLite extends Database
     $this->db = new PDO($connect_string, $username, $password, $opt);
   }
 
-  function select(SelectQuery $query, $args = array())
+  function select(SelectQuery $query)
   {
     $sql  = '';
     $sql .= 'SELECT';
@@ -53,43 +53,46 @@ class SQLite extends Database
       $sql .= ' OFFSET ' . (($query->getPageSize() * $query->getPage()) - $query->getPageSize());
     }
 
-//    debugPrint($sql);
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
     return $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  function insert(InsertQuery $query, $args = array())
+  function insert(InsertQuery $query)
   {
     $sql = '';
     $sql .= 'INSERT INTO '  . key($query->getTables()) . ' (';
-    foreach ($query->getFields() as $name => $value)
+    foreach ($query->getFields() as $name => $field)
     {
       $sql .= ' ' . $name . ',';
     }
     $sql = trim($sql, ',');
 
     $sql .= ') VALUES (';
-    foreach ($query->getFields() as $name => $value)
+    foreach ($query->getFields() as $name => $field)
     {
-      $sql .= ' ' . $value['value'] . ',';
+      $placeholder = ':' . $field['table_alias'] . '_' . $field['field_alias'];
+      $sql .= ' ' . $placeholder . ',';
+      $query->addValue($placeholder, $field['value']);
     }
     $sql = trim($sql, ',');
 
     $sql .= ')';
 
     $prepared_statement = $this->db->prepare($sql);
-    $prepared_statement->execute($args);
+    $prepared_statement->execute($query->getValues());
     return $this->db->lastInsertId();
   }
 
-  function update(UpdateQuery $query, $args = array())
+  function update(UpdateQuery $query)
   {
     $sql = '';
     $sql .= 'UPDATE '  . key($query->getTables()) . ' SET';
-    foreach ($query->getFields() as $name => $value)
+    foreach ($query->getFields() as $name => $field)
     {
-      $sql .= ' ' . $name . ' = ' . $value['value'] . ',';
+      $placeholder = ':' . $field['table_alias'] . '_' . $field['field_alias'];
+      $sql .= ' ' . $name . ' = ' . $placeholder . ',';
+      $query->addValue($placeholder, $field['value']);
     }
     $sql = trim($sql, ',');
 
@@ -100,10 +103,10 @@ class SQLite extends Database
     }
 
     $prepared_statement = $this->db->prepare($sql);
-    $prepared_statement->execute($args);
+    $prepared_statement->execute($query->getValues());
   }
 
-  function delete(DeleteQuery $query, $args = array())
+  function delete(DeleteQuery $query)
   {
     $sql = '';
     $sql .= 'DELETE FROM '  . key($query->getTables());
@@ -115,11 +118,11 @@ class SQLite extends Database
     }
 
     $prepared_statement = $this->db->prepare($sql);
-    $prepared_statement->execute($args);
+    $prepared_statement->execute($query->getValues());
   }
 
   // Structure
-  function create(CreateQuery $query, $args = array())
+  function create(CreateQuery $query)
   {
     $primary_key = array();
     foreach($query->getFields() as $name => $value)
@@ -178,21 +181,12 @@ class SQLite extends Database
     $sql .= ')';
 
     $prepared_statement = $this->db->prepare($sql);
-    $prepared_statement->execute($args);
+    $prepared_statement->execute($query->getValues());
   }
 
   /***************************
    * Helpers
    ***************************/
-  static function buildArgs($args)
-  {
-    $new_args = array();
-    foreach ($args as $key => $value)
-    {
-      $new_args[':' . $key] = $value;
-    }
-    return $new_args;
-  }
 
   protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND)
   {
@@ -221,6 +215,33 @@ class SQLite extends Database
     return implode($join, $conditions);
   }
 
+  protected function _buildConditionGroupTable(Query $query, QueryTable $table, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND)
+  {
+    $conditions = array();
+    foreach($table->getConditions() as $condition)
+    {
+      if ($condition->getGroup() == $group_name)
+      {
+        $conditions[] = $this->_buildCondition($query, $condition);
+      }
+    }
+
+    foreach($table->getConditionGroups() as $subgroup_name => $condition_group)
+    {
+      if ($condition_group->getParent() == $group_name)
+      {
+        $conditions[] = '(' . $this->_buildConditionGroupTable($query, $table, $subgroup_name, $condition_group->getType()) . ')';
+      }
+    }
+
+    $join = ' AND ';
+    if ($type == QueryConditionGroup::GROUP_OR)
+    {
+      $join = ' OR ';
+    }
+    return implode($join, $conditions);
+  }
+
   protected function _buildCondition(Query $query, QueryCondition $condition)
   {
     $sql = $condition->getTable() . '.' . $condition->getField();
@@ -238,12 +259,12 @@ class SQLite extends Database
       }
       case QueryCondition::COMPARE_LESS_THAN:
       {
-        $sql .= ' >';
+        $sql .= ' <';
         break;
       }
       case QueryCondition::COMPARE_LESS_THAN_EQUAL:
       {
-        $sql .= ' >';
+        $sql .= ' <=';
         break;
       }
       case QueryCondition::COMPARE_GREATER_THAN:
@@ -325,9 +346,9 @@ class SQLite extends Database
       $sql .= ' ' . $table->getName() . ' ' . $table->getAlias();
 
       // Condition
-      if ($table->getCondition())
+      if ($table->getConditions())
       {
-        $sql .= ' ON ' . $this->_buildCondition($query, $table->getCondition());
+        $sql .= ' ON ' . $this->_buildConditionGroupTable($query, $table);
       }
     }
 

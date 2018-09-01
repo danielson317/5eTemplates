@@ -8,10 +8,10 @@ abstract class Database
   protected $db;
 
   // VCrUD operations.
-  abstract function select(SelectQuery $query, $args = array());
-  function selectList(SelectQuery $query, $args = array())
+  abstract function select(SelectQuery $query);
+  function selectList(SelectQuery $query)
   {
-    $results = $this->select($query, $args);
+    $results = $this->select($query);
 
     $list = array();
     foreach($results as $result)
@@ -20,15 +20,27 @@ abstract class Database
     }
     return $list;
   }
-  abstract function insert(InsertQuery $query, $args = array());
-  abstract function update(UpdateQuery $query, $args = array());
-  abstract function delete(DeleteQuery $query, $args = array());
+  function selectObject(SelectQuery $query)
+  {
+    $results = $this->select($query);
+    if (!$results)
+    {
+      return FALSE;
+    }
+    $result = array_shift($results);
+    return $result;
+  }
+
+  abstract function insert(InsertQuery $query);
+  abstract function update(UpdateQuery $query);
+  abstract function delete(DeleteQuery $query);
 
   // Database structure.
-  abstract function create(CreateQuery $query, $args = array());
+  abstract function create(CreateQuery $query);
 
   // Helpers.
   abstract protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
+  abstract protected function _buildConditionGroupTable(Query $query, QueryTable $table, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
   abstract protected function _buildCondition(Query $query, QueryCondition $condition);
   abstract protected function _buildJoins(Query $query, $tables);
 
@@ -164,7 +176,7 @@ class SelectQuery extends Query
     return $this->page_size;
   }
 
-  function addField($name, $alias = '', $table_alias = '')
+  function addField($name, $alias = '', $table_alias = '', $format = FALSE)
   {
     if (!$alias)
     {
@@ -177,6 +189,7 @@ class SelectQuery extends Query
     $this->fields[$alias] = array(
       'name' => $name,
       'table_alias' => $table_alias,
+      'format' => $format,
     );
     return $this;
   }
@@ -199,18 +212,18 @@ class SelectQuery extends Query
  */
 class InsertQuery extends Query
 {
-  function addField($name, $value, $alias = '', $table_alias = '')
+  function addField($name, $value = 0, $field_alias = '', $table_alias = '')
   {
-    if (!$alias)
+    if (!$field_alias)
     {
-      $alias = $name;
+      $field_alias = $name;
     }
     if (!$table_alias)
     {
       $table_alias = key($this->tables);
     }
     $this->fields[$name] = array(
-      'alias' => $alias,
+      'field_alias' => $field_alias,
       'table_alias' => $table_alias,
       'value' => $value,
     );
@@ -223,18 +236,18 @@ class InsertQuery extends Query
  */
 class UpdateQuery extends Query
 {
-  function addField($name, $value, $alias = '', $table_alias = '')
+  function addField($name, $value, $field_alias = '', $table_alias = '')
   {
-    if (!$alias)
+    if (!$field_alias)
     {
-      $alias = $name;
+      $field_alias = $name;
     }
     if (!$table_alias)
     {
       $table_alias = key($this->tables);
     }
     $this->fields[$name] = array(
-      'alias' => $alias,
+      'field_alias' => $field_alias,
       'table_alias' => $table_alias,
       'value' => $value,
     );
@@ -424,14 +437,18 @@ class QueryTable
   protected $name;
   protected $alias;
   protected $join;
-  protected $condition;
+  protected $conditions = array();
+  protected $condition_groups = array();
 
   function __construct($name, $alias, $join = QueryTable::INNER_JOIN, QueryCondition $condition = NULL)
   {
     $this->name = $name;
     $this->alias = $alias;
     $this->join = $join;
-    $this->condition = $condition;
+    if ($condition)
+    {
+      $this->conditions[] = $condition;
+    }
   }
 
   function getName()
@@ -449,22 +466,29 @@ class QueryTable
     return $this->join;
   }
 
-  function setCondition(QueryCondition $condition)
+  function addCondition(QueryCondition $condition)
   {
-    $this->condition = $condition;
+    $this->conditions[] = $condition;
   }
 
-  function setConditionSimple($left_field_alias, $left_table_alias, $comparison, $right_field_alias, $right_table_alias)
+  function addConditionGroup(QueryConditionGroup $condition_group)
   {
-    $this->condition = new QueryCondition($left_field_alias, $left_table_alias, $comparison, FALSE);
-    $this->condition->setValueField($left_field_alias, $right_table_alias);
+    $this->condition_groups[] = $condition_group;
   }
 
   /**
-   * @return QueryCondition
+   * @return QueryCondition[]
    */
-  function getCondition()
+  function getConditions()
   {
-    return $this->condition;
+    return $this->conditions;
+  }
+
+  /**
+   * @return QueryConditionGroup[]
+   */
+  function getConditionGroups()
+  {
+    return $this->condition_groups;
   }
 }
