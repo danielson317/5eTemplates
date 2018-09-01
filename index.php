@@ -1,5 +1,5 @@
 <?php
-include '/libraries/bootstrap.inc.php';
+include 'libraries/bootstrap.inc.php';
 
 //echo menu();
 

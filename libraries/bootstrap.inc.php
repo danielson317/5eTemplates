@@ -1,7 +1,13 @@
 <?php
 DEFINE('ROOT_PATH', __DIR__ . '/..');
 
-include ROOT_PATH . '/platform.inc.php';
+// Include the platform file.
+$platform_path = ROOT_PATH . '/platform.inc.php';
+if (!file_exists($platform_path))
+{
+  die('platform.inc.php is missing.');
+}
+include $platform_path;
 
 include ROOT_PATH . '/libraries/global.inc.php';
 include ROOT_PATH . '/libraries/sqlite.inc.php';

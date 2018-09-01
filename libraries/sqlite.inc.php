@@ -6,6 +6,10 @@ class SQLite
 
   function __construct($db_path, $username = '', $password = '')
   {
+    if (!file_exists($db_path))
+    {
+      die('No such file: ' . $db_path);
+    }
     $opt = array(
       PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
