@@ -11,10 +11,15 @@ class SQLite extends Database
       die('No such file: ' . $db_path);
     }
 
+    if (!is_writable($db_path))
+    {
+      die($db_path . ' is not writable.');
+    }
+
     $opt = array(
       PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-      PDO::ATTR_EMULATE_PREPARES   => false,
+      PDO::ATTR_EMULATE_PREPARES   => TRUE,
     );
 
     $connect_string = 'sqlite:' . $db_path;

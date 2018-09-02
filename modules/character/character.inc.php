@@ -19,5 +19,9 @@ function getAlignmentList()
     'le' => 'Lawful Evil',
     'ne' => 'Neutral Evil',
     'ce' => 'Chaotic Evil',
+    'l' => 'Lawful',
+    'c' => 'Chaotic',
+    'g' => 'Good',
+    'e' => 'Evil',
   );
 }

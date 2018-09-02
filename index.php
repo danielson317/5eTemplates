@@ -34,6 +34,8 @@ function getRegistry($path = FALSE)
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
+    'item-type' => 'itemTypeUpsertForm',
+    'item-types' => 'itemTypeList',
     'language' => 'languageUpsertForm',
     'languages' => 'languageList',
     'player' => 'playerUpsertForm',
@@ -78,6 +80,7 @@ function menu()
 
   $output .= htmlWrap('a', 'Attributes', array('href' => '/attributes'));
   $output .= htmlWrap('a', 'Classes', array('href' => '/classes'));
+  $output .= htmlWrap('a', 'Item Types', array('href' => '/item-types'));
   $output .= htmlWrap('a', 'Languages', array('href' => '/languages'));
   $output .= htmlWrap('a', 'Players', array('href' => '/players'));
   $output .= htmlWrap('a', 'Races', array('href' => '/races'));

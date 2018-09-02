@@ -99,7 +99,6 @@ function getCharacterPager($page)
   $query = new SelectQuery('characters', 'c');
   $query->addField('id');
   $query->addField('name');
-  $query->addTable('races', 'r');
   $query->addField('race_id');
   $query->addField('player_id');
   $query->addField('background');

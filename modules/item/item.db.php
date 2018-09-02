@@ -1,9 +1,7 @@
 <?php
-
-
 /******************************************************************************
  *
- *  Item.
+ *  Install.
  *
  ******************************************************************************/
 function installItem()
@@ -15,7 +13,6 @@ function installItem()
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('item_type_id', 'INTEGER', array('N'), 0);
   $query->addField('value', 'INTEGER', array('N'), 0);
-  $query->addField('magic', 'INTEGER', array('N'), 0);
   $query->addField('attunement', 'INTEGER', array('N'), 0);
   $query->addField('description', 'TEXT');
   $db->create($query);
@@ -26,6 +23,18 @@ function installItem()
   $db->create($query);
 }
 
+
+
+/******************************************************************************
+ *
+ *  Item.
+ *
+ ******************************************************************************/
+
+/**
+ * @param int $page
+ * @return array
+ */
 function getItemPager($page = 1)
 {
   GLOBAL $db;
@@ -35,13 +44,10 @@ function getItemPager($page = 1)
     ->addField('name')
     ->addField('item_type_id')
     ->addField('value')
-    ->addField('magic')
     ->addField('attunement')
     ->addField('description');
   $query->addOrder('id');
-//  $query->addOrder('item_type_id');
-//  $query->addOrder('name');
-//  $query->addPager($page);
+  $query->addPager($page);
 
   $results = $db->select($query);
   if (!$results)
@@ -60,7 +66,6 @@ function getItem($id)
         ->addField('name')
         ->addField('item_type_id')
         ->addField('value')
-        ->addField('magic')
         ->addField('attunement')
         ->addField('description');
   $query->addConditionSimple('id', $id);
@@ -81,7 +86,6 @@ function createItem($item)
   $query->addField('name', $item['name'])
         ->addField('item_type_id', $item['item_type_id'])
         ->addField('value', $item['value'])
-        ->addField('magic', $item['magic'])
         ->addField('attunement', $item['attunement'])
         ->addField('description', $item['description']);
 
@@ -96,7 +100,6 @@ function updateItem($item)
   $query->addField('name', $item['name'])
         ->addField('item_type_id', $item['item_type_id'])
         ->addField('value', $item['value'])
-        ->addField('magic', $item['magic'])
         ->addField('attunement', $item['attunement'])
         ->addField('description', $item['description']);
   $query->addConditionSimple('id', $item['id']);
@@ -115,6 +118,25 @@ function deleteItem($id)
  *
  ******************************************************************************/
 
+function getItemTypePager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('item_types');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('description');
+  $query->addOrder('id');
+  $query->addPager($page);
+
+  $results = $db->select($query);
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
 function getItemTypeList()
 {
   GLOBAL $db;
@@ -123,4 +145,55 @@ function getItemTypeList()
   $query->addField('id')->addField('name', 'value');
 
   return $db->selectList($query);
+}
+
+
+function getItemType($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('item_types');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('description');
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
+  if (!$results)
+  {
+    return FALSE;
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createItemType($item)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('item_types');
+  $query->addField('name', $item['name']);
+  $query->addField('description', $item['description']);
+
+  return $db->insert($query);
+}
+
+function updateItemType($item)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('item_types');
+  $query->addField('name', $item['name']);
+  $query->addField('description', $item['description']);
+  $query->addConditionSimple('id', $item['id']);
+
+  $db->update($query);
+}
+
+function deleteItemType($id)
+{
+  GLOBAL $db;
+  $query = new DeleteQuery('item_types');
+  $query->addConditionSimple('id', $id);
+
+  $db->delete($query);
 }
