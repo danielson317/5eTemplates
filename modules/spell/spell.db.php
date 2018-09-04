@@ -10,10 +10,47 @@ function installSpell()
 {
   GLOBAL $db;
 
+  // Line, cone, cube, etc.
+  $query = new CreateQuery('aoes');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Bludgeoning, Force, Psychic, etc.
+  $query = new CreateQuery('damage_types');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('code', 'TEXT', array('N'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Touch, 5 ft, 60ft, etc.
+  $query = new CreateQuery('ranges');
+  $query->addField('id', 'INTEGER', array('P', 'U'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Conjuration, evocation, etc.
+  $query = new CreateQuery('schools');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Action, Reaction, 1 minute, etc.
+  $query = new CreateQuery('speeds');
+  $query->addField('id', 'INTEGER', array('P', 'U'));
+  $query->addField('casting_time', 'TEXT', array('N'));
+  $query->addField('duration', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Spells.
   $query = new CreateQuery('spells');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
-  $query->addField('source_id', 'INTEGER', array('N'), 0);
   $query->addField('school_id', 'INTEGER', array('N'), 0);
   $query->addField('level', 'INTEGER', array('N'), 0);
   $query->addField('speed', 'INTEGER', array('N'), 0);
@@ -28,38 +65,8 @@ function installSpell()
   $query->addField('aoe_range', 'INTEGER', array('N'), 0);
   $query->addField('description', 'TEXT');
   $query->addField('alternate', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('schools');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('aoes');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('damage_types');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('speeds');
-  $query->addField('id', 'INTEGER', array('P', 'U'));
-  $query->addField('casting_time', 'TEXT', array('N'));
-  $query->addField('duration', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('ranges');
-  $query->addField('id', 'INTEGER', array('P', 'U'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('source_id', 'INTEGER', array('N'), 0);
+  $query->addField('source_location', 'INTEGER', array('N'), 0);
   $db->create($query);
 }
 
@@ -159,6 +166,7 @@ function updateSpell($spell)
     ->addField('verbal')
     ->addField('semantic')
     ->addField('material')
+    ->addField('duration')
     ->addField('duration')
     ->addField('aoe_id')
     ->addField('aoe_range')

@@ -8,19 +8,36 @@ function installItem()
 {
   GLOBAL $db;
 
+  // Armor, Gemstone, Wand, Weapon, etc.
+  $query = new CreateQuery('item_types');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('description', 'TEXT');
+  $db->create($query);
+
+  // Boots of butt-kicking.
   $query = new CreateQuery('items');
   $query->addField('id', 'INTEGER', array('P', 'A'));
   $query->addField('name', 'TEXT', array('N'));
   $query->addField('item_type_id', 'INTEGER', array('N'), 0);
+  $query->addField('item_type_details', 'TEXT');
   $query->addField('value', 'INTEGER', array('N'), 0);
+  $query->addField('rarity_id', 'INTEGER', array('N'), 0);
   $query->addField('attunement', 'INTEGER', array('N'), 0);
+  $query->addField('attunement_requirements', 'TEXT');
+  $query->addField('artifact', 'INTEGER', array('N'), 0);
+  $query->addField('description', 'TEXT');
+  $query->addField('source_id', 'INTEGER', array('N'), 0);
+  $query->addField('source_location', 'INTEGER', array('N'), 0);
+  $db->create($query);
+
+  // common, uncommon, rare, etc.
+  $query = new CreateQuery('rarities');
+  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('name', 'TEXT', array('N'));
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('item_types');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $db->create($query);
 }
 
 
