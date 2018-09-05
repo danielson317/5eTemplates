@@ -11,7 +11,7 @@ function spellList()
   $page = getUrlID('page', 1);
   $spells = getSpellPager($page);
 
-  $template = new ListTemplate('Spells');
+  $template = new ListPageTemplate('Spells');
   $template->addCssFilePath('/themes/default/css/spell.css');
 
   // Operations.
@@ -72,7 +72,7 @@ function spellList()
 
 function spellUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Submit.
@@ -228,7 +228,7 @@ function spellPrintForm()
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
-  $template = new ListTemplate();
+  $template = new ListPageTemplate();
   $template->setTitle('Print Item Cards');
   $template->addJsFilePath('/themes/default/js/print_list.js');
   $template->setBodyAttr(array('class' => array('print-page')));

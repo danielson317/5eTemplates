@@ -10,7 +10,7 @@ function attributeList()
   $page = getUrlID('page', 1);
   $attributes = getAttributePager($page);
 
-  $template = new ListTemplate('Attributes');
+  $template = new ListPageTemplate('Attributes');
 
   // Operations.
   $attr = array(
@@ -61,7 +61,7 @@ function attributeList()
  ******************************************************************************/
 function attributeUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -154,7 +154,7 @@ function skillList()
   $page = getUrlID('page', 1);
   $skills = getSkillPager($page);
 
-  $template = new ListTemplate('Skills');
+  $template = new ListPageTemplate('Skills');
 
   // Operations.
   $attr = array(
@@ -208,7 +208,7 @@ function skillList()
  ******************************************************************************/
 function skillUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))

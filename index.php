@@ -72,21 +72,35 @@ function menu()
 {
   $output = '';
 
+  // Characters
   $output .= htmlWrap('a', 'Characters', array('href' => '/characters'));
+  $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Attributes', array('href' => '/attributes')));
+  $submenu->addListItem(htmlWrap('a', 'Classes', array('href' => '/classes')));
+  $submenu->addListItem(htmlWrap('a', 'Languages', array('href' => '/languages')));
+  $submenu->addListItem(htmlWrap('a', 'Races', array('href' => '/races')));
+  $submenu->addListItem(htmlWrap('a', 'Scripts', array('href' => '/scripts')));
+  $submenu->addListItem(htmlWrap('a', 'Skills', array('href' => '/skills')));
+  $output .= $submenu;
+
+  // Items.
   $output .= htmlWrap('a', 'Items', array('href' => '/items'));
+  $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Item Types', array('href' => '/item-types')));
+  $output .= $submenu;
+
+  // Monsters.
+  $output .= htmlWrap('a', 'Monsters', array('href' => '/monsters'));
+
+  // Spells.
   $output .= htmlWrap('a', 'Spells', array('href' => '/spells'));
 
-  $output .= htmlWrap('a', '-');
-
-  $output .= htmlWrap('a', 'Attributes', array('href' => '/attributes'));
-  $output .= htmlWrap('a', 'Classes', array('href' => '/classes'));
-  $output .= htmlWrap('a', 'Item Types', array('href' => '/item-types'));
-  $output .= htmlWrap('a', 'Languages', array('href' => '/languages'));
-  $output .= htmlWrap('a', 'Players', array('href' => '/players'));
-  $output .= htmlWrap('a', 'Races', array('href' => '/races'));
-  $output .= htmlWrap('a', 'Scripts', array('href' => '/scripts'));
-  $output .= htmlWrap('a', 'Skills', array('href' => '/skills'));
-  $output .= htmlWrap('a', 'Sources', array('href' => '/sources'));
+  // Other.
+  $output .= htmlWrap('a', 'Other', array('href' => '/players'));
+  $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Sources', array('href' => '/sources')));
+  $submenu->addListItem(htmlWrap('a', 'Players', array('href' => '/players')));
+  $output .= $submenu;
 
   $attr = array('id' => 'menu', 'class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);

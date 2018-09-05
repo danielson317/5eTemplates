@@ -22,6 +22,7 @@ class HTMLTemplate
     $this->addCssFilePath('/themes/default/css/page.css');
     $this->addCssFilePath('/themes/default/css/form.css');
     $this->addJsFilePath('https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js');
+    $this->addJsFilePath('/libraries/global.js');
   }
 
   function __toString()
@@ -63,7 +64,7 @@ class HTMLTemplate
 /**
  * Class ListTemplate
  */
-class ListTemplate extends HTMLTemplate
+class ListPageTemplate extends HTMLTemplate
 {
   protected $operations = '';
   protected $list = '';
@@ -110,7 +111,7 @@ class ListTemplate extends HTMLTemplate
 /**
  * Class ListTemplate
  */
-class FormTemplate extends HTMLTemplate
+class FormPageTemplate extends HTMLTemplate
 {
   protected $messages = '';
   protected $form = '';
@@ -246,4 +247,50 @@ Class TableTemplate
     $output = htmlWrap('tbody', $output);
     return $output;
   }
+}
+
+Class ListTemplate
+{
+  protected $list;
+  protected $list_type;
+  protected $attr;
+  protected $pointer = 0;
+
+  public function __construct($list_type = 'ol')
+  {
+    $this->list_type = $list_type;
+  }
+
+  public function setListType($list_type)
+  {
+    $this->list_type = $list_type;
+  }
+
+  public function addListItem($item, $attr = array())
+  {
+    $this->list[$this->pointer] = $item;
+    $this->attr[$this->pointer] = $attr;
+    $this->pointer++;
+  }
+
+  public function setAttr($attr)
+  {
+    $this->attr = array_merge($this->attr, $attr);
+  }
+
+  public function __toString()
+  {
+    $output = '';
+
+    for($k = 0; $k < $this->pointer; $k++)
+    {
+      $list_item = $this->list[$k];
+      $attr = $this->attr[$k];
+      $output .= htmlWrap('li', $list_item, $attr);
+    }
+
+    $output = htmlWrap($this->list_type, $output, $attr);
+    return $output;
+  }
+
 }

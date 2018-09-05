@@ -11,7 +11,7 @@ function monsterList()
   $page = getUrlID('page', 1);
   $monsters = getMonsterPager($page);
 
-  $template = new ListTemplate('monsters');
+  $template = new ListPageTemplate('monsters');
   $template->addCssFilePath('/themes/default/css/monster.css');
 
   // Operations.
@@ -71,7 +71,7 @@ function monsterList()
 
 function monsterUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/monster.css');
 
   // Submit.

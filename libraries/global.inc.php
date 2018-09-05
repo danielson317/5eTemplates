@@ -102,6 +102,10 @@ function buildAttr($attr)
   $attr_string = '';
   foreach ($attr as $name => $value)
   {
+    if (is_numeric($name))
+    {
+      continue;
+    }
     if (is_array($value))
     {
       $value = implode(' ', $value);

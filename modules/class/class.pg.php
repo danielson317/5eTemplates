@@ -10,7 +10,7 @@ function classList()
   $page = getUrlID('page', 1);
   $classes = getClassPager($page);
 
-  $template = new ListTemplate('Class');
+  $template = new ListPageTemplate('Class');
 
   // Operations.
   $attr = array(
@@ -61,7 +61,7 @@ function classList()
  ******************************************************************************/
 function classUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -209,7 +209,7 @@ function subclassAjax()
  ******************************************************************************/
 function subclassUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))

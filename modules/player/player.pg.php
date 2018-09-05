@@ -10,7 +10,7 @@ function playerList()
   $page = getUrlID('page', 1);
   $players = getPlayerPager($page);
 
-  $template = new ListTemplate('Players');
+  $template = new ListPageTemplate('Players');
 
   // Operations.
   $attr = array(
@@ -59,7 +59,7 @@ function playerList()
  ******************************************************************************/
 function playerUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -144,7 +144,7 @@ function sourceList()
   $page = getUrlID('page', 1);
   $sources = getSourcePager($page);
 
-  $template = new ListTemplate('Sources');
+  $template = new ListPageTemplate('Sources');
 
   // Operations.
   $attr = array(
@@ -194,7 +194,7 @@ function sourceList()
  ******************************************************************************/
 function sourceUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))

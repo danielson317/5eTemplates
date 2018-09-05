@@ -51,41 +51,55 @@ table th, table td {
   display: inline-block;
   margin: 5px;
 }
+/* line 61, ../scss/page.scss */
+#menu ul {
+  display: none;
+  position: absolute;
+  background-color: #FFE3AA;
+  margin: 0;
+  padding: 5px;
+}
+/* line 70, ../scss/page.scss */
+#menu ul li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-/* line 64, ../scss/page.scss */
+/* line 81, ../scss/page.scss */
 body > .operations {
   margin-left: 20px;
   margin-bottom: 5px;
 }
-/* line 69, ../scss/page.scss */
+/* line 86, ../scss/page.scss */
 .operations a {
   margin-left: 10px;
 }
-/* line 73, ../scss/page.scss */
+/* line 90, ../scss/page.scss */
 .operations a:first-of-type {
   margin: auto;
 }
 
-/* line 82, ../scss/page.scss */
+/* line 99, ../scss/page.scss */
 table.print-list .column-1 {
   width: 100px;
 }
-/* line 86, ../scss/page.scss */
+/* line 103, ../scss/page.scss */
 table.print-list .column-1 input.button {
   width: 30px;
 }
-/* line 91, ../scss/page.scss */
+/* line 108, ../scss/page.scss */
 table.print-list .column-1 input.plus,
 table.print-list .column-1 input.minus {
   width: 22px;
   margin-left: 2px;
 }
-/* line 98, ../scss/page.scss */
+/* line 115, ../scss/page.scss */
 table.print-list .column-2 {
   width: 200px;
 }
 
-/* line 104, ../scss/page.scss */
+/* line 121, ../scss/page.scss */
 .print-card {
   width: 212px;
   height: 300px;

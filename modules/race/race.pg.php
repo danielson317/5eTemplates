@@ -10,7 +10,7 @@ function raceList()
   $page = getUrlID('page', 1);
   $races = getRacePager($page);
 
-  $template = new ListTemplate('Race');
+  $template = new ListPageTemplate('Race');
 
   // Operations.
   $attr = array(
@@ -60,7 +60,7 @@ function raceList()
  ******************************************************************************/
 function raceUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -193,7 +193,7 @@ function subraceAjax()
  ******************************************************************************/
 function subraceUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -334,7 +334,7 @@ function scriptList()
   $page = getUrlID('page', 1);
   $scripts = getScriptPager($page);
 
-  $template = new ListTemplate('Scripts');
+  $template = new ListPageTemplate('Scripts');
 
   // Operations.
   $attr = array(
@@ -384,7 +384,7 @@ function scriptList()
  ******************************************************************************/
 function scriptUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -478,7 +478,7 @@ function languageList()
   $page = getUrlID('page', 1);
   $languages = getLanguagePager($page);
 
-  $template = new ListTemplate('Languages');
+  $template = new ListPageTemplate('Languages');
 
   // Operations.
   $attr = array(
@@ -530,7 +530,7 @@ function languageList()
  ******************************************************************************/
 function languageUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))

@@ -11,7 +11,7 @@ function characterList()
   $page = getUrlID('page', 1);
   $characters = getCharacterPager($page);
 
-  $template = new ListTemplate('Characters');
+  $template = new ListPageTemplate('Characters');
   $template->addCssFilePath('/themes/default/css/character.css');
 
   // Operations.
@@ -88,7 +88,7 @@ function characterList()
 
 function characterUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
 
   // Submit.
@@ -371,7 +371,7 @@ function characterUpsertSubmit()
  ******************************************************************************/
 function characterClassUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
 
@@ -519,7 +519,7 @@ function characterClassUpsertSubmit()
  ******************************************************************************/
 function characterAttributeUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
 
@@ -687,7 +687,7 @@ function characterAttributeUpsertSubmit()
  ******************************************************************************/
 function characterSkillUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
 
@@ -853,7 +853,7 @@ function characterSkillUpsertSubmit()
  ******************************************************************************/
 function characterLanguageUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
 

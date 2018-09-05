@@ -11,7 +11,7 @@ function itemList()
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
-  $template = new ListTemplate('Items');
+  $template = new ListPageTemplate('Items');
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Operations.
@@ -65,7 +65,7 @@ function itemList()
 
 function itemUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Submit.
@@ -154,7 +154,7 @@ function itemPrintForm()
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
-  $template = new ListTemplate();
+  $template = new ListPageTemplate();
   $template->setTitle('Print Item Cards');
   $template->addJsFilePath('/themes/default/js/print_list.js');
   $template->setBodyAttr(array('class' => array('print-page')));
@@ -291,7 +291,7 @@ function itemTypeList()
   $page = getUrlID('page', 1);
   $item_types = getItemTypePager($page);
 
-  $template = new ListTemplate('Item Types');
+  $template = new ListPageTemplate('Item Types');
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Operations.
@@ -337,7 +337,7 @@ function itemTypeList()
 
 function itemTypeUpsertForm()
 {
-  $template = new FormTemplate();
+  $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Submit.

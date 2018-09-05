@@ -57,6 +57,23 @@ table
     display: inline-block;
     margin: 5px;
   }
+
+  ul
+  {
+    display: none;
+    //display: block;
+    position: absolute;
+    background-color: $color_tan;
+    margin: 0;
+    padding: 5px;
+
+    li
+    {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+  }
 }
 
 .operations
