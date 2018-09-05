@@ -31,6 +31,8 @@ function getRegistry($path = FALSE)
     'characters' => 'characterList',
     'class' => 'classUpsertForm',
     'classes' => 'classList',
+    'damage-types' => 'damageTypeList',
+    'damage-type' => 'damageTypeUpsertForm',
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
@@ -40,8 +42,14 @@ function getRegistry($path = FALSE)
     'languages' => 'languageList',
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
+    'properties' => 'propertyList',
+    'property' => 'propertyUpsertForm',
     'race' => 'raceUpsertForm',
     'races' => 'raceList',
+    'range' => 'rangeUpsertForm',
+    'ranges' => 'rangeList',
+    'rarities' => 'rarityList',
+    'rarity' => 'rarityUpsertForm',
     'script' => 'scriptUpsertForm',
     'scripts' => 'scriptList',
     'skill' => 'skillUpsertForm',
@@ -86,7 +94,10 @@ function menu()
   // Items.
   $output .= htmlWrap('a', 'Items', array('href' => '/items'));
   $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Damage Types', array('href' => '/damage-types')));
   $submenu->addListItem(htmlWrap('a', 'Item Types', array('href' => '/item-types')));
+  $submenu->addListItem(htmlWrap('a', 'Properties', array('href' => '/properties')));
+  $submenu->addListItem(htmlWrap('a', 'Rarities', array('href' => '/rarities')));
   $output .= $submenu;
 
   // Monsters.
@@ -94,6 +105,9 @@ function menu()
 
   // Spells.
   $output .= htmlWrap('a', 'Spells', array('href' => '/spells'));
+  $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Ranges', array('href' => '/ranges')));
+  $output .= $submenu;
 
   // Other.
   $output .= htmlWrap('a', 'Other', array('href' => '/players'));

@@ -144,6 +144,10 @@ function classUpsertForm()
   $field = new FieldSelect('source_id', 'Source', $options);
   $form->addField($field);
 
+  // Source location (page number).
+  $field = new FieldNumber('source_location', 'Page');
+  $form->addField($field);
+
   // Submit
   $value = 'Add';
   if ($class_id)

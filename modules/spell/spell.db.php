@@ -17,14 +17,6 @@ function installSpell()
   $query->addField('description', 'TEXT');
   $db->create($query);
 
-  // Bludgeoning, Force, Psychic, etc.
-  $query = new CreateQuery('damage_types');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
   // Touch, 5 ft, 60ft, etc.
   $query = new CreateQuery('ranges');
   $query->addField('id', 'INTEGER', array('P', 'U'));
@@ -228,6 +220,31 @@ function getDurationList()
   return $db->selectList($query);
 }
 
+/******************************************************************************
+ *
+ *  Range.
+ *
+ ******************************************************************************/
+
+function getRangePager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('ranges');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('description');
+  $query->addOrder('id');
+  $query->addPager($page);
+
+  $results = $db->select($query);
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
 function getRangeList()
 {
   GLOBAL $db;
@@ -236,4 +253,56 @@ function getRangeList()
   $query->addField('id')->addField('name', 'value');
 
   return $db->selectList($query);
+}
+
+
+function getRange($id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('ranges');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('description');
+  $query->addConditionSimple('id', $id);
+  $results = $db->select($query);
+  if (!$results)
+  {
+    return FALSE;
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+function createRange($item)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('ranges');
+  $query->addField('id', $item['id']);
+  $query->addField('name', $item['name']);
+  $query->addField('description', $item['description']);
+
+  return $db->insert($query);
+}
+
+function updateRange($item)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('ranges');
+  $query->addField('name', $item['name']);
+  $query->addField('description', $item['description']);
+  $query->addConditionSimple('id', $item['id']);
+
+  $db->update($query);
+}
+
+function deleteRange($id)
+{
+  GLOBAL $db;
+  $query = new DeleteQuery('ranges');
+  $query->addConditionSimple('id', $id);
+
+  $db->delete($query);
 }
