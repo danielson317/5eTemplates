@@ -194,7 +194,7 @@ class FieldHidden extends Field
   function __toString()
   {
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'hidden';
     if ($this->value)
@@ -219,7 +219,7 @@ class FieldText extends Field
 
     // Input.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'text';
     if ($this->value)
@@ -247,7 +247,7 @@ class FieldNumber extends Field
 
     // Input.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'number';
     if ($this->value)
@@ -295,7 +295,7 @@ class FieldSelect extends Field
 
     // Select.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'text';
     $output .= htmlWrap('select', $select_options, $attr);
@@ -321,7 +321,7 @@ class FieldCheckbox extends Field
 
     // Input.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'checkbox';
     if ($this->value)
@@ -356,7 +356,7 @@ class FieldTextarea extends Field
 
     // Input.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['rows'] = $this->rows;
     $attr['cols'] = $this->cols;
@@ -392,7 +392,7 @@ class FieldSubmit extends Field
   {
     // Input.
     $attr = $this->attr;
-    $attr['id'] = $this->id;
+//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'submit';
     if ($this->value)

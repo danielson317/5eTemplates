@@ -90,6 +90,7 @@ function characterUpsertForm()
 {
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
+  $template->addJsFilePath('/modules/character/character.js');
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
@@ -147,6 +148,7 @@ function characterUpsertForm()
 
     $attr = array(
       'href' => '/character/class?character_id=' . $character_id,
+      'class' => array('add-class'),
     );
     $link = htmlWrap('a', 'Add New Class', $attr);
 
@@ -371,21 +373,20 @@ function characterUpsertSubmit()
  ******************************************************************************/
 function characterClassUpsertForm()
 {
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/character.css');
-  $template->addJsFilePath('/modules/character/character.js');
+//  $template = new FormPageTemplate();
+//  $template->addCssFilePath('/themes/default/css/character.css');
+//  $template->addJsFilePath('/modules/character/character.js');
 
   // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-  {
-    $template->addMessage(characterClassUpsertSubmit());
-  }
+//  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+//  {
+//    $template->addMessage(characterClassUpsertSubmit());
+//  }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
   {
-    $template->addMessage('Missing parameter character_id.');
-    return $template;
+    return htmlWrap('h3', 'Missing parameter character_id.');
   }
   $character = getCharacter($character_id);
   $class_id = getUrlID('class_id');
@@ -413,23 +414,23 @@ function characterClassUpsertForm()
   $form->setTitle($title);
 
   // Class List.
-  $table = new TableTemplate('character-class');
-  $table->setHeader(array('Class', 'Subclass', 'Level'));
-  foreach ($character_classes as $character_class)
-  {
-    $row = array();
-    $row[] = $classes[$character_class['class_id']];
-    $row[] = $subclasses[$character_class['subclass_id']];
-    $row[] = $character_class['level'];
-    $table->addRow($row);
-  }
-  $attr = array(
-    'href' => '/character?id=' . $character_id,
-  );
-  $link = htmlWrap('a', 'Back to ' . htmlWrap('em', $character['name']), $attr);
-
-  $field = new FieldMarkup('classes', '', $table . $link);
-  $form->addField($field);
+//  $table = new TableTemplate('character-class');
+//  $table->setHeader(array('Class', 'Subclass', 'Level'));
+//  foreach ($character_classes as $character_class)
+//  {
+//    $row = array();
+//    $row[] = $classes[$character_class['class_id']];
+//    $row[] = $subclasses[$character_class['subclass_id']];
+//    $row[] = $character_class['level'];
+//    $table->addRow($row);
+//  }
+//  $attr = array(
+//    'href' => '/character?id=' . $character_id,
+//  );
+//  $link = htmlWrap('a', 'Back to ' . htmlWrap('em', $character['name']), $attr);
+//
+//  $field = new FieldMarkup('classes', '', $table . $link);
+//  $form->addField($field);
 
   // Character ID.
   $field = new FieldHidden('character_id');
@@ -482,9 +483,7 @@ function characterClassUpsertForm()
   $field = new FieldSubmit('delete', 'Delete');
   $form->addField($field);
 
-  $template->setForm($form);
-
-  return $template;
+  return $form;
 }
 
 function characterClassUpsertSubmit()

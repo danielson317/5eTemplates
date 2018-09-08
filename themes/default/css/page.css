@@ -110,3 +110,53 @@ table.print-list .column-2 {
   overflow: hidden;
   page-break-inside: avoid;
 }
+
+/* line 137, ../scss/page.scss */
+#cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  background-color: #010101;
+  opacity: 0.2;
+}
+
+/* line 150, ../scss/page.scss */
+#modal {
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  z-index: 100;
+  width: 500px;
+  height: 300px;
+  background-color: #FEFEFE;
+  padding: 10px;
+  border: 2px solid #838383;
+  border-radius: 5px;
+  box-shadow: 0 5px 5px 1px #838383;
+}
+/* line 166, ../scss/page.scss */
+#modal #close-modal {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  cursor: pointer;
+}
+/* line 174, ../scss/page.scss */
+#modal h1 {
+  font-size: 16px;
+  margin: 0;
+}
+/* line 179, ../scss/page.scss */
+#modal .field.submit {
+  float: right;
+}
+
+/* line 185, ../scss/page.scss */
+input[name="submit"] {
+  background-color: #5C9632;
+  padding: 5px;
+  min-width: 100px;
+}
