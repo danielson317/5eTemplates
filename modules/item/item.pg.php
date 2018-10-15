@@ -159,6 +159,7 @@ function itemUpsertSubmit()
 {
   $item = $_POST;
   $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  $item['artifact'] = isset($_POST['artifact']) ? 1 : 0;
   unset($item['submit']);
 
   if ($item['id'])
@@ -255,7 +256,8 @@ function itemPrintForm()
     $table->addRow($row);
   }
 
-  $form = $table->__toString();
+  $form = htmlWrap('p', 'Print results via chrome. Set margins to minimal, scale to 106, and enable background images for color.');
+  $form .= $table->__toString();
 
   $attr = array(
     'type' => 'submit',

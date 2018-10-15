@@ -206,7 +206,7 @@ function getCharacterClasses($character_id)
   $query->addField('subclass_id');
   $query->addField('level');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addOrder('level', 'DESC');
+  $query->addOrderSimple('level', QueryOrder::DIRECTION_DESC);
   $results = $db->select($query);
 
   if (!$results)
@@ -287,7 +287,7 @@ function getCharacterAttributes($character_id)
   $query->addField('proficiency');
   $query->addField('saving_throw');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addOrder('attribute_id', 'ASC');
+  $query->addOrderSimple('attribute_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
 
   if (!$results)
@@ -372,7 +372,7 @@ function getCharacterSkills($character_id)
   $query->addField('proficiency');
   $query->addField('modifier');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addOrder('skill_id', 'ASC');
+  $query->addOrderSimple('skill_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
 
   if (!$results)
@@ -449,7 +449,7 @@ function getCharacterLanguages($character_id)
   $query = new SelectQuery('character_languages');
   $query->addField('language_id');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addOrder('language_id', 'ASC');
+  $query->addOrderSimple('language_id', QueryOrder::DIRECTION_ASC);
   $args = array(':character_id' => $character_id);
   $results = $db->select($query, $args);
 

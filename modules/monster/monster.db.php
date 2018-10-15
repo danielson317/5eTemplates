@@ -133,7 +133,7 @@ function getMonsterPager($page = 1)
     ->addField('magic')
     ->addField('attunement')
     ->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   //  $query->addOrder('monster_type_id');
   //  $query->addOrder('name');
   //  $query->addPager($page);

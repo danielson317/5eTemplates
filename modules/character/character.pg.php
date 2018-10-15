@@ -117,13 +117,19 @@ function characterUpsertForm()
   /*****************
    * Header Group
    *****************/
-  $group = 'header';
+  $group = 'header_name';
   $form->addGroup($group);
 
   // Name.
   $field = new FieldText('name', 'Name');
   $field->setGroup($group)->setRequired();
   $form->addField($field);
+
+  /*****************
+   * Header Group
+   *****************/
+  $group = 'header_upper';
+  $form->addGroup($group);
 
   // Classes
   $classes = getClassList();
@@ -168,6 +174,12 @@ function characterUpsertForm()
   $field->setGroup($group);
   $field->setRequired();
   $form->addField($field);
+
+  /*****************
+   * Header Group
+   *****************/
+  $group = 'header_lower';
+  $form->addGroup($group);
 
   // Race.
   $options = array(0 => '--Select One--') + getRaceList();

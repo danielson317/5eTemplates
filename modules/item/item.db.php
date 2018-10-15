@@ -90,7 +90,7 @@ function getItemPager($page = 1)
     ->addField('value')
     ->addField('attunement')
     ->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -106,12 +106,19 @@ function getItem($id)
   GLOBAL $db;
 
   $query = new SelectQuery('items');
-  $query->addField('id')
-        ->addField('name')
-        ->addField('item_type_id')
-        ->addField('value')
-        ->addField('attunement')
-        ->addField('description');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('item_type_id');
+  $query->addField('item_type_details');
+  $query->addField('value');
+  $query->addField('weight');
+  $query->addField('rarity_id');
+  $query->addField('attunement');
+  $query->addField('attunement_requirements');
+  $query->addField('artifact');
+  $query->addField('description');
+  $query->addField('source_id');
+  $query->addField('source_location');
   $query->addConditionSimple('id', $id);
   $results = $db->select($query);
   if (!$results)
@@ -127,11 +134,18 @@ function createItem($item)
   GLOBAL $db;
 
   $query = new InsertQuery('items');
-  $query->addField('name', $item['name'])
-        ->addField('item_type_id', $item['item_type_id'])
-        ->addField('value', $item['value'])
-        ->addField('attunement', $item['attunement'])
-        ->addField('description', $item['description']);
+  $query->addField('name', $item['name']);
+  $query->addField('item_type_id', $item['item_type_id']);
+  $query->addField('item_type_details', $item['item_type_details']);
+  $query->addField('value', $item['value']);
+  $query->addField('weight', $item['weight']);
+  $query->addField('rarity_id', $item['rarity_id']);
+  $query->addField('attunement', $item['attunement']);
+  $query->addField('attunement_requirements', $item['attunement_requirements']);
+  $query->addField('artifact', $item['artifact']);
+  $query->addField('description', $item['description']);
+  $query->addField('source_id', $item['source_id']);
+  $query->addField('source_location', $item['source_location']);
 
   return $db->insert($query);
 }
@@ -141,11 +155,18 @@ function updateItem($item)
   GLOBAL $db;
 
   $query = new UpdateQuery('items');
-  $query->addField('name', $item['name'])
-        ->addField('item_type_id', $item['item_type_id'])
-        ->addField('value', $item['value'])
-        ->addField('attunement', $item['attunement'])
-        ->addField('description', $item['description']);
+  $query->addField('name', $item['name']);
+  $query->addField('item_type_id', $item['item_type_id']);
+  $query->addField('item_type_details', $item['item_type_details']);
+  $query->addField('value', $item['value']);
+  $query->addField('weight', $item['weight']);
+  $query->addField('rarity_id', $item['rarity_id']);
+  $query->addField('attunement', $item['attunement']);
+  $query->addField('attunement_requirements', $item['attunement_requirements']);
+  $query->addField('artifact', $item['artifact']);
+  $query->addField('description', $item['description']);
+  $query->addField('source_id', $item['source_id']);
+  $query->addField('source_location', $item['source_location']);
   $query->addConditionSimple('id', $item['id']);
 
   $db->update($query);
@@ -170,7 +191,7 @@ function getItemTypePager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -256,7 +277,7 @@ function getRarityPager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -343,7 +364,7 @@ function getDamageTypePager($page = 1)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addOrder('name');
+  $query->addOrderSimple('name');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -441,7 +462,7 @@ function getPropertyPager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   $query->addPager($page);
 
   $results = $db->select($query);

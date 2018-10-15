@@ -66,7 +66,7 @@ function getRacePager($page = 1)
   $query->addField('speed');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addOrder('name');
+  $query->addOrderSimple('name');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -85,7 +85,7 @@ function getRaceList()
   $query = new SelectQuery('races');
   $query->addField('id');
   $query->addField('name', 'value');
-  $query->addOrder('name');
+  $query->addOrderSimple('name');
 
   return $db->selectList($query);
 }

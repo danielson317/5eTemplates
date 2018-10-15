@@ -32,7 +32,7 @@ class SQLite extends Database
     $sql .= 'SELECT';
     foreach ($query->getFields() as $alias => $details)
     {
-      $sql .= ' ' . $details['table_alias'] . '.' . $details['name'] . ' AS ' . $alias . ',';
+      $sql .= ' ' . self::structureEscape($details['table_alias']) . '.' . self::structureEscape($details['name']) . ' AS ' . self::structureEscape($alias) . ',';
     }
     $sql = trim($sql, ',');
 
@@ -48,13 +48,21 @@ class SQLite extends Database
     // Order by.
     if ($query->getOrders())
     {
+//      $sql .= ' ORDER BY';
+//      foreach ($query->getOrders() as $alias => $dir)
+//      {
+//        $sql .= ' ' . $alias . ' ' . $dir . ',';
+//      }
+
       $sql .= ' ORDER BY';
-      foreach ($query->getOrders() as $alias => $dir)
+      foreach ($query->getOrders() as $order)
       {
-        $sql .= ' ' . $alias . ' ' . $dir . ',';
+        $sql .= ' ' . $this->_buildOrder($order);
+        $sql .= ',';
       }
+      $sql = trim($sql, ',');
     }
-    $sql = trim($sql, ',');
+//    $sql = trim($sql, ',');
 
     // Pager
     if ($query->getPage())
@@ -97,7 +105,7 @@ class SQLite extends Database
   function update(UpdateQuery $query)
   {
     $sql = '';
-    $sql .= 'UPDATE '  . key($query->getTables()) . ' SET';
+    $sql .= 'UPDATE '  . self::structureEscape(key($query->getTables())) . ' SET';
     foreach ($query->getFields() as $name => $field)
     {
       $placeholder = ':' . $field['table_alias'] . '_' . $field['field_alias'];
@@ -119,7 +127,7 @@ class SQLite extends Database
   function delete(DeleteQuery $query)
   {
     $sql = '';
-    $sql .= 'DELETE FROM '  . key($query->getTables());
+    $sql .= 'DELETE FROM '  . self::structureEscape(key($query->getTables()));
 
     // Where.
     if ($query->getConditions())
@@ -254,7 +262,7 @@ class SQLite extends Database
 
   protected function _buildCondition(Query $query, QueryCondition $condition)
   {
-    $sql = $condition->getTable() . '.' . $condition->getField();
+    $sql = self::structureEscape($condition->getTable()) . '.' . self::structureEscape($condition->getField());
     switch($condition->getComparison())
     {
       case QueryCondition::COMPARE_EQUAL:
@@ -310,7 +318,16 @@ class SQLite extends Database
     }
     else
     {
-      $placeholder = self::PLACEHOLDER_TOKEN . $condition->getTable() . '_' . $condition->getField();
+      $placeholder = $placeholder_base = self::PLACEHOLDER_TOKEN . $condition->getTable() . '_' . $condition->getField();
+
+      $values = $query->getValues();
+      $count = 1;
+      while (array_key_exists($placeholder, $values))
+      {
+        $placeholder = $placeholder_base . '_' . $count;
+        $count++;
+      }
+
       $sql .= ' ' . $placeholder;
       $query->addValue($placeholder, $condition->getValue());
     }
@@ -353,13 +370,37 @@ class SQLite extends Database
       }
 
       // Table.
-      $sql .= ' ' . $table->getName() . ' ' . $table->getAlias();
+      $sql .= ' ' . self::structureEscape($table->getName()) . ' ' . self::structureEscape($table->getAlias());
 
       // Condition
       if ($table->getConditions())
       {
         $sql .= ' ON ' . $this->_buildConditionGroupTable($query, $table);
       }
+    }
+
+    return $sql;
+  }
+
+  protected function _buildOrder(QueryOrder $order)
+  {
+    $sql = '';
+    $sql .= self::structureEscape($order->getTable());
+    $sql .= '.';
+    $sql .= self::structureEscape($order->getField());
+    $sql .= ' ';
+    if ($order->getDirection() == QueryOrder::DIRECTION_ASC)
+    {
+      $sql .= 'ASC';
+    }
+    elseif ($order->getDirection() == QueryOrder::DIRECTION_DESC)
+    {
+      $sql .= 'DESC';
+    }
+    else
+    {
+      assert(FALSE, 'Unhandled order option.');
+      $sql .= 'ASC';
     }
 
     return $sql;
@@ -386,5 +427,11 @@ class SQLite extends Database
   {
     $string = str_replace('%', '\\%', $string);
     return str_replace('_', '\\_', $string);
+  }
+
+  function structureEscape($string)
+  {
+    $string = str_replace('"', '""', $string);
+    return '"' . $string . '"';
   }
 }

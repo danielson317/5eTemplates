@@ -53,7 +53,7 @@ $(document).ready(function()
   }
 });
 
-function showModal($content)
+function modalShow($content)
 {
   var $body = $('body');
   var $cover = $('#cover');
@@ -70,19 +70,19 @@ function showModal($content)
   }
   $modal.find('#close-modal').click(function()
   {
-    hideModal();
+    modalHide();
   });
   $modal.append($content);
   return $modal;
 }
 
-function loadModal()
+function modalLoad()
 {
-  var $modal = showModal('');
+  var $modal = modalShow('');
   $modal.addClass('loading');
 }
 
-function hideModal()
+function modalHide()
 {
   $('#cover').remove();
   $('#modal').remove();

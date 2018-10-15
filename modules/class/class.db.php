@@ -46,7 +46,7 @@ function getClassPager($page = 1)
         ->addField('hit_die')
         ->addField('description')
         ->addField('source_id')
-        ->addOrder('name')
+        ->addOrderSimple('name')
         ->addPager($page);
 
   $results = $db->select($query);

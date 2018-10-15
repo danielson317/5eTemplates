@@ -1,13 +1,28 @@
 /* line 7, ../scss/character.scss */
-#character_form .field_group.header {
-  width: 100%;
+#character_form .field_group.header_name {
+  height: 200px;
 }
 /* line 11, ../scss/character.scss */
-#character_form .field_group.header .field {
-  clear: none;
-  margin-right: 10px;
+#character_form .field_group.header_upper {
+  width: 600px;
 }
-/* line 16, ../scss/character.scss */
-#character_form .field_group.header .field.classes, #character_form .field_group.header .field.race_id {
+/* line 15, ../scss/character.scss */
+#character_form .field_group.header_upper .field {
+  margin-right: 10px;
+  float: left;
+  clear: none;
+}
+/* line 22, ../scss/character.scss */
+#character_form .field_group.header_lower {
+  width: 600px;
+}
+/* line 26, ../scss/character.scss */
+#character_form .field_group.header_lower .field {
+  margin-right: 10px;
+  float: left;
+  clear: none;
+}
+/* line 33, ../scss/character.scss */
+#character_form .field_group.attributes {
   clear: left;
 }

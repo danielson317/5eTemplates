@@ -72,7 +72,7 @@ function getSpellPager($page = 1)
     ->addField('school_id')
     ->addField('level')
     ->addField('description');
-  $query->addOrder('name');
+  $query->addOrderSimple('name');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -234,7 +234,7 @@ function getRangePager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addOrder('id');
+  $query->addOrderSimple('id');
   $query->addPager($page);
 
   $results = $db->select($query);

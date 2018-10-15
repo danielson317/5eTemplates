@@ -5,6 +5,7 @@
  */
 abstract class Database
 {
+  /* @var PDO $db*/
   protected $db;
 
   // VCrUD operations.
@@ -34,6 +35,10 @@ abstract class Database
   abstract function insert(InsertQuery $query);
   abstract function update(UpdateQuery $query);
   abstract function delete(DeleteQuery $query);
+  function passThrough($query)
+  {
+    return $this->db->query($query);
+  }
 
   // Database structure.
   abstract function create(CreateQuery $query);
@@ -43,6 +48,7 @@ abstract class Database
   abstract protected function _buildConditionGroupTable(Query $query, QueryTable $table, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
   abstract protected function _buildCondition(Query $query, QueryCondition $condition);
   abstract protected function _buildJoins(Query $query, $tables);
+  abstract protected function _buildOrder(QueryOrder $order);
 
   // String manipulation.
   abstract function concatenate();
@@ -163,6 +169,9 @@ class SelectQuery extends Query
   protected $page = FALSE;
   protected $page_size = FALSE;
 
+  /**
+   * @return QueryOrder[]
+   */
   function getOrders()
   {
     return $this->orders;
@@ -194,16 +203,32 @@ class SelectQuery extends Query
     return $this;
   }
 
-  function addOrder($alias, $dir = 'ASC')
+  function addFieldBypass($name, $alias = '')
   {
-    $this->orders[$alias] = $dir;
+    $this->addField($name, $alias, '', 'bypass');
     return $this;
+  }
+
+  function addOrderSimple($alias, $dir = QueryOrder::DIRECTION_ASC)
+  {
+    $this->orders[] = new QueryOrder($alias, key($this->tables), $dir);
+    return $this;
+  }
+
+  function addOrder(QueryOrder $order)
+  {
+    $this->orders[] = $order;
   }
 
   function addPager($page = 1, $page_size = DEFAULT_PAGER_SIZE)
   {
     $this->page = $page;
     $this->page_size = $page_size;
+  }
+
+  function addLimit($limit)
+  {
+    $this->page_size = $limit;
   }
 }
 
@@ -331,6 +356,9 @@ class QueryCondition
     $this->value = $value;
   }
 
+  /**
+   * @param string $group
+   */
   function setGroup($group)
   {
     $this->group = $group;
@@ -490,5 +518,37 @@ class QueryTable
   function getConditionGroups()
   {
     return $this->condition_groups;
+  }
+}
+
+Class QueryOrder
+{
+  const DIRECTION_ASC = 1;
+  const DIRECTION_DESC = 2;
+
+  protected $field;
+  protected $table;
+  protected $direction;
+
+  function __construct($field, $table, $direction = self::DIRECTION_ASC)
+  {
+    $this->field = $field;
+    $this->table = $table;
+    $this->direction = $direction;
+  }
+
+  function getField()
+  {
+    return $this->field;
+  }
+
+  function getTable()
+  {
+    return $this->table;
+  }
+
+  function getDirection()
+  {
+    return $this->direction;
   }
 }

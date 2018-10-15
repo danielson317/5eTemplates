@@ -4,21 +4,55 @@
 {
   .field_group
   {
-    &.header
+    &.header_name
     {
-      width: 100%;
+      height: 200px;
+    }
+    &.header_upper
+    {
+      width: 600px;
 
       .field
       {
-        clear: none;
         margin-right: 10px;
-
-        &.classes,
-        &.race_id
-        {
-          clear: left;
-        }
+        float: left;
+        clear: none;
       }
     }
+    &.header_lower
+    {
+      width: 600px;
+
+      .field
+      {
+        margin-right: 10px;
+        float: left;
+        clear: none;
+      }
+    }
+    &.attributes
+    {
+      clear: left;
+    }
+    //&.header_
+    //{
+    //  width: 100%;
+    //
+    //  .field
+    //  {
+    //    clear: none;
+    //    margin-right: 10px;
+    //    &.name
+    //    {
+    //      height: 150px;
+    //    }
+    //
+    //    //&.classes,
+    //    //&.race_id
+    //    //{
+    //    //  clear: left;
+    //    //}
+    //  }
+    //}
   }
 }
