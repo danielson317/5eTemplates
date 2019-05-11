@@ -37,7 +37,7 @@ class URL
     }
 
     // Home path.
-    if ($url == '/')
+    if ($url === '/')
     {
       $this->path = '/';
       return;
@@ -62,6 +62,11 @@ class URL
       $parts = explode('=', $parameter);
       $this->query[$parts[0]] = isset($parts[1]) ? urldecode($parts[1]) : FALSE;
     }
+    
+	if ($this->path === 'index.php' && array_key_exists('q', $this->query))
+	{
+  		$this->path = urldecode($this->query['q']);
+	}
   }
 
   function getPath()
@@ -168,3 +173,41 @@ function getDiceList()
     '100' => 'd100'
   );
 }
+
+function u($path, $attr = array())
+{
+  if ($_SERVER['SERVER_SOFTWARE'] != 'Apache')
+  {
+    $attr['query']['q'] = $path;
+    $path = '/index.php';
+  }
+  
+  $url = $path;
+  
+  $first = TRUE;
+  foreach ($attr['query'] as $name => $value)
+  {
+    if ($first)
+    {
+    $url .= '?';
+    $first = FALSE;
+    }
+    else
+    {
+      $url .= '&';
+    }
+    
+    $url .= $name . '=' . urlencode($value);
+  }
+  return $url;
+}
+
+function a($name, $path, $attr = array())
+{ 
+  $attr['href'] = $path;
+  return htmlWrap('a', u($path, $attr), $attr);
+}
+
+
+
+
