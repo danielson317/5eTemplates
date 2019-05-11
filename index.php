@@ -2,6 +2,12 @@
 include 'libraries/bootstrap.inc.php';
 
 //echo menu();
+$url_sample = u('/spells');
+$url = new URL($url_sample);
+echo $url_sample . '<br>';
+echo $url->getPath();
+echo htmlwrap('pre', print_r($url, TRUE));
+die();
 
 // Retrieve body.
 $url = new URL();
