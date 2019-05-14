@@ -13,10 +13,7 @@ function classList()
   $template = new ListPageTemplate('Class');
 
   // Operations.
-  $attr = array(
-    'href' => 'class',
-  );
-  $template->addOperation(htmlWrap('a', 'New Class', $attr));
+  $template->addOperation(a('New Class', '/class'));
 
   if ($page > 1)
   {

@@ -27,7 +27,16 @@ class SQLite extends Database
     $sql .= 'SELECT';
     foreach ($query->getFields() as $alias => $details)
     {
-      $sql .= ' ' . self::structureEscape($details['table_alias']) . '.' . self::structureEscape($details['name']) . ' AS ' . self::structureEscape($alias) . ',';
+      if ($details['format'] === 'bypass')
+      {
+        $sql .= ' ' . $details['name'];
+      }
+      else
+      {
+        $sql .= ' ' . self::structureEscape($details['table_alias']) . '.' . self::structureEscape($details['name']);
+      }
+
+      $sql .= ' AS ' . self::structureEscape($alias) . ',';
     }
     $sql = trim($sql, ',');
 
@@ -59,6 +68,10 @@ class SQLite extends Database
       $sql .= ' OFFSET ' . (($query->getPageSize() * $query->getPage()) - $query->getPageSize());
     }
 
+    if ($query->getDebug())
+    {
+      die($sql);
+    }
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
     return $prepared_statement->fetchAll(PDO::FETCH_ASSOC);

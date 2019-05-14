@@ -148,7 +148,11 @@ function getSourceList()
   GLOBAL $db;
 
   $query = new SelectQuery('sources');
-  $query->addField('id')->addField($db->concatenate('code', $db->literal(' - '), 'name'), 'value');
+  $query->addField('id');
+  $query->addFieldBypass($db->concatenate(
+    $db->structureEscape('sources') . '.' . $db->structureEscape('code'),
+    $db->literal(' - '),
+    $db->structureEscape('sources') . '.' . $db->structureEscape('name')), 'value');
 
   return $db->selectList($query);
 }

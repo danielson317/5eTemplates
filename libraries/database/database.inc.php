@@ -94,6 +94,7 @@ abstract class Query
   protected $conditions = array();
   protected $condition_groups = array();
   protected $values = array();
+  protected $debug = FALSE;
 
   /**
    * @param string $table_name
@@ -185,6 +186,16 @@ abstract class Query
   function addValue($placeholder, $value)
   {
     $this->values[$placeholder] = $value;
+  }
+
+  function setDebug($debug = TRUE)
+  {
+    $this->debug = $debug;
+  }
+
+  function getDebug()
+  {
+    return $this->debug;
   }
 }
 

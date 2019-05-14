@@ -93,13 +93,7 @@ function getClass($class_id)
   $query->addField('source_id');
   $query->addConditionSimple('id', $class_id);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  return $db->selectObject($query);
 }
 
 /**
