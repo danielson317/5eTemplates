@@ -9,11 +9,26 @@ if (!file_exists($platform_path))
 }
 include $platform_path;
 
+/****************
+ * Libraries.
+ ****************/
+
 include ROOT_PATH . '/libraries/global.inc.php';
 include ROOT_PATH . '/libraries/database/database.inc.php';
 include ROOT_PATH . '/libraries/database/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
 include ROOT_PATH . '/libraries/template.inc.php';
+
+include ROOT_PATH . '/libraries/session/session.inc.php';
+include ROOT_PATH . '/libraries/session/session.db.php';
+
+include ROOT_PATH . '/libraries/user/user.inc.php';
+include ROOT_PATH . '/libraries/user/user.db.php';
+include ROOT_PATH . '/libraries/user/user.pg.php';
+
+/****************
+ * Modules.
+ ****************/
 
 include ROOT_PATH . '/modules/attributes/attributes.db.php';
 include ROOT_PATH . '/modules/attributes/attributes.pg.php';
@@ -39,5 +54,3 @@ include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';
 include ROOT_PATH . '/modules/spell/spell.pg.php';
 
-GLOBAL $db;
-$db = new SQLite(DB_PATH);

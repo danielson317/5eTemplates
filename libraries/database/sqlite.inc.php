@@ -6,16 +6,6 @@ class SQLite extends Database
 
   function __construct($db_path, $username = '', $password = '')
   {
-    if (!file_exists($db_path))
-    {
-      die('No such file: ' . $db_path);
-    }
-
-    if (!is_writable($db_path))
-    {
-      die($db_path . ' is not writable.');
-    }
-
     $opt = array(
       PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
       PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -48,12 +38,6 @@ class SQLite extends Database
     // Order by.
     if ($query->getOrders())
     {
-//      $sql .= ' ORDER BY';
-//      foreach ($query->getOrders() as $alias => $dir)
-//      {
-//        $sql .= ' ' . $alias . ' ' . $dir . ',';
-//      }
-
       $sql .= ' ORDER BY';
       foreach ($query->getOrders() as $order)
       {
@@ -62,7 +46,6 @@ class SQLite extends Database
       }
       $sql = trim($sql, ',');
     }
-//    $sql = trim($sql, ',');
 
     // Pager
     if ($query->getPage())
@@ -82,14 +65,23 @@ class SQLite extends Database
     $sql .= 'INSERT INTO '  . key($query->getTables()) . ' (';
     foreach ($query->getFields() as $name => $field)
     {
-      $sql .= ' ' . $name . ',';
+      $sql .= ' ' . self::structureEscape($name) . ',';
     }
     $sql = trim($sql, ',');
 
     $sql .= ') VALUES (';
     foreach ($query->getFields() as $name => $field)
     {
-      $placeholder = ':' . $field['table_alias'] . '_' . $field['field_alias'];
+      $placeholder = $placeholder_base = self::PLACEHOLDER_TOKEN . $field['table_alias'] . '_' . $field['field_alias'];
+
+      $values = $query->getValues();
+      $count = 1;
+      while (array_key_exists($placeholder, $values))
+      {
+        $placeholder = $placeholder_base . '_' . $count;
+        $count++;
+      }
+
       $sql .= ' ' . $placeholder . ',';
       $query->addValue($placeholder, $field['value']);
     }
@@ -108,8 +100,17 @@ class SQLite extends Database
     $sql .= 'UPDATE '  . self::structureEscape(key($query->getTables())) . ' SET';
     foreach ($query->getFields() as $name => $field)
     {
-      $placeholder = ':' . $field['table_alias'] . '_' . $field['field_alias'];
-      $sql .= ' ' . $name . ' = ' . $placeholder . ',';
+      $placeholder = $placeholder_base = self::PLACEHOLDER_TOKEN . $field['table_alias'] . '_' . $field['field_alias'];
+
+      $values = $query->getValues();
+      $count = 1;
+      while (array_key_exists($placeholder, $values))
+      {
+        $placeholder = $placeholder_base . '_' . $count;
+        $count++;
+      }
+
+      $sql .= ' ' . self::structureEscape($name) . ' = ' . $placeholder . ',';
       $query->addValue($placeholder, $field['value']);
     }
     $sql = trim($sql, ',');
@@ -153,11 +154,13 @@ class SQLite extends Database
     $key_count = count($primary_key);
 
     $sql = '';
-    $sql .= 'CREATE TABLE `'  . key($query->getTables()) . '` (';
+    $sql .= 'CREATE TABLE '  . self::structureEscape(key($query->getTables())) . ' (';
 
     foreach ($query->getFields() as $name => $value)
     {
-      $sql .= ' `' . $name . '` ' . $value['type'];
+      assert(self::isValidDataTypes($value['type']), 'Unsupported type');
+      $sql .= ' ' . self::structureEscape($name) . ' ' . $value['type'];
+
       foreach ($value['flags'] as $flag)
       {
         if ($flag == 'N')
@@ -189,7 +192,7 @@ class SQLite extends Database
       $sql .= ' PRIMARY KEY(';
       foreach($primary_key as $key)
       {
-        $sql .= '`' . $key . '` ' . ', ';
+        $sql .= self::structureEscape($key) . ', ';
       }
       $sql = trim($sql, ', ');
       $sql .= ')';
@@ -327,7 +330,6 @@ class SQLite extends Database
         $placeholder = $placeholder_base . '_' . $count;
         $count++;
       }
-
       $sql .= ' ' . $placeholder;
       $query->addValue($placeholder, $condition->getValue());
     }
@@ -433,5 +435,17 @@ class SQLite extends Database
   {
     $string = str_replace('"', '""', $string);
     return '"' . $string . '"';
+  }
+
+  function isValidDataTypes($type)
+  {
+    $list = array(
+      'integer',
+      'text',
+      'real',
+      'blob',
+    );
+
+    return in_array(strtolower($type), $list);
   }
 }

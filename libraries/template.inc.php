@@ -14,6 +14,7 @@ class HTMLTemplate
   protected $title = '';
   protected $css_file_paths = array();
   protected $js_file_paths = array();
+  protected $messages = array();
   protected $body_attr = array();
   protected $body = '';
 
@@ -27,6 +28,12 @@ class HTMLTemplate
 
   function __toString()
   {
+    if (isset($_SESSION) && isset($_SESSION['messages']))
+    {
+      $this->messages = $_SESSION['messages'];
+      $_SESSION = array();
+    }
+
     extract(get_object_vars($this));
     ob_start();
 
@@ -68,6 +75,7 @@ class ListPageTemplate extends HTMLTemplate
 {
   protected $operations = '';
   protected $list = '';
+  protected $menu = '';
 
   function __construct($title = 'List')
   {
@@ -75,6 +83,7 @@ class ListPageTemplate extends HTMLTemplate
 
     $this->setTitle($title);
     $this->setBodyAttr(array('id' => stringToAttr($title)));
+    $this->menu = menu();
   }
 
   function __toString()
@@ -86,7 +95,7 @@ class ListPageTemplate extends HTMLTemplate
     include ROOT_PATH . '/themes/default/templates/list.tpl.php';
 
     $body = ob_get_clean();
-    $this->setBody(menu() . $body);
+    $this->setBody($this->menu . $body);
 
     // Wrapper.
     return parent::__toString();
@@ -105,6 +114,14 @@ class ListPageTemplate extends HTMLTemplate
   function setList($list)
   {
     $this->list = $list;
+  }
+
+  /**
+   * @param string $menu - html of the menu.
+   */
+  function setMenu($menu)
+  {
+    $this->menu = $menu;
   }
 }
 

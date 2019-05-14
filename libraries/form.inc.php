@@ -235,6 +235,34 @@ class FieldText extends Field
   }
 }
 
+class FieldPassword extends Field
+{
+  function __toString()
+  {
+    $output = '';
+
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
+
+    // Input.
+    $attr = $this->attr;
+//    $attr['id'] = $this->id;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'password';
+    if ($this->value)
+    {
+      $attr['value'] = $this->value;
+    }
+    $output .= htmlSolo('input', $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'text', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+}
+
 class FieldNumber extends Field
 {
   function __toString()

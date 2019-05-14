@@ -1,13 +1,42 @@
 <?php
 include 'libraries/bootstrap.inc.php';
 
-//echo menu();
+// Database.
+if (!file_exists(DB_PATH))
+{
+  die('Database file does not exist. Visit /install.php to create a new one.');
+}
+if (!is_writable(dirname(DB_PATH)))
+{
+  die('Database file is not writable. Edit the file permission to give apache read/write access.');
+}
+GLOBAL $db;
+$db = new SQLite(DB_PATH);
+
+// Path.
+GLOBAL $url;
+$url = new URL();
+$path = $url->getPath();
+
+// Login.
+session_name('dphdnd');
+session_start();
+
+GLOBAL $logged_in_user;
+if (!$logged_in_user && $path !== 'unknown')
+{
+  $path = 'login';
+}
 
 // Retrieve body.
-$url = new URL();
 $function = getRegistry($url->getPath());
 echo $function();
 
+/******************************************************************************
+ *
+ * Core functions.
+ *
+ ******************************************************************************/
 
 /**
  * @param bool|FALSE $path
@@ -16,10 +45,15 @@ echo $function();
 function getRegistry($path = FALSE)
 {
   $registry = array(
+    // Global.
     '/' => 'home',
     'unknown' => 'unknown',
+
+    // Ajax.
     'ajax/subclass' => 'subclassAjax',
     'ajax/subrace' => 'subraceAjax',
+
+    // Modules.
     'attribute' => 'attributeUpsertForm',
     'attributes' => 'attributeList',
     'character' => 'characterUpsertForm',
@@ -63,6 +97,12 @@ function getRegistry($path = FALSE)
     'subraces' => 'subraceList',
     'subclass' => 'subclassUpsertForm',
     'subclasses' => 'subclassList',
+
+    // Users.
+    'user' => 'userUpsertForm',
+    'users' => 'userListPage',
+    'login' => 'userLoginForm',
+    'logout' => 'userLogout',
   );
 
   if ($path)
@@ -116,6 +156,14 @@ function menu()
   $submenu->addListItem(htmlWrap('a', 'Players', array('href' => '/players')));
   $output .= $submenu;
 
+  // Users.
+  GLOBAL $logged_in_user;
+  $output .= htmlWrap('a', $logged_in_user['username'], array('href', '/user', 'query' => array('user_id', $logged_in_user['id'])));
+  $submenu = new ListTemplate('ul');
+  $submenu->addListItem(htmlWrap('a', 'Users', array('href' => '/users')));
+  $output .= $submenu;
+
+  // Menu wrapper.
   $attr = array('id' => 'menu', 'class' => array('menu'));
   $output = htmlWrap('div', $output, $attr);
   return $output;
