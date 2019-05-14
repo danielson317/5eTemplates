@@ -121,46 +121,46 @@ function menu()
   $output = '';
 
   // Characters
-  $output .= htmlWrap('a', 'Characters', array('href' => '/characters'));
+  $output .= a('Characters', '/characters');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(htmlWrap('a', 'Attributes', array('href' => '/attributes')));
-  $submenu->addListItem(htmlWrap('a', 'Classes', array('href' => '/classes')));
-  $submenu->addListItem(htmlWrap('a', 'Languages', array('href' => '/languages')));
-  $submenu->addListItem(htmlWrap('a', 'Races', array('href' => '/races')));
-  $submenu->addListItem(htmlWrap('a', 'Scripts', array('href' => '/scripts')));
-  $submenu->addListItem(htmlWrap('a', 'Skills', array('href' => '/skills')));
+  $submenu->addListItem(a('Attributes', '/attributes'));
+  $submenu->addListItem(a('Classes', '/classes'));
+  $submenu->addListItem(a('Languages', '/languages'));
+  $submenu->addListItem(a('Races', '/races'));
+  $submenu->addListItem(a('Scripts', '/scripts'));
+  $submenu->addListItem(a('Skills', '/skills'));
   $output .= $submenu;
 
   // Items.
-  $output .= htmlWrap('a', 'Items', array('href' => '/items'));
+  $output .= a('Items', '/items');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(htmlWrap('a', 'Damage Types', array('href' => '/damage-types')));
-  $submenu->addListItem(htmlWrap('a', 'Item Types', array('href' => '/item-types')));
-  $submenu->addListItem(htmlWrap('a', 'Properties', array('href' => '/properties')));
-  $submenu->addListItem(htmlWrap('a', 'Rarities', array('href' => '/rarities')));
+  $submenu->addListItem(a('Damage Types', '/damage-types'));
+  $submenu->addListItem(a('Item Types', '/item-types'));
+  $submenu->addListItem(a('Properties', '/properties'));
+  $submenu->addListItem(a('Rarities', '/rarities'));
   $output .= $submenu;
 
   // Monsters.
-  $output .= htmlWrap('a', 'Monsters', array('href' => '/monsters'));
+  $output .= a('Monsters', '/monsters');
 
   // Spells.
-  $output .= htmlWrap('a', 'Spells', array('href' => '/spells'));
+  $output .= a('Spells', '/spells');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(htmlWrap('a', 'Ranges', array('href' => '/ranges')));
+  $submenu->addListItem(a('Ranges', '/ranges'));
   $output .= $submenu;
 
   // Other.
-  $output .= htmlWrap('a', 'Other', array('href' => '/players'));
+  $output .= a('Other', '/players');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(htmlWrap('a', 'Sources', array('href' => '/sources')));
-  $submenu->addListItem(htmlWrap('a', 'Players', array('href' => '/players')));
+  $submenu->addListItem(a('Sources', '/sources'));
+  $submenu->addListItem(a('Players', '/players'));
   $output .= $submenu;
 
   // Users.
   GLOBAL $logged_in_user;
-  $output .= htmlWrap('a', $logged_in_user['username'], array('href', '/user', 'query' => array('user_id', $logged_in_user['id'])));
+  $output .= a(sanitize($logged_in_user['username']), '/user', array('query' => array('user_id', $logged_in_user['id'])));
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(htmlWrap('a', 'Users', array('href' => '/users')));
+  $submenu->addListItem(a('Users', '/users'));
   $output .= $submenu;
 
   // Menu wrapper.

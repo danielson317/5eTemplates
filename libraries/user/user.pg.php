@@ -56,12 +56,12 @@ function userListPage()
   {
     $row = array();
     $row[] = $user['id'];
-    $row[] = htmlWrap('a', sanitize($user['username']), array('href' => '/user?user_id=' . $user['id']));
+    $row[] =a(sanitize($user['username']), '/user', array('query' => array('user_id' => $user['id'])));
     $row[] = sanitize($user['email']);
     $table->addRow($row);
   }
 
-  $template->setList(htmlWrap('a', 'New User', array('href' => '/user')) . $table);
+  $template->setList(a('New User', '/user') . $table);
 
   return $template;
 }

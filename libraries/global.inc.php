@@ -56,12 +56,39 @@ class URL
     {
       $url = $_SERVER['REQUEST_URI'];
     }
-
+    
+    if (FALSE)
+	 {
+  		$url = urldecode($this->query['q']);
+  		$this->__construct($url);
+	 }	
     // Home path.
-    if ($url == '/')
-    {
+    if ($url === '/')
+    {     
       $this->path = '/';
       return;
+    }
+    elseif (strpos($url, '/5eTemplates/index.php') === 0)
+    {
+      $end = strpos($url, '?');
+      if ($end === FALSE)
+      {
+        $this->path = '/';
+        return;
+      }
+
+      $start = $end + 1;
+      $query = substr($url, $start);
+      $query = explode('&', $query);
+      $this->path = '/';
+      foreach ($query as $parameter)
+      {
+        $parts = explode('=', $parameter);
+        if ($parts[0] === 'q')
+        {
+          $url = urldecode($parts[1]);
+        }
+      }    
     }
 
     $start = strpos($url, '/') + 1;
@@ -386,3 +413,41 @@ function getDiceList()
     '100' => 'd100'
   );
 }
+
+function u($path, $attr = array())
+{
+  if (!CLEAN_URLS)
+  {
+    $attr['query']['q'] = $path;
+    $path = '/5eTemplates/index.php';
+  }
+  
+  $url = $path;
+  
+  $first = TRUE;
+  foreach ($attr['query'] as $name => $value)
+  {
+    if ($first)
+    {
+    $url .= '?';
+    $first = FALSE;
+    }
+    else
+    {
+      $url .= '&';
+    }
+    
+    $url .= $name . '=' . urlencode($value);
+  }
+  return $url;
+}
+
+function a($name, $path, $attr = array())
+{ 
+  $attr['href'] = u($path, $attr);
+  return htmlWrap('a', $name, $attr);
+}
+
+
+
+
