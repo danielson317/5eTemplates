@@ -35,25 +35,55 @@ class URL
     {
       $url = $_SERVER['REQUEST_URI'];
     }
-
+    
+    if (FALSE)
+	 {
+  		$url = urldecode($this->query['q']);
+  		$this->__construct($url);
+	 }	
+die($url);
     // Home path.
     if ($url === '/')
-    {
+    {     
       $this->path = '/';
       return;
     }
-
-    $start = strpos($url, '/') + 1;
-    $end = strpos($url, '?');
-
-    // No query string. Only the path is defined.
-    if ($end === FALSE)
+    elseif (strpos($url, '/5eTemplates/index.php') === 0)
     {
-      $this->path = substr($url, $start);
-      return;
-    }
-    $this->path = substr($url, $start, $end - 1);
+      $end = strpos($url, '?');
+      if ($end === FALSE)
+      {
+        $this->path = '/';
+        return;
+      }
 
+      $start = $end + 1;
+      $query = substr($url, $start);
+      die($query);
+      $query = explode('&', $query);
+      $this->path = '/';
+      foreach ($query as $parameter)
+      {
+        $parts = explode('=', $parameter);
+        if ($parts[0] === 'q')
+        {
+          $this->path = urldecode($parts[1]);
+        }
+      }    
+    }
+    else
+    {
+      $start = strpos($url, '/') + 1;
+      $end = strpos($url, '?');
+      // No query string. Only the path is defined.
+      if ($end === FALSE)
+      {
+        $this->path = substr($url, $start);
+        return;
+      }
+      $this->path = substr($url, $start, $end - 1);
+    }
+     
     // Build the query string.
     $query = substr($url, $end + 1);
     $query = explode('&', $query);
@@ -62,11 +92,8 @@ class URL
       $parts = explode('=', $parameter);
       $this->query[$parts[0]] = isset($parts[1]) ? urldecode($parts[1]) : FALSE;
     }
-    
-	if ($this->path === 'index.php' && array_key_exists('q', $this->query))
-	{
-  		$this->path = urldecode($this->query['q']);
-	}
+    //echo $url;
+    //debugPrint($this, 'this', 'die');
   }
 
   function getPath()
@@ -179,7 +206,7 @@ function u($path, $attr = array())
   if ($_SERVER['SERVER_SOFTWARE'] != 'Apache')
   {
     $attr['query']['q'] = $path;
-    $path = '/index.php';
+    $path = '/5eTemplates/index.php';
   }
   
   $url = $path;
@@ -204,8 +231,8 @@ function u($path, $attr = array())
 
 function a($name, $path, $attr = array())
 { 
-  $attr['href'] = $path;
-  return htmlWrap('a', u($path, $attr), $attr);
+  $attr['href'] = u($path, $attr);
+  return htmlWrap('a', $name, $attr);
 }
 
 

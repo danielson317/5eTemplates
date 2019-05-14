@@ -2,17 +2,22 @@
 include 'libraries/bootstrap.inc.php';
 
 //echo menu();
-$url_sample = u('/spells');
-$url = new URL($url_sample);
-echo $url_sample . '<br>';
-echo $url->getPath();
-echo htmlwrap('pre', print_r($url, TRUE));
-die();
+//$url_sample = u('/spells');
+//$url = new URL($url_sample);
+//echo $url_sample . '<br>';
+//echo $url->getPath();
+//echo htmlwrap('pre', print_r($url, TRUE));
+//die();
 
 // Retrieve body.
-$url = new URL();
+$url = new URL('5eTemplates\/index.php?q=characters');
+//echo '<pre>';
+//print_r($url);
+//die('</pre>');
 $function = getRegistry($url->getPath());
-echo $function();
+echo $url->getPath();
+echo $function;
+die();
 
 
 /**
@@ -87,7 +92,7 @@ function menu()
   $output = '';
 
   // Characters
-  $output .= htmlWrap('a', 'Characters', array('href' => '/characters'));
+  $output .= a('Characters', '/characters');//htmlWrap('a', 'Characters', array('href' => '/characters'));
   $submenu = new ListTemplate('ul');
   $submenu->addListItem(htmlWrap('a', 'Attributes', array('href' => '/attributes')));
   $submenu->addListItem(htmlWrap('a', 'Classes', array('href' => '/classes')));
