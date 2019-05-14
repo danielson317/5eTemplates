@@ -86,12 +86,11 @@ function createAttribute($attribute)
   GLOBAL $db;
 
   $query = new InsertQuery('attributes');
-  $query->addField('name');
-  $query->addField('code');
-  $query->addField('description');
-  $args = $db->buildArgs($attribute);
+  $query->addField('name', $attribute['name']);
+  $query->addField('code', $attribute['code']);
+  $query->addField('description', $attribute['description']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
 function updateAttribute($attribute)
@@ -99,9 +98,9 @@ function updateAttribute($attribute)
   GLOBAL $db;
 
   $query = new UpdateQuery('attributes');
-  $query->addField('name');
-  $query->addField('code');
-  $query->addField('description');
+  $query->addField('name', $attribute['name']);
+  $query->addField('code', $attribute['code']);
+  $query->addField('description', $attribute['description']);
   $query->addConditionSimple('id', $attribute['id']);
 
   $db->update($query);
@@ -179,13 +178,12 @@ function createSkill($skill)
   GLOBAL $db;
 
   $query = new InsertQuery('skills');
-  $query->addField('name');
-  $query->addField('code');
-  $query->addField('description');
-  $query->addField('attribute_id');
-  $args = $db->buildArgs($skill);
+  $query->addField('name', $skill['name']);
+  $query->addField('code', $skill['code']);
+  $query->addField('description', $skill['description']);
+  $query->addField('attribute_id', $skill['attribute_id']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
 function updateSkill($skill)
@@ -193,10 +191,10 @@ function updateSkill($skill)
   GLOBAL $db;
 
   $query = new UpdateQuery('skills');
-  $query->addField('name');
-  $query->addField('code');
-  $query->addField('description');
-  $query->addField('attribute_id');
+  $query->addField('name', $skill['name']);
+  $query->addField('code', $skill['code']);
+  $query->addField('description', $skill['description']);
+  $query->addField('attribute_id', $skill['attribute_id']);
   $query->addConditionSimple('id', $skill['id']);
 
   $db->update($query);

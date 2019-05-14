@@ -84,24 +84,24 @@ function getItemPager($page = 1)
   GLOBAL $db;
 
   $query = new SelectQuery('items');
-  $query->addField('id')
-    ->addField('name')
-    ->addField('item_type_id')
-    ->addField('value')
-    ->addField('attunement')
-    ->addField('description');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('item_type_id');
+  $query->addField('value');
+  $query->addField('attunement');
+  $query->addField('description');
   $query->addOrderSimple('id');
   $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
-function getItem($id)
+/**
+ * @param int $item_id
+ *
+ * @return array|false
+ */
+function getItem($item_id)
 {
   GLOBAL $db;
 
@@ -119,14 +119,8 @@ function getItem($id)
   $query->addField('description');
   $query->addField('source_id');
   $query->addField('source_location');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addConditionSimple('id', $item_id);
+  return $db->selectObject($query);
 }
 
 function createItem($item)
@@ -172,9 +166,16 @@ function updateItem($item)
   $db->update($query);
 }
 
-function deleteItem($id)
+/**
+ * @param int $item_id
+ */
+function deleteItem($item_id)
 {
+  GLOBAL $db;
 
+  $query = new DeleteQuery('items');
+  $query->addConditionSimple('id', $item_id);
+  $db->delete($query);
 }
 
 /******************************************************************************
@@ -183,6 +184,11 @@ function deleteItem($id)
  *
  ******************************************************************************/
 
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
 function getItemTypePager($page = 1)
 {
   GLOBAL $db;
@@ -194,14 +200,12 @@ function getItemTypePager($page = 1)
   $query->addOrderSimple('id');
   $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getItemTypeList()
 {
   GLOBAL $db;
@@ -213,7 +217,12 @@ function getItemTypeList()
 }
 
 
-function getItemType($id)
+/**
+ * @param $item_type_id
+ *
+ * @return array|false
+ */
+function getItemType($item_type_id)
 {
   GLOBAL $db;
 
@@ -221,45 +230,49 @@ function getItemType($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addConditionSimple('id', $item_type_id);
+  return $db->selectObject($query);
 }
 
-function createItemType($item)
+/**
+ * @param array $item_type
+ *
+ * @return int
+ */
+function createItemType($item_type)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('item_types');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
+  $query->addField('name', $item_type['name']);
+  $query->addField('description', $item_type['description']);
 
   return $db->insert($query);
 }
 
-function updateItemType($item)
+/**
+ * @param array $item_type
+ */
+function updateItemType($item_type)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('item_types');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
-  $query->addConditionSimple('id', $item['id']);
+  $query->addField('name', $item_type['name']);
+  $query->addField('description', $item_type['description']);
+  $query->addConditionSimple('id', $item_type['id']);
 
   $db->update($query);
 }
 
-function deleteItemType($id)
+/**
+ * @param $item_type_id
+ */
+function deleteItemType($item_type_id)
 {
   GLOBAL $db;
   $query = new DeleteQuery('item_types');
-  $query->addConditionSimple('id', $id);
-
+  $query->addConditionSimple('id', $item_type_id);
   $db->delete($query);
 }
 
@@ -269,6 +282,11 @@ function deleteItemType($id)
  *
  ******************************************************************************/
 
+/**
+ * @param int $page
+ *
+ * @return array
+ */
 function getRarityPager($page = 1)
 {
   GLOBAL $db;
@@ -280,14 +298,12 @@ function getRarityPager($page = 1)
   $query->addOrderSimple('id');
   $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getRarityList()
 {
   GLOBAL $db;
@@ -298,8 +314,12 @@ function getRarityList()
   return $db->selectList($query);
 }
 
-
-function getRarity($id)
+/**
+ * @param int $rarity_id
+ *
+ * @return array|false
+ */
+function getRarity($rarity_id)
 {
   GLOBAL $db;
 
@@ -307,44 +327,49 @@ function getRarity($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addConditionSimple('id', $rarity_id);
+  return $db->selectObject($query);
 }
 
-function createRarity($item)
+/**
+ * @param array $rarity
+ *
+ * @return int
+ */
+function createRarity($rarity)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('rarities');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
+  $query->addField('name', $rarity['name']);
+  $query->addField('description', $rarity['description']);
 
   return $db->insert($query);
 }
 
-function updateRarity($item)
+/**
+ * @param array $rarity
+ */
+function updateRarity($rarity)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('rarities');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
-  $query->addConditionSimple('id', $item['id']);
+  $query->addField('name', $rarity['name']);
+  $query->addField('description', $rarity['description']);
+  $query->addConditionSimple('id', $rarity['id']);
 
   $db->update($query);
 }
 
-function deleteRarity($id)
+/**
+ * @param int $rarity_id
+ */
+function deleteRarity($rarity_id)
 {
   GLOBAL $db;
   $query = new DeleteQuery('rarities');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $rarity_id);
 
   $db->delete($query);
 }
@@ -355,6 +380,11 @@ function deleteRarity($id)
  *
  ******************************************************************************/
 
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
 function getDamageTypePager($page = 1)
 {
   GLOBAL $db;
@@ -367,14 +397,12 @@ function getDamageTypePager($page = 1)
   $query->addOrderSimple('name');
   $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getDamageTypeList()
 {
   GLOBAL $db;
@@ -385,6 +413,9 @@ function getDamageTypeList()
   return $db->selectList($query);
 }
 
+/**
+ * @return array
+ */
 function getDamageTypeCodeList()
 {
   GLOBAL $db;
@@ -395,7 +426,12 @@ function getDamageTypeCodeList()
   return $db->selectList($query);
 }
 
-function getDamageType($id)
+/**
+ * @param int $damage_type_id
+ *
+ * @return array|false
+ */
+function getDamageType($damage_type_id)
 {
   GLOBAL $db;
 
@@ -404,16 +440,15 @@ function getDamageType($id)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addConditionSimple('id', $damage_type_id);
+  return $db->selectObject($query);
 }
 
+/**
+ * @param array $damage_type
+ *
+ * @return int
+ */
 function createDamageType($damage_type)
 {
   GLOBAL $db;
@@ -426,6 +461,9 @@ function createDamageType($damage_type)
   return $db->insert($query);
 }
 
+/**
+ * @param array $damage_type
+ */
 function updateDamageType($damage_type)
 {
   GLOBAL $db;
@@ -439,11 +477,14 @@ function updateDamageType($damage_type)
   $db->update($query);
 }
 
-function deleteDamageType($id)
+/**
+ * @param int $damage_type_id
+ */
+function deleteDamageType($damage_type_id)
 {
   GLOBAL $db;
   $query = new DeleteQuery('damage_types');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $damage_type_id);
 
   $db->delete($query);
 }
@@ -454,6 +495,11 @@ function deleteDamageType($id)
  *
  ******************************************************************************/
 
+/**
+ * @param int $page
+ *
+ * @return array
+ */
 function getPropertyPager($page = 1)
 {
   GLOBAL $db;
@@ -465,14 +511,12 @@ function getPropertyPager($page = 1)
   $query->addOrderSimple('id');
   $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getPropertyList()
 {
   GLOBAL $db;
@@ -483,8 +527,12 @@ function getPropertyList()
   return $db->selectList($query);
 }
 
-
-function getProperty($id)
+/**
+ * @param int $property_id
+ *
+ * @return array|false
+ */
+function getProperty($property_id)
 {
   GLOBAL $db;
 
@@ -492,45 +540,50 @@ function getProperty($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('description');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addConditionSimple('id', $property_id);
+
+  return $db->selectObject($query);
 }
 
-function createProperty($item)
+/**
+ * @param array $property
+ *
+ * @return int
+ */
+function createProperty($property)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('properties');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
+  $query->addField('name', $property['name']);
+  $query->addField('description', $property['description']);
 
   return $db->insert($query);
 }
 
-function updateProperty($item)
+/**
+ * @param array $property
+ */
+function updateProperty($property)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('properties');
-  $query->addField('name', $item['name']);
-  $query->addField('description', $item['description']);
-  $query->addConditionSimple('id', $item['id']);
+  $query->addField('name', $property['name']);
+  $query->addField('description', $property['description']);
+  $query->addConditionSimple('id', $property['id']);
 
   $db->update($query);
 }
 
-function deleteProperty($id)
+/**
+ * @param int $property_id
+ */
+function deleteProperty($property_id)
 {
   GLOBAL $db;
   $query = new DeleteQuery('properties');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $property_id);
 
   $db->delete($query);
 }
-

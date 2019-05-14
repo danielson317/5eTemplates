@@ -2,7 +2,7 @@
 
 /******************************************************************************
  *
- *  Monster.
+ *  Install.
  *
  ******************************************************************************/
 function installMonster()
@@ -121,79 +121,90 @@ function installMonster()
 
 }
 
+/******************************************************************************
+ *
+ *  Monster.
+ *
+ ******************************************************************************/
+
+/**
+ * @param int $page
+ *
+ * @return array|bool
+ */
 function getMonsterPager($page = 1)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('monsters');
-  $query->addField('id')
-    ->addField('name')
-    ->addField('monster_type_id')
-    ->addField('value')
-    ->addField('magic')
-    ->addField('attunement')
-    ->addField('description');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('monster_type_id');
+  $query->addField('value');
+  $query->addField('magic');
+  $query->addField('attunement');
+  $query->addField('description');
   $query->addOrderSimple('id');
-  //  $query->addOrder('monster_type_id');
-  //  $query->addOrder('name');
-  //  $query->addPager($page);
+  $query->addPager($page);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
-function getMonster($id)
+/**
+ * @param int $monster_id
+ *
+ * @return bool|mixed
+ */
+function getMonster($monster_id)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('monsters');
-  $query->addField('id')
-    ->addField('name')
-    ->addField('monster_type_id')
-    ->addField('value')
-    ->addField('magic')
-    ->addField('attunement')
-    ->addField('description');
-  $query->addConditionSimple('id', $id);
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('monster_type_id');
+  $query->addField('value');
+  $query->addField('magic');
+  $query->addField('attunement');
+  $query->addField('description');
+  $query->addConditionSimple('id', $monster_id);
+  return $db->selectObject($query);
 }
 
+/**
+ * @param array $monster
+ *
+ * @return int
+ */
 function createMonster($monster)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('monsters');
-  $query->addField('name', $monster['name'])
-    ->addField('monster_type_id', $monster['monster_type_id'])
-    ->addField('value', $monster['value'])
-    ->addField('magic', $monster['magic'])
-    ->addField('attunement', $monster['attunement'])
-    ->addField('description', $monster['description']);
+  $query->addField('name', $monster['name']);
+  $query->addField('monster_type_id', $monster['monster_type_id']);
+  $query->addField('value', $monster['value']);
+  $query->addField('magic', $monster['magic']);
+  $query->addField('attunement', $monster['attunement']);
+  $query->addField('description', $monster['description']);
 
   return $db->insert($query);
 }
 
+/**
+ * @param $monster
+ */
 function updateMonster($monster)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('monsters');
-  $query->addField('name', $monster['name'])
-    ->addField('monster_type_id', $monster['monster_type_id'])
-    ->addField('value', $monster['value'])
-    ->addField('magic', $monster['magic'])
-    ->addField('attunement', $monster['attunement'])
-    ->addField('description', $monster['description']);
+  $query->addField('name', $monster['name']);
+  $query->addField('monster_type_id', $monster['monster_type_id']);
+  $query->addField('value', $monster['value']);
+  $query->addField('magic', $monster['magic']);
+  $query->addField('attunement', $monster['attunement']);
+  $query->addField('description', $monster['description']);
   $query->addConditionSimple('id', $monster['id']);
 
   $db->update($query);

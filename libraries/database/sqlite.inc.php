@@ -16,6 +16,11 @@ class SQLite extends Database
     $this->db = new PDO($connect_string, $username, $password, $opt);
   }
 
+  /**
+   * @param SelectQuery $query
+   *
+   * @return array|false
+   */
   function select(SelectQuery $query)
   {
     $sql  = '';
@@ -59,6 +64,11 @@ class SQLite extends Database
     return $prepared_statement->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  /**
+   * @param InsertQuery $query
+   *
+   * @return int
+   */
   function insert(InsertQuery $query)
   {
     $sql = '';

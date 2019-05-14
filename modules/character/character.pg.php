@@ -234,7 +234,7 @@ function characterUpsertForm()
 
   // Skills
   $skills = getSkillList();
-  $character_skills = getCharacterSkills($character_id);
+  $character_skills = getCharacterSkillList($character_id);
   $table = new TableTemplate();
   $table->setHeader(array('Skill', 'Prof', 'Mod'));
   foreach($character_skills as $character_skill)
@@ -260,7 +260,7 @@ function characterUpsertForm()
 
   // Languages
   $languages = getLanguageList();
-  $character_languages = getCharacterLanguages($character_id);
+  $character_languages = getCharacterLanguageList($character_id);
 
   $list = array();
   foreach($character_languages as $character_language)
@@ -717,7 +717,7 @@ function characterSkillUpsertForm()
   $character = getCharacter($character_id);
   $skill_id = getUrlID('skill_id');
   $skills = getSkillList();
-  $character_skills = getCharacterSkills($character_id);
+  $character_skills = getCharacterSkillList($character_id);
 
   $form = new Form('character_skill_form');
   if ($skill_id)
@@ -883,7 +883,7 @@ function characterLanguageUpsertForm()
   $character = getCharacter($character_id);
   $language_id = getUrlID('language_id');
   $languages = getlanguageList();
-  $character_languages = getCharacterlanguages($character_id);
+  $character_languages = getCharacterLanguageList($character_id);
 
   $form = new Form('character_language_form');
   if ($language_id)

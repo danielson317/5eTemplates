@@ -36,18 +36,23 @@ function installClass()
  *
  ******************************************************************************/
 
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
 function getClassPager($page = 1)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('classes');
-  $query->addField('id')
-        ->addField('name')
-        ->addField('hit_die')
-        ->addField('description')
-        ->addField('source_id')
-        ->addOrderSimple('name')
-        ->addPager($page);
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('hit_die');
+  $query->addField('description');
+  $query->addField('source_id');
+  $query->addOrderSimple('name');
+  $query->addPager($page);
 
   $results = $db->select($query);
 
@@ -68,7 +73,12 @@ function getClassList()
   return $db->selectList($query);
 }
 
-function getClass($id)
+/**
+ * @param int $class_id
+ *
+ * @return bool|mixed
+ */
+function getClass($class_id)
 {
   GLOBAL $db;
 
@@ -81,7 +91,7 @@ function getClass($id)
   $query->addField('stp2');
   $query->addField('subclass_name');
   $query->addField('source_id');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $class_id);
 
   $results = $db->select($query);
   if (!$results)
@@ -92,21 +102,25 @@ function getClass($id)
   return $result;
 }
 
+/**
+ * @param array $class
+ *
+ * @return bool|int|string
+ */
 function createClass($class)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('classes');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addField('hit_die');
-  $query->addField('stp1');
-  $query->addField('stp2');
-  $query->addField('subclass_name');
-  $query->addField('source_id');
-  $args = $db->buildArgs($class);
+  $query->addField('name', $class['name']);
+  $query->addField('description', $class['description']);
+  $query->addField('hit_die', $class['hit_die']);
+  $query->addField('stp1', $class['stp1']);
+  $query->addField('stp2', $class['stp2']);
+  $query->addField('subclass_name', $class['subclass_name']);
+  $query->addField('source_id', $class['source_id']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
 function updateClass($class)
@@ -114,13 +128,13 @@ function updateClass($class)
   GLOBAL $db;
 
   $query = new UpdateQuery('classes');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addField('hit_die');
-  $query->addField('stp1');
-  $query->addField('stp2');
-  $query->addField('subclass_name');
-  $query->addField('source_id');
+  $query->addField('name', $class['name']);
+  $query->addField('description', $class['description']);
+  $query->addField('hit_die', $class['hit_die']);
+  $query->addField('stp1', $class['stp1']);
+  $query->addField('stp2', $class['stp2']);
+  $query->addField('subclass_name', $class['subclass_name']);
+  $query->addField('source_id', $class['source_id']);
   $query->addConditionSimple('id', $class['id']);
 
   $db->update($query);
@@ -141,6 +155,12 @@ function deleteClass($id)
  *
  ******************************************************************************/
 
+/**
+ * @param int $class_id
+ * @param int $page
+ *
+ * @return array|bool
+ */
 function getSubclassPager($class_id, $page = 1)
 {
   GLOBAL $db;
@@ -160,22 +180,31 @@ function getSubclassPager($class_id, $page = 1)
   return $results;
 }
 
+/**
+ * @param int|bool $class_id - optional. Filter by given class if present.
+ *
+ * @return array
+ */
 function getSubclassList($class_id = FALSE)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('subclasses');
   $query->addField('id')->addField('name', 'value');
-  $args = array();
   if ($class_id)
   {
     $query->addConditionSimple('class_id', $class_id);
   }
 
-  return $db->selectList($query, $args);
+  return $db->selectList($query);
 }
 
-function getSubclass($id)
+/**
+ * @param int $sublcass_id
+ *
+ * @return array|FALSE
+ */
+function getSubclass($sublcass_id)
 {
   GLOBAL $db;
 
@@ -185,7 +214,7 @@ function getSubclass($id)
   $query->addField('name');
   $query->addField('description');
   $query->addField('source_id');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $sublcass_id);
 
   $results = $db->select($query);
   if (!$results)
@@ -196,38 +225,48 @@ function getSubclass($id)
   return $result;
 }
 
-function createSubclass($class)
+/**
+ * @param array $subclass
+ *
+ * @return int|false
+ */
+function createSubclass($subclass)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('subclasses');
-  $query->addField('class_id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addField('source_id');
-  $args = $db->buildArgs($class);
+  $query->addField('class_id', $subclass['class_id']);
+  $query->addField('name', $subclass['name']);
+  $query->addField('description', $subclass['description']);
+  $query->addField('source_id', $subclass['source_id']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
-function updateSubclass($class)
+/**
+ * @param array $subclass
+ */
+function updateSubclass($subclass)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('subclasses');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addField('source_id');
-  $query->addConditionSimple('id', $class['id']);
+  $query->addField('name', $subclass['name']);
+  $query->addField('description', $subclass['description']);
+  $query->addField('source_id', $subclass['source_id']);
+  $query->addConditionSimple('id', $subclass['id']);
 
   $db->update($query);
 }
 
-function deleteSubclass($id)
+/**
+ * @param int $subclass_id
+ */
+function deleteSubclass($subclass_id)
 {
   GLOBAL $db;
 
   $query = new DeleteQuery('subclasses');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $subclass_id);
   $db->delete($query);
 }

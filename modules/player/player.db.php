@@ -26,6 +26,12 @@ function installPlayer()
  *  Player.
  *
  ******************************************************************************/
+
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
 function getPlayerPager($page = 1)
 {
   GLOBAL $db;
@@ -35,15 +41,12 @@ function getPlayerPager($page = 1)
   $query->addField('name');
   $query->addPager($page);
 
-  $results = $db->select($query);
-
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getPlayerList()
 {
   GLOBAL $db;
@@ -54,52 +57,61 @@ function getPlayerList()
   return $db->selectList($query);
 }
 
-function getPlayer($id)
+/**
+ * @param $player_id
+ *
+ * @return array|false
+ */
+function getPlayer($player_id)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('players');
   $query->addField('id');
   $query->addField('name');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $player_id);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  return $db->selectObject($query);
 }
 
+/**
+ * @param array $player
+ *
+ * @return int
+ */
 function createPlayer($player)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('players');
-  $query->addField('name');
-  $args = $db->buildArgs($player);
+  $query->addField('name', $player['name']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
+/**
+ * @param array $player
+ */
 function updatePlayer($player)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('players');
-  $query->addField('name');
+  $query->addField('name', $player['name']);
   $query->addConditionSimple('id', $player['id']);
 
   $db->update($query);
 }
 
-function deletePlayer($id)
+/**
+ * @param int $player_id
+ */
+function deletePlayer($player_id)
 {
   GLOBAL $db;
 
   $query = new DeleteQuery('players');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $player_id);
 
   $db->delete($query);
 }
@@ -109,6 +121,12 @@ function deletePlayer($id)
  *  Sources.
  *
  ******************************************************************************/
+
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
 function getSourcePager($page = 1)
 {
   GLOBAL $db;
@@ -119,15 +137,12 @@ function getSourcePager($page = 1)
   $query->addField('code');
   $query->addPager($page);
 
-  $results = $db->select($query);
-
-  if (!$results)
-  {
-    return array();
-  }
-  return $results;
+  return $db->select($query);
 }
 
+/**
+ * @return array
+ */
 function getSourceList()
 {
   GLOBAL $db;
@@ -138,7 +153,12 @@ function getSourceList()
   return $db->selectList($query);
 }
 
-function getSource($id)
+/**
+ * @param $source_id
+ *
+ * @return array|FALSE
+ */
+function getSource($source_id)
 {
   GLOBAL $db;
 
@@ -146,47 +166,51 @@ function getSource($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('code');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $source_id);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  return $db->selectObject($query);
 }
 
+/**
+ * @param array $source
+ *
+ * @return int
+ */
 function createSource($source)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('sources');
-  $query->addField('name');
-  $query->addField('code');
-  $args = $db->buildArgs($source);
+  $query->addField('name', $source['name']);
+  $query->addField('code', $source['code']);
 
-  return $db->insert($query, $args);
+  return $db->insert($query);
 }
 
+/**
+ * @param $source
+ */
 function updateSource($source)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('sources');
-  $query->addField('name');
-  $query->addField('code');
+  $query->addField('name', $source['name']);
+  $query->addField('code', $source['code']);
   $query->addConditionSimple('id', $source['id']);
 
   $db->update($query);
 }
 
-function deleteSource($id)
+/**
+ * @param int $source_id
+ */
+function deleteSource($source_id)
 {
   GLOBAL $db;
 
   $query = new DeleteQuery('sources');
-  $query->addConditionSimple('id', $id);
+  $query->addConditionSimple('id', $source_id);
 
   $db->delete($query);
 }

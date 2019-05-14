@@ -425,19 +425,22 @@ function u($path, $attr = array())
   $url = $path;
   
   $first = TRUE;
-  foreach ($attr['query'] as $name => $value)
+  if (array_key_exists('query', $attr))
   {
-    if ($first)
+    foreach ($attr['query'] as $name => $value)
     {
-    $url .= '?';
-    $first = FALSE;
+      if ($first)
+      {
+        $url .= '?';
+        $first = FALSE;
+      }
+      else
+      {
+        $url .= '&';
+      }
+
+      $url .= $name . '=' . urlencode($value);
     }
-    else
-    {
-      $url .= '&';
-    }
-    
-    $url .= $name . '=' . urlencode($value);
   }
   return $url;
 }

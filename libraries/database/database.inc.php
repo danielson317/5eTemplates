@@ -33,7 +33,7 @@ abstract class Database
 
   /**
    * @param SelectQuery $query
-   * @return bool|array
+   * @return array|false
    */
   function selectObject(SelectQuery $query)
   {

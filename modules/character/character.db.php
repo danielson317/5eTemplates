@@ -149,22 +149,22 @@ function createCharacter($character)
   GLOBAL $db;
 
   $query = new InsertQuery('characters');
-  $query->addField('name');
-  $query->addField('race_id');
-  $query->addField('player_id');
-  $query->addField('background');
-  $query->addField('xp');
-  $query->addField('alignment');
-  $query->addField('hp');
-  $query->addField('pb');
-  $query->addField('speed');
-  $query->addField('personality');
-  $query->addField('ideals');
-  $query->addField('bonds');
-  $query->addField('flaws');
-  $query->addField('features');
+  $query->addField('name', $character['name']);
+  $query->addField('race_id', $character['race_id']);
+  $query->addField('player_id', $character['player_id']);
+  $query->addField('background', $character['background']);
+  $query->addField('xp', $character['xp']);
+  $query->addField('alignment', $character['alignment']);
+  $query->addField('hp', $character['hp']);
+  $query->addField('pb', $character['pb']);
+  $query->addField('speed', $character['speed']);
+  $query->addField('personality', $character['personality']);
+  $query->addField('ideals', $character['ideals']);
+  $query->addField('bonds', $character['bonds']);
+  $query->addField('flaws', $character['flaws']);
+  $query->addField('features', $character['features']);
 
-  return $db->insert($query, SQLite::buildArgs($character));
+  return $db->insert($query);
 }
 
 function updateCharacter($character)
@@ -172,20 +172,20 @@ function updateCharacter($character)
   GLOBAL $db;
 
   $query = new UpdateQuery('characters');
-  $query->addField('name');
-  $query->addField('race_id');
-  $query->addField('player_id');
-  $query->addField('background');
-  $query->addField('xp');
-  $query->addField('alignment');
-  $query->addField('hp');
-  $query->addField('pb');
-  $query->addField('speed');
-  $query->addField('personality');
-  $query->addField('ideals');
-  $query->addField('bonds');
-  $query->addField('flaws');
-  $query->addField('features');
+  $query->addField('name', $character['name']);
+  $query->addField('race_id', $character['race_id']);
+  $query->addField('player_id', $character['player_id']);
+  $query->addField('background', $character['background']);
+  $query->addField('xp', $character['xp']);
+  $query->addField('alignment', $character['alignment']);
+  $query->addField('hp', $character['hp']);
+  $query->addField('pb', $character['pb']);
+  $query->addField('speed', $character['speed']);
+  $query->addField('personality', $character['personality']);
+  $query->addField('ideals', $character['ideals']);
+  $query->addField('bonds', $character['bonds']);
+  $query->addField('flaws', $character['flaws']);
+  $query->addField('features', $character['features']);
 
   $query->addConditionSimple('id', $character['id']);
   $db->update($query);
@@ -242,11 +242,11 @@ function createCharacterClass($character_class)
   GLOBAL $db;
 
   $query = new InsertQuery('character_classes');
-  $query->addField('character_id');
-  $query->addField('class_id');
-  $query->addField('subclass_id');
-  $query->addField('level');
-  $db->insert($query, SQLite::buildArgs($character_class));
+  $query->addField('character_id', $character_class['character_id']);
+  $query->addField('class_id', $character_class['class_id']);
+  $query->addField('subclass_id', $character_class['subclass_id']);
+  $query->addField('level', $character_class['level']);
+  $db->insert($query);
 }
 
 function updateCharacterClass($character_class)
@@ -254,8 +254,8 @@ function updateCharacterClass($character_class)
   GLOBAL $db;
 
   $query = new UpdateQuery('character_classes');
-  $query->addField('subclass_id');
-  $query->addField('level');
+  $query->addField('subclass_id', $character_class['subclass_id']);
+  $query->addField('level', $character_class['level']);
   $query->addConditionSimple('character_id', $character_class['character_id']);
   $query->addConditionSimple('class_id', $character_class['class_id']);
   $db->update($query);
@@ -276,6 +276,11 @@ function deleteCharacterClass($character_class)
  *  Character Attributes.
  *
  ******************************************************************************/
+/**
+ * @param int $character_id
+ *
+ * @return array|bool
+ */
 function getCharacterAttributes($character_id)
 {
   GLOBAL $db;
@@ -297,6 +302,12 @@ function getCharacterAttributes($character_id)
   return $results;
 }
 
+/**
+ * @param int $character_id
+ * @param int $attribute_id
+ *
+ * @return array|mixed
+ */
 function getCharacterAttribute($character_id, $attribute_id)
 {
   GLOBAL $db;
@@ -320,34 +331,43 @@ function getCharacterAttribute($character_id, $attribute_id)
   return $result;
 }
 
+/**
+ * @param array $character_attribute
+ */
 function createCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('character_attributes');
-  $query->addField('character_id');
-  $query->addField('attribute_id');
-  $query->addField('score');
-  $query->addField('modifier');
-  $query->addField('proficiency');
-  $query->addField('saving_throw');
-  $db->insert($query, SQLite::buildArgs($character_attribute));
+  $query->addField('character_id', $character_attribute['character_id']);
+  $query->addField('attribute_id', $character_attribute['attribute_id']);
+  $query->addField('score', $character_attribute['score']);
+  $query->addField('modifier', $character_attribute['modifier']);
+  $query->addField('proficiency', $character_attribute['proficiency']);
+  $query->addField('saving_throw', $character_attribute['saving_throw']);
+  $db->insert($query);
 }
 
+/**
+ * @param array $character_attribute
+ */
 function updateCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('character_attributes');
-  $query->addField('score');
-  $query->addField('modifier');
-  $query->addField('proficiency');
-  $query->addField('saving_throw');
+  $query->addField('score', $character_attribute['score']);
+  $query->addField('modifier', $character_attribute['modifier']);
+  $query->addField('proficiency', $character_attribute['proficiency']);
+  $query->addField('saving_throw', $character_attribute['saving_throw']);
   $query->addConditionSimple('character_id', $character_attribute['character_id']);
   $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
   $db->update($query);
 }
 
+/**
+ * @param array $character_attribute
+ */
 function deleteCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
@@ -363,7 +383,13 @@ function deleteCharacterAttribute($character_attribute)
  *  Character Skills.
  *
  ******************************************************************************/
-function getCharacterSkills($character_id)
+
+/**
+ * @param int $character_id
+ *
+ * @return array|false
+ */
+function getCharacterSkillList($character_id)
 {
   GLOBAL $db;
 
@@ -382,6 +408,12 @@ function getCharacterSkills($character_id)
   return $results;
 }
 
+/**
+ * @param int $character_id
+ * @param int $skill_id
+ *
+ * @return array|mixed
+ */
 function getCharacterSkill($character_id, $skill_id)
 {
   GLOBAL $db;
@@ -403,30 +435,39 @@ function getCharacterSkill($character_id, $skill_id)
   return $result;
 }
 
-function createCharacterSkill($skill)
+/**
+ * @param array $character_skill
+ */
+function createCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('character_skills');
-  $query->addField('character_id');
-  $query->addField('skill_id');
-  $query->addField('proficiency');
-  $query->addField('modifier');
-  $db->insert($query, SQLite::buildArgs($skill));
+  $query->addField('character_id', $character_skill['character_id']);
+  $query->addField('skill_id', $character_skill['skill_id']);
+  $query->addField('proficiency', $character_skill['proficiency']);
+  $query->addField('modifier', $character_skill['modifier']);
+  $db->insert($query);
 }
 
+/**
+ * @param array $character_skill
+ */
 function updateCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
   $query = new UpdateQuery('character_skills');
-  $query->addField('proficiency');
-  $query->addField('modifier');
+  $query->addField('proficiency', $character_skill['proficiency']);
+  $query->addField('modifier', $character_skill['modifier']);
   $query->addConditionSimple('character_id', $character_skill['character_id']);
   $query->addConditionSimple('skill_id', $character_skill['skill_id']);
   $db->update($query);
 }
 
+/**
+ * @param array $character_skill
+ */
 function deleteCharacterSkill($character_skill)
 {
   GLOBAL $db;
@@ -442,7 +483,13 @@ function deleteCharacterSkill($character_skill)
  *  Character Languages.
  *
  ******************************************************************************/
-function getCharacterLanguages($character_id)
+
+/**
+ * @param int $character_id
+ *
+ * @return array|false
+ */
+function getCharacterLanguageList($character_id)
 {
   GLOBAL $db;
 
@@ -450,8 +497,7 @@ function getCharacterLanguages($character_id)
   $query->addField('language_id');
   $query->addConditionSimple('character_id', $character_id);
   $query->addOrderSimple('language_id', QueryOrder::DIRECTION_ASC);
-  $args = array(':character_id' => $character_id);
-  $results = $db->select($query, $args);
+  $results = $db->select($query);
 
   if (!$results)
   {
@@ -460,6 +506,12 @@ function getCharacterLanguages($character_id)
   return $results;
 }
 
+/**
+ * @param int $character_id
+ * @param int $language_id
+ *
+ * @return array|mixed
+ */
 function getCharacterLanguage($character_id, $language_id)
 {
   GLOBAL $db;
@@ -479,16 +531,22 @@ function getCharacterLanguage($character_id, $language_id)
   return $result;
 }
 
+/**
+ * @param array $character_language
+ */
 function createCharacterLanguage($character_language)
 {
   GLOBAL $db;
 
   $query = new InsertQuery('character_languages');
-  $query->addField('character_id');
-  $query->addField('language_id');
-  $db->insert($query, SQLite::buildArgs($character_language));
+  $query->addField('character_id', $character_language['character_id']);
+  $query->addField('language_id', $character_language['language_id']);
+  $db->insert($query);
 }
 
+/**
+ * @param array $character_language
+ */
 function deleteCharacterLanguage($character_language)
 {
   GLOBAL $db;
