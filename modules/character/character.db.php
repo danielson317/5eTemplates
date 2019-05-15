@@ -45,7 +45,7 @@ function installCharacter()
   $query = new CreateQuery('character_classes');
   $query->addField('character_id', 'INTEGER', array('P', 'N'));
   $query->addField('class_id', 'INTEGER', array('P', 'N'));
-  $query->addField('subclass_id', 'INTEGER', array('N'));
+  $query->addField('subclass_id', 'INTEGER', array('N'), 0);
   $query->addField('level', 'INTEGER', array('N'), 0);
   $db->create($query);
 
@@ -319,8 +319,8 @@ function getCharacterAttribute($character_id, $attribute_id)
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
-  $query->addConditionSimple('id', $character_id);
-  $query->addConditionSimple('id', $attribute_id);
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addConditionSimple('attribute_id', $attribute_id);
   $results = $db->select($query);
 
   if (!$results)

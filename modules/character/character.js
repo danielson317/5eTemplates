@@ -20,12 +20,13 @@ $(document).ready(function()
 
   function characterClassBehaviors($wrapper)
   {
-    $wrapper.find('.name-submit input').click(function(e)
+    $wrapper.find('.field.submit input').click(function(e)
     {
       e.preventDefault();
-      var url = '/character/class';
+      var url = '/ajax/character/class';
       var values =
       {
+        character_id: $wrapper.find('[name="character_id"]').val(),
         class_id: $wrapper.find('.class_id input').val(),
         subclass_id: $wrapper.find('.class_id input').val(),
         level: $wrapper.find('.level input').val(),

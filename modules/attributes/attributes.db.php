@@ -131,6 +131,7 @@ function getSkillPager($page = 1)
   $query->addField('code');
   $query->addField('description');
   $query->addField('attribute_id');
+  $query->addOrderSimple('name');
   $query->addPager($page);
 
   $results = $db->select($query);
@@ -148,6 +149,7 @@ function getSkillList()
 
   $query = new SelectQuery('skills');
   $query->addField('id')->addField('name', 'value');
+  $query->addOrderSimple('name');
 
   return $db->selectList($query);
 }

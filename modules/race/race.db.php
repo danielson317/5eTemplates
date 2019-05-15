@@ -477,7 +477,7 @@ function deleteLanguage($language_id)
   GLOBAL $db;
 
   $query = new DeleteQuery('languages');
-  $query->addCondition('id', $language_id);
+  $query->addConditionSimple('id', $language_id);
 
   $db->delete($query);
 }
