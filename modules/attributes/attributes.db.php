@@ -11,17 +11,17 @@ function installAttributes()
   GLOBAL $db;
 
   $query = new CreateQuery('attributes');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('code', 'TEXT', 0, array('N'));
+  $query->addField('name', 'TEXT', 0, array('N'));
   $query->addField('description', 'TEXT');
   $db->create($query);
 
   $query = new CreateQuery('skills');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('code', 'TEXT', array('N'));
   $query->addField('name', 'TEXT', array('N'));
-  $query->addField('attribute_id', 'INTEGER', array('N'));
+  $query->addField('attribute_id', 'INTEGER', 0, array('N'));
   $query->addField('description', 'TEXT');
   $db->create($query);
 }
