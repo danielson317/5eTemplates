@@ -10,22 +10,22 @@ function installClass()
   GLOBAL $db;
 
   $query = new CreateQuery('classes');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $query->addField('hit_die', 'INTEGER');
   $query->addField('stp1', 'INTEGER');
   $query->addField('stp2', 'INTEGER');
-  $query->addField('subclass_name', 'TEXT');
+  $query->addField('subclass_name', 'TEXT', 32);
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
 
   $query = new CreateQuery('subclass');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('class_id', 'INTEGER', array('N'));
   $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT');
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 }
 

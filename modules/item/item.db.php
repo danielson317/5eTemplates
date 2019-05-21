@@ -10,62 +10,62 @@ function installItem()
 
   // Bludgeoning, Force, Psychic, etc.
   $query = new CreateQuery('damage_types');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('code', 'TEXT', 8, array('N'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
   
   // Armor, Gemstone, Wand, Weapon, etc.
   $query = new CreateQuery('item_types');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
   // Sword, Shield, Rome, Boots of butt-kicking, etc.
   $query = new CreateQuery('items');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('item_type_id', 'INTEGER', array('N'), 0);
-  $query->addField('item_type_details', 'TEXT');
-  $query->addField('value', 'INTEGER', array('N'), 0);
-  $query->addField('weight', 'INTEGER', array('N'), 0);
-  $query->addField('rarity_id', 'INTEGER', array('N'), 0);
-  $query->addField('attunement', 'INTEGER', array('N'), 0);
-  $query->addField('attunement_requirements', 'TEXT');
-  $query->addField('artifact', 'INTEGER', array('N'), 0);
-  $query->addField('description', 'TEXT');
-  $query->addField('source_id', 'INTEGER', array('N'), 0);
-  $query->addField('source_location', 'INTEGER', array('N'), 0);
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('item_type_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('item_type_details', 'TEXT', 64);
+  $query->addField('value', 'INTEGER', 0, array('N'), 0);
+  $query->addField('weight', 'INTEGER', 0, array('N'), 0);
+  $query->addField('rarity_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('attunement', 'INTEGER', 0, array('N'), 0);
+  $query->addField('attunement_requirements', 'TEXT', 64);
+  $query->addField('artifact', 'INTEGER', 0, array('N'), 0);
+  $query->addField('description', 'TEXT', 1024);
+  $query->addField('source_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('source_location', 'INTEGER', 0, array('N'), 0);
 
-  $query->addField('damage_die_count', 'INTEGER', array('N'), 0);
-  $query->addField('damage_die', 'INTEGER', array('N'), 0);
-  $query->addField('damage_type_id', 'INTEGER', array('N'), 0);
-  $query->addField('range_id', 'INTEGER', array('N'), 0);
-  $query->addField('disadvantage_range_id', 'INTEGER', array('N'), 0);
+  $query->addField('damage_die_count', 'INTEGER', 0, array('N'), 0);
+  $query->addField('damage_die', 'INTEGER', 0, array('N'), 0);
+  $query->addField('damage_type_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('range_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('disadvantage_range_id', 'INTEGER', 0, array('N'), 0);
 
-  $query->addField('ac', 'INTEGER', array('N'), 0);
-  $query->addField('strength', 'INTEGER', array('N'), 0);
+  $query->addField('ac', 'INTEGER', 0, array('N'), 0);
+  $query->addField('strength', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 
   // Ammunition, Heavy, Versatile, etc.
   $query = new CreateQuery('item_properties');
-  $query->addField('item_id', 'INTEGER', array('P'));
-  $query->addField('property_id', 'INTEGER', array('P'));
+  $query->addField('item_id', 'INTEGER', 0, array('P'));
+  $query->addField('property_id', 'INTEGER', 0, array('P'));
 
   // Ammunition, Heavy, Versatile, etc.
   $query = new CreateQuery('properties');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
   // Common, uncommon, rare, etc.
   $query = new CreateQuery('rarities');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 }
 
