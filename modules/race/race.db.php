@@ -10,43 +10,43 @@ function installRace()
   GLOBAL $db;
 
   $query = new CreateQuery('races');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('description', 'TEXT');
-  $query->addField('speed', 'INTEGER', array('N'), 30);
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
+  $query->addField('speed', 'INTEGER', 0, array('N'), 30);
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
 
   $query = new CreateQuery('subraces');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
-  $query->addField('race_id', 'INTEGER', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('race_id', 'INTEGER', 0, array('N'));
   $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT');
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
   $query = new CreateQuery('names');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('race_id', 'INTEGER');
   $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT');
-  $query->addField('placement', 'TEXT', array('N'), 'F'); // First, Last, Middle
+  $query->addField('description', 'TEXT', 1024);
+  $query->addField('placement', 'TEXT', 8, array('N'), 'F'); // First, Last, Middle
   $db->create($query);
 
   $query = new CreateQuery('languages');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('script_id', 'INTEGER');
   $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT');
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
   $query = new CreateQuery('scripts');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT');
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 }
 
