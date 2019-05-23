@@ -15,25 +15,22 @@ function characterList()
   $template->addCssFilePath('/themes/default/css/character.css');
 
   // Operations.
-  $attr = array(
-    'href' => 'character',
-  );
-  $template->addOperation(htmlWrap('a', 'New Character', $attr));
+  $template->addOperation(a('New Character', '/character'));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => $page - 1),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/character', $attr));
   }
 
   if (count($characters) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => $page + 1),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/character', $attr));
   }
 
   // List
@@ -49,9 +46,11 @@ function characterList()
   {
     $row = array();
     $attr = array(
-      'href' => '/character?id=' . $character['id'],
+      'query' => array(
+        'id' => $character['id']
+      ),
     );
-    $row[] = htmlWrap('a', $character['name'], $attr);
+    $row[] = a($character['name'], '/character', $attr);
 
     $character_classes = getCharacterClasses($character['id']);
     $class = [];
@@ -71,9 +70,11 @@ function characterList()
     $row[] = $players[$character['player_id']];
 
     $attr = array(
-      'href' => 'character/print?id=' . $character['id'],
+      'query' => array(
+        'id' => $character['id']
+      ),
     );
-    $row[] = htmlWrap('a', 'Print', $attr);
+    $row[] = a('Print', '/character/print', $attr);
     $table->addRow($row);
   }
   $template->setList($table);
@@ -144,19 +145,22 @@ function characterUpsertForm()
 
       $row = array();
       $attr = array(
-        'href' => '/character/class?character_id=' . $character_id . '&class_id=' . $character_class['class_id'],
+        'query' => array(
+          'character_id' => $character_id, 
+          'class_id' => $character_class['class_id'],
+        ),
       );
-      $row[] = htmlWrap('a', $classes[$character_class['class_id']], $attr);
+      $row[] = a($classes[$character_class['class_id']], '/character/class', $attr);
       $row[] = $subclasses[$character_class['subclass_id']];
       $row[] = $character_class['level'];
       $table->addRow($row);
     }
 
     $attr = array(
-      'href' => '/character/class?character_id=' . $character_id,
+      'query' => array('character_id' => $character_id),
       'class' => array('add-class'),
     );
-    $link = htmlWrap('a', 'Add New Class', $attr);
+    $link = a('Add New Class', '/character/class', $attr);
 
     $field = new FieldMarkup('classes', 'Classes', $table . $link);
     $field->setGroup($group);
