@@ -15,11 +15,11 @@ if (!file_exists(DB_PATH))
   installSession();
 
   installAttributes();
-  installBackground();
+  //installBackground();
   installCharacter();
   installClass();
   installItem();
-  installMonster();
+  //installMonster();
   installPlayer();
   installRace();
   installSpell();

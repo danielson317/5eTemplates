@@ -11,11 +11,11 @@ function installCharacter()
 
   $query = new CreateQuery('characters');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 0, array('N'));
-  $query->addField('xp', 'INTEGER', 0, array('N', 0));
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('xp', 'INTEGER', 0, array('N'));
   $query->addField('race_id', 'INTEGER', 0, array('N'));
-  $query->addField('alignment', 'TEXT', 0, array('N'));
-  $query->addField('pb', 'TEXT', 0, array('N'), 2);
+  $query->addField('alignment', 'TEXT', 8, array('N'));
+  $query->addField('pb', 'TEXT', 8, array('N'), 2);
   $query->addField('speed', 'INTEGER', 0, array('N'), 30);
   $query->addField('hp', 'INTEGER', 0, array('N'));
   $query->addField('player_id', 'INTEGER');
@@ -78,11 +78,6 @@ function installCharacter()
   $query = new CreateQuery('character_item');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('item_id', 'INTEGER', 0, array('P', 'N'));
-  $db->create($query);
-
-  $query = new CreateQuery('players');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 0, array('N'));
   $db->create($query);
 }
 

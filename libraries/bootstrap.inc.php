@@ -33,6 +33,8 @@ include ROOT_PATH . '/libraries/user/user.pg.php';
 include ROOT_PATH . '/modules/attributes/attributes.db.php';
 include ROOT_PATH . '/modules/attributes/attributes.pg.php';
 
+include ROOT_PATH . '/modules/background/background.db.php';
+
 include ROOT_PATH . '/modules/character/character.db.php';
 include ROOT_PATH . '/modules/character/character.inc.php';
 include ROOT_PATH . '/modules/character/character.pg.php';

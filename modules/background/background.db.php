@@ -12,7 +12,7 @@ function installBackground()
   $query = new CreateQuery('background');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 0, array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('description', 'TEXT', 1024);
   $query->addField('skill_count', 'INTEGER', 0, array('N'), 2);
   $db->create($query);
 
@@ -25,8 +25,8 @@ function installBackground()
 
   $query = new CreateQuery('trait_types');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 0, array('N'));
-  $query->addField('description', 'TEXT');
+  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
   $query = new CreateQuery('background_skill');

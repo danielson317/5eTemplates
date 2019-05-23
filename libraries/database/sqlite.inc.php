@@ -223,6 +223,11 @@ class SQLite extends Database
     $sql = trim($sql, ',');
 
     $sql .= ')';
+    
+    //if (key($query->getTables()) === 'characters')
+    //{
+    //die($sql);
+    //}
 
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());

@@ -20,10 +20,10 @@ function installClass()
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
 
-  $query = new CreateQuery('subclass');
+  $query = new CreateQuery('subclasses');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('class_id', 'INTEGER', array('N'));
+  $query->addField('class_id', 'INTEGER', 0, array('N'));
   $query->addField('source_id', 'INTEGER');
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
