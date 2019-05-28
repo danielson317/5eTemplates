@@ -10,14 +10,14 @@ function installPlayer()
   GLOBAL $db;
 
   $query = new CreateQuery('players');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $db->create($query);
 
   $query = new CreateQuery('sources');
-  $query->addField('id', 'INTEGER', array('P', 'A'));
-  $query->addField('code', 'TEXT', array('N'));
-  $query->addField('name', 'TEXT', array('N'));
+  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('code', 'TEXT', 8, array('N'));
+  $query->addField('name', 'TEXT', 32, array('N'));
   $db->create($query);
 }
 

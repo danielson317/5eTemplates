@@ -154,9 +154,9 @@ function getUrlOperation()
   return getUrlOption('operation', $operations, FALSE);
 }
 
-function redirect($path, $statusCode = '303')
+function redirect($path, $statusCode = '303', $attr = array())
 {
-  header('Location: ' . $path, TRUE, $statusCode);
+  header('Location: ' . u($path, $attr), TRUE, $statusCode);
   die();
 }
 
@@ -305,21 +305,21 @@ function sanitize($data)
 function dewordify($string)
 {
   $search = [                 // www.fileformat.info/info/unicode/<NUM>/ <NUM> = 2018
-    "\xC2\xAB",     // « (U+00AB) in UTF-8
-    "\xC2\xBB",     // » (U+00BB) in UTF-8
-    "\xE2\x80\x98", // ‘ (U+2018) in UTF-8
-    "\xE2\x80\x99", // ’ (U+2019) in UTF-8
-    "\xE2\x80\x9A", // ‚ (U+201A) in UTF-8
+    "\xC2\xAB",     // Â« (U+00AB) in UTF-8
+    "\xC2\xBB",     // Â» (U+00BB) in UTF-8
+    "\xE2\x80\x98", // Â‘ (U+2018) in UTF-8
+    "\xE2\x80\x99", // Â’ (U+2019) in UTF-8
+    "\xE2\x80\x9A", // Â‚ (U+201A) in UTF-8
     "\xE2\x80\x9B", // ? (U+201B) in UTF-8
-    "\xE2\x80\x9C", // “ (U+201C) in UTF-8
-    "\xE2\x80\x9D", // ” (U+201D) in UTF-8
-    "\xE2\x80\x9E", // „ (U+201E) in UTF-8
+    "\xE2\x80\x9C", // Â“ (U+201C) in UTF-8
+    "\xE2\x80\x9D", // Â” (U+201D) in UTF-8
+    "\xE2\x80\x9E", // Â„ (U+201E) in UTF-8
     "\xE2\x80\x9F", // ? (U+201F) in UTF-8
-    "\xE2\x80\xB9", // ‹ (U+2039) in UTF-8
-    "\xE2\x80\xBA", // › (U+203A) in UTF-8
-    "\xE2\x80\x93", // – (U+2013) in UTF-8
-    "\xE2\x80\x94", // — (U+2014) in UTF-8
-    "\xE2\x80\xA6", // … (U+2026) in UTF-8
+    "\xE2\x80\xB9", // Â‹ (U+2039) in UTF-8
+    "\xE2\x80\xBA", // Â› (U+203A) in UTF-8
+    "\xE2\x80\x93", // Â– (U+2013) in UTF-8
+    "\xE2\x80\x94", // Â— (U+2014) in UTF-8
+    "\xE2\x80\xA6", // Â… (U+2026) in UTF-8
   ];
 
   $replacements = [
@@ -381,7 +381,8 @@ function sanitizeXss($string, $allowed_tags = array('a', 'em', 'strong', 'cite',
     )%x', '_sanitizeXssHelper', $string);
 }
 
-function _sanitizeXssHelper($m, $store = FALSE) {
+function _sanitizeXssHelper($m, $store = FALSE) 
+{
   static $allowed_html;
 
   if ($store) {
@@ -504,5 +505,4 @@ function iis($array, $key, $default = '')
   }
   return $default;
 }
-
 

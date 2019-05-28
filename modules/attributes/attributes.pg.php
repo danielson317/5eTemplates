@@ -13,25 +13,22 @@ function attributeList()
   $template = new ListPageTemplate('Attributes');
 
   // Operations.
-  $attr = array(
-    'href' => 'attribute',
-  );
-  $template->addOperation(htmlWrap('a', 'New Attribute', $attr));
+  $template->addOperation(a('New Attribute', '/attribute'));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/attribute', $attr));
   }
 
   if (count($attributes) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/attribute', $attr));
   }
 
   // List
@@ -43,9 +40,9 @@ function attributeList()
   {
     $row = array();
     $attr = array(
-      'href' => '/attribute?id=' . $attribute['id'],
+      'query' => array('id' => $attribute['id']),
     );
-    $row[] = htmlWrap('a', $attribute['name'], $attr);
+    $row[] = a($attribute['name'], '/attribute', $attr);
     $row[] = $attribute['code'];
     $row[] = $attribute['description'];
     $table->addRow($row);
@@ -157,25 +154,22 @@ function skillList()
   $template = new ListPageTemplate('Skills');
 
   // Operations.
-  $attr = array(
-    'href' => 'skill',
-  );
-  $template->addOperation(htmlWrap('a', 'New Skill', $attr));
+  $template->addOperation(a('New Skill', 'skill', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/skill', $attr));
   }
 
   if (count($skills) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/skill', $attr));
   }
 
   // List
@@ -188,9 +182,9 @@ function skillList()
   {
     $row = array();
     $attr = array(
-      'href' => '/skill?id=' . $skill['id'],
+      'query' => array('id' => $skill['id']),
     );
-    $row[] = htmlWrap('a', $skill['name'], $attr);
+    $row[] = a($skill['name'], '/skill', $attr);
     $row[] = $skill['code'];
     $row[] = $attributes[$skill['attribute_id']];
     $row[] = $skill['description'];

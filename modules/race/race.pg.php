@@ -13,25 +13,22 @@ function raceList()
   $template = new ListPageTemplate('Race');
 
   // Operations.
-  $attr = array(
-    'href' => 'race',
-  );
-  $template->addOperation(htmlWrap('a', 'New Race', $attr));
+  $template->addOperation(a('New Race', '/race', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/race', $attr));
   }
 
   if (count($races) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('next Page', '/race', $attr));
   }
 
   // List
@@ -43,9 +40,9 @@ function raceList()
   {
     $row = array();
     $attr = array(
-      'href' => '/race?id=' . $race['id'],
+      'query' => array('id' => $race['id']),
     );
-    $row[] = htmlWrap('a', $race['name'], $attr);
+    $row[] = a($race['name'], '/race', $attr);
     $row[] = $race['description'];
     $table->addRow($row);
   }
@@ -107,17 +104,17 @@ function raceUpsertForm()
     {
       $row = array();
       $attr = array(
-        'href' => '/subrace?id=' . $subrace['id'],
+        'query' => array('id' => $subrace['id']),
       );
-      $row[] = htmlWrap('a', $subrace['name'], $attr);
+      $row[] = a($subrace['name'], '/subrace', $attr);
       $row[] = $subrace['description'];
       $table->addRow($row);
     }
 
     $attr = array(
-      'href' => '/subrace?race_id=' . $race['id'],
+      'query' => array('race_id' => $race['id']),
     );
-    $link = htmlWrap('a', 'Add New Subrace', $attr);
+    $link = a('Add New Subrace', '/subrace', $attr);
 
     $field = new FieldMarkup('subraces', '', $table . $link);
     $form->addField($field);
@@ -237,9 +234,9 @@ function subraceUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/subrace?id=' . $subrace['id'],
+      'query' => array('id' => $subrace['id']),
     );
-    $row[] = htmlWrap('a', $subrace['name'], $attr);
+    $row[] = a($subrace['name'], '/subrace', $attr);
     $row[] = $subrace['description'];
     $table->addRow($row);
   }
@@ -248,9 +245,9 @@ function subraceUpsertForm()
   if ($subrace_id)
   {
     $attr = array(
-      'href' => '/subrace?race_id=' . $race['id'],
+      'query' => array('race_id' => $race['id']),
     );
-    $link = htmlWrap('a', 'Add New Subrace', $attr);
+    $link = a('Add New Subrace', '/subrace', $attr);
   }
 
   $field = new FieldMarkup('subraces', '', $table . $link);
@@ -271,9 +268,9 @@ function subraceUpsertForm()
 
   // Back link.
   $attr = array(
-    'href' => '/race?id=' . $race['id'],
+    'query' => array('id' => $race['id']),
   );
-  $link = htmlWrap('a', 'Back to race ' . $race['name'], $attr);
+  $link = a('Back to race ' . $race['name'], '/race', $attr);
 
   $field = new FieldMarkup('links', '', $link);
   $form->addField($field);
@@ -305,7 +302,8 @@ function subraceUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteSubrace($subrace['id']);
-    redirect('/race?id=' . $subrace['race_id']);
+    $attr = array('query' => array('id' => $subrace['race_id']));
+    redirect('/race', 303, $attr);
   }
 
   // Update.
@@ -337,25 +335,22 @@ function scriptList()
   $template = new ListPageTemplate('Scripts');
 
   // Operations.
-  $attr = array(
-    'href' => 'script',
-  );
-  $template->addOperation(htmlWrap('a', 'New Script', $attr));
+  $template->addOperation(a('New Script', '/script', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/script', $attr));
   }
 
   if (count($scripts) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/script', $attr));
   }
 
   // List
@@ -367,9 +362,9 @@ function scriptList()
   {
     $row = array();
     $attr = array(
-      'href' => '/script?id=' . $script['id'],
+      'query' => array('id' => $script['id'])
     );
-    $row[] = htmlWrap('a', $script['name'], $attr);
+    $row[] = a($script['name'], '/script', $attr);
     $row[] = $script['description'];
     $table->addRow($row);
   }
@@ -481,25 +476,22 @@ function languageList()
   $template = new ListPageTemplate('Languages');
 
   // Operations.
-  $attr = array(
-    'href' => 'language',
-  );
-  $template->addOperation(htmlWrap('a', 'New Language', $attr));
+  $template->addOperation(a('New Language', '/language', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/language', $attr));
   }
 
   if (count($languages) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/language', $attr));
   }
 
   // List
@@ -512,9 +504,9 @@ function languageList()
   {
     $row = array();
     $attr = array(
-      'href' => '/language?id=' . $language['id'],
+      'query' => array('id' => $language['id']),
     );
-    $row[] = htmlWrap('a', $language['name'], $attr);
+    $row[] = a($language['name'], '/language', $attr);
     $row[] = $scripts[$language['script_id']];
     $row[] = $language['description'];
     $table->addRow($row);

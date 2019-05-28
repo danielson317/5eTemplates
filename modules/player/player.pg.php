@@ -13,25 +13,22 @@ function playerList()
   $template = new ListPageTemplate('Players');
 
   // Operations.
-  $attr = array(
-    'href' => 'player',
-  );
-  $template->addOperation(htmlWrap('a', 'New Player', $attr));
+  $template->addOperation(a('New Player', '/player'));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/player', $attr));
   }
 
   if (count($players) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/player', $attr));
   }
 
   // List
@@ -43,9 +40,9 @@ function playerList()
   {
     $row = array();
     $attr = array(
-      'href' => '/player?id=' . $player['id'],
+      'query' => array('id' => $player['id']),
     );
-    $row[] = htmlWrap('a', $player['name'], $attr);
+    $row[] = a($player['name'], '/player', $attr);
     $table->addRow($row);
   }
   $template->setList($table);
@@ -147,25 +144,22 @@ function sourceList()
   $template = new ListPageTemplate('Sources');
 
   // Operations.
-  $attr = array(
-    'href' => 'source',
-  );
-  $template->addOperation(htmlWrap('a', 'New Source', $attr));
+  $template->addOperation(a('New Source', '/source', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/source', $attr));
   }
 
   if (count($sources) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/player', $attr));
   }
 
   // List
@@ -177,9 +171,9 @@ function sourceList()
   {
     $row = array();
     $attr = array(
-      'href' => '/source?id=' . $source['id'],
+      'query' => array('id' => $source['id']),
     );
-    $row[] = htmlWrap('a', $source['name'], $attr);
+    $row[] = a($source['name'], '/source', $attr);
     $row[] = $source['code'];
     $table->addRow($row);
   }

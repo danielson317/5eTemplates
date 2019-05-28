@@ -22,7 +22,7 @@ class HTMLTemplate
   {
     $this->addCssFilePath('/themes/default/css/page.css');
     $this->addCssFilePath('/themes/default/css/form.css');
-    $this->addJsFilePath('https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js');
+    $this->addJsFilePath('/libraries/jquery/jquery.min.js');
     $this->addJsFilePath('/libraries/global.js');
   }
 
