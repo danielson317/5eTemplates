@@ -264,6 +264,19 @@ Class TableTemplate
     $output = htmlWrap('tbody', $output);
     return $output;
   }
+
+  static function tableRow($row)
+  {
+    $output = '';
+    $count = 1;
+    foreach ($row as $cell)
+    {
+      $attr = array('class' => array('column-' . $count));
+      $output .= htmlWrap('td', $cell, $attr);
+      $count++;
+    }
+    return $output;
+  }
 }
 
 Class ListTemplate

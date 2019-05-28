@@ -197,7 +197,7 @@ function updateCharacter($character)
  *
  ******************************************************************************/
 
-function getCharacterClasses($character_id)
+function getCharacterClassList($character_id)
 {
   GLOBAL $db;
 

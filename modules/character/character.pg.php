@@ -53,14 +53,14 @@ function characterList()
     );
     $row[] = htmlWrap('a', $character['name'], $attr);
 
-    $character_classes = getCharacterClasses($character['id']);
+    $character_classes = getCharacterClassList($character['id']);
     $class = [];
     $subclass = [];
     $level = [];
     foreach ($character_classes as $character_class)
     {
       $class[] = $classes[$character_class['class_id']];
-      $subclass[] = $subclasses[$character_class['subclass_id']];
+      $subclass[] = $character_class['subclass_id'] ? $subclasses[$character_class['subclass_id']] : '';
       $level[] = $character_class['level'];
     }
     $row[] = join('/', $class);
@@ -138,7 +138,7 @@ function characterUpsertForm()
   {
     $table = new TableTemplate('character-class');
     $table->setHeader(array('Class', 'Subclass', 'Level'));
-    $character_classes = getCharacterClasses($character_id);
+    $character_classes = getCharacterClassList($character_id);
     foreach ($character_classes as $character_class)
     {
 
@@ -147,7 +147,7 @@ function characterUpsertForm()
         'href' => '/character/class?character_id=' . $character_id . '&class_id=' . $character_class['class_id'],
       );
       $row[] = htmlWrap('a', $classes[$character_class['class_id']], $attr);
-      $row[] = $subclasses[$character_class['subclass_id']];
+      $row[] = ($character_class['subclass_id'] > 0) ? $subclasses[$character_class['subclass_id']] : '';
       $row[] = $character_class['level'];
       $table->addRow($row);
     }
@@ -383,17 +383,22 @@ function characterUpsertSubmit()
  * Character Class Upsert
  *
  ******************************************************************************/
-function characterClassUpsertForm()
+function characterClassUpsertFormAjax()
 {
 //  $template = new FormPageTemplate();
 //  $template->addCssFilePath('/themes/default/css/character.css');
 //  $template->addJsFilePath('/modules/character/character.js');
 
   // Submit.
-//  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-//  {
-//    $template->addMessage(characterClassUpsertSubmit());
-//  }
+  $operation = getUrlOperation();
+  if ($operation === 'list')
+  {
+    characterClassListAjax();
+  }
+  elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    characterClassUpsertSubmitAjax();
+  }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
@@ -403,8 +408,7 @@ function characterClassUpsertForm()
   $character = getCharacter($character_id);
   $class_id = getUrlID('class_id');
   $classes = getClassList();
-  $subclasses = getSubclassList();
-  $character_classes = getCharacterClasses($character_id);
+  $character_classes = getCharacterClassList($character_id);
 
   $form = new Form('character_class_form');
   if ($class_id)
@@ -424,25 +428,6 @@ function characterClassUpsertForm()
     $form->addField($field);
   }
   $form->setTitle($title);
-
-  // Class List.
-//  $table = new TableTemplate('character-class');
-//  $table->setHeader(array('Class', 'Subclass', 'Level'));
-//  foreach ($character_classes as $character_class)
-//  {
-//    $row = array();
-//    $row[] = $classes[$character_class['class_id']];
-//    $row[] = $subclasses[$character_class['subclass_id']];
-//    $row[] = $character_class['level'];
-//    $table->addRow($row);
-//  }
-//  $attr = array(
-//    'href' => '/character?id=' . $character_id,
-//  );
-//  $link = htmlWrap('a', 'Back to ' . htmlWrap('em', $character['name']), $attr);
-//
-//  $field = new FieldMarkup('classes', '', $table . $link);
-//  $form->addField($field);
 
   // Character ID.
   $field = new FieldHidden('character_id');
@@ -498,8 +483,10 @@ function characterClassUpsertForm()
   return $form;
 }
 
-function characterClassUpsertSubmit()
+function characterClassUpsertSubmitAjax()
 {
+  $response = getAjaxDefaultResponse();
+
   $character_class = $_POST;
   unset($character_class['submit']);
   unset($character_class['operation']);
@@ -507,20 +494,43 @@ function characterClassUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteCharacterClass($character_class);
-    redirect('/character?id=' . $_POST['character_id']);
+    $response['data'] = 'Deleted';
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
   {
     updateCharacterClass($character_class);
-    return htmlWrap('h3', 'Updated.');
+    $response['data'] = 'Updated.';
   }
   // Create.
   else
   {
     createCharacterClass($character_class);
-    return htmlWrap('h3', 'Created.');
+    $response['data'] = 'Created.';
   }
+}
+
+function characterClassListAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+  $output = '';
+  $classes = getClassList();
+  $subclasses = getSubclassList();
+  $character_classes = getCharacterClassList($character_id);
+  foreach ($character_classes as $character_class)
+  {
+
+    $row = array();
+    $row[] = $classes[$character_class['class_id']];
+    $row[] = ($character_class['subclass_id'] > 0) ? $subclasses[$character_class['subclass_id']] : '';
+    $row[] = $character_class['level'];
+    $output .= TableTemplate::tableRow($row);
+  }
+  $response['data'] = $output;
+
+  jsonResponseDie($response);
 }
 
 /******************************************************************************

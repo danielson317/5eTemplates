@@ -133,12 +133,57 @@ function getUrlID($name, $default = FALSE)
   return abs($_GET[$name]);
 }
 
+function getUrlOption($name, $options, $default = FALSE)
+{
+  if (!isset($_GET[$name]) || !array_key_exists($_GET[$name], $options))
+  {
+    return $default;
+  }
+
+  return $_GET[$name];
+}
+
+function getUrlOperation()
+{
+  $operations = array(
+    'list',
+    'create',
+    'update',
+    'delete',
+  );
+  return getUrlOption('operation', $operations, FALSE);
+}
+
 function redirect($path, $statusCode = '303')
 {
   header('Location: ' . $path, TRUE, $statusCode);
   die();
 }
 
+function getAjaxDefaultResponse()
+{
+  return array(
+    'status' => TRUE,
+    'data' => 'Generic Response',
+    'message' => FALSE,
+  );
+}
+
+/**
+ * @param array|bool $response
+ */
+function jsonResponseDie($response)
+{
+  if (is_string($response))
+  {
+    $response = getAjaxDefaultResponse();
+    $response['data'] = $response;
+  }
+
+  header('Content-Type: application/json');
+  echo json_encode($response);
+  die();
+}
 /******************************************************************************
  *
  * HTML Helpers
@@ -451,6 +496,13 @@ function a($name, $path, $attr = array())
   return htmlWrap('a', $name, $attr);
 }
 
-
+function iis($array, $key, $default = '')
+{
+  if (is_array($array) && isset($array[$key]))
+  {
+    return $array[$key];
+  }
+  return $default;
+}
 
 
