@@ -217,9 +217,11 @@ function characterUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'attribute_id' => $character_attribute['attribute_id'],
     );
-    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
+    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/attribute', $attr);
     $row[] = $character_attribute['score'];
     $row[] = $character_attribute['modifier'];
     $row[] = $character_attribute['proficiency'];
@@ -228,9 +230,9 @@ function characterUpsertForm()
   }
 
   $attr = array(
-    'href' => '/character/attribute?character_id=' . $character_id,
+    'attr' => array('character_id' => $character_id),
   );
-  $link = htmlWrap('a', 'Add New Attribute', $attr);
+  $link = a('Add New Attribute', '/character/attribute', $attr);
 
   $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
   $field->setGroup($group);
@@ -245,18 +247,20 @@ function characterUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/character/skill?character_id=' . $character_id . '&skill_id=' . $character_skill['skill_id'],
+      'attr' => array(
+        'character_id' => $character_id,
+        'skill_id' => $character_skill['skill_id'],
     );
-    $row[] = htmlWrap('a', $skills[$character_skill['skill_id']], $attr);
+    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
     $row[] = $character_skill['proficiency'];
     $row[] = $character_skill['modifier'];
     $table->addRow($row);
   }
 
   $attr = array(
-    'href' => '/character/skill?character_id=' . $character_id,
+    'attr' => array('character_id' => $character_id),
   );
-  $link = htmlWrap('a', 'Add New Skill', $attr);
+  $link = a('Add New Skill', '/character/skill', $attr);
 
   $field = new FieldMarkup('skills', 'Skills', $table . $link);
   $field->setGroup($group);
@@ -270,15 +274,18 @@ function characterUpsertForm()
   foreach($character_languages as $character_language)
   {
     $attr = array(
-      'href' => '/character/language?character_id=' . $character_id . '&language_id=' . $character_language['language_id'],
+      'href' => array(
+        'character_id' => $character_id,
+        'language_id' => $character_language['language_id'],
+      )
     );
-    $list[] = htmlWrap('a', $languages[$character_language['language_id']], $attr);
+    $list[] = a($languages[$character_language['language_id']], '/character/language', $attr);
   }
 
   $attr = array(
-    'href' => '/character/language?character_id=' . $character_id,
+    'query' => array('character_id' => $character_id),
   );
-  $link = htmlWrap('a', 'Add New Language', $attr);
+  $link = a('Add New Language', '/character/language', $attr);
 
   $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $link);
   $field->setGroup($group);
@@ -585,9 +592,12 @@ function characterAttributeUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'attribute_id' => $character_attribute['attribute_id'],
+      )
     );
-    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
+    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/attribute', $attr);
     $row[] = $character_attribute['score'];
     $row[] = $character_attribute['modifier'];
     $row[] = $character_attribute['proficiency'];
@@ -596,14 +606,14 @@ function characterAttributeUpsertForm()
   }
 
   $attr = array(
-    'href' => '/character/attribute?character_id=' . $character_id,
+    'query' => array('character_id' => $character_id),
   );
-  $links = htmlWrap('a', 'Add New Attribute', $attr) . '<br>';
+  $links = a('Add New Attribute', '/character/attribute', $attr) . '<br>';
 
   $attr = array(
-    'href' => '/character?id=' . $character_id,
+    'query' => array('id' => $character_id),
   );
-  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
+  $links .= a('Back to ' . $character['name'], '/character', $attr);
 
   $field = new FieldMarkup('attributes', 'Attributes', $table . $links);
   $form->addField($field);
@@ -679,7 +689,8 @@ function characterAttributeUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteCharacterAttribute($character_attribute);
-    redirect('/character?id=' . $character_attribute['character_id']);
+    $attr = array('query' => array('id' => $character_attribute['character_id']));
+    redirect('/character', $attr);
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
@@ -763,23 +774,26 @@ function characterSkillUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/character/skill?character_id=' . $character_id . '&skill_id=' . $character_skill['skill_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'skill_id' => $character_skill['skill_id'],
+      )
     );
-    $row[] = htmlWrap('a', $skills[$character_skill['skill_id']], $attr);
+    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
     $row[] = $character_skill['proficiency'];
     $row[] = $character_skill['modifier'];
     $table->addRow($row);
   }
 
   $attr = array(
-    'href' => '/character/skill?character_id=' . $character_id,
+    'query' => array('character_id' => $character_id),
   );
-  $links = htmlWrap('a', 'Add New Skill', $attr) . '<br>';
+  $links = a('Add New Skill', '/character/skill', $attr) . '<br>';
 
   $attr = array(
-    'href' => '/character?id=' . $character_id,
+    'query' => array('id' => $character_id),
   );
-  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
+  $links .= a('Back to ' . $character['name'], '/character', $attr);
 
   $field = new FieldMarkup('skills', 'Skills', $table . $links);
   $form->addField($field);
@@ -845,7 +859,8 @@ function characterSkillUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteCharacterSkill($character_skill);
-    redirect('/character?id=' . $character_skill['character_id']);
+    $attr = array('query' => array('id' => $character_skill['character_id']));
+    redirect('/character', $attr);
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
@@ -913,20 +928,23 @@ function characterLanguageUpsertForm()
   foreach($character_languages as $character_language)
   {
     $attr = array(
-      'href' => '/character/language?character_id=' . $character_id . '&language_id=' . $character_language['language_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'language_id' => $character_language['language_id'],
+      )
     );
-    $list[] = htmlWrap('a', $languages[$character_language['language_id']], $attr);
+    $list[] = a($languages[$character_language['language_id']], '/character/language', $attr);
   }
 
   $attr = array(
-    'href' => '/character/language?character_id=' . $character_id,
+    'query' => array('character_id' => $character_id),
   );
-  $links = htmlWrap('a', 'Add New language', $attr) . '<br>';
+  $links = a('Add New language', '/character/language', $attr) . '<br>';
 
   $attr = array(
-    'href' => '/character?id=' . $character_id,
+    'attr' => array('id' => $character_id),
   );
-  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
+  $links .= a('Back to ' . $character['name'], '/character', $attr);
 
   $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $links);
   $form->addField($field);
@@ -973,7 +991,8 @@ function characterLanguageUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteCharacterlanguage($character_language);
-    redirect('/character?id=' . $character_language['character_id']);
+    $attr = array('query' => array('id' => $character_skill['character_id']));
+    redirect('/character', $attr);
   }
   // Create.
   else

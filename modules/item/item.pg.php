@@ -15,31 +15,28 @@ function itemList()
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Operations.
-  $attr = array(
-    'href' => 'item',
-  );
-  $template->addOperation(htmlWrap('a', 'New Item', $attr));
+  $template->addOperation(a('New Item', '/item', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/item', $attr));
   }
 
   if (count($items) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/item', $attr));
   }
 
   $attr = array(
-    'href' => 'items/print?page=' . $page,
+    'query' => array('page' => $page),
   );
-  $template->addOperation(htmlWrap('a', 'Print Cards', $attr));
+  $template->addOperation(a('Print Cards', '/items/print', $attr));
 
   // List
   $table = new TableTemplate();
@@ -51,9 +48,9 @@ function itemList()
   {
     $row = array();
     $attr = array(
-      'href' => 'item?id=' . $item['id'],
+      'query' => array('id' => $item['id']),
     );
-    $row[] = htmlWrap('a', $item['name'], $attr);
+    $row[] = a($item['name'], $attr);
     $row[] = $item['value'];
     $row[] = $item_types[$item['item_type_id']];
     $row[] = $item['description'];
@@ -194,17 +191,17 @@ function itemPrintForm()
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/item/print', $attr));
   }
 
   if (count($items) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/item/print', $attr));
   }
 
   // List.
@@ -327,25 +324,22 @@ function itemTypeList()
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Operations.
-  $attr = array(
-    'href' => 'item-type',
-  );
-  $template->addOperation(htmlWrap('a', 'New Item Type', $attr));
+  $template->addOperation(a('New Item Type', 'item-type', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/item-type', $attr));
   }
 
   if (count($item_types) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/item-type', $attr));
   }
 
   // List
@@ -448,25 +442,22 @@ function rarityList()
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Operations.
-  $attr = array(
-    'href' => 'rarity',
-  );
-  $template->addOperation(htmlWrap('a', 'New Rarity', $attr));
+  $template->addOperation(a('New Rarity', '/rarity', $attr));
 
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/rarity', $attr));
   }
 
   if (count($rarities) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Prev Page', '/rarity', $attr));
   }
 
   // List

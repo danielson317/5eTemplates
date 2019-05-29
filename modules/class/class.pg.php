@@ -18,17 +18,17 @@ function classList()
   if ($page > 1)
   {
     $attr = array(
-      'href' => '?page=' . ($page - 1),
+      'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
+    $template->addOperation(a('Prev Page', '/class', $attr));
   }
 
   if (count($classes) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
-      'href' => '?page=' . ($page + 1),
+      'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
+    $template->addOperation(a('Next Page', '/class', $attr));
   }
 
   // List
@@ -41,9 +41,9 @@ function classList()
   {
     $row = array();
     $attr = array(
-      'href' => '/class?id=' . $class['id'],
+      'query' => array('id' => $class['id']),
     );
-    $row[] = htmlWrap('a', $class['name'], $attr);
+    $row[] = a($class['name'], '/class', $attr);
     $row[] = $dice[$class['hit_die']];
     $table->addRow($row);
   }
@@ -105,10 +105,6 @@ function classUpsertForm()
   $field = new FieldSelect('stp2', 'Saving Throw 2', $options);
   $form->addField($field);
 
-  // Subclass Name
-  $field = new FieldText('subclass_name', 'Subclass Name');
-  $form->addField($field);
-
   // Subclasses
   if ($class_id)
   {
@@ -120,17 +116,17 @@ function classUpsertForm()
     {
       $row = array();
       $attr = array(
-        'href' => '/subclass?id=' . $subclass['id'],
+        'query' => array('id' => $subclass['id']),
       );
-      $row[] = htmlWrap('a', $subclass['name'], $attr);
+      $row[] = a($subclass['name'], '/subclass', $attr);
       $row[] = $subclass['description'];
       $table->addRow($row);
     }
 
     $attr = array(
-      'href' => '/subclass?class_id=' . $class['id'],
+      'query' => array('class_id' => $class['id']),
     );
-    $link = htmlWrap('a', 'Add New Subclass', $attr);
+    $link = a('Add New Subclass', '/subclass', $attr);
 
     $field = new FieldMarkup('subclasses', '', $table . $link);
     $form->addField($field);
@@ -254,9 +250,9 @@ function subclassUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/subclass?id=' . $subclass['id'],
+      'query' => array('id'=> $subclass['id']),
     );
-    $row[] = htmlWrap('a', $subclass['name'], $attr);
+    $row[] = a($subclass['name'], '/sublcass', $attr);
     $row[] = $subclass['description'];
     $table->addRow($row);
   }
@@ -265,9 +261,9 @@ function subclassUpsertForm()
   if ($subclass_id)
   {
     $attr = array(
-      'href' => '/subclass?class_id=' . $class['id'],
+      'query' => array('class_id' => $class['id']),
     );
-    $link = htmlWrap('a', 'Add New Subclass', $attr);
+    $link = a('Add New Subclass', '/subclass', $attr);
   }
 
   $field = new FieldMarkup('subclasses', '', $table . $link);
@@ -288,9 +284,9 @@ function subclassUpsertForm()
 
   // Back link.
   $attr = array(
-    'href' => '/class?id=' . $class['id'],
+    'query' => array('id' => $class['id']),
   );
-  $link = htmlWrap('a', 'Back to class ' . $class['name'], $attr);
+  $link = a('Back to class ' . $class['name'], '/class', $attr);
 
   $field = new FieldMarkup('links', '', $link);
   $form->addField($field);
@@ -322,7 +318,8 @@ function subclassUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteSubclass($subclass['id']);
-    redirect('/class?id=' . $subclass['class_id']);
+    $attr = array('query' => array('id' => $subclass['class_id']));
+    redirect('/class', $attr);
   }
 
   // Update.
