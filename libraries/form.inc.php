@@ -431,7 +431,7 @@ class FieldSubmit extends Field
     $output = htmlSolo('input', $attr);
 
     // Wrapper.
-    $attr = array('class' => array('field', 'textarea', $this->id));
+    $attr = array('class' => array('field', $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }

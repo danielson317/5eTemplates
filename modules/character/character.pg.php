@@ -52,14 +52,14 @@ function characterList()
     );
     $row[] = a($character['name'], '/character', $attr);
 
-    $character_classes = getCharacterClasses($character['id']);
+    $character_classes = getCharacterClassList($character['id']);
     $class = [];
     $subclass = [];
     $level = [];
     foreach ($character_classes as $character_class)
     {
       $class[] = $classes[$character_class['class_id']];
-      $subclass[] = $subclasses[$character_class['subclass_id']];
+      $subclass[] = $character_class['subclass_id'] ? $subclasses[$character_class['subclass_id']] : '';
       $level[] = $character_class['level'];
     }
     $row[] = join('/', $class);
@@ -139,7 +139,7 @@ function characterUpsertForm()
   {
     $table = new TableTemplate('character-class');
     $table->setHeader(array('Class', 'Subclass', 'Level'));
-    $character_classes = getCharacterClasses($character_id);
+    $character_classes = getCharacterClassList($character_id);
     foreach ($character_classes as $character_class)
     {
 
@@ -149,9 +149,10 @@ function characterUpsertForm()
           'character_id' => $character_id, 
           'class_id' => $character_class['class_id'],
         ),
+        'class' => 'class'
       );
       $row[] = a($classes[$character_class['class_id']], '/character/class', $attr);
-      $row[] = $subclasses[$character_class['subclass_id']];
+      $row[] = ($character_class['subclass_id'] > 0) ? $subclasses[$character_class['subclass_id']] : '';
       $row[] = $character_class['level'];
       $table->addRow($row);
     }
@@ -210,16 +211,20 @@ function characterUpsertForm()
   $form->addGroup($group);
 
   $attributes = getAttributeList();
-  $character_attributes = getCharacterAttributes($character_id);
+  $character_attributes = getCharacterAttributeList($character_id);
   $table = new TableTemplate();
   $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
   foreach($character_attributes as $character_attribute)
   {
     $row = array();
     $attr = array(
-      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'attribute_id' => $character_attribute['attribute_id'],
+      ),
+      'class' => array('attribute'),
     );
-    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
+    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/attribute', $attr);
     $row[] = $character_attribute['score'];
     $row[] = $character_attribute['modifier'];
     $row[] = $character_attribute['proficiency'];
@@ -228,9 +233,12 @@ function characterUpsertForm()
   }
 
   $attr = array(
-    'href' => '/character/attribute?character_id=' . $character_id,
+    'query' => array(
+      'character_id' => $character_id,
+    ),
+    'class' => 'add-attribute',
   );
-  $link = htmlWrap('a', 'Add New Attribute', $attr);
+  $link = a('Add New Attribute', '/character/attribute', $attr);
 
   $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
   $field->setGroup($group);
@@ -245,18 +253,23 @@ function characterUpsertForm()
   {
     $row = array();
     $attr = array(
-      'href' => '/character/skill?character_id=' . $character_id . '&skill_id=' . $character_skill['skill_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'skill_id' => $character_skill['skill_id']
+      ),
     );
-    $row[] = htmlWrap('a', $skills[$character_skill['skill_id']], $attr);
+    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
     $row[] = $character_skill['proficiency'];
     $row[] = $character_skill['modifier'];
     $table->addRow($row);
   }
 
   $attr = array(
-    'href' => '/character/skill?character_id=' . $character_id,
+    'query' => array(
+      'character_id' => $character_id
+    ),
   );
-  $link = htmlWrap('a', 'Add New Skill', $attr);
+  $link = a('Add New Skill', '/character/skill', $attr);
 
   $field = new FieldMarkup('skills', 'Skills', $table . $link);
   $field->setGroup($group);
@@ -270,15 +283,18 @@ function characterUpsertForm()
   foreach($character_languages as $character_language)
   {
     $attr = array(
-      'href' => '/character/language?character_id=' . $character_id . '&language_id=' . $character_language['language_id'],
+      'query' => array(
+        'character_id' => $character_id,
+        'language_id' => $character_language['language_id'],
+      ),
     );
-    $list[] = htmlWrap('a', $languages[$character_language['language_id']], $attr);
+    $list[] = a($languages[$character_language['language_id']], '/character/language', $attr);
   }
 
   $attr = array(
-    'href' => '/character/language?character_id=' . $character_id,
+    'query' => array('character_id' => $character_id),
   );
-  $link = htmlWrap('a', 'Add New Language', $attr);
+  $link = a('Add New Language', '/character/language', $attr);
 
   $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $link);
   $field->setGroup($group);
@@ -387,17 +403,20 @@ function characterUpsertSubmit()
  * Character Class Upsert
  *
  ******************************************************************************/
-function characterClassUpsertForm()
+function characterClassUpsertFormAjax()
 {
-//  $template = new FormPageTemplate();
-//  $template->addCssFilePath('/themes/default/css/character.css');
-//  $template->addJsFilePath('/modules/character/character.js');
+  $response = getAjaxDefaultResponse();
 
   // Submit.
-//  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-//  {
-//    $template->addMessage(characterClassUpsertSubmit());
-//  }
+  $operation = getUrlOperation();
+  if ($operation === 'list')
+  {
+    characterClassListAjax();
+  }
+  elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    characterClassUpsertSubmitAjax();
+  }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
@@ -407,8 +426,7 @@ function characterClassUpsertForm()
   $character = getCharacter($character_id);
   $class_id = getUrlID('class_id');
   $classes = getClassList();
-  $subclasses = getSubclassList();
-  $character_classes = getCharacterClasses($character_id);
+  $character_classes = getCharacterClassList($character_id);
 
   $form = new Form('character_class_form');
   if ($class_id)
@@ -428,25 +446,6 @@ function characterClassUpsertForm()
     $form->addField($field);
   }
   $form->setTitle($title);
-
-  // Class List.
-//  $table = new TableTemplate('character-class');
-//  $table->setHeader(array('Class', 'Subclass', 'Level'));
-//  foreach ($character_classes as $character_class)
-//  {
-//    $row = array();
-//    $row[] = $classes[$character_class['class_id']];
-//    $row[] = $subclasses[$character_class['subclass_id']];
-//    $row[] = $character_class['level'];
-//    $table->addRow($row);
-//  }
-//  $attr = array(
-//    'href' => '/character?id=' . $character_id,
-//  );
-//  $link = htmlWrap('a', 'Back to ' . htmlWrap('em', $character['name']), $attr);
-//
-//  $field = new FieldMarkup('classes', '', $table . $link);
-//  $form->addField($field);
 
   // Character ID.
   $field = new FieldHidden('character_id');
@@ -499,32 +498,67 @@ function characterClassUpsertForm()
   $field = new FieldSubmit('delete', 'Delete');
   $form->addField($field);
 
-  return $form;
+  $response['data'] = $form->__toString();
+  jsonResponseDie($response);
 }
 
-function characterClassUpsertSubmit()
+function characterClassUpsertSubmitAjax()
 {
+  $response = getAjaxDefaultResponse();
+
   $character_class = $_POST;
   unset($character_class['submit']);
   unset($character_class['operation']);
 
+  // Delete.
   if (isset($_POST['delete']))
   {
     deleteCharacterClass($character_class);
-    redirect('/character?id=' . $_POST['character_id']);
+    $response['data'] = 'Deleted';
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
   {
     updateCharacterClass($character_class);
-    return htmlWrap('h3', 'Updated.');
+    $response['data'] = 'Updated.';
   }
   // Create.
   else
   {
     createCharacterClass($character_class);
-    return htmlWrap('h3', 'Created.');
+    $response['data'] = 'Created.';
   }
+  jsonResponseDie($response);
+}
+
+function characterClassListAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+  $output = '';
+  $classes = getClassList();
+  $subclasses = getSubclassList();
+  $character_classes = getCharacterClassList($character_id);
+  foreach ($character_classes as $character_class)
+  {
+
+    $row = array();
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'class_id' => $character_class['class_id'],
+      ),
+      'class' => 'class'
+    );
+    $row[] = a($classes[$character_class['class_id']], '/character/class', $attr);
+    $row[] = ($character_class['subclass_id'] > 0) ? $subclasses[$character_class['subclass_id']] : '';
+    $row[] = $character_class['level'];
+    $output .= TableTemplate::tableRow($row);
+  }
+  $response['data'] = $output;
+
+  jsonResponseDie($response);
 }
 
 /******************************************************************************
@@ -532,28 +566,30 @@ function characterClassUpsertSubmit()
  * Character Attribute Upsert
  *
  ******************************************************************************/
-function characterAttributeUpsertForm()
+function characterAttributeUpsertFormAjax()
 {
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/character.css');
-  $template->addJsFilePath('/modules/character/character.js');
+  $response = getAjaxDefaultResponse();
 
   // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  $operation = getUrlOperation();
+  if ($operation === 'list')
   {
-    $template->addMessage(characterAttributeUpsertSubmit());
+    characterAttributeListAjax();
+  }
+  elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    characterAttributeUpsertSubmit();
   }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
   {
-    $template->addMessage('Missing parameter character_id.');
-    return $template;
+    die('Missing parameter character_id.');
   }
   $character = getCharacter($character_id);
   $attribute_id = getUrlID('attribute_id');
   $attributes = getAttributeList();
-  $character_attributes = getCharacterAttributes($character_id);
+  $character_attributes = getCharacterAttributeList($character_id);
 
   $form = new Form('character_attribute_form');
   if ($attribute_id)
@@ -561,51 +597,15 @@ function characterAttributeUpsertForm()
     $character_attribute = getCharacterAttribute($character_id, $attribute_id);
     $form->setValues($character_attribute);
     $title = 'Edit character ' . htmlWrap('em', $character['name']) . '\'s attribute ' . htmlWrap('em', $attributes[$character_attribute['attribute_id']]);
-
-    $field = new FieldHidden('operation', 'update');
-    $form->addField($field);
   }
   else
   {
     $title = 'Add New Attribute to ' . htmlWrap('em', $character['name']);
-
-    $field = new FieldHidden('operation', 'create');
-    $form->addField($field);
   }
   $form->setTitle($title);
 
   $markup = htmlWrap('span', $character['pb'], array('class' => array('pb')));
   $field = new FieldMarkup('pb', 'Proficiency Bonus', $markup);
-  $form->addField($field);
-
-  // Attribute List.
-  $table = new TableTemplate();
-  $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
-  foreach($character_attributes as $character_attribute)
-  {
-    $row = array();
-    $attr = array(
-      'href' => '/character/attribute?character_id=' . $character_id . '&attribute_id=' . $character_attribute['attribute_id'],
-    );
-    $row[] = htmlWrap('a', $attributes[$character_attribute['attribute_id']], $attr);
-    $row[] = $character_attribute['score'];
-    $row[] = $character_attribute['modifier'];
-    $row[] = $character_attribute['proficiency'];
-    $row[] = $character_attribute['saving_throw'];
-    $table->addRow($row);
-  }
-
-  $attr = array(
-    'href' => '/character/attribute?character_id=' . $character_id,
-  );
-  $links = htmlWrap('a', 'Add New Attribute', $attr) . '<br>';
-
-  $attr = array(
-    'href' => '/character?id=' . $character_id,
-  );
-  $links .= htmlWrap('a', 'Back to ' . $character['name'], $attr);
-
-  $field = new FieldMarkup('attributes', 'Attributes', $table . $links);
   $form->addField($field);
 
   // Character.
@@ -665,9 +665,8 @@ function characterAttributeUpsertForm()
     $form->addField($field);
   }
 
-  $template->setForm($form);
-
-  return $template;
+  $response['data'] = $form->__toString();
+  jsonResponseDie($response);
 }
 
 function characterAttributeUpsertSubmit()
@@ -693,6 +692,37 @@ function characterAttributeUpsertSubmit()
     createCharacterAttribute($character_attribute);
     return htmlWrap('h3', 'Created.');
   }
+}
+
+function characterAttributeListAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+  $output = '';
+  $attributes = getAttributeList();
+  $character_attributes = getCharacterAttributeList($character_id);
+  foreach ($character_attributes as $character_attribute)
+  {
+
+    $row = array();
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'attribute_id' => $character_attribute['attribute_id'],
+      ),
+      'class' => 'attribute',
+    );
+    $row[] = a($attributes[$character_attribute['class_id']], '/character/class', $attr);
+    $row[] = $character_attribute['score'];
+    $row[] = $character_attribute['modifier'];
+    $row[] = $character_attribute['proficiency'];
+    $row[] = $character_attribute['saving_throw'];
+    $output .= TableTemplate::tableRow($row);
+  }
+  $response['data'] = $output;
+
+  jsonResponseDie($response);
 }
 
 /******************************************************************************
