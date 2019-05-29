@@ -15,7 +15,7 @@ if (!file_exists(DB_PATH))
   installSession();
 
   installAttributes();
-  //installBackground();
+  installBackground();
   installCharacter();
   installClass();
   installItem();
@@ -26,3 +26,5 @@ if (!file_exists(DB_PATH))
 }
 
 redirect('/');
+
+
