@@ -1,44 +1,69 @@
 $ = jQuery;
 $(document).ready(function()
 {
-  // Add new character class.
+  /**********************
+   * Classes.
+   **********************/
+  // View - Refresh the list.
+  $('.field.classes').on('refresh', '', function()
+  {
+    var url = '/ajax/character/class';
+    var values =
+      {
+        operation: 'list',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      if (response['status'])
+      {
+        $('.classes tbody').html(response['data']);
+      }
+    });
+  });
+
+  // Create - Add new character class.
   $('.add-class').click(function(e)
   {
     e.preventDefault();
-    var url = '/character/class';
+    var url = '/ajax/character/class';
     var values =
     {
+      operation: 'create',
       character_id: getUrlParameter('id')
     };
 
     $.get(url, values, function(response)
     {
-      var $modal = modalShow(response);
-      characterClassBehaviors($modal);
+      var $modal = modalShow(response['data']);
+      characterClassBehaviors($modal, 'create');
     })
   });
 
-  function characterClassBehaviors($wrapper)
+  // Update - Edit character class.
+  $('.field.classes').on('click', 'a.class',function(e)
   {
-    $wrapper.find('.field.submit input').click(function(e)
-    {
-      e.preventDefault();
-      var url = '/ajax/character/class';
-      var values =
+    e.preventDefault();
+    var url = '/ajax/character/class';
+    var values =
       {
-        character_id: $wrapper.find('[name="character_id"]').val(),
-        class_id: $wrapper.find('.class_id input').val(),
-        subclass_id: $wrapper.find('.class_id input').val(),
-        level: $wrapper.find('.level input').val(),
-        operation: 'submit'
+        operation: 'update',
+        character_id: getUrlParameter('character_id', $(this).attr('href')),
+        class_id: getUrlParameter('class_id', $(this).attr('href'))
       };
-      $.post(url, values, function()
-      {
-        modalHide();
-      });
-    });
 
-    $wrapper.find('.field.class_id select').change(function(e)
+    $.get(url, values, function(response)
+    {
+      var $modal = modalShow(response['data']);
+      characterClassBehaviors($modal, 'update');
+    })
+  });
+
+  function characterClassBehaviors($wrapper, $operation)
+  {
+    // Update subclass list.
+    $wrapper.find('.field.class_id select').change(function()
     {
       var url = '/ajax/subclass';
       var values = {class_id:$(this).val()};
@@ -47,6 +72,146 @@ $(document).ready(function()
       {
         $('.field.subclass_id select').html(response);
       }, 'html');
+    });
+
+    // Submit.
+    $wrapper.find('.field.submit input').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/class';
+      var values =
+      {
+        operation: $operation,
+        character_id: $wrapper.find('[name="character_id"]').val(),
+        class_id: $wrapper.find('[name="class_id"]').val(),
+        subclass_id: $wrapper.find('.subclass_id select').val(),
+        level: $wrapper.find('.level input').val()
+      };
+      $.post(url, values, function()
+      {
+        $('.field.classes').refresh();
+        modalHide();
+      });
+    });
+
+    // Delete.
+    $wrapper.find('.field.delete').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/class';
+      var values =
+      {
+        delete: 1,
+        character_id: $wrapper.find('[name="character_id"]').val(),
+        class_id: $wrapper.find('[name="class_id"]').val()
+      };
+      $.post(url, values, function()
+      {
+        $('.field.classes').refresh();
+        modalHide();
+      });
+    });
+  }
+
+  /**********************
+   * Attributes.
+   **********************/
+  // View - Refresh the list.
+  $('.field.attributes').on('refresh', '', function()
+  {
+    var url = '/ajax/character/attribute';
+    var values =
+      {
+        operation: 'list',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      if (response['status'])
+      {
+        $('.classes tbody').html(response['data']);
+      }
+    });
+  });
+
+  // Create - Add new character class.
+  $('.add-attribute').click(function(e)
+  {
+    e.preventDefault();
+    var url = '/ajax/character/attribute';
+    var values =
+      {
+        operation: 'create',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      var $modal = modalShow(response['data']);
+      characterAttributeBehaviors($modal, 'create');
+    })
+  });
+
+  // Update - Edit character class.
+  $('.field.attributes').on('click', 'a.attribute',function(e)
+  {
+    e.preventDefault();
+    var url = '/ajax/character/attribute';
+    var values =
+      {
+        operation: 'update',
+        character_id: getUrlParameter('character_id', $(this).attr('href')),
+        class_id: getUrlParameter('attribute_id', $(this).attr('href'))
+      };
+
+    $.get(url, values, function(response)
+    {
+      var $modal = modalShow(response['data']);
+      characterAttributeBehaviors($modal, 'update');
+    })
+  });
+
+  function characterAttributeBehaviors($wrapper, $operation)
+  {
+    // Submit.
+    $wrapper.find('.field.submit input').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/attribute';
+      var values =
+      {
+        operation: $operation,
+        character_id: $wrapper.find('[name="character_id"]').val(),
+        attribute_id: $wrapper.find('[name="attribute_id"]').val(),
+        score: $wrapper.find('[name="score"]').val(),
+        modifier: $wrapper.find('[name="modifier"]').val(),
+        proficiency: $wrapper.find('[name="proficiency"]').val(),
+        saving_throw: $wrapper.find('[name="saving_throw"]').val()
+      };
+      $.post(url, values, function()
+      {
+        $('.field.classes').refresh();
+        modalHide();
+      });
+    });
+
+    // Delete.
+    $wrapper.find('.field.delete').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/attribute';
+      var values =
+        {
+          delete: 1,
+          character_id: $wrapper.find('[name="character_id"]').val(),
+          class_id: $wrapper.find('[name="attribute_id"]').val()
+        };
+      $.post(url, values, function()
+      {
+        $('.field.attributes').refresh();
+        modalHide();
+      });
     });
   }
 });

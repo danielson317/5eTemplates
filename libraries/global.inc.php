@@ -133,12 +133,57 @@ function getUrlID($name, $default = FALSE)
   return abs($_GET[$name]);
 }
 
+function getUrlOption($name, $options, $default = FALSE)
+{
+  if (!isset($_GET[$name]) || !array_key_exists($_GET[$name], $options))
+  {
+    return $default;
+  }
+
+  return $_GET[$name];
+}
+
+function getUrlOperation()
+{
+  $operations = array(
+    'list' => 'List',
+    'create' => 'Create',
+    'update' => 'Update',
+    'delete' => 'Delete',
+  );
+  return getUrlOption('operation', $operations, FALSE);
+}
+
 function redirect($path, $statusCode = '303', $attr = array())
 {
   header('Location: ' . u($path, $attr), TRUE, $statusCode);
   die();
 }
 
+function getAjaxDefaultResponse()
+{
+  return array(
+    'status' => TRUE,
+    'data' => 'Generic Response',
+    'message' => FALSE,
+  );
+}
+
+/**
+ * @param array|bool $response
+ */
+function jsonResponseDie($response)
+{
+  if (is_string($response))
+  {
+    $response = getAjaxDefaultResponse();
+    $response['data'] = $response;
+  }
+
+  header('Content-Type: application/json');
+  echo json_encode($response);
+  die();
+}
 /******************************************************************************
  *
  * HTML Helpers
@@ -449,5 +494,17 @@ function u($path, $attr = array())
 function a($name, $path, $attr = array())
 { 
   $attr['href'] = u($path, $attr);
+  unset($attr['query']);
+  unset($attr['fragment']);
   return htmlWrap('a', $name, $attr);
 }
+
+function iis($array, $key, $default = '')
+{
+  if (is_array($array) && isset($array[$key]))
+  {
+    return $array[$key];
+  }
+  return $default;
+}
+

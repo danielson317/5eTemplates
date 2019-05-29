@@ -72,13 +72,7 @@ function getAttribute($id)
   $query->addField('description');
   $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $results = $db->selectObject($query);
 }
 
 function createAttribute($attribute)
@@ -166,13 +160,7 @@ function getSkill($id)
   $query->addField('attribute_id');
   $query->addConditionSimple('id', $id);
 
-  $results = $db->select($query);
-  if (!$results)
-  {
-    return FALSE;
-  }
-  $result = array_shift($results);
-  return $result;
+  $results = $db->selectObject($query);
 }
 
 function createSkill($skill)
