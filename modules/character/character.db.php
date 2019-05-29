@@ -276,11 +276,12 @@ function deleteCharacterClass($character_class)
  *
  * @return array|bool
  */
-function getCharacterAttributes($character_id)
+function getCharacterAttributeList($character_id)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('character_attributes');
+  $query->addField('character_id');
   $query->addField('attribute_id');
   $query->addField('score');
   $query->addField('modifier');

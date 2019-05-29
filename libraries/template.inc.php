@@ -265,17 +265,21 @@ Class TableTemplate
     return $output;
   }
 
-  static function tableRow($row)
+  static function tableRow($row, $attr = array())
   {
     $output = '';
     $count = 1;
     foreach ($row as $cell)
     {
-      $attr = array('class' => array('column-' . $count));
+      $attr = iis($attr, 0, array());
+      $class = iis($attr, 'class', array());
+      assert(is_array($class));
+      $class[] = 'column-' . $count;
+      $attr['class'] = $class;
       $output .= htmlWrap('td', $cell, $attr);
       $count++;
     }
-    return $output;
+    return htmlWrap('tr', $output, $attr);
   }
 }
 

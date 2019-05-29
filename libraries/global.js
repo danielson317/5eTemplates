@@ -3,6 +3,39 @@
  */
 $ = jQuery;
 
+/****************************************************************************
+ *
+ *  JQuery Plugins.
+ *
+ ****************************************************************************/
+
+$.fn.once = function(processed_class)
+{
+  if (typeof processed_class == 'undefined')
+  {
+    processed_class = 'processed';
+  }
+  return this.not('.' + processed_class).addClass(processed_class);
+};
+
+$.fn.refresh = function()
+{
+  $(this).trigger('refresh');
+  return this;
+};
+
+$.fn.hasAttr = function(attr_name)
+{
+  var attr = $(this).attr(attr_name);
+  return (typeof attr !== typeof undefined)
+};
+
+/****************************************************************************
+ *
+ *  Form handlers.
+ *
+ ****************************************************************************/
+
 dnd = {};
 $(document).ready(function()
 {

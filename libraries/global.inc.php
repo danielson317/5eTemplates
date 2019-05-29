@@ -146,10 +146,10 @@ function getUrlOption($name, $options, $default = FALSE)
 function getUrlOperation()
 {
   $operations = array(
-    'list',
-    'create',
-    'update',
-    'delete',
+    'list' => 'List',
+    'create' => 'Create',
+    'update' => 'Update',
+    'delete' => 'Delete',
   );
   return getUrlOption('operation', $operations, FALSE);
 }
@@ -494,6 +494,8 @@ function u($path, $attr = array())
 function a($name, $path, $attr = array())
 { 
   $attr['href'] = u($path, $attr);
+  unset($attr['query']);
+  unset($attr['fragment']);
   return htmlWrap('a', $name, $attr);
 }
 
