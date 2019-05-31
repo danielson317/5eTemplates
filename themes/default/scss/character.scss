@@ -6,10 +6,12 @@
   {
     &.header_name
     {
-      height: 200px;
+      //height: 200px;
     }
     &.header_upper
     {
+      float: left;
+      clear: left;
       width: 600px;
 
       .field
@@ -21,6 +23,8 @@
     }
     &.header_lower
     {
+      float: left;
+      clear: left;
       width: 600px;
 
       .field
@@ -30,7 +34,7 @@
         clear: none;
       }
     }
-    &.attributes
+    &.attributes_group
     {
       clear: left;
     }

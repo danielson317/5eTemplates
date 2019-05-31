@@ -130,12 +130,12 @@ $(document).ready(function()
     {
       if (response['status'])
       {
-        $('.classes tbody').html(response['data']);
+        $('.attributes tbody').html(response['data']);
       }
     });
   });
 
-  // Create - Add new character class.
+  // Create - Add new character attribute.
   $('.add-attribute').click(function(e)
   {
     e.preventDefault();
@@ -153,7 +153,7 @@ $(document).ready(function()
     })
   });
 
-  // Update - Edit character class.
+  // Update - Edit character attribute.
   $('.field.attributes').on('click', 'a.attribute',function(e)
   {
     e.preventDefault();
@@ -162,7 +162,7 @@ $(document).ready(function()
       {
         operation: 'update',
         character_id: getUrlParameter('character_id', $(this).attr('href')),
-        class_id: getUrlParameter('attribute_id', $(this).attr('href'))
+        attribute_id: getUrlParameter('attribute_id', $(this).attr('href'))
       };
 
     $.get(url, values, function(response)
@@ -191,7 +191,7 @@ $(document).ready(function()
       };
       $.post(url, values, function()
       {
-        $('.field.classes').refresh();
+        $('.field.attributes').refresh();
         modalHide();
       });
     });
@@ -205,11 +205,110 @@ $(document).ready(function()
         {
           delete: 1,
           character_id: $wrapper.find('[name="character_id"]').val(),
-          class_id: $wrapper.find('[name="attribute_id"]').val()
+          attribute_id: $wrapper.find('[name="attribute_id"]').val()
         };
       $.post(url, values, function()
       {
         $('.field.attributes').refresh();
+        modalHide();
+      });
+    });
+  }
+
+  /**********************
+   * Skills.
+   **********************/
+  // View - Refresh the list.
+  $('.field.skills').on('refresh', '', function()
+  {
+    var url = '/ajax/character/skill';
+    var values =
+      {
+        operation: 'list',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      if (response['status'])
+      {
+        $('.skills tbody').html(response['data']);
+      }
+    });
+  });
+
+  // Create - Add new character skill.
+  $('.add-skill').click(function(e)
+  {
+    e.preventDefault();
+    var url = '/ajax/character/skill';
+    var values =
+      {
+        operation: 'create',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      var $modal = modalShow(response['data']);
+      characterSkillBehaviors($modal, 'create');
+    })
+  });
+
+  // Update - Edit character skill.
+  $('.field.skills').on('click', 'a.skill', function (e) {
+    e.preventDefault();
+    var url = '/ajax/character/skill';
+    var values =
+      {
+        operation: 'update',
+        character_id: getUrlParameter('character_id', $(this).attr('href')),
+        skill_id: getUrlParameter('skill_id', $(this).attr('href'))
+      };
+
+    $.get(url, values, function (response) {
+      var $modal = modalShow(response['data']);
+      characterSkillBehaviors($modal, 'update');
+    })
+  });
+  refreshSkillUpdate();
+
+  function characterSkillBehaviors($wrapper, $operation)
+  {
+    // Submit.
+    $wrapper.find('.field.submit input').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/skill';
+      var values =
+        {
+          operation: $operation,
+          character_id: $wrapper.find('[name="character_id"]').val(),
+          skill_id: $wrapper.find('[name="skill_id"]').val(),
+          proficiency: $wrapper.find('[name="proficiency"]').val(),
+          modifier: $wrapper.find('[name="modifier"]').val(),
+        };
+      $.post(url, values, function()
+      {
+        $('.field.skills').refresh();
+        modalHide();
+      });
+    });
+
+    // Delete.
+    $wrapper.find('.field.delete').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/skill';
+      var values =
+        {
+          delete: 1,
+          character_id: $wrapper.find('[name="character_id"]').val(),
+          skill_id: $wrapper.find('[name="skill_id"]').val()
+        };
+      $.post(url, values, function()
+      {
+        $('.field.skills').refresh();
         modalHide();
       });
     });

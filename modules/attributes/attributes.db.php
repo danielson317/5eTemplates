@@ -160,7 +160,7 @@ function getSkill($id)
   $query->addField('attribute_id');
   $query->addConditionSimple('id', $id);
 
-  $results = $db->selectObject($query);
+  return $db->selectObject($query);
 }
 
 function createSkill($skill)

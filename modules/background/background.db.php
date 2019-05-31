@@ -76,7 +76,7 @@ function getBackground($id)
 
 function createBackground($background)
 {
-  GLOBEL $db;
+  GLOBAL $db;
   
   $query = new CreateQuery('background');
   
@@ -91,7 +91,7 @@ function createBackground($background)
 
 function updateBackground($background)
 {
-  GLOBEL $db;
+  GLOBAL $db;
   
   $query = new UpdateQuery('background');
   
@@ -122,55 +122,5 @@ function getTraitPager($page)
 
   return $db->select($query);
 }
-
-function getBackground($id)
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('background');
-  $query->addField('id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addField('skill_count');
-  $query->addConditionSimple('id', $id);
-
-  return $db->selectObject($query);
-}
-
-function createBackground($background)
-{
-  GLOBEL $db;
-  
-  $query = new CreateQuery('background');
-  
-  $query->addField('id', $background['id']);
-  $query->addField('name', $background['name']);
-  $query->addField('description', $background['description']);
-  $query->addField('skill_count', $background['skill_count']);
-  $query->addConditionSimple('id', $id);
-  
-  return $db->create($query);
-}
-
-function updateBackground($background)
-{
-  GLOBEL $db;
-  
-  $query = new UpdateQuery('background');
-  
-  $query->addField('id', $background['id']);
-  $query->addField('name', $background['name']);
-  $query->addField('description', $background['description']);
-  $query->addField('skill_count', $background['skill_count']);
-  $query->addConditionSimple('id', $id);
-  
-  return $db->update($query);
-}
-
-function getTraitType($id)
-{
-}
-
-
 
 

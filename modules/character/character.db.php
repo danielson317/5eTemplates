@@ -470,7 +470,7 @@ function deleteCharacterSkill($character_skill)
 
   $query = new DeleteQuery('character_skills');
   $query->addConditionSimple('character_id', $character_skill['character_id']);
-  $query->addConditionSimple('character_id', $character_skill['skill_id']);
+  $query->addConditionSimple('skill_id', $character_skill['skill_id']);
   $db->delete($query);
 }
 

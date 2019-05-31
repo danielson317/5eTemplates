@@ -207,7 +207,7 @@ function characterUpsertForm()
   /********************
    * Attributes Group
    ********************/
-  $group = 'attributes';
+  $group = 'attributes_group';
   $form->addGroup($group);
 
   $attributes = getAttributeList();
@@ -224,7 +224,7 @@ function characterUpsertForm()
       ),
       'class' => array('attribute'),
     );
-    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/attribute', $attr);
+    $row[] = a($attributes[$character_attribute['attribute_id']], '/ajax/character/attribute', $attr);
     $row[] = $character_attribute['score'];
     $row[] = $character_attribute['modifier'];
     $row[] = $character_attribute['proficiency'];
@@ -236,9 +236,9 @@ function characterUpsertForm()
     'query' => array(
       'character_id' => $character_id,
     ),
-    'class' => 'add-attribute',
+    'class' => array('add-attribute'),
   );
-  $link = a('Add New Attribute', '/character/attribute', $attr);
+  $link = a('Add New Attribute', '/ajax/character/attribute', $attr);
 
   $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
   $field->setGroup($group);
@@ -257,8 +257,9 @@ function characterUpsertForm()
         'character_id' => $character_id,
         'skill_id' => $character_skill['skill_id']
       ),
+      'class' => array('skill'),
     );
-    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
+    $row[] = a($skills[$character_skill['skill_id']], '/ajax/character/skill', $attr);
     $row[] = $character_skill['proficiency'];
     $row[] = $character_skill['modifier'];
     $table->addRow($row);
@@ -268,8 +269,9 @@ function characterUpsertForm()
     'query' => array(
       'character_id' => $character_id
     ),
+    'class' => array('add-skill'),
   );
-  $link = a('Add New Skill', '/character/skill', $attr);
+  $link = a('Add New Skill', '/ajax/character/skill', $attr);
 
   $field = new FieldMarkup('skills', 'Skills', $table . $link);
   $field->setGroup($group);
@@ -288,15 +290,15 @@ function characterUpsertForm()
         'language_id' => $character_language['language_id'],
       ),
     );
-    $list[] = a($languages[$character_language['language_id']], '/character/language', $attr);
+    $list[] = a($languages[$character_language['language_id']], '/ajax/character/language', $attr);
   }
 
   $attr = array(
     'query' => array('character_id' => $character_id),
   );
-  $link = a('Add New Language', '/character/language', $attr);
+  $link = a('Add New Language', '/ajax/character/language', $attr);
 
-  $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $link);
+  $field = new FieldMarkup('languages', '<none>', 'Languages ' . implode(', ', $list) . '<br>' . $link);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -507,8 +509,6 @@ function characterClassUpsertSubmitAjax()
   $response = getAjaxDefaultResponse();
 
   $character_class = $_POST;
-  unset($character_class['submit']);
-  unset($character_class['operation']);
 
   // Delete.
   if (isset($_POST['delete']))
@@ -578,7 +578,7 @@ function characterAttributeUpsertFormAjax()
   }
   elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    characterAttributeUpsertSubmit();
+    characterAttributeUpsertSubmitAjax();
   }
 
   $character_id = getUrlID('character_id');
@@ -669,11 +669,10 @@ function characterAttributeUpsertFormAjax()
   jsonResponseDie($response);
 }
 
-function characterAttributeUpsertSubmit()
+function characterAttributeUpsertSubmitAjax()
 {
+  $response = getAjaxDefaultResponse();
   $character_attribute = $_POST;
-  unset($character_attribute['submit']);
-  unset($character_attribute['operation']);
 
   if (isset($_POST['delete']))
   {
@@ -685,14 +684,15 @@ function characterAttributeUpsertSubmit()
   elseif ($_POST['operation'] == 'update')
   {
     updateCharacterAttribute($character_attribute);
-    return htmlWrap('h3', 'Updated.');
+    $response['data'] = 'Updated';
   }
   // Create.
   else
   {
     createCharacterAttribute($character_attribute);
-    return htmlWrap('h3', 'Created.');
+    $response['data'] = 'created';
   }
+  jsonResponseDie($response);
 }
 
 function characterAttributeListAjax()
@@ -714,7 +714,7 @@ function characterAttributeListAjax()
       ),
       'class' => 'attribute',
     );
-    $row[] = a($attributes[$character_attribute['class_id']], '/character/class', $attr);
+    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/class', $attr);
     $row[] = $character_attribute['score'];
     $row[] = $character_attribute['modifier'];
     $row[] = $character_attribute['proficiency'];
@@ -731,23 +731,25 @@ function characterAttributeListAjax()
  * Character Skill Upsert
  *
  ******************************************************************************/
-function characterSkillUpsertForm()
+function characterSkillUpsertFormAjax()
 {
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/character.css');
-  $template->addJsFilePath('/modules/character/character.js');
+  $response = getAjaxDefaultResponse();
 
   // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  $operation = getUrlOperation();
+  if ($operation === 'list')
   {
-    $template->addMessage(characterSkillUpsertSubmit());
+    characterSkillListAjax();
+  }
+  elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    characterSkillUpsertSubmitAjax();
   }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
   {
-    $template->addMessage('Missing parameter character_id.');
-    return $template;
+    die('Missing parameter character_id.');
   }
   $character = getCharacter($character_id);
   $skill_id = getUrlID('skill_id');
@@ -787,38 +789,7 @@ function characterSkillUpsertForm()
     $form->addField($field);
   }
 
-  // Skill List.
-  $table = new TableTemplate();
-  $table->setHeader(array('Attr', 'Prof', 'Modifier'));
-  foreach($character_skills as $character_skill)
-  {
-    $row = array();
-    $attr = array(
-      'query' => array(
-        'character_id' => $character_id,
-        'skill_id' => $character_skill['skill_id'],
-      )
-    );
-    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
-    $row[] = $character_skill['proficiency'];
-    $row[] = $character_skill['modifier'];
-    $table->addRow($row);
-  }
-
-  $attr = array(
-    'query' => array('character_id' => $character_id),
-  );
-  $links = a('Add New Skill', '/character/skill', $attr) . '<br>';
-
-  $attr = array(
-    'query' => array('id' => $character_id),
-  );
-  $links .= a('Back to ' . $character['name'], '/character', $attr);
-
-  $field = new FieldMarkup('skills', 'Skills', $table . $links);
-  $form->addField($field);
-
-  // Character.
+  // Character id.
   $field = new FieldHidden('character_id');
   $field->setValue($character_id);
   $form->addField($field);
@@ -865,35 +836,65 @@ function characterSkillUpsertForm()
     $form->addField($field);
   }
 
-  $template->setForm($form);
-
-  return $template;
+  $response['data'] = $form->__toString();
+  jsonResponseDie($response);
 }
 
-function characterSkillUpsertSubmit()
+function characterSkillListAjax()
 {
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+  $output = '';
+  // Skill List.
+  $table = new TableTemplate();
+  $skills = getSkillList();
+  $character_skills = getCharacterSkillList($character_id);
+  foreach($character_skills as $character_skill)
+  {
+    $row = array();
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'skill_id' => $character_skill['skill_id'],
+      ),
+      'class' => array('skill'),
+    );
+    $row[] = a($skills[$character_skill['skill_id']], '/character/skill', $attr);
+    $row[] = $character_skill['proficiency'];
+    $row[] = $character_skill['modifier'];
+    $output .= $table::tableRow($row);
+  }
+
+  $response['data'] = $output;
+
+  jsonResponseDie($response);
+}
+
+function characterSkillUpsertSubmitAjax()
+{
+  $response = getAjaxDefaultResponse();
   $character_skill = $_POST;
-  unset($character_skill['submit']);
-  unset($character_skill['operation']);
 
   if (isset($_POST['delete']))
   {
     deleteCharacterSkill($character_skill);
-    $attr = array('query' => array('id' => $character_skill['character_id']));
-    redirect('/character', $attr);
+    $response['data'] = 'Deleted';
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
   {
     updateCharacterSkill($character_skill);
-    return htmlWrap('h3', 'Updated.');
+    $response['data'] = 'Updated';
   }
   // Create.
   else
   {
     createCharacterSkill($character_skill);
-    return htmlWrap('h3', 'Created.');
+    $response['data'] = 'Created';
   }
+
+  jsonResponseDie($response);
 }
 
 /******************************************************************************
@@ -901,23 +902,22 @@ function characterSkillUpsertSubmit()
  * Character language Upsert
  *
  ******************************************************************************/
-function characterLanguageUpsertForm()
+function characterLanguageUpsertFormAjax()
 {
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/character.css');
-  $template->addJsFilePath('/modules/character/character.js');
+  $response = getAjaxDefaultResponse();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(characterLanguageUpsertSubmit());
+    characterLanguageUpsertSubmitAjax();
   }
 
   $character_id = getUrlID('character_id');
   if (!$character_id)
   {
-    $template->addMessage('Missing parameter character_id.');
-    return $template;
+    $response['status'] = FALSE;
+    $response['data'] = 'Missing parameter character_id.';
+    jsonResponseDie($response);
   }
   $character = getCharacter($character_id);
   $language_id = getUrlID('language_id');
@@ -942,32 +942,6 @@ function characterLanguageUpsertForm()
     $form->addField($field);
   }
   $form->setTitle($title);
-
-  // Language list.
-  $list = array();
-  foreach($character_languages as $character_language)
-  {
-    $attr = array(
-      'query' => array(
-        'character_id' => $character_id,
-        'language_id' => $character_language['language_id'],
-      )
-    );
-    $list[] = a($languages[$character_language['language_id']], '/character/language', $attr);
-  }
-
-  $attr = array(
-    'query' => array('character_id' => $character_id),
-  );
-  $links = a('Add New language', '/character/language', $attr) . '<br>';
-
-  $attr = array(
-    'attr' => array('id' => $character_id),
-  );
-  $links .= a('Back to ' . $character['name'], '/character', $attr);
-
-  $field = new FieldMarkup('languages', '<none>', 'Languages: ' . implode(', ', $list) . '<br>' . $links);
-  $form->addField($field);
 
   // Character.
   $field = new FieldHidden('character_id');
@@ -997,12 +971,38 @@ function characterLanguageUpsertForm()
     $form->addField($field);
   }
 
-  $template->setForm($form);
+  $response['data'] = $form->__toString();
 
-  return $template;
+  jsonResponseDie($response);
 }
 
-function characterLanguageUpsertSubmit()
+function characterLanguageListAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+
+  $languages = getLanguageList();
+  $character_languages = getCharacterLanguageList($character_id);
+
+  $list = array();
+  foreach($character_languages as $character_language)
+  {
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'language_id' => $character_language['language_id'],
+      ),
+      'class' => array('language'),
+    );
+    $list[] = a($languages[$character_language['language_id']], '/ajax/character/language', $attr);
+  }
+
+  $response['data'] = implode(', ', $list);
+  jsonResponseDie($response);
+}
+
+function characterLanguageUpsertSubmitAjax()
 {
   $character_language = $_POST;
   unset($character_language['submit']);
@@ -1011,8 +1011,6 @@ function characterLanguageUpsertSubmit()
   if (isset($_POST['delete']))
   {
     deleteCharacterlanguage($character_language);
-    $attr = array('query' => array('id' => $character_skill['character_id']));
-    redirect('/character', $attr);
   }
   // Create.
   else

@@ -50,8 +50,10 @@ function getRegistry($path = FALSE)
     'unknown' => 'unknown',
 
     // Ajax.
-    'ajax/character/class' => 'characterClassUpsertFormAjax',
     'ajax/character/attribute' => 'characterAttributeUpsertFormAjax',
+    'ajax/character/class' => 'characterClassUpsertFormAjax',
+    'ajax/character/language' => 'characterLanguageUpsertFormAjax',
+    'ajax/character/skill' => 'characterSkillUpsertFormAjax',
     'ajax/subclass' => 'subclassAjax',
     'ajax/subrace' => 'subraceAjax',
 
@@ -59,9 +61,7 @@ function getRegistry($path = FALSE)
     'attribute' => 'attributeUpsertForm',
     'attributes' => 'attributeList',
     'character' => 'characterUpsertForm',
-    'character/language' => 'characterLanguageUpsertForm',
     'character/print' => 'characterPrint',
-    'character/skill' => 'characterSkillUpsertForm',
     'characters' => 'characterList',
     'class' => 'classUpsertForm',
     'classes' => 'classList',
