@@ -65,3 +65,5 @@ include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';
 include ROOT_PATH . '/modules/spell/spell.pg.php';
 
+include ROOT_PATH . '/modules/subrace/subrace.db.php';
+include ROOT_PATH . '/modules/subrace/subrace.pg.php';

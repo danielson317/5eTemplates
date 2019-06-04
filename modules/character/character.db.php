@@ -27,21 +27,6 @@ function installCharacter()
   $query->addField('features', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('proficiencies');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('code', 'TEXT', 0, array('N'));
-  $query->addField('name', 'TEXT', 0, array('N'));
-  $query->addField('proficiency_type_id', 'INTEGER', 0, array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
-  $query = new CreateQuery('proficiency_types');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('code', 'TEXT', 0, array('N'));
-  $query->addField('name', 'TEXT', 0, array('N'));
-  $query->addField('description', 'TEXT');
-  $db->create($query);
-
   $query = new CreateQuery('character_classes');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('class_id', 'INTEGER', 0, array('P', 'N'));
@@ -68,16 +53,6 @@ function installCharacter()
   $query = new CreateQuery('character_languages');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('language_id', 'INTEGER', 0, array('P', 'N'));
-  $db->create($query);
-
-  $query = new CreateQuery('character_proficiency');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('proficiency_id', 'INTEGER', 0, array('P', 'N'));
-  $db->create($query);
-
-  $query = new CreateQuery('character_item');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('item_id', 'INTEGER', 0, array('P', 'N'));
   $db->create($query);
 }
 
