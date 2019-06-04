@@ -1,48 +1,48 @@
 <?php
-
 /******************************************************************************
  *
- * Player List
+ * Aoe List
  *
  ******************************************************************************/
-function playerList()
+function aoeList()
 {
   $page = getUrlID('page', 1);
-  $players = getPlayerPager($page);
+  $aoes = getAoePager($page);
 
-  $template = new ListPageTemplate('Players');
+  $template = new ListPageTemplate('Aoes');
 
   // Operations.
-  $template->addOperation(a('New Player', '/player'));
+  $template->addOperation(a('New Aoe', '/aoe'));
 
   if ($page > 1)
   {
     $attr = array(
       'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(a('Prev Page', '/player', $attr));
+    $template->addOperation(a('Prev Page', '/aoe', $attr));
   }
 
-  if (count($players) >= DEFAULT_PAGER_SIZE)
+  if (count($aoes) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(a('Next Page', '/player', $attr));
+    $template->addOperation(a('Next Page', '/aoe', $attr));
   }
 
   // List
   $table = new TableTemplate();
-  $table->setAttr('class', array('player-list'));
-  $table->setHeader(array('Name'));
+  $table->setAttr('class', array('aoe-list'));
+  $table->setHeader(array('Name', 'Description'));
 
-  foreach ($players as $player)
+  foreach ($aoes as $aoe)
   {
     $row = array();
     $attr = array(
-      'query' => array('id' => $player['id']),
+      'query' => array('id' => $aoe['id'])
     );
-    $row[] = a($player['name'], '/player', $attr);
+    $row[] = a($aoe['name'], '/aoe', $attr);
+    $row[] = $aoe['description'];
     $table->addRow($row);
   }
   $template->setList($table);
@@ -51,28 +51,28 @@ function playerList()
 
 /******************************************************************************
  *
- * Player Upsert
+ * Aoe Upsert
  *
  ******************************************************************************/
-function playerUpsertForm()
+function aoeUpsertForm()
 {
   $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(playerUpsertSubmit());
+    $template->addMessage(aoeUpsertSubmit());
   }
 
-  $player_id = getUrlID('id');
+  $aoe_id = getUrlID('id');
 
-  $form = new Form('player_form');
-  $title = 'Add New Player';
-  if ($player_id)
+  $form = new Form('aoe_form');
+  $title = 'Add New Aoe';
+  if ($aoe_id)
   {
-    $player = getPlayer($player_id);
-    $form->setValues($player);
-    $title = 'Edit player ' . htmlWrap('em', $player['name']);
+    $aoe = getAoe($aoe_id);
+    $form->setValues($aoe);
+    $title = 'Edit aoe ' . htmlWrap('em', $aoe['name']);
   }
   $form->setTitle($title);
 
@@ -84,9 +84,13 @@ function playerUpsertForm()
   $field = new FieldText('name', 'Name');
   $form->addField($field);
 
+  // Description.
+  $field = new FieldTextarea('description', 'Description');
+  $form->addField($field);
+
   // Submit
   $value = 'Add';
-  if ($player_id)
+  if ($aoe_id)
   {
     $value = 'Update';
   }
@@ -94,7 +98,7 @@ function playerUpsertForm()
   $form->addField($field);
 
   // Delete.
-  if ($player_id)
+  if ($aoe_id)
   {
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
@@ -105,28 +109,28 @@ function playerUpsertForm()
   return $template;
 }
 
-function playerUpsertSubmit()
+function aoeUpsertSubmit()
 {
-  $player = $_POST;
-  unset($player['submit']);
+  $aoe = $_POST;
+  unset($aoe['submit']);
 
   if (isset($_POST['delete']))
   {
-    deletePlayer($player['id']);
-    redirect('/players');
+    deleteAoe($aoe['id']);
+    redirect('/aoes');
   }
 
   // Update.
-  if ($player['id'])
+  if ($aoe['id'])
   {
-    updatePlayer($player);
-    return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') updated.');
+    updateAoe($aoe);
+    return htmlWrap('h3', 'Aoe ' . htmlWrap('em', $aoe['name']) . ' (' . $aoe['id'] . ') updated.');
   }
   // Create.
   else
   {
-    unset($player['id']);
-    $player['id'] = createPlayer($player);
-    return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') created.');
+    unset($aoe['id']);
+    $aoe['id'] = createAoe($aoe);
+    return htmlWrap('h3', 'Aoe ' . htmlWrap('em', $aoe['name']) . ' (' . $aoe['id'] . ') created.');
   }
 }

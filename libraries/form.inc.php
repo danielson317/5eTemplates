@@ -222,10 +222,10 @@ class FieldText extends Field
 //    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'text';
-    if ($this->value)
-    {
+//    if ($this->value)
+//    {
       $attr['value'] = $this->value;
-    }
+//    }
     $output .= htmlSolo('input', $attr);
 
     // Wrapper.

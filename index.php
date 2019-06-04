@@ -58,8 +58,10 @@ function getRegistry($path = FALSE)
     'ajax/subrace' => 'subraceAjax',
 
     // Modules.
+    'aoe' => 'aoeUpsertForm',
+    'aoes' => 'aoeList',
     'attribute' => 'attributeUpsertForm',
-    'attribute' => 'attributeList',
+    'attributes' => 'attributeList',
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
@@ -84,15 +86,19 @@ function getRegistry($path = FALSE)
     'ranges' => 'rangeList',
     'rarities' => 'rarityList',
     'rarity' => 'rarityUpsertForm',
+    'school' => 'schoolUpsertForm',
+    'schools' => 'schoolList',
     'script' => 'scriptUpsertForm',
     'scripts' => 'scriptList',
     'skill' => 'skillUpsertForm',
     'skills' => 'skillList',
+    'source' => 'sourceUpsertForm',
+    'sources' => 'sourceList',
+    'speed' => 'speedUpsertForm',
+    'speeds' => 'speedList',
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
-    'source' => 'sourceUpsertForm',
-    'sources' => 'sourceList',
     'subrace' => 'subraceUpsertForm',
     'subraces' => 'subraceList',
     'subclass' => 'subclassUpsertForm',
@@ -123,7 +129,7 @@ function menu()
   // Characters
   $output .= a('Characters', '/characters');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(a('Attributes', '/attribute'));
+  $submenu->addListItem(a('Attributes', '/attributes'));
   $submenu->addListItem(a('Classes', '/classes'));
   $submenu->addListItem(a('Languages', '/languages'));
   $submenu->addListItem(a('Races', '/races'));
@@ -146,7 +152,10 @@ function menu()
   // Spells.
   $output .= a('Spells', '/spells');
   $submenu = new ListTemplate('ul');
+  $submenu->addListItem(a('AOEs', '/aoes'));
   $submenu->addListItem(a('Ranges', '/ranges'));
+  $submenu->addListItem(a('Schools', '/schools'));
+  $submenu->addListItem(a('Speeds', '/speeds'));
   $output .= $submenu;
 
   // Other.

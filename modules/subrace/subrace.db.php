@@ -1,6 +1,6 @@
 <?php
 
-function installRace()
+function installSubrace()
 {
   GLOBAL $db;
 

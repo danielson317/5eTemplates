@@ -16,6 +16,7 @@ if (!file_exists(DB_PATH))
 
 //  installArmor();
 //  installArmorType();
+  installAoe();
   installAttribute();
   installBackground();
   installCharacter();
@@ -23,11 +24,19 @@ if (!file_exists(DB_PATH))
   installDamageType();
   installItem();
   installItemType();
+  installLanguage();
 //  installMonster();
   installPlayer();
   installRace();
+  installRange();
+  installSchool();
+  installScript();
   installSkill();
+  installSource();
+  installSpeed();
   installSpell();
+  installSubclass();
+  installSubrace();
 //  installTool();
 //  installToolType();
 //  installWeapon();

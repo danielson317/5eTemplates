@@ -2,28 +2,28 @@
 
 /******************************************************************************
  *
- * Player List
+ * Source List
  *
  ******************************************************************************/
-function playerList()
+function sourceList()
 {
   $page = getUrlID('page', 1);
-  $players = getPlayerPager($page);
+  $sources = getSourcePager($page);
 
-  $template = new ListPageTemplate('Players');
+  $template = new ListPageTemplate('Sources');
 
   // Operations.
-  $template->addOperation(a('New Player', '/player'));
+  $template->addOperation(a('New Source', '/source', $attr));
 
   if ($page > 1)
   {
     $attr = array(
       'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(a('Prev Page', '/player', $attr));
+    $template->addOperation(a('Prev Page', '/source', $attr));
   }
 
-  if (count($players) >= DEFAULT_PAGER_SIZE)
+  if (count($sources) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
@@ -33,16 +33,17 @@ function playerList()
 
   // List
   $table = new TableTemplate();
-  $table->setAttr('class', array('player-list'));
-  $table->setHeader(array('Name'));
+  $table->setAttr('class', array('source-list'));
+  $table->setHeader(array('Name', 'Code'));
 
-  foreach ($players as $player)
+  foreach ($sources as $source)
   {
     $row = array();
     $attr = array(
-      'query' => array('id' => $player['id']),
+      'query' => array('id' => $source['id']),
     );
-    $row[] = a($player['name'], '/player', $attr);
+    $row[] = a($source['name'], '/source', $attr);
+    $row[] = $source['code'];
     $table->addRow($row);
   }
   $template->setList($table);
@@ -51,28 +52,28 @@ function playerList()
 
 /******************************************************************************
  *
- * Player Upsert
+ * Source Upsert
  *
  ******************************************************************************/
-function playerUpsertForm()
+function sourceUpsertForm()
 {
   $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(playerUpsertSubmit());
+    $template->addMessage(sourceUpsertSubmit());
   }
 
-  $player_id = getUrlID('id');
+  $source_id = getUrlID('id');
 
-  $form = new Form('player_form');
-  $title = 'Add New Player';
-  if ($player_id)
+  $form = new Form('source_form');
+  $title = 'Add New source';
+  if ($source_id)
   {
-    $player = getPlayer($player_id);
-    $form->setValues($player);
-    $title = 'Edit player ' . htmlWrap('em', $player['name']);
+    $source = getSource($source_id);
+    $form->setValues($source);
+    $title = 'Edit source ' . htmlWrap('em', $source['name']);
   }
   $form->setTitle($title);
 
@@ -84,9 +85,13 @@ function playerUpsertForm()
   $field = new FieldText('name', 'Name');
   $form->addField($field);
 
+  // Name
+  $field = new FieldText('code', 'Code');
+  $form->addField($field);
+
   // Submit
   $value = 'Add';
-  if ($player_id)
+  if ($source_id)
   {
     $value = 'Update';
   }
@@ -94,7 +99,7 @@ function playerUpsertForm()
   $form->addField($field);
 
   // Delete.
-  if ($player_id)
+  if ($source_id)
   {
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
@@ -105,28 +110,28 @@ function playerUpsertForm()
   return $template;
 }
 
-function playerUpsertSubmit()
+function sourceUpsertSubmit()
 {
-  $player = $_POST;
-  unset($player['submit']);
+  $source = $_POST;
+  unset($source['submit']);
 
   if (isset($_POST['delete']))
   {
-    deletePlayer($player['id']);
-    redirect('/players');
+    deleteSource($source['id']);
+    redirect('/sources');
   }
 
   // Update.
-  if ($player['id'])
+  if ($_POST['id'])
   {
-    updatePlayer($player);
-    return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') updated.');
+    updateSource($source);
+    return htmlWrap('h3', 'Source ' . htmlWrap('em', $source['name']) . ' (' . $source['id'] . ') updated.');
   }
   // Create.
   else
   {
-    unset($player['id']);
-    $player['id'] = createPlayer($player);
-    return htmlWrap('h3', 'Player ' . htmlWrap('em', $player['name']) . ' (' . $player['id'] . ') created.');
+    unset($source['id']);
+    $source['id'] = createSource($source);
+    return htmlWrap('h3', 'Source ' . htmlWrap('em', $source['name']) . ' (' . $source['id'] . ') created.');
   }
 }
