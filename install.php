@@ -14,15 +14,24 @@ if (!file_exists(DB_PATH))
   installUser();
   installSession();
 
-  installAttributes();
+//  installArmor();
+//  installArmorType();
+  installAttribute();
   installBackground();
   installCharacter();
   installClass();
+  installDamageType();
   installItem();
-  //installMonster();
+  installItemType();
+//  installMonster();
   installPlayer();
   installRace();
+  installSkill();
   installSpell();
+//  installTool();
+//  installToolType();
+//  installWeapon();
+//  installWeaponType();
 }
 
 redirect('/');

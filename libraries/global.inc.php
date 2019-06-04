@@ -428,11 +428,11 @@ function _sanitizeXssHelper($m, $store = FALSE)
     return "</$elem>";
   }
 
-  // Is there a closing XHTML slash at the end of the attributes?
+  // Is there a closing XHTML slash at the end of the attribute?
   $attrlist = preg_replace('%(\s?)/\s*$%', '\1', $attrlist, -1, $count);
   $xhtml_slash = $count ? ' /' : '';
 
-  // Clean up attributes.
+  // Clean up attribute.
 //  $attr2 = implode(' ', $attrlist); //_filter_xss_attributes($attrlist));
   $attr2 = preg_replace('/[<>]/', '', $attrlist);
   $attr2 = strlen($attr2) ? ' ' . $attr2 : '';

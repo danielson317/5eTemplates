@@ -59,7 +59,7 @@ function getRegistry($path = FALSE)
 
     // Modules.
     'attribute' => 'attributeUpsertForm',
-    'attributes' => 'attributeList',
+    'attribute' => 'attributeList',
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
@@ -123,7 +123,7 @@ function menu()
   // Characters
   $output .= a('Characters', '/characters');
   $submenu = new ListTemplate('ul');
-  $submenu->addListItem(a('Attributes', '/attributes'));
+  $submenu->addListItem(a('Attributes', '/attribute'));
   $submenu->addListItem(a('Classes', '/classes'));
   $submenu->addListItem(a('Languages', '/languages'));
   $submenu->addListItem(a('Races', '/races'));

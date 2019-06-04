@@ -30,8 +30,8 @@ include ROOT_PATH . '/libraries/user/user.pg.php';
  * Modules.
  ****************/
 
-include ROOT_PATH . '/modules/attributes/attributes.db.php';
-include ROOT_PATH . '/modules/attributes/attributes.pg.php';
+include ROOT_PATH . '/modules/attribute/attribute.db.php';
+include ROOT_PATH . '/modules/attribute/attribute.pg.php';
 
 include ROOT_PATH . '/modules/background/background.db.php';
 
@@ -43,14 +43,23 @@ include ROOT_PATH . '/modules/class/class.db.php';
 include ROOT_PATH . '/modules/class/class.inc.php';
 include ROOT_PATH . '/modules/class/class.pg.php';
 
+include ROOT_PATH . '/modules/damage_type/damage_type.db.php';
+include ROOT_PATH . '/modules/damage_type/damage_type.pg.php';
+
 include ROOT_PATH . '/modules/item/item.db.php';
 include ROOT_PATH . '/modules/item/item.pg.php';
+
+include ROOT_PATH . '/modules/item_type/item_type.db.php';
+include ROOT_PATH . '/modules/item_type/item_type.pg.php';
 
 include ROOT_PATH . '/modules/player/player.db.php';
 include ROOT_PATH . '/modules/player/player.pg.php';
 
 include ROOT_PATH . '/modules/race/race.db.php';
 include ROOT_PATH . '/modules/race/race.pg.php';
+
+include ROOT_PATH . '/modules/skill/skill.db.php';
+include ROOT_PATH . '/modules/skill/skill.pg.php';
 
 include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';

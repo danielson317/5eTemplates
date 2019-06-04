@@ -240,7 +240,7 @@ function characterUpsertForm()
   );
   $link = a('Add New Attribute', '/ajax/character/attribute', $attr);
 
-  $field = new FieldMarkup('attributes', 'Attributes', $table . $link);
+  $field = new FieldMarkup('attribute', 'Attributes', $table . $link);
   $field->setGroup($group);
   $form->addField($field);
 

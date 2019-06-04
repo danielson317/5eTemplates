@@ -117,7 +117,7 @@ $(document).ready(function()
    * Attributes.
    **********************/
   // View - Refresh the list.
-  $('.field.attributes').on('refresh', '', function()
+  $('.field.attribute').on('refresh', '', function()
   {
     var url = '/ajax/character/attribute';
     var values =
@@ -130,7 +130,7 @@ $(document).ready(function()
     {
       if (response['status'])
       {
-        $('.attributes tbody').html(response['data']);
+        $('.attribute tbody').html(response['data']);
       }
     });
   });
@@ -154,7 +154,7 @@ $(document).ready(function()
   });
 
   // Update - Edit character attribute.
-  $('.field.attributes').on('click', 'a.attribute',function(e)
+  $('.field.attribute').on('click', 'a.attribute',function(e)
   {
     e.preventDefault();
     var url = '/ajax/character/attribute';
@@ -191,7 +191,7 @@ $(document).ready(function()
       };
       $.post(url, values, function()
       {
-        $('.field.attributes').refresh();
+        $('.field.attribute').refresh();
         modalHide();
       });
     });
@@ -209,7 +209,7 @@ $(document).ready(function()
         };
       $.post(url, values, function()
       {
-        $('.field.attributes').refresh();
+        $('.field.attribute').refresh();
         modalHide();
       });
     });
