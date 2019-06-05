@@ -52,11 +52,11 @@ function characterList()
     );
     $row[] = a($character['name'], '/character', $attr);
 
-    $character_classes = getCharacterClassList($character['id']);
+    $character_class_map = getCharacterClassList($character['id']);
     $class = [];
     $subclass = [];
     $level = [];
-    foreach ($character_classes as $character_class)
+    foreach ($character_class_map as $character_class)
     {
       $class[] = $classes[$character_class['class_id']];
       $subclass[] = $character_class['subclass_id'] ? $subclasses[$character_class['subclass_id']] : '';
@@ -139,8 +139,8 @@ function characterUpsertForm()
   {
     $table = new TableTemplate('character-class');
     $table->setHeader(array('Class', 'Subclass', 'Level'));
-    $character_classes = getCharacterClassList($character_id);
-    foreach ($character_classes as $character_class)
+    $character_class_map = getCharacterClassList($character_id);
+    foreach ($character_class_map as $character_class)
     {
 
       $row = array();
@@ -211,10 +211,10 @@ function characterUpsertForm()
   $form->addGroup($group);
 
   $attributes = getAttributeList();
-  $character_attributes = getCharacterAttributeList($character_id);
+  $character_attribute_map = getCharacterAttributeList($character_id);
   $table = new TableTemplate();
   $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
-  foreach($character_attributes as $character_attribute)
+  foreach($character_attribute_map as $character_attribute)
   {
     $row = array();
     $attr = array(
@@ -246,10 +246,10 @@ function characterUpsertForm()
 
   // Skills
   $skills = getSkillList();
-  $character_skills = getCharacterSkillList($character_id);
+  $character_skill_map = getCharacterSkillList($character_id);
   $table = new TableTemplate();
   $table->setHeader(array('Skill', 'Prof', 'Mod'));
-  foreach($character_skills as $character_skill)
+  foreach($character_skill_map as $character_skill)
   {
     $row = array();
     $attr = array(
@@ -279,18 +279,18 @@ function characterUpsertForm()
 
   // Languages
   $languages = getLanguageList();
-  $character_languages = getCharacterLanguageList($character_id);
+  $character_language_maps = getCharacterLanguageList($character_id);
 
   $list = array();
-  foreach($character_languages as $character_language)
+  foreach($character_language_maps as $character_language_map)
   {
     $attr = array(
       'query' => array(
         'character_id' => $character_id,
-        'language_id' => $character_language['language_id'],
+        'language_id' => $character_language_map['language_id'],
       ),
     );
-    $list[] = a($languages[$character_language['language_id']], '/ajax/character/language', $attr);
+    $list[] = a($languages[$character_language_map['language_id']], '/ajax/character/language', $attr);
   }
 
   $attr = array(
@@ -428,7 +428,7 @@ function characterClassUpsertFormAjax()
   $character = getCharacter($character_id);
   $class_id = getUrlID('class_id');
   $classes = getClassList();
-  $character_classes = getCharacterClassList($character_id);
+  $character_class_map = getCharacterClassList($character_id);
 
   $form = new Form('character_class_form');
   if ($class_id)
@@ -458,7 +458,7 @@ function characterClassUpsertFormAjax()
   if (!$class_id)
   {
     $options = array(0 => '--Select One--') + $classes;
-    foreach ($character_classes as $character_class)
+    foreach ($character_class_map as $character_class)
     {
       unset($options[$character_class['class_id']]);
     }
@@ -539,8 +539,8 @@ function characterClassListAjax()
   $output = '';
   $classes = getClassList();
   $subclasses = getSubclassList();
-  $character_classes = getCharacterClassList($character_id);
-  foreach ($character_classes as $character_class)
+  $character_class_map = getCharacterClassList($character_id);
+  foreach ($character_class_map as $character_class)
   {
 
     $row = array();
@@ -589,7 +589,7 @@ function characterAttributeUpsertFormAjax()
   $character = getCharacter($character_id);
   $attribute_id = getUrlID('attribute_id');
   $attributes = getAttributeList();
-  $character_attributes = getCharacterAttributeList($character_id);
+  $character_attribute_map = getCharacterAttributeList($character_id);
 
   $form = new Form('character_attribute_form');
   if ($attribute_id)
@@ -617,7 +617,7 @@ function characterAttributeUpsertFormAjax()
   if (!$attribute_id)
   {
     $options = $attributes;
-    foreach ($character_attributes as $character_attribute)
+    foreach ($character_attribute_map as $character_attribute)
     {
       unset($options[$character_attribute['attribute_id']]);
     }
@@ -702,8 +702,8 @@ function characterAttributeListAjax()
 
   $output = '';
   $attributes = getAttributeList();
-  $character_attributes = getCharacterAttributeList($character_id);
-  foreach ($character_attributes as $character_attribute)
+  $character_attribute_map = getCharacterAttributeList($character_id);
+  foreach ($character_attribute_map as $character_attribute)
   {
 
     $row = array();
@@ -754,7 +754,7 @@ function characterSkillUpsertFormAjax()
   $character = getCharacter($character_id);
   $skill_id = getUrlID('skill_id');
   $skills = getSkillList();
-  $character_skills = getCharacterSkillList($character_id);
+  $character_skill_map = getCharacterSkillList($character_id);
 
   $form = new Form('character_skill_form');
   if ($skill_id)
@@ -798,7 +798,7 @@ function characterSkillUpsertFormAjax()
   if (!$skill_id)
   {
     $options = $skills;
-    foreach ($character_skills as $character_skill)
+    foreach ($character_skill_map as $character_skill)
     {
       unset($options[$character_skill['skill_id']]);
     }
@@ -849,8 +849,8 @@ function characterSkillListAjax()
   // Skill List.
   $table = new TableTemplate();
   $skills = getSkillList();
-  $character_skills = getCharacterSkillList($character_id);
-  foreach($character_skills as $character_skill)
+  $character_skill_map = getCharacterSkillList($character_id);
+  foreach($character_skill_map as $character_skill)
   {
     $row = array();
     $attr = array(
@@ -922,14 +922,14 @@ function characterLanguageUpsertFormAjax()
   $character = getCharacter($character_id);
   $language_id = getUrlID('language_id');
   $languages = getlanguageList();
-  $character_languages = getCharacterLanguageList($character_id);
+  $character_language_maps = getCharacterLanguageList($character_id);
 
-  $form = new Form('character_language_form');
+  $form = new Form('character_language_map_form');
   if ($language_id)
   {
-    $character_language = getCharacterlanguage($character_id, $language_id);
-    $form->setValues($character_language);
-    $title = 'Delete character ' . htmlWrap('em', $character['name']) . '\'s language ' . htmlWrap('em', $languages[$character_language['language_id']]);
+    $character_language_map = getCharacterlanguage($character_id, $language_id);
+    $form->setValues($character_language_map);
+    $title = 'Delete character ' . htmlWrap('em', $character['name']) . '\'s language ' . htmlWrap('em', $languages[$character_language_map['language_id']]);
 
     $field = new FieldHidden('operation', 'delete');
     $form->addField($field);
@@ -960,9 +960,9 @@ function characterLanguageUpsertFormAjax()
   else
   {
     $options = $languages;
-    foreach ($character_languages as $character_language)
+    foreach ($character_language_maps as $character_language_map)
     {
-      unset($options[$character_language['language_id']]);
+      unset($options[$character_language_map['language_id']]);
     }
     $field = new FieldSelect('language_id', 'language', $options);
     $form->addField($field);
@@ -983,19 +983,19 @@ function characterLanguageListAjax()
 
 
   $languages = getLanguageList();
-  $character_languages = getCharacterLanguageList($character_id);
+  $character_language_maps = getCharacterLanguageList($character_id);
 
   $list = array();
-  foreach($character_languages as $character_language)
+  foreach($character_language_maps as $character_language_map)
   {
     $attr = array(
       'query' => array(
         'character_id' => $character_id,
-        'language_id' => $character_language['language_id'],
+        'language_id' => $character_language_map['language_id'],
       ),
       'class' => array('language'),
     );
-    $list[] = a($languages[$character_language['language_id']], '/ajax/character/language', $attr);
+    $list[] = a($languages[$character_language_map['language_id']], '/ajax/character/language', $attr);
   }
 
   $response['data'] = implode(', ', $list);
@@ -1004,18 +1004,18 @@ function characterLanguageListAjax()
 
 function characterLanguageUpsertSubmitAjax()
 {
-  $character_language = $_POST;
-  unset($character_language['submit']);
-  unset($character_language['operation']);
+  $character_language_map = $_POST;
+  unset($character_language_map['submit']);
+  unset($character_language_map['operation']);
 
   if (isset($_POST['delete']))
   {
-    deleteCharacterlanguage($character_language);
+    deleteCharacterlanguage($character_language_map);
   }
   // Create.
   else
   {
-    createCharacterlanguage($character_language);
+    createCharacterlanguage($character_language_map);
     return htmlWrap('h3', 'Created.');
   }
 }

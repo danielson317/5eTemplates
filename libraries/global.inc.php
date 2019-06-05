@@ -446,20 +446,6 @@ function _sanitizeXssHelper($m, $store = FALSE)
  *
  ******************************************************************************/
 
-function getDiceList()
-{
-  return array(
-    '2' => 'd2',
-    '4' => 'd4',
-    '6' => 'd6',
-    '8' => 'd8',
-    '10' => 'd10',
-    '12' => 'd12',
-    '20' => 'd20',
-    '100' => 'd100'
-  );
-}
-
 function u($path, $attr = array())
 {
   if (!CLEAN_URLS)

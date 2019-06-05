@@ -22,6 +22,7 @@ if (!file_exists(DB_PATH))
   installCharacter();
   installClass();
   installDamageType();
+  installDie();
   installItem();
   installItemType();
   installLanguage();

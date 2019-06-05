@@ -1,56 +1,61 @@
 <?php
-/******************************************************************************
+/***
  *
- *  Install.
+ * item.db.php
  *
- ******************************************************************************/
+ * items - any physical object that a creature may poses. Includes armor, weapons, tools, adventure gear, money, etc.
+ * item_types - The hierarchical classification of the item that describes how game rules apply to it or groups
+ *    the items by proficiencies and usages. "armor" => "light armor", "weapon", "tool", "adventure gear" => "holy symbol", etc.
+ *
+ *
+ */
+
+/**
+ *
+ */
 function installItem()
 {
   GLOBAL $db;
 
-  // Sword, Shield, Rome, Boots of butt-kicking, etc.
   $query = new CreateQuery('items');
+
+  // All items.
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('item_type_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('item_type_details', 'TEXT', 64);
   $query->addField('value', 'INTEGER', 0, array('N'), 0);
   $query->addField('weight', 'INTEGER', 0, array('N'), 0);
-  $query->addField('rarity_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('attunement', 'INTEGER', 0, array('N'), 0);
-  $query->addField('attunement_requirements', 'TEXT', 64);
-  $query->addField('artifact', 'INTEGER', 0, array('N'), 0);
   $query->addField('description', 'TEXT', 1024);
   $query->addField('source_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('source_location', 'INTEGER', 0, array('N'), 0);
+  $query->addField('bonus', 'INTEGER', 0, array('N'), 0);
 
-  $query->addField('damage_die_count', 'INTEGER', 0, array('N'), 0);
-  $query->addField('damage_die', 'INTEGER', 0, array('N'), 0);
-  $query->addField('damage_type_id', 'INTEGER', 0, array('N'), 0);
+  // Weapons
   $query->addField('range_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('disadvantage_range_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('max_range_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('light', 'INTEGER', 0, array('N'), 0);
+  $query->addField('finesse', 'INTEGER', 0, array('N'), 0);
+  $query->addField('thrown', 'INTEGER', 0, array('N'), 0);
+  $query->addField('ammunition', 'INTEGER', 0, array('N'), 0);
+  $query->addField('loading', 'INTEGER', 0, array('N'), 0);
+  $query->addField('heavy', 'INTEGER', 0, array('N'), 0);
+  $query->addField('reach', 'INTEGER', 0, array('N'), 0);
+  $query->addField('special', 'INTEGER', 0, array('N'), 0);
+  $query->addField('two-handed', 'INTEGER', 0, array('N'), 0);
 
-  $query->addField('ac', 'INTEGER', 0, array('N'), 0);
-  $query->addField('strength', 'INTEGER', 0, array('N'), 0);
+  // Armor
+  $query->addField('base_ac', 'INTEGER', 0, array('N'), 0);
+  $query->addField('dex_cap', 'INTEGER', 0, array('N'), 0);
+  $query->addField('strength_requirement', 'INTEGER', 0, array('N'), 0);
+  $query->addField('stealth_disadvantage', 'INTEGER', 0, array('N'), 0);
+
   $db->create($query);
 
-  // Ammunition, Heavy, Versatile, etc.
-  $query = new CreateQuery('item_properties');
+  // Item damage many to many map.
+  $query = new CreateQuery('item_damage_map');
   $query->addField('item_id', 'INTEGER', 0, array('P'));
-  $query->addField('property_id', 'INTEGER', 0, array('P'));
-
-  // Ammunition, Heavy, Versatile, etc.
-  $query = new CreateQuery('properties');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
-  $db->create($query);
-
-  // Common, uncommon, rare, etc.
-  $query = new CreateQuery('rarities');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
+  $query->addField('item_damage_id', 'INTEGER', 0, array('P'));
+  $query->addField('versatile', 0, 'INTEGER', array('N'), 0);
   $db->create($query);
 }
 
@@ -261,101 +266,4 @@ function deleteRarity($rarity_id)
   $db->delete($query);
 }
 
-/******************************************************************************
- *
- *  Property.
- *
- ******************************************************************************/
 
-/**
- * @param int $page
- *
- * @return array
- */
-function getPropertyPager($page = 1)
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('properties');
-  $query->addField('id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addOrderSimple('id');
-  $query->addPager($page);
-
-  return $db->select($query);
-}
-
-/**
- * @return array
- */
-function getPropertyList()
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('properties');
-  $query->addField('id')->addField('name', 'value');
-
-  return $db->selectList($query);
-}
-
-/**
- * @param int $property_id
- *
- * @return array|false
- */
-function getProperty($property_id)
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('properties');
-  $query->addField('id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addConditionSimple('id', $property_id);
-
-  return $db->selectObject($query);
-}
-
-/**
- * @param array $property
- *
- * @return int
- */
-function createProperty($property)
-{
-  GLOBAL $db;
-
-  $query = new InsertQuery('properties');
-  $query->addField('name', $property['name']);
-  $query->addField('description', $property['description']);
-
-  return $db->insert($query);
-}
-
-/**
- * @param array $property
- */
-function updateProperty($property)
-{
-  GLOBAL $db;
-
-  $query = new UpdateQuery('properties');
-  $query->addField('name', $property['name']);
-  $query->addField('description', $property['description']);
-  $query->addConditionSimple('id', $property['id']);
-
-  $db->update($query);
-}
-
-/**
- * @param int $property_id
- */
-function deleteProperty($property_id)
-{
-  GLOBAL $db;
-  $query = new DeleteQuery('properties');
-  $query->addConditionSimple('id', $property_id);
-
-  $db->delete($query);
-}

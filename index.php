@@ -60,53 +60,77 @@ function getRegistry($path = FALSE)
     // Modules.
     'aoe' => 'aoeUpsertForm',
     'aoes' => 'aoeList',
+
     'attribute' => 'attributeUpsertForm',
     'attributes' => 'attributeList',
+
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
+
     'class' => 'classUpsertForm',
     'classes' => 'classList',
-    'damage-types' => 'damageTypeList',
+
     'damage-type' => 'damageTypeUpsertForm',
+    'damage-types' => 'damageTypeList',
+
+    'die' => 'dieUpsertForm',
+    'dice' => 'dieList',
+
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
+
     'item-type' => 'itemTypeUpsertForm',
     'item-types' => 'itemTypeList',
+
     'language' => 'languageUpsertForm',
     'languages' => 'languageList',
+
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
+
     'properties' => 'propertyList',
     'property' => 'propertyUpsertForm',
+
     'race' => 'raceUpsertForm',
     'races' => 'raceList',
+
     'range' => 'rangeUpsertForm',
     'ranges' => 'rangeList',
+
     'rarities' => 'rarityList',
     'rarity' => 'rarityUpsertForm',
+
     'school' => 'schoolUpsertForm',
     'schools' => 'schoolList',
+
     'script' => 'scriptUpsertForm',
     'scripts' => 'scriptList',
+
     'skill' => 'skillUpsertForm',
     'skills' => 'skillList',
+
     'source' => 'sourceUpsertForm',
     'sources' => 'sourceList',
+
     'speed' => 'speedUpsertForm',
     'speeds' => 'speedList',
+
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
     'spells/print' => 'spellPrintForm',
+
     'subrace' => 'subraceUpsertForm',
     'subraces' => 'subraceList',
+
     'subclass' => 'subclassUpsertForm',
     'subclasses' => 'subclassList',
 
     // Users.
     'user' => 'userUpsertForm',
     'users' => 'userListPage',
+
     'login' => 'userLoginForm',
     'logout' => 'userLogout',
   );
@@ -163,6 +187,7 @@ function menu()
   $submenu = new ListTemplate('ul');
   $submenu->addListItem(a('Sources', '/sources'));
   $submenu->addListItem(a('Players', '/players'));
+  $submenu->addListItem(a('Dice', '/dice'));
   $output .= $submenu;
 
   // Users.

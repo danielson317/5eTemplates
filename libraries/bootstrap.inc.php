@@ -72,6 +72,9 @@ include ROOT_PATH . '/modules/class/class.pg.php';
 include ROOT_PATH . '/modules/damage_type/damage_type.db.php';
 include ROOT_PATH . '/modules/damage_type/damage_type.pg.php';
 
+include ROOT_PATH . '/modules/die/die.db.php';
+include ROOT_PATH . '/modules/die/die.pg.php';
+
 include ROOT_PATH . '/modules/item/item.db.php';
 include ROOT_PATH . '/modules/item/item.pg.php';
 

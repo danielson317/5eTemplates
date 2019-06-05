@@ -50,7 +50,7 @@ function itemList()
     $attr = array(
       'query' => array('id' => $item['id']),
     );
-    $row[] = a($item['name'], $item['name'], $attr);
+    $row[] = a($item['name'], '/item', $attr);
     $row[] = $item['value'];
     $row[] = $item_types[$item['item_type_id']];
     $row[] = $item['description'];

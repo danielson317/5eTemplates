@@ -27,14 +27,14 @@ function installCharacter()
   $query->addField('features', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('character_classes');
+  $query = new CreateQuery('character_class_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('class_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('subclass_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('level', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 
-  $query = new CreateQuery('character_attributes');
+  $query = new CreateQuery('character_attribute_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('attribute_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('score', 'INTEGER', 0, array('N'), 8);
@@ -43,14 +43,14 @@ function installCharacter()
   $query->addField('saving_throw', 'INTEGER', 0, array('N'), -1);
   $db->create($query);
 
-  $query = new CreateQuery('character_skills');
+  $query = new CreateQuery('character_skill_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('skill_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
   $query->addField('modifier', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 
-  $query = new CreateQuery('character_languages');
+  $query = new CreateQuery('character_language_maps');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('language_id', 'INTEGER', 0, array('P', 'N'));
   $db->create($query);
@@ -171,7 +171,7 @@ function getCharacterClassList($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_classes');
+  $query = new SelectQuery('character_class_map');
   $query->addField('class_id');
   $query->addField('subclass_id');
   $query->addField('level');
@@ -190,7 +190,7 @@ function getCharacterClass($character_id, $class_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_classes');
+  $query = new SelectQuery('character_class_map');
   $query->addField('character_id');
   $query->addField('class_id');
   $query->addField('subclass_id');
@@ -211,7 +211,7 @@ function createCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_classes');
+  $query = new InsertQuery('character_class_map');
   $query->addField('character_id', $character_class['character_id']);
   $query->addField('class_id', $character_class['class_id']);
   $query->addField('subclass_id', $character_class['subclass_id']);
@@ -223,7 +223,7 @@ function updateCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_classes');
+  $query = new UpdateQuery('character_class_map');
   $query->addField('subclass_id', $character_class['subclass_id']);
   $query->addField('level', $character_class['level']);
   $query->addConditionSimple('character_id', $character_class['character_id']);
@@ -235,7 +235,7 @@ function deleteCharacterClass($character_class)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_classes');
+  $query = new DeleteQuery('character_class_map');
   $query->addConditionSimple('character_id', $character_class['character_id']);
   $query->addConditionSimple('class_id', $character_class['class_id']);
   $db->delete($query);
@@ -255,7 +255,7 @@ function getCharacterAttributeList($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attributes');
+  $query = new SelectQuery('character_attribute_map');
   $query->addField('character_id');
   $query->addField('attribute_id');
   $query->addField('score');
@@ -283,7 +283,7 @@ function getCharacterAttribute($character_id, $attribute_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attributes');
+  $query = new SelectQuery('character_attribute_map');
   $query->addField('character_id');
   $query->addField('attribute_id');
   $query->addField('score');
@@ -309,7 +309,7 @@ function createCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_attributes');
+  $query = new InsertQuery('character_attribute_map');
   $query->addField('character_id', $character_attribute['character_id']);
   $query->addField('attribute_id', $character_attribute['attribute_id']);
   $query->addField('score', $character_attribute['score']);
@@ -326,7 +326,7 @@ function updateCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_attributes');
+  $query = new UpdateQuery('character_attribute_map');
   $query->addField('score', $character_attribute['score']);
   $query->addField('modifier', $character_attribute['modifier']);
   $query->addField('proficiency', $character_attribute['proficiency']);
@@ -343,7 +343,7 @@ function deleteCharacterAttribute($character_attribute)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_attributes');
+  $query = new DeleteQuery('character_attribute_map');
   $query->addConditionSimple('character_id', $character_attribute['character_id']);
   $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
   $db->delete($query);
@@ -364,7 +364,7 @@ function getCharacterSkillList($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_skills');
+  $query = new SelectQuery('character_skill_map');
   $query->addField('skill_id');
   $query->addField('proficiency');
   $query->addField('modifier');
@@ -389,7 +389,7 @@ function getCharacterSkill($character_id, $skill_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_skills');
+  $query = new SelectQuery('character_skill_map');
   $query->addField('character_id');
   $query->addField('skill_id');
   $query->addField('proficiency');
@@ -413,7 +413,7 @@ function createCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_skills');
+  $query = new InsertQuery('character_skill_map');
   $query->addField('character_id', $character_skill['character_id']);
   $query->addField('skill_id', $character_skill['skill_id']);
   $query->addField('proficiency', $character_skill['proficiency']);
@@ -428,7 +428,7 @@ function updateCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_skills');
+  $query = new UpdateQuery('character_skill_map');
   $query->addField('proficiency', $character_skill['proficiency']);
   $query->addField('modifier', $character_skill['modifier']);
   $query->addConditionSimple('character_id', $character_skill['character_id']);
@@ -443,7 +443,7 @@ function deleteCharacterSkill($character_skill)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_skills');
+  $query = new DeleteQuery('character_skill_map');
   $query->addConditionSimple('character_id', $character_skill['character_id']);
   $query->addConditionSimple('skill_id', $character_skill['skill_id']);
   $db->delete($query);
@@ -464,7 +464,7 @@ function getCharacterLanguageList($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_languages');
+  $query = new SelectQuery('character_language_maps');
   $query->addField('language_id');
   $query->addConditionSimple('character_id', $character_id);
   $query->addOrderSimple('language_id', QueryOrder::DIRECTION_ASC);
@@ -487,7 +487,7 @@ function getCharacterLanguage($character_id, $language_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_languages');
+  $query = new SelectQuery('character_language_maps');
   $query->addField('character_id');
   $query->addField('language_id');
   $query->addConditionSimple('character_id', $character_id);
@@ -503,27 +503,27 @@ function getCharacterLanguage($character_id, $language_id)
 }
 
 /**
- * @param array $character_language
+ * @param array $character_language_map
  */
-function createCharacterLanguage($character_language)
+function createCharacterLanguage($character_language_map)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_languages');
-  $query->addField('character_id', $character_language['character_id']);
-  $query->addField('language_id', $character_language['language_id']);
+  $query = new InsertQuery('character_language_maps');
+  $query->addField('character_id', $character_language_map['character_id']);
+  $query->addField('language_id', $character_language_map['language_id']);
   $db->insert($query);
 }
 
 /**
- * @param array $character_language
+ * @param array $character_language_map
  */
-function deleteCharacterLanguage($character_language)
+function deleteCharacterLanguage($character_language_map)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_languages');
-  $query->addConditionSimple('character_id', $character_language['character_id']);
-  $query->addConditionSimple('language_id', $character_language['language_id']);
+  $query = new DeleteQuery('character_language_maps');
+  $query->addConditionSimple('character_id', $character_language_map['character_id']);
+  $query->addConditionSimple('language_id', $character_language_map['language_id']);
   $db->delete($query);
 }

@@ -36,7 +36,7 @@ function classList()
   $table->setAttr('class', array('class-list'));
   $table->setHeader(array('Name', 'Hit Die'));
 
-  $dice = getDiceList();
+  $dice = getDieList();
   foreach ($classes as $class)
   {
     $row = array();
@@ -91,7 +91,7 @@ function classUpsertForm()
   $form->addField($field);
 
   // Hit Die
-  $options = array(0 => '--Select One--') + getDiceList();
+  $options = array(0 => '--Select One--') + getDieList();
   $field = new FieldSelect('hit_die', 'Hit Die', $options);
   $form->addField($field);
 

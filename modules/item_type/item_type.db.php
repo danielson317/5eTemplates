@@ -1,10 +1,5 @@
 <?php
 
-/******************************************************************************
- *
- *  Install.
- *
- ******************************************************************************/
 function installItemType()
 {
   GLOBAL $db;
@@ -13,9 +8,11 @@ function installItemType()
   $query = new CreateQuery('item_types');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('parent_item_type_id', 0, array('N'), 0);
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 }
+
 /**
  * @param int $page
  *
@@ -47,7 +44,6 @@ function getItemTypeList()
 
   return $db->selectList($query);
 }
-
 
 /**
  * @param $item_type_id
