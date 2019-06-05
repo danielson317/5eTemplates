@@ -58,7 +58,6 @@ function installDie()
   {
     createDie($die);
   }
-
 }
 
 /**

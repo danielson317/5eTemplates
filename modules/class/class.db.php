@@ -19,6 +19,52 @@ function installClass()
   $query->addField('subclass_name', 'TEXT', 32);
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
+
+  $sources = array_flip(getSourceList());
+  $attributes = array_flip(getAttributeList());
+  $classes = array(
+    array(
+      'name' => 'Cleric',
+      'description' => '',
+      'hit_die' => 8,
+      'stp1' => $attributes['WIS'],
+      'stp2' => $attributes['CHA'],
+      'subclass_name' => 'Divine Domain',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Fighter',
+      'description' => '',
+      'hit_die' => 10,
+      'stp1' => $attributes['STR'],
+      'stp2' => $attributes['CON'],
+      'subclass_name' => 'Martial Archetype',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Rogue',
+      'description' => '',
+      'hit_die' => 8,
+      'stp1' => $attributes['DEX'],
+      'stp2' => $attributes['INT'],
+      'subclass_name' => 'Roguish Archetype',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Wizard',
+      'description' => '',
+      'hit_die' => 6,
+      'stp1' => $attributes['INT'],
+      'stp2' => $attributes['WIS'],
+      'subclass_name' => 'Arcane Tradition',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  foreach ($classes as $class)
+  {
+    createClass($class);
+  }
 }
 
 

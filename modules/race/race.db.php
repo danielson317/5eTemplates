@@ -11,6 +11,39 @@ function installRace()
   $query->addField('speed', 'INTEGER', 0, array('N'), 30);
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
+
+  $sources = array_flip(getSourceList());
+  $races = array(
+    array(
+      'name' => 'Dwarf',
+      'description' => '',
+      'speed' => 25,
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Elf',
+      'description' => '',
+      'speed' => 30,
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Halfling',
+      'description' => '',
+      'speed' => 25,
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Human',
+      'description' => '',
+      'speed' => 25,
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  foreach ($races as $race)
+  {
+    createRace($race);
+  }
 }
 
 /******************************************************************************

@@ -42,20 +42,20 @@ function installItem()
   $query->addField('reach', 'INTEGER', 0, array('N'), 0);
   $query->addField('special', 'INTEGER', 0, array('N'), 0);
   $query->addField('two-handed', 'INTEGER', 0, array('N'), 0);
+  $query->addField('magic', 'INTEGER', 0, array('N'), 0);
 
   // Armor
   $query->addField('base_ac', 'INTEGER', 0, array('N'), 0);
   $query->addField('dex_cap', 'INTEGER', 0, array('N'), 0);
   $query->addField('strength_requirement', 'INTEGER', 0, array('N'), 0);
   $query->addField('stealth_disadvantage', 'INTEGER', 0, array('N'), 0);
-
   $db->create($query);
 
   // Item damage many to many map.
   $query = new CreateQuery('item_damage_map');
   $query->addField('item_id', 'INTEGER', 0, array('P'));
   $query->addField('item_damage_id', 'INTEGER', 0, array('P'));
-  $query->addField('versatile', 0, 'INTEGER', array('N'), 0);
+  $query->addField('versatile', 'INTEGER', array('N'), 0);
   $db->create($query);
 }
 
@@ -77,8 +77,6 @@ function getItemPager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('item_type_id');
-  $query->addField('value');
-  $query->addField('attunement');
   $query->addField('description');
   $query->addOrderSimple('id');
   $query->addPager($page);

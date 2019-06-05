@@ -8,6 +8,9 @@ function installPlayer()
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 32, array('N'));
   $db->create($query);
+
+  $player = array(array('name' => 'Daniel P. Henry'));
+  createPlayer($player);
 }
 
 /**

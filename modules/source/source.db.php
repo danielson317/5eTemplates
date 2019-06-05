@@ -9,6 +9,46 @@ function installSource()
   $query->addField('code', 'TEXT', 8, array('N'));
   $query->addField('name', 'TEXT', 32, array('N'));
   $db->create($query);
+
+  $sources = array(
+    array(
+      'code' => 'BR',
+      'name' => 'Basic Rules',
+    ),
+    array(
+      'code' => 'PHB',
+      'name' => 'Player Handbook',
+    ),
+    array(
+      'code' => 'DMG',
+      'name' => 'Dungeon Master\'s Guide',
+    ),
+    array(
+      'code' => 'MM',
+      'name' => 'Monster Manual',
+    ),
+    array(
+      'code' => 'SCAG',
+      'name' => 'Sword Coast Adventurer\'s Guide',
+    ),
+    array(
+      'code' => 'VGM',
+      'name' => 'Volo\'s guid to Monsters',
+    ),
+    array(
+      'code' => 'MTF',
+      'name' => 'Mordenkainen\'s Tome of Foes',
+    ),
+    array(
+      'code' => 'XGE',
+      'name' => 'Xanathar\'s Guide to Everything',
+    ),
+  );
+
+  foreach ($sources as $source)
+  {
+    createSource($source);
+  }
 }
 
 /**

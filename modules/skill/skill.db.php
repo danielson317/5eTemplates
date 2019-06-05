@@ -11,6 +11,123 @@ function installSkill()
   $query->addField('attribute_id', 'INTEGER', 0, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $attributes = array_flip(getAttributeList());
+  $skills = array(
+    array(
+      'code' => 'Acb',
+      'name' => 'Acrobatics',
+      'attribute_id' => $attributes['DEX'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'AnH',
+      'name' => 'Animal Handling',
+      'attribute_id' => $attributes['WIS'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Arc',
+      'name' => 'Arcana',
+      'attribute_id' => $attributes['INT'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Ath',
+      'name' => 'Athletics',
+      'attribute_id' => $attributes['STR'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Dec',
+      'name' => 'Deception',
+      'attribute_id' => $attributes['CHA'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'His',
+      'name' => 'History',
+      'attribute_id' => $attributes['INT'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Ins',
+      'name' => 'Insight',
+      'attribute_id' => $attributes['WIS'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Itm',
+      'name' => 'Intimidation',
+      'attribute_id' => $attributes['CHA'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Inv',
+      'name' => 'Investigation',
+      'attribute_id' => $attributes['INT'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Med',
+      'name' => 'Medicine',
+      'attribute_id' => $attributes['WIS'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Nat',
+      'name' => 'Nature',
+      'attribute_id' => $attributes['INT'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Prc',
+      'name' => 'Perception',
+      'attribute_id' => $attributes['WIS'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Prf',
+      'name' => 'Performance',
+      'attribute_id' => $attributes['CHA'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Prs',
+      'name' => 'Persuasion',
+      'attribute_id' => $attributes['CHA'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Rel',
+      'name' => 'Religion',
+      'attribute_id' => $attributes['INT'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'SoH',
+      'name' => 'Slight of Hand',
+      'attribute_id' => $attributes['DEX'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Stl',
+      'name' => 'Stealth',
+      'attribute_id' => $attributes['DEX'],
+      'description' => '',
+    ),
+    array(
+      'code' => 'Srv',
+      'name' => 'Survival',
+      'attribute_id' => $attributes['WIS'],
+      'description' => '',
+    ),
+  );
+
+  foreach($skills as $skill)
+  {
+    createSkill($skills);
+  }
 }
 
 function getSkillPager($page = 1)

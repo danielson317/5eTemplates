@@ -1,9 +1,4 @@
 <?php
-/******************************************************************************
- *
- * Item Types
- *
- ******************************************************************************/
 
 /**
  * @return ListPageTemplate
@@ -106,7 +101,6 @@ function itemTypeUpsertForm()
 function itemTypeUpsertSubmit()
 {
   $item_type = $_POST;
-  unset($item_type['submit']);
 
   if ($item_type['id'])
   {
@@ -115,7 +109,6 @@ function itemTypeUpsertSubmit()
   }
   else
   {
-    unset($item_type['id']);
     $item_type['id'] = createItemType($item_type);
     return htmlWrap('h3', 'New item type' . htmlWrap('em', $item_type['name']) . ' (' . $item_type['id'] . ') created.');
   }

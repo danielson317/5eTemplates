@@ -2,5 +2,6 @@
 *.db-journal
 *.db
 .idea
+.DS_Store
 ValloricMonsterStatblock
 platform.inc.php

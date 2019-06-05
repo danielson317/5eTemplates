@@ -84,7 +84,7 @@ function dieUpsertForm()
   $form->addField($field);
 
   // ID.
-  $field = new FieldText('id', 'Distance (in character speed units)');
+  $field = new FieldText('id', 'ID');
   $form->addField($field);
 
   // Name

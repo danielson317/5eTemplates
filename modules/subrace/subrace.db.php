@@ -4,13 +4,59 @@ function installSubrace()
 {
   GLOBAL $db;
 
-  $query = new CreateQuery('races');
+  $query = new CreateQuery('subraces');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
+  $query->addField('race_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
-  $query->addField('speed', 'INTEGER', 0, array('N'), 30);
   $query->addField('source_id', 'INTEGER');
   $db->create($query);
+
+  $sources = array_flip(getSourceList());
+  $races = array_flip(getRaceList());
+  $races = array(
+    array(
+      'race_id' => $races['Dwarf'],
+      'name' => 'Hill Dwarf',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'race_id' => $races['Dwarf'],
+      'name' => 'Mountain Dwarf',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'race_id' => $races['Elf'],
+      'name' => 'Wood Elf',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'race_id' => $races['Elf'],
+      'name' => 'High Elf',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'race_id' => $races['Halfling'],
+      'name' => 'Lightfoot Halfling',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'race_id' => $races['Halfling'],
+      'name' => 'Stout Halfling',
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  foreach ($races as $race)
+  {
+    createRace($race);
+  }
 }
 
 /**

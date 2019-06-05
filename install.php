@@ -14,30 +14,31 @@ if (!file_exists(DB_PATH))
   installUser();
   installSession();
 
+  installSource();
+
 //  installArmor();
 //  installArmorType();
   installAoe();
   installAttribute();
   installBackground();
   installCharacter();
-  installClass();
+  installClass(); // Depends on Attribute, Source
   installDamageType();
   installDie();
   installItem();
   installItemType();
-  installLanguage();
+  installScript(); // Depends on Source.
+  installLanguage(); // Depends on Script, Source
 //  installMonster();
   installPlayer();
-  installRace();
+  installRace(); // Depends on Source
   installRange();
   installSchool();
-  installScript();
-  installSkill();
-  installSource();
+  installSkill(); // Depends on Attribute.
   installSpeed();
   installSpell();
-  installSubclass();
-  installSubrace();
+  installSubclass(); // Depends on Class, Source
+  installSubrace(); // Depends on Race, Source
 //  installTool();
 //  installToolType();
 //  installWeapon();

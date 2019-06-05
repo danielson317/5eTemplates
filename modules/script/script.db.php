@@ -10,6 +10,50 @@ function installScript()
   $query->addField('source_id', 'INTEGER');
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $sources = array_flip(getSourceList());
+  $scripts = array(
+    array(
+      'name' => 'Common',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Dwarvish',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Elvish',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Infernal',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Celestial',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Draconic',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+    array(
+      'name' => 'Unwritten',
+      'source_id' => $sources['BR'],
+      'description' => '',
+    ),
+  );
+
+  foreach ($scripts as $script)
+  {
+    createScript($script);
+  }
 }
 
 /**
