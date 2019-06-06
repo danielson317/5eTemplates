@@ -29,14 +29,15 @@ define('DATE_FORM', 'm/d/Y');
  ******************************************************************************/
 function debugPrint($variable, $name = '', $die = TRUE)
 {
-  echo '<h1 class="debug">' . $name . '</h1>';
-  echo '<pre>';
-  print_r($variable);
-  echo '</pre>';
+  $output = '';
+  $output .= htmlWrap('strong', $name);
+  $output .= htmlWrap('pre', print_r($variable, TRUE));
+  $output = htmlWrap('div', $output, array('class' => array('debug')));
   if ($die)
   {
-    die();
+    die($output);
   }
+  echo $output;
 }
 
 /******************************************************************************
@@ -114,7 +115,7 @@ class URL
 
   function getPath()
   {
-    return $this->path;
+    return urldecode($this->path);
   }
 
   function getQuery()
@@ -184,6 +185,7 @@ function jsonResponseDie($response)
   echo json_encode($response);
   die();
 }
+
 /******************************************************************************
  *
  * HTML Helpers

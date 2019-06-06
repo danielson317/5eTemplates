@@ -204,6 +204,6 @@ function userUpsertFormSubmit()
     {
       message($e->getMessage());
     }
-    redirect(u('', array('preserve_query' => 1)));
+    redirect('/', array('preserve_query' => 1));
   }
 }

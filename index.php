@@ -28,8 +28,13 @@ if (!$logged_in_user && $path !== 'unknown')
   $path = 'login';
 }
 
+if ($path === '')
+{
+  $path = '/';
+}
+
 // Retrieve body.
-$function = getRegistry($url->getPath());
+$function = getRegistry($path);
 echo $function();
 
 /******************************************************************************
