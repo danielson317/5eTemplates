@@ -80,6 +80,16 @@ function getAttributeList()
   return $db->selectList($query);
 }
 
+function getAttributeCodeList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('attributes');
+  $query->addField('id')->addField('code', 'value');
+
+  return $db->selectList($query);
+}
+
 function getAttribute($id)
 {
   GLOBAL $db;

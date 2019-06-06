@@ -92,7 +92,7 @@ function languageUpsertForm()
   $form->addField($field);
 
   // Source
-  $options = array(0 => '--Select One--') + getSourceList();
+  $options = array(0 => '--Select One--') + getSourceDetailList();
   $field = new FieldSelect('source_id', 'Source', $options);
   $form->addField($field);
 

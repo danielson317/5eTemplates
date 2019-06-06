@@ -20,7 +20,8 @@ if (!file_exists(DB_PATH))
 //  installArmorType();
   installAoe();
   installAttribute();
-  installBackground();
+  installBackground(); // Depends on Source.
+  installBackgroundCharacteristics(); // Depends on Source, Background.
   installCharacter();
   installClass(); // Depends on Attribute, Source
   installDamageType();

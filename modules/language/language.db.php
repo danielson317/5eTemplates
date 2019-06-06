@@ -113,4 +113,111 @@ function installLanguage()
       'description' => '',
     ),
   );
+
+  foreach ($languages as $languge)
+  {
+    createLanguage($languge);
+  }
+}
+
+/**
+ * @param int $page
+ *
+ * @return array|false
+ */
+function getLanguagePager($page = 1)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+
+  $query->addPager($page);
+
+  return $db->select($query);
+}
+
+/**
+ * @return array
+ */
+function getLanguageList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id')->addField('name', 'value');
+
+  return $db->selectList($query);
+}
+
+/**
+ * @param int $language_id
+ *
+ * @return array|false
+ */
+function getLanguage($language_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('languages');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('source_id');
+  $query->addField('script_id');
+  $query->addField('description');
+  $query->addConditionSimple('id', $language_id);
+
+  return $db->selectObject($query);
+}
+
+/**
+ * @param array $language
+ *
+ * @return int
+ */
+function createLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('languages');
+  $query->addField('name', $language['name']);
+  $query->addField('source_id', $language['source_id']);
+  $query->addField('script_id', $language['script_id']);
+  $query->addField('description', $language['description']);
+
+  return $db->insert($query);
+}
+
+/**
+ * @param array $language
+ */
+function updateLanguage($language)
+{
+  GLOBAL $db;
+
+  $query = new UpdateQuery('languages');
+  $query->addField('name', $language['name']);
+  $query->addField('source_id', $language['source_id']);
+  $query->addField('script_id', $language['script_id']);
+  $query->addField('description', $language['description']);
+  $query->addConditionSimple('id', $language['id']);
+
+  $db->update($query);
+}
+
+/**
+ * @param int $language_id
+ */
+function deleteLanguage($language_id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('languages');
+  $query->addConditionSimple('id', $language_id);
+
+  $db->delete($query);
 }

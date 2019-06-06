@@ -12,7 +12,7 @@ function installSkill()
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
-  $attributes = array_flip(getAttributeList());
+  $attributes = array_flip(getAttributeCodeList());
   $skills = array(
     array(
       'code' => 'Acb',
@@ -41,7 +41,7 @@ function installSkill()
     array(
       'code' => 'Dec',
       'name' => 'Deception',
-      'attribute_id' => $attributes['CHA'],
+      'attribute_id' => $attributes['CHR'],
       'description' => '',
     ),
     array(
@@ -59,7 +59,7 @@ function installSkill()
     array(
       'code' => 'Itm',
       'name' => 'Intimidation',
-      'attribute_id' => $attributes['CHA'],
+      'attribute_id' => $attributes['CHR'],
       'description' => '',
     ),
     array(
@@ -89,13 +89,13 @@ function installSkill()
     array(
       'code' => 'Prf',
       'name' => 'Performance',
-      'attribute_id' => $attributes['CHA'],
+      'attribute_id' => $attributes['CHR'],
       'description' => '',
     ),
     array(
       'code' => 'Prs',
       'name' => 'Persuasion',
-      'attribute_id' => $attributes['CHA'],
+      'attribute_id' => $attributes['CHR'],
       'description' => '',
     ),
     array(
@@ -124,9 +124,13 @@ function installSkill()
     ),
   );
 
+//  echo '<pre>';
+//  print_r($attributes);
+//  print_r($skills);
+//  die('</pre>');
   foreach($skills as $skill)
   {
-    createSkill($skills);
+    createSkill($skill);
   }
 }
 

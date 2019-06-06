@@ -78,6 +78,20 @@ function getSourceList()
 
   $query = new SelectQuery('sources');
   $query->addField('id');
+  $query->addField('code', 'value');
+
+  return $db->selectList($query);
+}
+
+/**
+ * @return array
+ */
+function getSourceDetailList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('sources');
+  $query->addField('id');
   $query->addFieldBypass($db->concatenate(
     $db->structureEscape('sources') . '.' . $db->structureEscape('code'),
     $db->literal(' - '),

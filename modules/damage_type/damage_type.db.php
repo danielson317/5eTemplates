@@ -14,6 +14,79 @@ function installDamageType()
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $damage_types = array(
+    array(
+      'code' => 'Acid',
+      'name' => 'Acid',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Bl',
+      'name' => 'Bludgeoning',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Cold',
+      'name' => 'Cold',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Fire',
+      'name' => 'Fire',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Frc',
+      'name' => 'Force',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Ltn',
+      'name' => 'Lightning',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Ncr',
+      'name' => 'Necrotic',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Pi',
+      'name' => 'Piercing',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Poi',
+      'name' => 'Poison',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Psy',
+      'name' => 'Psychic',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Rad',
+      'name' => 'Radiant',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Sl',
+      'name' => 'Slashing',
+      'description' => '',
+    ),
+    array(
+      'code' => 'Thnd',
+      'name' => 'Thunder',
+      'description' => '',
+    ),
+  );
+
+  foreach ($damage_types as $damage_type)
+  {
+    createDamageType($damage_type);
+  }
 }
 
 /**

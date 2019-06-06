@@ -11,6 +11,98 @@ function installSpeed()
   $query->addField('duration', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $speeds = array(
+    array(
+      'id' => 1,
+      'casting_time' => 'Instant',
+      'duration' => 'Forever',
+      'description' => '',
+    ),
+    array(
+      'id' => 2,
+      'casting_time' => 'Reaction',
+      'duration' => '',
+      'description' => '',
+    ),
+    array(
+      'id' => 3,
+      'casting_time' => 'BA',
+      'duration' => 'End of targets next turn',
+      'description' => '',
+    ),
+    array(
+      'id' => 6,
+      'casting_time' => 'Action',
+      'duration' => 'End of your next turn',
+      'description' => '',
+    ),
+    array(
+      'id' => 60,
+      'casting_time' => '1 Minute',
+      'duration' => '1 Minute',
+      'description' => '',
+    ),
+    array(
+      'id' => 600,
+      'casting_time' => '10 Minutes',
+      'duration' => '10 Minutes',
+      'description' => '',
+    ),
+    array(
+      'id' => 3600,
+      'casting_time' => '1 Hour',
+      'duration' => '1 Hour',
+      'description' => '',
+    ),
+    array(
+      'id' => 7200,
+      'casting_time' => '2 Hours',
+      'duration' => '2 Hours',
+      'description' => '',
+    ),
+    array(
+      'id' => 28800,
+      'casting_time' => '8 Hours',
+      'duration' => '8 Hours',
+      'description' => '',
+    ),
+    array(
+      'id' => 43200,
+      'casting_time' => '12 Hours',
+      'duration' => '12 Hours',
+      'description' => '',
+    ),
+    array(
+      'id' => 86400,
+      'casting_time' => '24 Hours',
+      'duration' => '24 Hours',
+      'description' => '',
+    ),
+    array(
+      'id' => 604800,
+      'casting_time' => '7 Days',
+      'duration' => '7 Days',
+      'description' => '',
+    ),
+    array(
+      'id' => 864000,
+      'casting_time' => '10 Days',
+      'duration' => '10 Days',
+      'description' => '',
+    ),
+    array(
+      'id' => 2592000,
+      'casting_time' => '30 Days',
+      'duration' => '30 Days',
+      'description' => '',
+    ),
+  );
+
+  foreach ($speeds as $speed)
+  {
+    createSpeed($speed);
+  }
 }
 
 /**

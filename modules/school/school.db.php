@@ -10,6 +10,46 @@ function installSchool()
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $schools = array(
+    array(
+      'name' => 'Abjuration',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Conjuration',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Divination',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Enchantment',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Evocation',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Illusion',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Necromancy',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Transmutation',
+      'description' => '',
+    ),
+  );
+
+  foreach ($schools as $school)
+  {
+    createSchool($school);
+  }
 }
 
 /**

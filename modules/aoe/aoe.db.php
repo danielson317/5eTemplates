@@ -10,6 +10,34 @@ function installAoe()
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $aoes = array(
+    array(
+      'name' => 'Cone',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Cube',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Cylinders',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Line',
+      'description' => '',
+    ),
+    array(
+      'name' => 'Sphere',
+      'description' => '',
+    ),
+  );
+
+  foreach ($aoes as $aoe)
+  {
+    createAoe($aoe);
+  }
 }
 
 /**

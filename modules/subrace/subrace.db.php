@@ -55,7 +55,7 @@ function installSubrace()
 
   foreach ($races as $race)
   {
-    createRace($race);
+    createSubrace($race);
   }
 }
 

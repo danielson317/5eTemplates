@@ -102,7 +102,7 @@ function spellUpsertForm()
   $form->addField($field);
 
   // Source.
-  $options = getSourceList();
+  $options = getSourceDetailList();
   $field = new FieldSelect('source_id', 'Source', $options);
   $field->setValue(1);
   $form->addField($field);

@@ -9,7 +9,7 @@ function installPlayer()
   $query->addField('name', 'TEXT', 32, array('N'));
   $db->create($query);
 
-  $player = array(array('name' => 'Daniel P. Henry'));
+  $player = array('name' => 'Daniel P. Henry');
   createPlayer($player);
 }
 
