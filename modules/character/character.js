@@ -256,22 +256,23 @@ $(document).ready(function()
   });
 
   // Update - Edit character skill.
-  $('.field.skills').on('click', 'a.skill', function (e) {
+  $('.field.skills').on('click', 'a.skill', function (e) 
+  {
     e.preventDefault();
     var url = '/ajax/character/skill';
     var values =
-      {
-        operation: 'update',
-        character_id: getUrlParameter('character_id', $(this).attr('href')),
-        skill_id: getUrlParameter('skill_id', $(this).attr('href'))
-      };
+    {
+      operation: 'update',
+      character_id: getUrlParameter('character_id', $(this).attr('href')),
+      skill_id: getUrlParameter('skill_id', $(this).attr('href'))
+    };
 
-    $.get(url, values, function (response) {
+    $.get(url, values, function (response) 
+    {
       var $modal = modalShow(response['data']);
       characterSkillBehaviors($modal, 'update');
     })
   });
-  refreshSkillUpdate();
 
   function characterSkillBehaviors($wrapper, $operation)
   {
@@ -281,13 +282,13 @@ $(document).ready(function()
       e.preventDefault();
       var url = '/ajax/character/skill';
       var values =
-        {
-          operation: $operation,
-          character_id: $wrapper.find('[name="character_id"]').val(),
-          skill_id: $wrapper.find('[name="skill_id"]').val(),
-          proficiency: $wrapper.find('[name="proficiency"]').val(),
-          modifier: $wrapper.find('[name="modifier"]').val(),
-        };
+      {
+        operation: $operation,
+        character_id: $wrapper.find('[name="character_id"]').val(),
+        skill_id: $wrapper.find('[name="skill_id"]').val(),
+        proficiency: $wrapper.find('[name="proficiency"]').val(),
+        modifier: $wrapper.find('[name="modifier"]').val(),
+      };
       $.post(url, values, function()
       {
         $('.field.skills').refresh();
@@ -309,6 +310,106 @@ $(document).ready(function()
       $.post(url, values, function()
       {
         $('.field.skills').refresh();
+        modalHide();
+      });
+    });
+  }
+
+  /**********************
+   * Languages.
+   **********************/
+  // View - Refresh the list.
+  $('.field.languages').on('refresh', '', function()
+  {
+    var url = '/ajax/character/language';
+    var values =
+      {
+        operation: 'list',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      if (response['status'])
+      {
+        $('.languages .language-list').html(response['data']);
+      }
+    });
+  });
+
+  // Create - Add new character language.
+  $('.add-language').click(function(e)
+  {
+    e.preventDefault();
+    var url = '/ajax/character/language';
+    var values =
+      {
+        operation: 'create',
+        character_id: getUrlParameter('id')
+      };
+
+    $.get(url, values, function(response)
+    {
+      var $modal = modalShow(response['data']);
+      characterLanguageBehaviors($modal, 'create');
+    })
+  });
+
+  // Update - Edit character language.
+  $('.field.languages').on('click', 'a.language', function (e)
+  {
+    e.preventDefault();
+    var url = '/ajax/character/language';
+    var values =
+      {
+        operation: 'update',
+        character_id: getUrlParameter('character_id', $(this).attr('href')),
+        language_id: getUrlParameter('language_id', $(this).attr('href'))
+      };
+
+    $.get(url, values, function (response)
+    {
+      var $modal = modalShow(response['data']);
+      characterLanguageBehaviors($modal, 'update');
+    })
+  });
+
+  function characterLanguageBehaviors($wrapper, $operation)
+  {
+    // Submit.
+    $wrapper.find('.field.submit input').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/language';
+      var values =
+        {
+          operation: $operation,
+          character_id: $wrapper.find('[name="character_id"]').val(),
+          language_id: $wrapper.find('[name="language_id"]').val(),
+          proficiency: $wrapper.find('[name="proficiency"]').val(),
+          modifier: $wrapper.find('[name="modifier"]').val(),
+        };
+      $.post(url, values, function()
+      {
+        $('.field.languages').refresh();
+        modalHide();
+      });
+    });
+
+    // Delete.
+    $wrapper.find('.field.delete').click(function(e)
+    {
+      e.preventDefault();
+      var url = '/ajax/character/language';
+      var values =
+        {
+          delete: 1,
+          character_id: $wrapper.find('[name="character_id"]').val(),
+          language_id: $wrapper.find('[name="language_id"]').val()
+        };
+      $.post(url, values, function()
+      {
+        $('.field.languages').refresh();
         modalHide();
       });
     });

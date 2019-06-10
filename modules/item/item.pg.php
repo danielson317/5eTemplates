@@ -66,7 +66,7 @@ function itemUpsertForm()
   $template->addCssFilePath('/themes/default/css/item.css');
 
   // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
   {
     $template->addMessage(itemUpsertSubmit());
   }
@@ -83,6 +83,9 @@ function itemUpsertForm()
   }
   $form->setTitle($title);
 
+  /*****************
+   * Base items.
+   *****************/
   // ID.
   $field = new FieldHidden('id');
   $form->addField($field);
@@ -96,33 +99,12 @@ function itemUpsertForm()
   $field = new FieldSelect('item_type_id', 'Type', $options);
   $form->addField($field);
 
-  // Item Type Details.
-  $field = new FieldText('item_type_details', 'Type Details');
-  $form->addField($field);
-
   // Value.
   $field = new FieldText('value', 'Value (cp)');
   $form->addField($field);
 
   // Weight.
   $field = new FieldText('weight', 'Weight (lbs)');
-  $form->addField($field);
-
-  // Rarity
-  $options = getRarityList();
-  $field = new FieldSelect('rarity_id', 'Rarity', $options);
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldCheckbox('attunement', 'Requires Attunement');
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldText('attunement_requirements', 'Attunement Conditions');
-  $form->addField($field);
-
-  // Artifact.
-  $field = new FieldCheckbox('artifact', 'Artifact');
   $form->addField($field);
 
   // Description.
@@ -136,6 +118,96 @@ function itemUpsertForm()
 
   // Source location (page number).
   $field = new FieldNumber('source_location', 'Page');
+  $form->addField($field);
+
+  /*****************
+   * Magic.
+   *****************/
+  // Magical items.
+  $field = new FieldCheckbox('magic', 'Magical');
+  $form->addField($field);
+
+  // Rarity.
+  $options = getRarityList();
+  $field = new FieldSelect('rarity_id', 'Rarity', $options);
+  $form->addField($field);
+
+  // Bonus.
+  $field = new FieldNumber('bonus', 'Weapon/Armor Bonus');
+  $form->addField($field);
+
+  // Attunement.
+  $field = new FieldCheckbox('attunement', 'Requires Attunement');
+  $form->addField($field);
+
+  // Attunement Requirements.
+  $field = new FieldText('attunement_requirements', 'Attunement Conditions');
+  $form->addField($field);
+
+  /*****************
+   * Weapons.
+   *****************/
+  // Range.
+  $field = new FieldSelect('range_id', 'Range');
+  $form->addField($field);
+
+  // Max Range.
+  $field = new FieldSelect('max_range_id', 'Max Range');
+  $form->addField($field);
+
+  // Light.
+  $field = new FieldCheckbox('light', 'Light');
+  $form->addField($field);
+
+  // Finesse.
+  $field = new FieldCheckbox('finesse', 'Finesse');
+  $form->addField($field);
+
+  // Thrown.
+  $field = new FieldCheckbox('thrown', 'Thrown');
+  $form->addField($field);
+
+  // Ammunition.
+  $field = new FieldCheckbox('ammunition', 'Ammunition');
+  $form->addField($field);
+
+  // Loading.
+  $field = new FieldCheckbox('loading', 'Loading');
+  $form->addField($field);
+
+  // Heavy.
+  $field = new FieldCheckbox('heavy', 'Heavy');
+  $form->addField($field);
+
+  // Reach.
+  $field = new FieldCheckbox('reach', 'Reach');
+  $form->addField($field);
+
+  // Special.
+  $field = new FieldCheckbox('special', 'Special');
+  $form->addField($field);
+
+  // Two Handed.
+  $field = new FieldCheckbox('two_handed', 'Two Handed');
+  $form->addField($field);
+
+  /*****************
+   * Armor.
+   *****************/
+  // Base AC.
+  $field = new FieldNumber('base_ac', 'Base AC');
+  $form->addField($field);
+
+  // Dexterity Cap.
+  $field = new FieldNumber('dex_cap', 'Dexterity Cap');
+  $form->addField($field);
+
+  // Strength Requirement.
+  $field = new FieldNumber('strength_requirement', 'Strength Requirement');
+  $form->addField($field);
+
+  // Stealth Disadvantage.
+  $field = new FieldNumber('stealth_disadvantage', 'Stealth Disadvantage');
   $form->addField($field);
 
   // Submit
@@ -308,243 +380,4 @@ function printItemCard($item)
   include ROOT_PATH . '/themes/default/templates/item.tpl.php';
 
   return ob_get_clean();
-}
-
-/******************************************************************************
- *
- * Rarity.
- *
- ******************************************************************************/
-function rarityList()
-{
-  $page = getUrlID('page', 1);
-  $rarities = getRarityPager($page);
-
-  $template = new ListPageTemplate('Rarities');
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Operations.
-  $template->addOperation(a('New Rarity', '/rarity', $attr));
-
-  if ($page > 1)
-  {
-    $attr = array(
-      'query' => array('page' => ($page - 1)),
-    );
-    $template->addOperation(a('Prev Page', '/rarity', $attr));
-  }
-
-  if (count($rarities) >= DEFAULT_PAGER_SIZE)
-  {
-    $attr = array(
-      'query' => array('page' => ($page + 1)),
-    );
-    $template->addOperation(a('Prev Page', '/rarity', $attr));
-  }
-
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('rarity-list'));
-  $table->setHeader(array('Name', 'Description'));
-
-  foreach($rarities as $rarity)
-  {
-    $row = array();
-    $attr = array(
-      'href' => 'rarity?id=' . $rarity['id'],
-    );
-    $row[] = htmlWrap('a', $rarity['name'], $attr);
-    $row[] = $rarity['description'];
-    $table->addRow($row);
-  }
-  $template->setList($table);
-  return $template;
-}
-
-function rarityUpsertForm()
-{
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-  {
-    $template->addMessage(rarityUpsertSubmit());
-  }
-
-  $item_id = getUrlID('id');
-
-  $form = new Form('rarity_form');
-  $title = 'Add Rarity';
-  if ($item_id)
-  {
-    $item = getRarity($item_id);
-    $form->setValues($item);
-    $title = 'Edit rarity ' . htmlWrap('em', $item['name']);
-  }
-  $form->setTitle($title);
-
-  // ID.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Name.
-  $field = new FieldText('name', 'Name');
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
-  $form->addField($field);
-
-  // Submit
-  $value = 'Create';
-  if ($item_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $form->addField($field);
-
-  $template->setForm($form);
-
-  return $template;
-}
-
-function rarityUpsertSubmit()
-{
-  $rarity = $_POST;
-  unset($rarity['submit']);
-
-  if ($rarity['id'])
-  {
-    updateRarity($rarity);
-    return htmlWrap('h3', 'Rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') updated.');
-  }
-  else
-  {
-    unset($rarity['id']);
-    $rarity['id'] = createRarity($rarity);
-    return htmlWrap('h3', 'New rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') created.');
-  }
-}
-
-/******************************************************************************
- *
- * Property.
- *
- ******************************************************************************/
-function propertyList()
-{
-  $page = getUrlID('page', 1);
-  $properties = getPropertyPager($page);
-
-  $template = new ListPageTemplate('Properties');
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Operations.
-  $attr = array(
-    'href' => 'property',
-  );
-  $template->addOperation(htmlWrap('a', 'New Property', $attr));
-
-  if ($page > 1)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page - 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
-  }
-
-  if (count($properties) >= DEFAULT_PAGER_SIZE)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page + 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
-  }
-
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('property-list'));
-  $table->setHeader(array('Name', 'Description'));
-
-  foreach($properties as $property)
-  {
-    $row = array();
-    $attr = array(
-      'href' => 'property?id=' . $property['id'],
-    );
-    $row[] = htmlWrap('a', $property['name'], $attr);
-    $row[] = $property['description'];
-    $table->addRow($row);
-  }
-  $template->setList($table);
-  return $template;
-}
-
-function propertyUpsertForm()
-{
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-  {
-    $template->addMessage(propertyUpsertSubmit());
-  }
-
-  $item_id = getUrlID('id');
-
-  $form = new Form('property_form');
-  $title = 'Add Property';
-  if ($item_id)
-  {
-    $item = getProperty($item_id);
-    $form->setValues($item);
-    $title = 'Edit property ' . htmlWrap('em', $item['name']);
-  }
-  $form->setTitle($title);
-
-  // ID.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Name.
-  $field = new FieldText('name', 'Name');
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
-  $form->addField($field);
-
-  // Submit
-  $value = 'Create';
-  if ($item_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $form->addField($field);
-
-  $template->setForm($form);
-
-  return $template;
-}
-
-function propertyUpsertSubmit()
-{
-  $property = $_POST;
-  unset($property['submit']);
-
-  if ($property['id'])
-  {
-    updateProperty($property);
-    return htmlWrap('h3', 'Property ' . htmlWrap('em', $property['name']) . ' (' . $property['id'] . ') updated.');
-  }
-  else
-  {
-    unset($property['id']);
-    $property['id'] = createProperty($property);
-    return htmlWrap('h3', 'New property ' . htmlWrap('em', $property['name']) . ' (' . $property['id'] . ') created.');
-  }
 }

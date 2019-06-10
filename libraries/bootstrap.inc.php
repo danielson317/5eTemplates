@@ -95,6 +95,9 @@ include ROOT_PATH . '/modules/race/race.pg.php';
 include ROOT_PATH . '/modules/range/range.db.php';
 include ROOT_PATH . '/modules/range/range.pg.php';
 
+include ROOT_PATH . '/modules/rarity/rarity.db.php';
+include ROOT_PATH . '/modules/rarity/rarity.pg.php';
+
 include ROOT_PATH . '/modules/school/school.db.php';
 include ROOT_PATH . '/modules/school/school.pg.php';
 

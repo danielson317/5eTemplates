@@ -14,6 +14,7 @@ function installCharacter()
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('xp', 'INTEGER', 0, array('N'));
   $query->addField('race_id', 'INTEGER', 0, array('N'));
+  $query->addField('subrace_id', 'INTEGER', 0);
   $query->addField('alignment', 'TEXT', 8, array('N'));
   $query->addField('pb', 'TEXT', 8, array('N'), 2);
   $query->addField('speed', 'INTEGER', 0, array('N'), 30);
@@ -70,6 +71,7 @@ function getCharacterPager($page)
   $query->addField('id');
   $query->addField('name');
   $query->addField('race_id');
+  $query->addField('subrace_id');
   $query->addField('player_id');
   $query->addField('background');
   $query->addPager($page);
@@ -90,6 +92,7 @@ function getCharacter($id)
   $query->addField('id');
   $query->addField('name');
   $query->addField('race_id');
+  $query->addField('subrace_id');
   $query->addField('player_id');
   $query->addField('background');
   $query->addField('xp');
@@ -121,6 +124,7 @@ function createCharacter($character)
   $query = new InsertQuery('characters');
   $query->addField('name', $character['name']);
   $query->addField('race_id', $character['race_id']);
+  $query->addField('subrace_id', $character['subrace_id']);
   $query->addField('player_id', $character['player_id']);
   $query->addField('background', $character['background']);
   $query->addField('xp', $character['xp']);
@@ -144,6 +148,7 @@ function updateCharacter($character)
   $query = new UpdateQuery('characters');
   $query->addField('name', $character['name']);
   $query->addField('race_id', $character['race_id']);
+  $query->addField('subrace_id', $character['subrace_id']);
   $query->addField('player_id', $character['player_id']);
   $query->addField('background', $character['background']);
   $query->addField('xp', $character['xp']);

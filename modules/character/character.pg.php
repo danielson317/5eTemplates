@@ -65,9 +65,9 @@ function characterList()
     $row[] = join('/', $class);
     $row[] = join('/', $subclass);
     $row[] = join('/', $level);
-    $row[] = $races[$character['race_id']];
+    $row[] = iis($races, $character['race_id']);
     $row[] = $character['background'];
-    $row[] = $players[$character['player_id']];
+    $row[] = iis($players, $character['player_id']);
 
     $attr = array(
       'query' => array(
@@ -107,7 +107,7 @@ function characterUpsertForm()
   {
     $character = getCharacter($character_id);
     $form->setValues($character);
-    $title = 'Edit character ' . htmlWrap('em', $character['name']);
+    $title = sanitize($character['name']);
   }
   $form->setTitle($title);
 
@@ -189,6 +189,13 @@ function characterUpsertForm()
   // Race.
   $options = array(0 => '--Select One--') + getRaceList();
   $field = new FieldSelect('race_id', 'Race', $options);
+  $field->setGroup($group);
+  $field->setRequired();
+  $form->addField($field);
+
+  // Race.
+  $options = array(0 => '--Select One--') + getSubraceList($character['race_id']);
+  $field = new FieldSelect('subrace_id', 'Subrace', $options);
   $field->setGroup($group);
   $field->setRequired();
   $form->addField($field);
@@ -289,16 +296,18 @@ function characterUpsertForm()
         'character_id' => $character_id,
         'language_id' => $character_language_map['language_id'],
       ),
+      'class' => array('language'),
     );
     $list[] = a($languages[$character_language_map['language_id']], '/ajax/character/language', $attr);
   }
 
   $attr = array(
     'query' => array('character_id' => $character_id),
+    'class' => array('add-language'),
   );
   $link = a('Add New Language', '/ajax/character/language', $attr);
 
-  $field = new FieldMarkup('languages', '<none>', 'Languages ' . implode(', ', $list) . '<br>' . $link);
+  $field = new FieldMarkup('languages', 'Languages', htmlWrap('span', implode(', ', $list), array('class' => 'language-list')) . '<br>' . $link);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -906,7 +915,11 @@ function characterLanguageUpsertFormAjax()
 {
   $response = getAjaxDefaultResponse();
 
-  // Submit.
+  $operation = getUrlOperation();
+  if ($operation === 'list')
+  {
+    characterLanguageListAjax();
+  }
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
     characterLanguageUpsertSubmitAjax();
@@ -1004,9 +1017,8 @@ function characterLanguageListAjax()
 
 function characterLanguageUpsertSubmitAjax()
 {
+  $response = getAjaxDefaultResponse();
   $character_language_map = $_POST;
-  unset($character_language_map['submit']);
-  unset($character_language_map['operation']);
 
   if (isset($_POST['delete']))
   {
@@ -1016,6 +1028,7 @@ function characterLanguageUpsertSubmitAjax()
   else
   {
     createCharacterlanguage($character_language_map);
-    return htmlWrap('h3', 'Created.');
   }
+
+  jsonResponseDie($response);
 }

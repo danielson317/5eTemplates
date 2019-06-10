@@ -5,6 +5,7 @@
  */
 function itemTypeList()
 {
+  installRarity();
   $page = getUrlID('page', 1);
   $item_types = getItemTypePager($page);
 
@@ -33,7 +34,7 @@ function itemTypeList()
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('item-type-list'));
-  $table->setHeader(array('Name', 'Description'));
+  $table->setHeader(array('Name', 'Parent', 'Description'));
 
   foreach($item_types as $item_type)
   {
@@ -42,6 +43,7 @@ function itemTypeList()
       'href' => 'item-type?id=' . $item_type['id'],
     );
     $row[] = htmlWrap('a', $item_type['name'], $attr);
+    $row[] = $item_type['parent_item_type_id'];
     $row[] = $item_type['description'];
     $table->addRow($row);
   }
@@ -78,6 +80,11 @@ function itemTypeUpsertForm()
 
   // Name.
   $field = new FieldText('name', 'Name');
+  $form->addField($field);
+
+  // Parent.
+  $options = array(0 => '--None--') + getItemTypeList();
+  $field = new FieldSelect('parent_item_type_id', 'Parent', $options);
   $form->addField($field);
 
   // Description.
