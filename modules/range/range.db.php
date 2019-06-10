@@ -11,6 +11,33 @@ function installRange()
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
+  $ranges = array(
+    array(
+      'id' => 2,
+      'name' => 'Unlimited',
+      'description' => '',
+    ),
+    array(
+      'id' => 1,
+      'name' => 'Self',
+      'description' => '',
+    ),
+    array(
+      'id' => 3,
+      'name' => 'Same Plane',
+      'description' => '',
+    ),
+    array(
+      'id' => 5,
+      'name' => 'Touch',
+      'description' => '',
+    ),
+  );
+  
+  foreach ($ranges as $range)
+  {
+    createRange($range);
+  }
 }
 
 /**
