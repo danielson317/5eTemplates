@@ -13,7 +13,7 @@ function sourceList()
   $template = new ListPageTemplate('Sources');
 
   // Operations.
-  $template->addOperation(a('New Source', '/source', $attr));
+  $template->addOperation(a('New Source', '/source'));
 
   if ($page > 1)
   {

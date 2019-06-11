@@ -60,7 +60,7 @@ function installItem()
   $query = new CreateQuery('item_damage_map');
   $query->addField('item_id', 'INTEGER', 0, array('P'));
   $query->addField('item_damage_id', 'INTEGER', 0, array('P'));
-  $query->addField('versatile', 'INTEGER', array('N'), 0);
+  $query->addField('versatile', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 }
 
@@ -81,6 +81,7 @@ function getItemPager($page = 1)
   $query = new SelectQuery('items');
   $query->addField('id');
   $query->addField('name');
+  $query->addField('value');
   $query->addField('item_type_id');
   $query->addField('description');
   $query->addOrderSimple('id');

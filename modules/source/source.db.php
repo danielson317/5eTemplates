@@ -43,6 +43,10 @@ function installSource()
       'code' => 'XGE',
       'name' => 'Xanathar\'s Guide to Everything',
     ),
+    array(
+      'code' => 'HB',
+      'name' => 'Homebrew',
+    ),
   );
 
   foreach ($sources as $source)

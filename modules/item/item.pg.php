@@ -1,10 +1,5 @@
 <?php
 
-/******************************************************************************
- *
- * Items
- *
- ******************************************************************************/
 
 function itemList()
 {
@@ -59,6 +54,12 @@ function itemList()
   $template->setList($table);
   return $template;
 }
+
+/******************************************************************************
+ *
+ * Item Upsert
+ *
+ ******************************************************************************/
 
 function itemUpsertForm()
 {
@@ -148,11 +149,12 @@ function itemUpsertForm()
    * Weapons.
    *****************/
   // Range.
-  $field = new FieldSelect('range_id', 'Range');
+  $ranges = getRangeList();
+  $field = new FieldSelect('range_id', 'Range', $ranges);
   $form->addField($field);
 
   // Max Range.
-  $field = new FieldSelect('max_range_id', 'Max Range');
+  $field = new FieldSelect('max_range_id', 'Max Range', $ranges);
   $form->addField($field);
 
   // Light.
@@ -227,9 +229,17 @@ function itemUpsertForm()
 function itemUpsertSubmit()
 {
   $item = $_POST;
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
   $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
-  $item['artifact'] = isset($_POST['artifact']) ? 1 : 0;
-  unset($item['submit']);
+  $item['light'] = isset($_POST['light']) ? 1 : 0;
+  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
+  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
+  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
+  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
+  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
+  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
+  $item['special'] = isset($_POST['special']) ? 1 : 0;
+  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
 
   if ($item['id'])
   {
@@ -238,11 +248,16 @@ function itemUpsertSubmit()
   }
   else
   {
-    unset($item['id']);
     $item['id'] = createItem($item);
     return htmlWrap('h3', 'New item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') created.');
   }
 }
+
+/******************************************************************************
+ *
+ * Item Print
+ *
+ ******************************************************************************/
 
 function itemPrintForm()
 {

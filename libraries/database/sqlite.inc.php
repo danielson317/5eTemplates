@@ -177,7 +177,7 @@ class SQLite extends Database
     $key_count = count($primary_key);
 
     $sql = '';
-    $sql .= 'CREATE TABLE '  . self::structureEscape(key($query->getTables())) . ' (';
+    $sql .= 'CREATE TABLE IF NOT EXISTS '  . self::structureEscape(key($query->getTables())) . ' (';
 
     foreach ($query->getFields() as $name => $value)
     {

@@ -14,12 +14,12 @@ function installItemType()
 
   $item_types = array(
     array(
-      'name' => 'Weapons',
+      'name' => 'Weapon',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
     array(
-      'name' => 'Armor & Shields',
+      'name' => 'Armor',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
@@ -29,22 +29,22 @@ function installItemType()
       'description' => '',
     ),
     array(
-      'name' => 'Containers',
+      'name' => 'Container',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
     array(
-      'name' => 'Tools',
+      'name' => 'Tool',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
     array(
-      'name' => 'Mounts and Vehicles',
+      'name' => 'Mount or Vehicle',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
     array(
-      'name' => 'Trade Goods',
+      'name' => 'Trade Good',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
@@ -54,12 +54,12 @@ function installItemType()
       'description' => '',
     ),
     array(
-      'name' => 'Services',
+      'name' => 'Service',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
     array(
-      'name' => 'Trinkets',
+      'name' => 'Trinket',
       'parent_item_type_id' => 0,
       'description' => '',
     ),
@@ -73,23 +73,23 @@ function installItemType()
   $item_type_list = array_flip(getItemTypeList());
   $item_types = array(
     array(
-      'name' => 'Simple Melee Weapons',
-      'parent_item_type_id' => $item_type_list['Weapons'],
+      'name' => 'Simple Melee Weapon',
+      'parent_item_type_id' => $item_type_list['Weapon'],
       'description' => '',
     ),
     array(
-      'name' => 'Simple Ranged Weapons',
-      'parent_item_type_id' => $item_type_list['Weapons'],
+      'name' => 'Simple Ranged Weapon',
+      'parent_item_type_id' => $item_type_list['Weapon'],
       'description' => '',
     ),
     array(
-      'name' => 'Martial Melee Weapons',
-      'parent_item_type_id' => $item_type_list['Weapons'],
+      'name' => 'Martial Melee Weapon',
+      'parent_item_type_id' => $item_type_list['Weapon'],
       'description' => '',
     ),
     array(
-      'name' => 'Martial Ranged Weapons',
-      'parent_item_type_id' => $item_type_list['Weapons'],
+      'name' => 'Martial Ranged Weapon',
+      'parent_item_type_id' => $item_type_list['Weapon'],
       'description' => '',
     ),
   );
@@ -103,22 +103,22 @@ function installItemType()
   $item_types = array(
     array(
       'name' => 'Light Armor',
-      'parent_item_type_id' => $item_type_list['Armor & Shields'],
+      'parent_item_type_id' => $item_type_list['Armor'],
       'description' => '',
     ),
     array(
       'name' => 'Medium Armor',
-      'parent_item_type_id' => $item_type_list['Armor & Shields'],
+      'parent_item_type_id' => $item_type_list['Armor'],
       'description' => '',
     ),
     array(
       'name' => 'Heavy Armor',
-      'parent_item_type_id' => $item_type_list['Armor & Shields'],
+      'parent_item_type_id' => $item_type_list['Armor'],
       'description' => '',
     ),
     array(
       'name' => 'Shield',
-      'parent_item_type_id' => $item_type_list['Armor & Shields'],
+      'parent_item_type_id' => $item_type_list['Armor'],
       'description' => '',
     ),
   );
@@ -161,17 +161,17 @@ function installItemType()
   $item_types = array(
     array(
       'name' => 'Artisan\'s Tools',
-      'parent_item_type_id' => $item_type_list['Tools'],
+      'parent_item_type_id' => $item_type_list['Tool'],
       'description' => '',
     ),
     array(
       'name' => 'Gaming Set',
-      'parent_item_type_id' => $item_type_list['Tools'],
+      'parent_item_type_id' => $item_type_list['Tool'],
       'description' => '',
     ),
     array(
       'name' => 'Musical Instrument',
-      'parent_item_type_id' => $item_type_list['Tools'],
+      'parent_item_type_id' => $item_type_list['Tool'],
       'description' => '',
     ),
   );
