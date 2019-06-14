@@ -59,6 +59,7 @@ function getRegistry($path = FALSE)
     'ajax/character/class' => 'characterClassUpsertFormAjax',
     'ajax/character/language' => 'characterLanguageUpsertFormAjax',
     'ajax/character/skill' => 'characterSkillUpsertFormAjax',
+    'ajax/item/damage' => 'itemDamageUpsertFormAjax',
     'ajax/subclass' => 'subclassAjax',
     'ajax/subrace' => 'subraceAjax',
 

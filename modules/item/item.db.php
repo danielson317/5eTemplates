@@ -57,9 +57,12 @@ function installItem()
   $db->create($query);
 
   // Item damage many to many map.
-  $query = new CreateQuery('item_damage_map');
-  $query->addField('item_id', 'INTEGER', 0, array('P'));
-  $query->addField('item_damage_id', 'INTEGER', 0, array('P'));
+  $query = new CreateQuery('item_damages');
+  $query->addField('id', 'INTEGER', 0, array('P'));
+  $query->addField('item_id', 'INTEGER', 0, array('N'));
+  $query->addField('die_count', 'INTEGER', 0, array('N'), 0);
+  $query->addField('die_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('damage_type_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('versatile', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 }
@@ -143,6 +146,18 @@ function getItem($item_id)
 
 function createItem($item)
 {
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
+  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  $item['light'] = isset($_POST['light']) ? 1 : 0;
+  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
+  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
+  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
+  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
+  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
+  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
+  $item['special'] = isset($_POST['special']) ? 1 : 0;
+  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
+
   GLOBAL $db;
   $query = new InsertQuery('items');
 
@@ -186,6 +201,19 @@ function createItem($item)
 
 function updateItem($item)
 {
+
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
+  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  $item['light'] = isset($_POST['light']) ? 1 : 0;
+  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
+  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
+  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
+  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
+  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
+  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
+  $item['special'] = isset($_POST['special']) ? 1 : 0;
+  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
+
   GLOBAL $db;
   $query = new UpdateQuery('items');
 
@@ -237,5 +265,107 @@ function deleteItem($item_id)
 
   $query = new DeleteQuery('items');
   $query->addConditionSimple('id', $item_id);
+  $db->delete($query);
+}
+
+/******************************************************************************
+ *
+ *  Item Damage
+ *
+ ******************************************************************************/
+/**
+ * @param int $item_id
+ *
+ * @return array|false
+ */
+function getItemDamageList($item_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('item_damages');
+  $query->addField('id');
+  $query->addField('item_id');
+  $query->addField('die_count');
+  $query->addField('die_id');
+  $query->addField('damage_type_id');
+  $query->addField('versatile');
+  $query->addConditionSimple('item_id', $item_id);
+  $query->addOrderSimple('die_count', QueryOrder::DIRECTION_ASC);
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+/**
+ * @param int $item_damage_id
+ *
+ * @return array|mixed
+ */
+function getItemDamage($item_damage_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('item_damages');
+  $query->addField('id');
+  $query->addField('item_id');
+  $query->addField('die_count');
+  $query->addField('die_id');
+  $query->addField('damage_type_id');
+  $query->addField('versatile');
+  $query->addConditionSimple('id', $item_damage_id);
+
+  return $db->selectObject($query);
+}
+
+/**
+ * @param array $item_damage
+ */
+function createItemDamage($item_damage)
+{
+  $item_damage['versatile'] = iis($item_damage, 'versatile', 0);
+
+  GLOBAL $db;
+
+  $query = new InsertQuery('item_damages');
+  $query->addField('item_id', $item_damage['item_id']);
+  $query->addField('die_count', $item_damage['die_count']);
+  $query->addField('die_id', $item_damage['die_id']);
+  $query->addField('damage_type_id', $item_damage['damage_type_id']);
+  $query->addField('versatile', $item_damage['versatile']);
+  $db->insert($query);
+}
+
+/**
+ * @param array $item_damage
+ */
+function updateItemDamage($item_damage)
+{
+  $item_damage['versatile'] = iis($item_damage, 'versatile', 0);
+
+  GLOBAL $db;
+
+  $query = new UpdateQuery('item_damages');
+  $query->addField('item_id', $item_damage['item_id']);
+  $query->addField('die_count', $item_damage['die_count']);
+  $query->addField('die_id', $item_damage['die_id']);
+  $query->addField('damage_type_id', $item_damage['damage_type_id']);
+  $query->addField('versatile', $item_damage['versatile']);
+  $query->addConditionSimple('id', $item_damage['id']);
+  $db->update($query);
+}
+
+/**
+ * @param int $item_damage_id
+ */
+function deleteItemDamage($item_damage_id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('item_damages');
+  $query->addConditionSimple('id', $item_damage_id);
   $db->delete($query);
 }

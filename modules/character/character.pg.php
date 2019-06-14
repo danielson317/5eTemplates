@@ -908,7 +908,7 @@ function characterSkillUpsertSubmitAjax()
 
 /******************************************************************************
  *
- * Character language Upsert
+ * Character Language Upsert
  *
  ******************************************************************************/
 function characterLanguageUpsertFormAjax()

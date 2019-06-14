@@ -1,11 +1,10 @@
-$ = jQuery;
 $(document).ready(function()
 {
   /**********************
    * Classes.
    **********************/
   // View - Refresh the list.
-  $('.field.classes').on('refresh', '', function()
+  $('.field.classes').refresh(function()
   {
     var url = '/ajax/character/class';
     var values =
@@ -117,7 +116,7 @@ $(document).ready(function()
    * Attributes.
    **********************/
   // View - Refresh the list.
-  $('.field.attribute').on('refresh', '', function()
+  $('.field.attribute').refresh(function()
   {
     var url = '/ajax/character/attribute';
     var values =
@@ -219,7 +218,7 @@ $(document).ready(function()
    * Skills.
    **********************/
   // View - Refresh the list.
-  $('.field.skills').on('refresh', '', function()
+  $('.field.skills').refresh(function()
   {
     var url = '/ajax/character/skill';
     var values =
@@ -319,7 +318,7 @@ $(document).ready(function()
    * Languages.
    **********************/
   // View - Refresh the list.
-  $('.field.languages').on('refresh', '', function()
+  $('.field.languages').refresh(function()
   {
     var url = '/ajax/character/language';
     var values =
