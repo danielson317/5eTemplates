@@ -1,48 +1,48 @@
 <?php
 /******************************************************************************
  *
- * Background List
+ * Rarity List
  *
  ******************************************************************************/
-function backgroundList()
+function rarityList()
 {
   $page = getUrlID('page', 1);
-  $backgrounds = getBackgroundPager($page);
+  $rarities = getRarityPager($page);
 
-  $template = new ListPageTemplate('Backgrounds');
+  $template = new ListPageTemplate('Rarities');
 
   // Operations.
-  $template->addOperation(a('New Background', '/background'));
+  $template->addOperation(a('New Rarity', '/rarity'));
 
   if ($page > 1)
   {
     $attr = array(
       'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(a('Prev Page', '/background', $attr));
+    $template->addOperation(a('Prev Page', '/rarity', $attr));
   }
 
-  if (count($backgrounds) >= DEFAULT_PAGER_SIZE)
+  if (count($rarities) >= DEFAULT_PAGER_SIZE)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(a('Next Page', '/background', $attr));
+    $template->addOperation(a('Next Page', '/rarity', $attr));
   }
 
   // List
   $table = new TableTemplate();
-  $table->setAttr('class', array('background-list'));
+  $table->setAttr('class', array('rarity-list'));
   $table->setHeader(array('Name', 'Description'));
 
-  foreach ($backgrounds as $background)
+  foreach ($rarities as $rarity)
   {
     $row = array();
     $attr = array(
-      'query' => array('id' => $background['id'])
+      'query' => array('id' => $rarity['id'])
     );
-    $row[] = a($background['name'], '/background', $attr);
-    $row[] = $background['description'];
+    $row[] = a($rarity['name'], '/rarity', $attr);
+    $row[] = $rarity['description'];
     $table->addRow($row);
   }
   $template->setList($table);
@@ -51,28 +51,28 @@ function backgroundList()
 
 /******************************************************************************
  *
- * Background Upsert
+ * Rarity Upsert
  *
  ******************************************************************************/
-function backgroundUpsertForm()
+function rarityUpsertForm()
 {
   $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(backgroundUpsertSubmit());
+    $template->addMessage(rarityUpsertSubmit());
   }
 
-  $background_id = getUrlID('id');
+  $rarity_id = getUrlID('id');
 
-  $form = new Form('background_form');
-  $title = 'Add New Background';
-  if ($background_id)
+  $form = new Form('rarity_form');
+  $title = 'Add New Rarity';
+  if ($rarity_id)
   {
-    $background = getBackground($background_id);
-    $form->setValues($background);
-    $title = 'Edit background ' . htmlWrap('em', $background['name']);
+    $rarity = getRarity($rarity_id);
+    $form->setValues($rarity);
+    $title = 'Edit rarity ' . htmlWrap('em', $rarity['name']);
   }
   $form->setTitle($title);
 
@@ -90,7 +90,7 @@ function backgroundUpsertForm()
 
   // Submit
   $value = 'Add';
-  if ($background_id)
+  if ($rarity_id)
   {
     $value = 'Update';
   }
@@ -98,7 +98,7 @@ function backgroundUpsertForm()
   $form->addField($field);
 
   // Delete.
-  if ($background_id)
+  if ($rarity_id)
   {
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
@@ -109,28 +109,28 @@ function backgroundUpsertForm()
   return $template;
 }
 
-function backgroundUpsertSubmit()
+function rarityUpsertSubmit()
 {
-  $background = $_POST;
-  unset($background['submit']);
+  $rarity = $_POST;
+  unset($rarity['submit']);
 
   if (isset($_POST['delete']))
   {
-    deleteBackground($background['id']);
-    redirect('/backgrounds');
+    deleteRarity($rarity['id']);
+    redirect('/rarities');
   }
 
   // Update.
-  if ($background['id'])
+  if ($rarity['id'])
   {
-    updateBackground($background);
-    return htmlWrap('h3', 'Background ' . htmlWrap('em', $background['name']) . ' (' . $background['id'] . ') updated.');
+    updateRarity($rarity);
+    return htmlWrap('h3', 'Rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') updated.');
   }
   // Create.
   else
   {
-    unset($background['id']);
-    $background['id'] = createBackground($background);
-    return htmlWrap('h3', 'Background ' . htmlWrap('em', $background['name']) . ' (' . $background['id'] . ') created.');
+    unset($rarity['id']);
+    $rarity['id'] = createRarity($rarity);
+    return htmlWrap('h3', 'Rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') created.');
   }
 }

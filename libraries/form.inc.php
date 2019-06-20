@@ -87,7 +87,7 @@ class Form
     $fields = array();
     foreach($this->fields as $field)
     {
-      if ($field->getGroup() == $group_name)
+      if ($field->getGroup() === $group_name)
       {
         $fields[] = $field->__toString();
       }

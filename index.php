@@ -58,7 +58,11 @@ function getRegistry($path = FALSE)
     'ajax/character/attribute' => 'characterAttributeUpsertFormAjax',
     'ajax/character/class' => 'characterClassUpsertFormAjax',
     'ajax/character/language' => 'characterLanguageUpsertFormAjax',
+    'ajax/character/item-proficiency' => 'characterItemProficiencyUpsertFormAjax',
+    'ajax/character/item-type-proficiency' => 'characterItemTypeProficiencyUpsertFormAjax',
+    'ajax/character/proficiencies' => 'characterItemTypeProficiencyAjax',
     'ajax/character/skill' => 'characterSkillUpsertFormAjax',
+    'ajax/item/damage' => 'itemDamageUpsertFormAjax',
     'ajax/subclass' => 'subclassAjax',
     'ajax/subrace' => 'subraceAjax',
 
@@ -68,6 +72,9 @@ function getRegistry($path = FALSE)
 
     'attribute' => 'attributeUpsertForm',
     'attributes' => 'attributeList',
+
+    'background' => 'backgroundUpsertForm',
+    'backgrounds' => 'backgroundList',
 
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',

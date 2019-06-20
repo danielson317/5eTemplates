@@ -13,7 +13,7 @@ function raceList()
   $template = new ListPageTemplate('Race');
 
   // Operations.
-  $template->addOperation(a('New Race', '/race', $attr));
+  $template->addOperation(a('New Race', '/race'));
 
   if ($page > 1)
   {

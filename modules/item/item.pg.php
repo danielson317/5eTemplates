@@ -1,10 +1,5 @@
 <?php
 
-/******************************************************************************
- *
- * Items
- *
- ******************************************************************************/
 
 function itemList()
 {
@@ -60,13 +55,21 @@ function itemList()
   return $template;
 }
 
+/******************************************************************************
+ *
+ * Item Upsert
+ *
+ ******************************************************************************/
+
 function itemUpsertForm()
 {
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/item.css');
+  $template->addJsFilePath('/modules/item/item.js');
 
+  installItemType();
   // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
   {
     $template->addMessage(itemUpsertSubmit());
   }
@@ -79,7 +82,7 @@ function itemUpsertForm()
   {
     $item = getItem($item_id);
     $form->setValues($item);
-    $title = 'Edit item ' . htmlWrap('em', $item['name']);
+    $title = 'Edit item ' . $item['name'];
   }
   $form->setTitle($title);
 
@@ -87,57 +90,227 @@ function itemUpsertForm()
   $field = new FieldHidden('id');
   $form->addField($field);
 
+  /*****************
+   * Base items.
+   *****************/
+  $group = 'base_group';
+  $form->addGroup($group);
+
+  // Heading.
+  $field = new FieldMarkup('base_heading');
+  $field->setValue(htmlWrap('h3', 'Base'));
+  $field->setGroup($group);
+  $form->addField($field);
+
   // Name.
   $field = new FieldText('name', 'Name');
+  $field->setGroup($group);
   $form->addField($field);
 
   // Type.
   $options = getItemTypeList();
   $field = new FieldSelect('item_type_id', 'Type', $options);
-  $form->addField($field);
-
-  // Item Type Details.
-  $field = new FieldText('item_type_details', 'Type Details');
+  $field->setGroup($group);
   $form->addField($field);
 
   // Value.
   $field = new FieldText('value', 'Value (cp)');
+  $field->setGroup($group);
   $form->addField($field);
 
   // Weight.
   $field = new FieldText('weight', 'Weight (lbs)');
-  $form->addField($field);
-
-  // Rarity
-  $options = getRarityList();
-  $field = new FieldSelect('rarity_id', 'Rarity', $options);
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldCheckbox('attunement', 'Requires Attunement');
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldText('attunement_requirements', 'Attunement Conditions');
-  $form->addField($field);
-
-  // Artifact.
-  $field = new FieldCheckbox('artifact', 'Artifact');
+  $field->setGroup($group);
   $form->addField($field);
 
   // Description.
   $field = new FieldTextarea('description', 'Description');
+  $field->setGroup($group);
   $form->addField($field);
 
   // Source.
   $options = array(0 => '--Select One--') + getSourceDetailList();
   $field = new FieldSelect('source_id', 'Source', $options);
+  $field->setGroup($group);
   $form->addField($field);
 
   // Source location (page number).
   $field = new FieldNumber('source_location', 'Page');
+  $field->setGroup($group);
   $form->addField($field);
 
+  /*****************
+   * Magic.
+   *****************/
+  $group = 'magic_group';
+  $form->addGroup($group);
+
+  // Heading.
+  $field = new FieldMarkup('magic_heading');
+  $field->setValue(htmlWrap('h3', 'Magic'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Magical items.
+  $field = new FieldCheckbox('magic', 'Magical');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Rarity.
+  $options = getRarityList();
+  $field = new FieldSelect('rarity_id', 'Rarity', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Bonus.
+  $field = new FieldNumber('bonus', 'Weapon/Armor Bonus');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Attunement.
+  $field = new FieldCheckbox('attunement', 'Requires Attunement');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Attunement Requirements.
+  $field = new FieldText('attunement_requirements', 'Attunement Conditions');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*****************
+   * Weapons.
+   *****************/
+  $group = 'weapon_group';
+  $form->addGroup($group);
+
+  // Heading.
+  $field = new FieldMarkup('weapon_heading');
+  $field->setValue(htmlWrap('h3', 'Weapons'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Range.
+  $ranges = getRangeList();
+  $field = new FieldSelect('range_id', 'Range', $ranges);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Max Range.
+  $field = new FieldSelect('max_range_id', 'Max Range', $ranges);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Light.
+  $field = new FieldCheckbox('light', 'Light');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Finesse.
+  $field = new FieldCheckbox('finesse', 'Finesse');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Thrown.
+  $field = new FieldCheckbox('thrown', 'Thrown');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Ammunition.
+  $field = new FieldCheckbox('ammunition', 'Ammunition');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Loading.
+  $field = new FieldCheckbox('loading', 'Loading');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Heavy.
+  $field = new FieldCheckbox('heavy', 'Heavy');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Reach.
+  $field = new FieldCheckbox('reach', 'Reach');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Special.
+  $field = new FieldCheckbox('special', 'Special');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Two Handed.
+  $field = new FieldCheckbox('two_handed', 'Two Handed');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Damage
+  $damage_type = getDamageTypeList();
+  $item_damages = getItemDamageList($item_id);
+  $die = getDieList();
+
+  $table = new TableTemplate();
+  $table->setHeader(array('Damage Type', 'Count', 'Versatile'));
+  foreach($item_damages as $item_damage)
+  {
+    $row = array();
+    $attr = array(
+      'query' => array(
+        'item_damage_id' => $item_damage['id'],
+      ),
+      'class' => array('item-damage'),
+    );
+    $row[] = a($damage_type[$item_damage['damage_type_id']], '/ajax/item/damage', $attr);
+    $row[] = $item_damage['die_count'] . $die[$item_damage['die_id']];
+    $row[] = $item_damage['versatile'] ? 'Two-Handed' : '';
+    $table->addRow($row);
+  }
+  $attr = array(
+    'query' => array('item_id' => $item_id),
+    'class' => array('add-damage'),
+  );
+  $link = a('Add Damage Type', '/ajax/item/damage', $attr);
+
+  $field = new FieldMarkup('damage', 'Damage', $table . $link);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*****************
+   * Armor.
+   *****************/
+  $group = 'armor_group';
+  $form->addGroup($group);
+
+  // Heading.
+  $field = new FieldMarkup('armor_heading');
+  $field->setValue(htmlWrap('h3', 'Armor'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Base AC.
+  $field = new FieldNumber('base_ac', 'Base AC');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Dexterity Cap.
+  $field = new FieldNumber('dex_cap', 'Dexterity Cap');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Strength Requirement.
+  $field = new FieldNumber('strength_requirement', 'Strength Requirement');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Stealth Disadvantage.
+  $field = new FieldNumber('stealth_disadvantage', 'Stealth Disadvantage');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /*****************
+   * Submit.
+   *****************/
   // Submit
   $value = 'Create';
   if ($item_id)
@@ -155,9 +328,6 @@ function itemUpsertForm()
 function itemUpsertSubmit()
 {
   $item = $_POST;
-  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
-  $item['artifact'] = isset($_POST['artifact']) ? 1 : 0;
-  unset($item['submit']);
 
   if ($item['id'])
   {
@@ -166,11 +336,16 @@ function itemUpsertSubmit()
   }
   else
   {
-    unset($item['id']);
     $item['id'] = createItem($item);
     return htmlWrap('h3', 'New item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') created.');
   }
 }
+
+/******************************************************************************
+ *
+ * Item Print
+ *
+ ******************************************************************************/
 
 function itemPrintForm()
 {
@@ -312,239 +487,143 @@ function printItemCard($item)
 
 /******************************************************************************
  *
- * Rarity.
+ * Item Damage Upsert
  *
  ******************************************************************************/
-function rarityList()
+function itemDamageUpsertFormAjax()
 {
-  $page = getUrlID('page', 1);
-  $rarities = getRarityPager($page);
+  $response = getAjaxDefaultResponse();
 
-  $template = new ListPageTemplate('Rarities');
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Operations.
-  $template->addOperation(a('New Rarity', '/rarity', $attr));
-
-  if ($page > 1)
+  $operation = getUrlOperation();
+  if ($operation === 'list')
   {
-    $attr = array(
-      'query' => array('page' => ($page - 1)),
-    );
-    $template->addOperation(a('Prev Page', '/rarity', $attr));
+    itemDamageListAjax();
   }
-
-  if (count($rarities) >= DEFAULT_PAGER_SIZE)
-  {
-    $attr = array(
-      'query' => array('page' => ($page + 1)),
-    );
-    $template->addOperation(a('Prev Page', '/rarity', $attr));
-  }
-
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('rarity-list'));
-  $table->setHeader(array('Name', 'Description'));
-
-  foreach($rarities as $rarity)
-  {
-    $row = array();
-    $attr = array(
-      'href' => 'rarity?id=' . $rarity['id'],
-    );
-    $row[] = htmlWrap('a', $rarity['name'], $attr);
-    $row[] = $rarity['description'];
-    $table->addRow($row);
-  }
-  $template->setList($table);
-  return $template;
-}
-
-function rarityUpsertForm()
-{
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(rarityUpsertSubmit());
+    itemDamageUpsertSubmitAjax();
   }
 
-  $item_id = getUrlID('id');
+  $form = new Form('item_damage_form');
 
-  $form = new Form('rarity_form');
-  $title = 'Add Rarity';
-  if ($item_id)
+  $item_id = getUrlID('item_id');
+  $item_damage_id = getUrlID('item_damage_id');
+  if ($item_damage_id)
   {
-    $item = getRarity($item_id);
-    $form->setValues($item);
-    $title = 'Edit rarity ' . htmlWrap('em', $item['name']);
+    $item_damage = getItemDamage($item_damage_id);
+    $form->setValues($item_damage);
+    $operation = 'update';
+    $title = 'Edit Damage Type';
   }
-  $form->setTitle($title);
-
-  // ID.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Name.
-  $field = new FieldText('name', 'Name');
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
-  $form->addField($field);
-
-  // Submit
-  $value = 'Create';
-  if ($item_id)
+  elseif ($item_id)
   {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $form->addField($field);
-
-  $template->setForm($form);
-
-  return $template;
-}
-
-function rarityUpsertSubmit()
-{
-  $rarity = $_POST;
-  unset($rarity['submit']);
-
-  if ($rarity['id'])
-  {
-    updateRarity($rarity);
-    return htmlWrap('h3', 'Rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') updated.');
+    $operation = 'create';
+    $title = 'Add New Damage Type';
   }
   else
   {
-    unset($rarity['id']);
-    $rarity['id'] = createRarity($rarity);
-    return htmlWrap('h3', 'New rarity ' . htmlWrap('em', $rarity['name']) . ' (' . $rarity['id'] . ') created.');
-  }
-}
-
-/******************************************************************************
- *
- * Property.
- *
- ******************************************************************************/
-function propertyList()
-{
-  $page = getUrlID('page', 1);
-  $properties = getPropertyPager($page);
-
-  $template = new ListPageTemplate('Properties');
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Operations.
-  $attr = array(
-    'href' => 'property',
-  );
-  $template->addOperation(htmlWrap('a', 'New Property', $attr));
-
-  if ($page > 1)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page - 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
-  }
-
-  if (count($properties) >= DEFAULT_PAGER_SIZE)
-  {
-    $attr = array(
-      'href' => '?page=' . ($page + 1),
-    );
-    $template->addOperation(htmlWrap('a', 'Next Page', $attr));
-  }
-
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('property-list'));
-  $table->setHeader(array('Name', 'Description'));
-
-  foreach($properties as $property)
-  {
-    $row = array();
-    $attr = array(
-      'href' => 'property?id=' . $property['id'],
-    );
-    $row[] = htmlWrap('a', $property['name'], $attr);
-    $row[] = $property['description'];
-    $table->addRow($row);
-  }
-  $template->setList($table);
-  return $template;
-}
-
-function propertyUpsertForm()
-{
-  $template = new FormPageTemplate();
-  $template->addCssFilePath('/themes/default/css/item.css');
-
-  // Submit.
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-  {
-    $template->addMessage(propertyUpsertSubmit());
-  }
-
-  $item_id = getUrlID('id');
-
-  $form = new Form('property_form');
-  $title = 'Add Property';
-  if ($item_id)
-  {
-    $item = getProperty($item_id);
-    $form->setValues($item);
-    $title = 'Edit property ' . htmlWrap('em', $item['name']);
+    $response['status'] = FALSE;
+    $response['data'] = 'Missing parameter item_id.';
+    jsonResponseDie($response);
+    die();
   }
   $form->setTitle($title);
 
-  // ID.
+  $field = new FieldHidden('operation', $operation);
+  $form->addField($field);
+
+  // Item damage id.
   $field = new FieldHidden('id');
   $form->addField($field);
 
-  // Name.
-  $field = new FieldText('name', 'Name');
+  // Item id.
+  $field = new FieldHidden('item_id');
+  $field->setValue($item_id);
   $form->addField($field);
 
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
+  // Die count.
+  $field = new FieldNumber('die_count', 'Number of Dice');
   $form->addField($field);
+
+  // Die id.
+  $dice = getDieList();
+  $field = new FieldSelect('die_id', 'Die', $dice);
+  $form->addField($field);
+
+  // Damage type id.
+  $damage_types = getDamageTypeList();
+  $field = new FieldSelect('damage_type_id', 'Damage Type', $damage_types);
+  $form->addField($field);
+
+  // Versatile.
+  $field = new FieldCheckbox('versatile', 'Versatile');
+  $form->addField($field);
+
+  // Delete
+  if ($operation === 'update')
+  {
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
 
   // Submit
-  $value = 'Create';
-  if ($item_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
+  $field = new FieldSubmit('submit', 'Submit');
   $form->addField($field);
 
-  $template->setForm($form);
+  $response['data'] = $form->__toString();
 
-  return $template;
+  jsonResponseDie($response);
 }
 
-function propertyUpsertSubmit()
+function itemDamageListAjax()
 {
-  $property = $_POST;
-  unset($property['submit']);
+  $response = getAjaxDefaultResponse();
+  $item_id = getUrlID('item_id');
 
-  if ($property['id'])
+  // Damage
+  $damage_types = getDamageTypeList();
+  $item_damages = getItemDamageList($item_id);
+  $dice = getDieList();
+
+  $output = '';
+  foreach($item_damages as $item_damage)
   {
-    updateProperty($property);
-    return htmlWrap('h3', 'Property ' . htmlWrap('em', $property['name']) . ' (' . $property['id'] . ') updated.');
+    $row = array();
+    $attr = array(
+      'query' => array(
+        'item_damage_id' => $item_damage['id'],
+      ),
+      'class' => array('item-damage'),
+    );
+    $row[] = a($damage_types[$item_damage['damage_type_id']], '/ajax/item/damage', $attr);
+    $row[] = $item_damage['die_count'] . $dice[$item_damage['die_id']];
+    $row[] = $item_damage['versatile'] ? 'Two-Handed' : '';
+    $output .= TableTemplate::tableRow($row);
   }
-  else
+
+  $response['data'] = $output;
+  jsonResponseDie($response);
+}
+
+function itemDamageUpsertSubmitAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $item_damage = $_POST;
+
+  if (isset($item_damage['delete']))
   {
-    unset($property['id']);
-    $property['id'] = createProperty($property);
-    return htmlWrap('h3', 'New property ' . htmlWrap('em', $property['name']) . ' (' . $property['id'] . ') created.');
+    deleteItemDamage($item_damage['id']);
   }
+  // Create.
+  elseif ($item_damage['operation'] === 'create')
+  {
+    createItemDamage($item_damage);
+  }
+  // Update.
+  elseif ($item_damage['operation'] === 'update')
+  {
+    updateItemDamage($item_damage);
+  }
+
+  jsonResponseDie($response);
 }

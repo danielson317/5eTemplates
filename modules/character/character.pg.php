@@ -42,6 +42,7 @@ function characterList()
   $subclasses = getSubclassList();
   $races = getRaceList();
   $players = getPlayerList();
+  $backgrounds = getBackgroundList();
   foreach ($characters as $character)
   {
     $row = array();
@@ -65,9 +66,9 @@ function characterList()
     $row[] = join('/', $class);
     $row[] = join('/', $subclass);
     $row[] = join('/', $level);
-    $row[] = $races[$character['race_id']];
-    $row[] = $character['background'];
-    $row[] = $players[$character['player_id']];
+    $row[] = iis($races, $character['race_id']);
+    $row[] = iis($backgrounds, $character['background_id']);
+    $row[] = iis($players, $character['player_id']);
 
     $attr = array(
       'query' => array(
@@ -107,7 +108,7 @@ function characterUpsertForm()
   {
     $character = getCharacter($character_id);
     $form->setValues($character);
-    $title = 'Edit character ' . htmlWrap('em', $character['name']);
+    $title = sanitize($character['name']);
   }
   $form->setTitle($title);
 
@@ -169,7 +170,8 @@ function characterUpsertForm()
   }
 
   // Background.
-  $field = new FieldText('background', 'Background');
+  $backgrounds = getBackgroundList();
+  $field = new FieldSelect('background_id', 'Background', $backgrounds);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -189,6 +191,13 @@ function characterUpsertForm()
   // Race.
   $options = array(0 => '--Select One--') + getRaceList();
   $field = new FieldSelect('race_id', 'Race', $options);
+  $field->setGroup($group);
+  $field->setRequired();
+  $form->addField($field);
+
+  // Race.
+  $options = array(0 => '--Select One--') + getSubraceList($character['race_id']);
+  $field = new FieldSelect('subrace_id', 'Subrace', $options);
   $field->setGroup($group);
   $field->setRequired();
   $form->addField($field);
@@ -277,10 +286,14 @@ function characterUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  /*******************
+   * Proficiencies.
+   *******************/
+  $proficiency_table = new TableTemplate('proficiencies');
+
   // Languages
   $languages = getLanguageList();
   $character_language_maps = getCharacterLanguageList($character_id);
-
   $list = array();
   foreach($character_language_maps as $character_language_map)
   {
@@ -289,18 +302,96 @@ function characterUpsertForm()
         'character_id' => $character_id,
         'language_id' => $character_language_map['language_id'],
       ),
+      'class' => array('language'),
     );
     $list[] = a($languages[$character_language_map['language_id']], '/ajax/character/language', $attr);
   }
+  $proficiency_table->addRow(array('Languages', implode(', ', $list)));
+
+  $proficiency_types = array();
+  // Items types.
+  $character_item_type_proficiency_map = getCharacterItemTypeProficiencyList($character_id);
+//  foreach($character_item_type_proficiency_map as $character_item_proficiency)
+//  {
+//    $item = getItem($character_item_proficiency['item_id']);
+//
+//    do
+//    {
+//      $item_type_id = $item['item_type_id'];
+//      $item_type = getItemType($item_type_id);
+//    } while ($item_type['parent_item_type_id'] !== 0);
+//
+//    if (!isset($proficiency_types[$item_type_id]))
+//    {
+//      $proficiency_types[$item_type_id] = array();
+//    }
+//    $proficiency_types[$item_type_id][] = $item;
+//  }
+
+  // Items.
+  $character_item_proficiency_map = getCharacterItemProficiencyList($character_id);
+  foreach($character_item_proficiency_map as $character_item_proficiency)
+  {
+    $item = getItem($character_item_proficiency['item_id']);
+
+    do
+    {
+      $item_type_id = $item['item_type_id'];
+      $item_type = getItemType($item_type_id);
+    } while ($item_type['parent_item_type_id'] !== 0);
+
+    if (!isset($proficiency_types[$item_type_id]))
+    {
+      $proficiency_types[$item_type_id] = array();
+    }
+    $proficiency_types[$item_type_id][] = $item;
+  }
+
+  // Render lists.
+  $item_types = getItemTypeList();
+  foreach($proficiency_types as $proficiency_type)
+  {
+    $row = array();
+    foreach($proficiency_type as $item)
+    {
+      $attr = array(
+        'query' => array(
+          'item_id' => $item['id'],
+          'character_id' => $character['id'],
+        ),
+      );
+      $row[] = a($item['name'], '/ajax/character/item-proficiency', $attr);
+    }
+    $proficiency_table->addRow(array($item_types[$item['item_type_id']], implode(', ', $row)));
+  }
+
+  // Create links.
+  $links = array();
+  $attr = array(
+    'query' => array('character_id' => $character_id),
+    'class' => array('add-language'),
+  );
+  $links[] = a('Add Language', '/ajax/character/language', $attr);
 
   $attr = array(
     'query' => array('character_id' => $character_id),
+    'class' => array('add-item-proficiency'),
   );
-  $link = a('Add New Language', '/ajax/character/language', $attr);
+  $links[] = a('Add Item', '/ajax/character/item-proficiency', $attr);
 
-  $field = new FieldMarkup('languages', '<none>', 'Languages ' . implode(', ', $list) . '<br>' . $link);
+  $attr = array(
+    'query' => array('character_id' => $character_id),
+    'class' => array('add-item-type-proficiency'),
+  );
+  $links[] = a('Add Item Type', '/ajax/character/item-type-proficiency', $attr);
+
+  $proficiency_table->addRow(array(join(', ', $links)), array('colspan' => 2));
+
+  // Field wrapper.
+  $field = new FieldMarkup('proficiencies', 'Proficiencies', $proficiency_table->__toString());
   $field->setGroup($group);
   $form->addField($field);
+
 
   /*****************
    * Stats Group
@@ -899,14 +990,46 @@ function characterSkillUpsertSubmitAjax()
 
 /******************************************************************************
  *
- * Character language Upsert
+ * Proficiency Table Refresh
+ *
+ ******************************************************************************/
+function characterItemTypeProficiencyAjax()
+{
+  $response = getAjaxDefaultResponse();
+
+  try
+  {
+    $operation = getUrlOperation();
+    if ($operation !== 'list')
+    {
+      throw new AjaxException('Unknown operation', EXCEPTION_UNKNOWN_OPTION);
+    }
+
+    getUrlID('');
+  }
+  catch(AjaxException $e)
+  {
+    $response['status'] = FALSE;
+    $response['data'] = $e->getMessage();
+  }
+
+  jsonResponseDie($response);
+}
+
+/******************************************************************************
+ *
+ * Character Language Upsert
  *
  ******************************************************************************/
 function characterLanguageUpsertFormAjax()
 {
   $response = getAjaxDefaultResponse();
 
-  // Submit.
+  $operation = getUrlOperation();
+  if ($operation === 'list')
+  {
+    characterLanguageListAjax();
+  }
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
     characterLanguageUpsertSubmitAjax();
@@ -1004,9 +1127,8 @@ function characterLanguageListAjax()
 
 function characterLanguageUpsertSubmitAjax()
 {
+  $response = getAjaxDefaultResponse();
   $character_language_map = $_POST;
-  unset($character_language_map['submit']);
-  unset($character_language_map['operation']);
 
   if (isset($_POST['delete']))
   {
@@ -1016,6 +1138,7 @@ function characterLanguageUpsertSubmitAjax()
   else
   {
     createCharacterlanguage($character_language_map);
-    return htmlWrap('h3', 'Created.');
   }
+
+  jsonResponseDie($response);
 }

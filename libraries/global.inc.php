@@ -19,8 +19,12 @@ define('EXCEPTION_PERMISSION_DENIED', 2);
 define('EXCEPTION_EXPIRED', 3);
 define('EXCEPTION_REQUIRED_FIELD_MISSING', 4);
 define('EXCEPTION_FIELD_INVALID', 5);
+define('EXCEPTION_UNKNOWN_OPTION', 6);
+define('EXCEPTION_BAD_ID', 7);
 
 define('DATE_FORM', 'm/d/Y');
+
+Class AjaxException extends Exception{};
 
 /******************************************************************************
  *
@@ -132,6 +136,31 @@ function getUrlID($name, $default = FALSE)
   }
 
   return abs($_GET[$name]);
+}
+
+/**
+ * @param string $name
+ * @param string $get_function
+ * @param mixed $default
+ *
+ * @return array
+ * @throws AjaxException
+ */
+function getUrlObject($name, $get_function)
+{
+  $id = getUrlID($name);
+  if (!$id)
+  {
+    throw new AjaxException('Missing required parameter ' . $name, EXCEPTION_REQUIRED_FIELD_MISSING);
+  }
+
+  $object = $get_function($name);
+  if (!$object)
+  {
+    throw new AjaxException('Given id ' . $name . ' does not correspond to an object.', EXCEPTION_BAD_ID);
+  }
+
+  return $object;
 }
 
 function getUrlOption($name, $options, $default = FALSE)

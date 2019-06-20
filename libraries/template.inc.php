@@ -205,11 +205,13 @@ Class TableTemplate
   public function addRows($rows)
   {
     $this->rows = $rows;
+    $this->attr = array_fill(0, count($rows), array());
     return $this;
   }
   public function addRow($row, $attr = array())
   {
     $this->rows[] = $row;
+    $this->attr[] = $attr;
     return $this;
   }
   public function setAttr($name, $value)
@@ -249,17 +251,21 @@ Class TableTemplate
   private function generateHTMLRows()
   {
     $output = '';
+    $attr = reset($this->attr);
     foreach ($this->rows as $row)
     {
       $row_output = '';
       $count = 1;
       foreach ($row as $cell)
       {
-        $attr = array('class' => array('column-' . $count));
+        $class = iis($attr, 'class', array());
+        $class[] = 'column-' . $count;
+        $attr['class'] = $class;
         $row_output .= htmlWrap('td', $cell, $attr);
         $count++;
       }
       $output .= htmlWrap('tr', $row_output);
+      $attr = next($this->attr);
     }
     $output = htmlWrap('tbody', $output);
     return $output;

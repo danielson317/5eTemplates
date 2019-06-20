@@ -26,8 +26,11 @@ if (!file_exists(DB_PATH))
   installClass(); // Depends on Attribute, Source
   installDamageType();
   installDie();
-  installItem();
   installItemType();
+  installRarity();
+  installItem(); // Depends on Source, Rarity, Item Type.
+  
+  
   installScript(); // Depends on Source.
   installLanguage(); // Depends on Script, Source
 //  installMonster();

@@ -28,7 +28,13 @@ function installItem()
   $query->addField('description', 'TEXT', 1024);
   $query->addField('source_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('source_location', 'INTEGER', 0, array('N'), 0);
+
+  // Magical items.
+  $query->addField('magic', 'INTEGER', 0, array('N'), 0);
+  $query->addField('rarity_id', 'INTEGER', 0, array('N'), 0);
   $query->addField('bonus', 'INTEGER', 0, array('N'), 0);
+  $query->addField('attunement', 'INTEGER', 0, array('N'), 0);
+  $query->addField('attunement_requirements', 'INTEGER', 0, array('N'), 0);
 
   // Weapons
   $query->addField('range_id', 'INTEGER', 0, array('N'), 0);
@@ -41,8 +47,7 @@ function installItem()
   $query->addField('heavy', 'INTEGER', 0, array('N'), 0);
   $query->addField('reach', 'INTEGER', 0, array('N'), 0);
   $query->addField('special', 'INTEGER', 0, array('N'), 0);
-  $query->addField('two-handed', 'INTEGER', 0, array('N'), 0);
-  $query->addField('magic', 'INTEGER', 0, array('N'), 0);
+  $query->addField('two_handed', 'INTEGER', 0, array('N'), 0);
 
   // Armor
   $query->addField('base_ac', 'INTEGER', 0, array('N'), 0);
@@ -52,10 +57,13 @@ function installItem()
   $db->create($query);
 
   // Item damage many to many map.
-  $query = new CreateQuery('item_damage_map');
-  $query->addField('item_id', 'INTEGER', 0, array('P'));
-  $query->addField('item_damage_id', 'INTEGER', 0, array('P'));
-  $query->addField('versatile', 'INTEGER', array('N'), 0);
+  $query = new CreateQuery('item_damages');
+  $query->addField('id', 'INTEGER', 0, array('P'));
+  $query->addField('item_id', 'INTEGER', 0, array('N'));
+  $query->addField('die_count', 'INTEGER', 0, array('N'), 0);
+  $query->addField('die_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('damage_type_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('versatile', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 }
 
@@ -76,6 +84,7 @@ function getItemPager($page = 1)
   $query = new SelectQuery('items');
   $query->addField('id');
   $query->addField('name');
+  $query->addField('value');
   $query->addField('item_type_id');
   $query->addField('description');
   $query->addOrderSimple('id');
@@ -94,63 +103,156 @@ function getItem($item_id)
   GLOBAL $db;
 
   $query = new SelectQuery('items');
+
+  // All items.
   $query->addField('id');
   $query->addField('name');
   $query->addField('item_type_id');
-  $query->addField('item_type_details');
   $query->addField('value');
   $query->addField('weight');
-  $query->addField('rarity_id');
-  $query->addField('attunement');
-  $query->addField('attunement_requirements');
-  $query->addField('artifact');
   $query->addField('description');
   $query->addField('source_id');
   $query->addField('source_location');
+
+  // Magic.
+  $query->addField('magic');
+  $query->addField('rarity_id');
+  $query->addField('bonus');
+  $query->addField('attunement');
+  $query->addField('attunement_requirements');
+
+  // Weapons.
+  $query->addField('range_id');
+  $query->addField('max_range_id');
+  $query->addField('light');
+  $query->addField('finesse');
+  $query->addField('thrown');
+  $query->addField('ammunition');
+  $query->addField('loading');
+  $query->addField('heavy');
+  $query->addField('reach');
+  $query->addField('special');
+  $query->addField('two_handed');
+
+  // Armor.
+  $query->addField('base_ac');
+  $query->addField('dex_cap');
+  $query->addField('strength_requirement');
+  $query->addField('stealth_disadvantage');
+
   $query->addConditionSimple('id', $item_id);
   return $db->selectObject($query);
 }
 
 function createItem($item)
 {
-  GLOBAL $db;
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
+  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  $item['light'] = isset($_POST['light']) ? 1 : 0;
+  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
+  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
+  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
+  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
+  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
+  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
+  $item['special'] = isset($_POST['special']) ? 1 : 0;
+  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
 
+  GLOBAL $db;
   $query = new InsertQuery('items');
+
+  // All items.
   $query->addField('name', $item['name']);
   $query->addField('item_type_id', $item['item_type_id']);
-  $query->addField('item_type_details', $item['item_type_details']);
   $query->addField('value', $item['value']);
   $query->addField('weight', $item['weight']);
-  $query->addField('rarity_id', $item['rarity_id']);
-  $query->addField('attunement', $item['attunement']);
-  $query->addField('attunement_requirements', $item['attunement_requirements']);
-  $query->addField('artifact', $item['artifact']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
   $query->addField('source_location', $item['source_location']);
+
+  // Magic.
+  $query->addField('magic', $item['magic']);
+  $query->addField('rarity_id', $item['rarity_id']);
+  $query->addField('bonus', $item['bonus']);
+  $query->addField('attunement', $item['attunement']);
+  $query->addField('attunement_requirements', $item['attunement_requirements']);
+
+  // Weapons.
+  $query->addField('range_id', $item['range_id']);
+  $query->addField('max_range_id', $item['max_range_id']);
+  $query->addField('light', $item['light']);
+  $query->addField('finesse', $item['finesse']);
+  $query->addField('thrown', $item['thrown']);
+  $query->addField('ammunition', $item['ammunition']);
+  $query->addField('loading', $item['loading']);
+  $query->addField('heavy', $item['heavy']);
+  $query->addField('reach', $item['reach']);
+  $query->addField('special', $item['special']);
+  $query->addField('two_handed', $item['two_handed']);
+
+  // Armor.
+  $query->addField('base_ac', $item['base_ac']);
+  $query->addField('dex_cap', $item['dex_cap']);
+  $query->addField('strength_requirement', $item['strength_requirement']);
+  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
 
   return $db->insert($query);
 }
 
 function updateItem($item)
 {
-  GLOBAL $db;
 
+  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
+  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
+  $item['light'] = isset($_POST['light']) ? 1 : 0;
+  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
+  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
+  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
+  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
+  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
+  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
+  $item['special'] = isset($_POST['special']) ? 1 : 0;
+  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
+
+  GLOBAL $db;
   $query = new UpdateQuery('items');
+
+  // All items.
   $query->addField('name', $item['name']);
   $query->addField('item_type_id', $item['item_type_id']);
-  $query->addField('item_type_details', $item['item_type_details']);
   $query->addField('value', $item['value']);
   $query->addField('weight', $item['weight']);
-  $query->addField('rarity_id', $item['rarity_id']);
-  $query->addField('attunement', $item['attunement']);
-  $query->addField('attunement_requirements', $item['attunement_requirements']);
-  $query->addField('artifact', $item['artifact']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
   $query->addField('source_location', $item['source_location']);
-  $query->addConditionSimple('id', $item['id']);
 
+  // Magic.
+  $query->addField('magic', $item['magic']);
+  $query->addField('rarity_id', $item['rarity_id']);
+  $query->addField('bonus', $item['bonus']);
+  $query->addField('attunement', $item['attunement']);
+  $query->addField('attunement_requirements', $item['attunement_requirements']);
+
+  // Weapons.
+  $query->addField('range_id', $item['range_id']);
+  $query->addField('max_range_id', $item['max_range_id']);
+  $query->addField('light', $item['light']);
+  $query->addField('finesse', $item['finesse']);
+  $query->addField('thrown', $item['thrown']);
+  $query->addField('ammunition', $item['ammunition']);
+  $query->addField('loading', $item['loading']);
+  $query->addField('heavy', $item['heavy']);
+  $query->addField('reach', $item['reach']);
+  $query->addField('special', $item['special']);
+  $query->addField('two_handed', $item['two_handed']);
+
+  // Armor.
+  $query->addField('base_ac', $item['base_ac']);
+  $query->addField('dex_cap', $item['dex_cap']);
+  $query->addField('strength_requirement', $item['strength_requirement']);
+  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
+
+  $query->addConditionSimple('id', $item['id']);
   $db->update($query);
 }
 
@@ -168,100 +270,102 @@ function deleteItem($item_id)
 
 /******************************************************************************
  *
- *  Rarity.
+ *  Item Damage
  *
  ******************************************************************************/
-
 /**
- * @param int $page
- *
- * @return array
- */
-function getRarityPager($page = 1)
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('rarities');
-  $query->addField('id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addOrderSimple('id');
-  $query->addPager($page);
-
-  return $db->select($query);
-}
-
-/**
- * @return array
- */
-function getRarityList()
-{
-  GLOBAL $db;
-
-  $query = new SelectQuery('rarities');
-  $query->addField('id')->addField('name', 'value');
-
-  return $db->selectList($query);
-}
-
-/**
- * @param int $rarity_id
+ * @param int $item_id
  *
  * @return array|false
  */
-function getRarity($rarity_id)
+function getItemDamageList($item_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('rarities');
+  $query = new SelectQuery('item_damages');
   $query->addField('id');
-  $query->addField('name');
-  $query->addField('description');
-  $query->addConditionSimple('id', $rarity_id);
+  $query->addField('item_id');
+  $query->addField('die_count');
+  $query->addField('die_id');
+  $query->addField('damage_type_id');
+  $query->addField('versatile');
+  $query->addConditionSimple('item_id', $item_id);
+  $query->addOrderSimple('die_count', QueryOrder::DIRECTION_ASC);
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+/**
+ * @param int $item_damage_id
+ *
+ * @return array|mixed
+ */
+function getItemDamage($item_damage_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('item_damages');
+  $query->addField('id');
+  $query->addField('item_id');
+  $query->addField('die_count');
+  $query->addField('die_id');
+  $query->addField('damage_type_id');
+  $query->addField('versatile');
+  $query->addConditionSimple('id', $item_damage_id);
+
   return $db->selectObject($query);
 }
 
 /**
- * @param array $rarity
- *
- * @return int
+ * @param array $item_damage
  */
-function createRarity($rarity)
+function createItemDamage($item_damage)
 {
+  $item_damage['versatile'] = iis($item_damage, 'versatile', 0);
+
   GLOBAL $db;
 
-  $query = new InsertQuery('rarities');
-  $query->addField('name', $rarity['name']);
-  $query->addField('description', $rarity['description']);
-
-  return $db->insert($query);
+  $query = new InsertQuery('item_damages');
+  $query->addField('item_id', $item_damage['item_id']);
+  $query->addField('die_count', $item_damage['die_count']);
+  $query->addField('die_id', $item_damage['die_id']);
+  $query->addField('damage_type_id', $item_damage['damage_type_id']);
+  $query->addField('versatile', $item_damage['versatile']);
+  $db->insert($query);
 }
 
 /**
- * @param array $rarity
+ * @param array $item_damage
  */
-function updateRarity($rarity)
+function updateItemDamage($item_damage)
 {
+  $item_damage['versatile'] = iis($item_damage, 'versatile', 0);
+
   GLOBAL $db;
 
-  $query = new UpdateQuery('rarities');
-  $query->addField('name', $rarity['name']);
-  $query->addField('description', $rarity['description']);
-  $query->addConditionSimple('id', $rarity['id']);
-
+  $query = new UpdateQuery('item_damages');
+  $query->addField('item_id', $item_damage['item_id']);
+  $query->addField('die_count', $item_damage['die_count']);
+  $query->addField('die_id', $item_damage['die_id']);
+  $query->addField('damage_type_id', $item_damage['damage_type_id']);
+  $query->addField('versatile', $item_damage['versatile']);
+  $query->addConditionSimple('id', $item_damage['id']);
   $db->update($query);
 }
 
 /**
- * @param int $rarity_id
+ * @param int $item_damage_id
  */
-function deleteRarity($rarity_id)
+function deleteItemDamage($item_damage_id)
 {
   GLOBAL $db;
-  $query = new DeleteQuery('rarities');
-  $query->addConditionSimple('id', $rarity_id);
 
+  $query = new DeleteQuery('item_damages');
+  $query->addConditionSimple('id', $item_damage_id);
   $db->delete($query);
 }
-
-

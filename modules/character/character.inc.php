@@ -11,15 +11,15 @@ function getAlignmentList()
 {
   return array(
     'lg' => 'Lawful Good',
-    'ng' => 'Lawful Neutral',
+    'ng' => 'Neutral Good',
     'cg' => 'Chaotic Good',
     'ln' => 'Lawful Neutral',
-    'n' => 'Neutral',
     'cn' => 'Chaotic Neutral',
     'le' => 'Lawful Evil',
     'ne' => 'Neutral Evil',
     'ce' => 'Chaotic Evil',
     'l' => 'Lawful',
+    'n' => 'Neutral',
     'c' => 'Chaotic',
     'g' => 'Good',
     'e' => 'Evil',

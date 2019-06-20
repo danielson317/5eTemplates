@@ -105,6 +105,10 @@ function classUpsertForm()
   $field = new FieldSelect('stp2', 'Saving Throw 2', $options);
   $form->addField($field);
 
+  // Saving Throw Proficiency 2.
+  $field = new FieldText('subclass_name', 'Subclass Name');
+  $form->addField($field);
+
   // Subclasses
   if ($class_id)
   {

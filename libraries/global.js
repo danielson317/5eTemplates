@@ -18,10 +18,17 @@ $.fn.once = function(processed_class)
   return this.not('.' + processed_class).addClass(processed_class);
 };
 
-$.fn.refresh = function()
+$.fn.refresh = function(function_pointer)
 {
-  $(this).trigger('refresh');
-  return this;
+  if (function_pointer !== undefined)
+  {
+    $(this).on('refresh', '', function_pointer);
+  }
+  else
+  {
+    $(this).trigger('refresh');
+    return this;
+  }
 };
 
 $.fn.hasAttr = function(attr_name)
