@@ -60,6 +60,7 @@ include ROOT_PATH . '/modules/attribute/attribute.db.php';
 include ROOT_PATH . '/modules/attribute/attribute.pg.php';
 
 include ROOT_PATH . '/modules/background/background.db.php';
+include ROOT_PATH . '/modules/background/background.pg.php';
 
 include ROOT_PATH . '/modules/background_characteristic/background_characteristic.db.php';
 
@@ -82,6 +83,7 @@ include ROOT_PATH . '/modules/item/item.pg.php';
 
 include ROOT_PATH . '/modules/item_type/item_type.db.php';
 include ROOT_PATH . '/modules/item_type/item_type.pg.php';
+include ROOT_PATH . '/modules/item_type/item_type.lib.php';
 
 include ROOT_PATH . '/modules/language/language.db.php';
 include ROOT_PATH . '/modules/language/language.pg.php';

@@ -202,14 +202,18 @@ function getItemTypePager($page = 1)
 }
 
 /**
+ * @param int $parent_id
+ *
  * @return array
  */
-function getItemTypeList()
+function getItemTypeListForParent($parent_id)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('item_types');
-  $query->addField('id')->addField('name', 'value');
+  $query->addField('id');
+  $query->addField('name', 'value');
+  $query->addConditionSimple('parent_item_type_id', $parent_id);
 
   return $db->selectList($query);
 }
