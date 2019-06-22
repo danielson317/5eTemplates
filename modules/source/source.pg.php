@@ -23,7 +23,7 @@ function sourceList()
     $template->addOperation(a('Prev Page', '/source', $attr));
   }
 
-  if (count($sources) >= DEFAULT_PAGER_SIZE)
+  if (count($sources) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

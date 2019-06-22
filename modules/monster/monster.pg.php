@@ -28,7 +28,7 @@ function monsterList()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($monsters) >= DEFAULT_PAGER_SIZE)
+  if (count($monsters) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),

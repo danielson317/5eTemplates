@@ -28,7 +28,7 @@ function spellList()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($spells) >= DEFAULT_PAGER_SIZE)
+  if (count($spells) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),
@@ -242,7 +242,7 @@ function spellPrintForm()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($items) >= DEFAULT_PAGER_SIZE)
+  if (count($items) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),

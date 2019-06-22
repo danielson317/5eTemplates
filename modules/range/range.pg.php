@@ -22,7 +22,7 @@ function rangeList()
     $template->addOperation(a('Prev Page', '/range', $attr));
   }
 
-  if (count($ranges) >= DEFAULT_PAGER_SIZE)
+  if (count($ranges) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

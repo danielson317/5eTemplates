@@ -23,7 +23,7 @@ function skillList()
     $template->addOperation(a('Prev Page', '/skill', $attr));
   }
 
-  if (count($skills) >= DEFAULT_PAGER_SIZE)
+  if (count($skills) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

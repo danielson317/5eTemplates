@@ -91,13 +91,61 @@ $(document).ready(function()
       }, 400);
     }
   }
+  $.each($('form'), function()
+  {
+    formBehaviors($(this));
+  })
 });
+
+function formBehaviors($form)
+{
+  $form.find('.field.autocomplete input').each(function()
+  {
+    let $this = $(this);
+    console.log($this);
+    $this.autocomplete(
+    {
+      source: function (request, response)
+      {
+        console.log('source function ' + $this.attr('callback'));
+        let values =
+        {
+          term: $this.val()
+        };
+        $.get($this.attr('callback'), values, function (get_response)
+        {
+          response(get_response['data']);
+        });
+      },
+      minLength: 1,
+      select: function (event, ui)
+      {
+        console.log('hello');
+        console.log(ui.item);
+        if (ui.item.id !== 0)
+        {
+          if ($this.attr('html'))
+          {
+            $this.val(ui.item.value);
+          }
+          else
+          {
+            $this.val(ui.item.value);
+          }
+          $this.siblings('input[type="hidden"]').val(ui.item.value);
+        }
+        // $(this).trigger('change');
+        // return false;
+      },
+    });
+  })
+}
 
 function modalShow($content)
 {
-  var $body = $('body');
-  var $cover = $('#cover');
-  var $modal = $('#modal');
+  let $body = $('body');
+  let $cover = $('#cover');
+  let $modal = $('#modal');
   if (!$cover.length)
   {
     $body.append($('<div id="cover"></div>'));
@@ -113,6 +161,8 @@ function modalShow($content)
     modalHide();
   });
   $modal.append($content);
+
+  formBehaviors($modal.find('form'));
   return $modal;
 }
 

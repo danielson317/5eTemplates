@@ -23,7 +23,7 @@ function classList()
     $template->addOperation(a('Prev Page', '/class', $attr));
   }
 
-  if (count($classes) >= DEFAULT_PAGER_SIZE)
+  if (count($classes) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

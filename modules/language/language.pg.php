@@ -22,7 +22,7 @@ function languageList()
     $template->addOperation(a('Prev Page', '/language', $attr));
   }
 
-  if (count($languages) >= DEFAULT_PAGER_SIZE)
+  if (count($languages) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

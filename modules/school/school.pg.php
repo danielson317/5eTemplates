@@ -22,7 +22,7 @@ function schoolList()
     $template->addOperation(a('Prev Page', '/school', $attr));
   }
 
-  if (count($schools) >= DEFAULT_PAGER_SIZE)
+  if (count($schools) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

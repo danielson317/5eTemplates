@@ -22,7 +22,7 @@ function backgroundList()
     $template->addOperation(a('Prev Page', '/background', $attr));
   }
 
-  if (count($backgrounds) >= DEFAULT_PAGER_SIZE)
+  if (count($backgrounds) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

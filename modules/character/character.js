@@ -336,13 +336,13 @@ $(document).ready(function()
     {
       if (response['status'])
       {
-        $('.proficiencies tbody').html(response['data']);
+        $('.proficiencies table').html(response['data']);
       }
     });
   });
 
   // Language create.
-  $('.add-language').click(function(e)
+  $proficiencies.on('click', '.add-language', function(e)
   {
     e.preventDefault();
     let url = '/ajax/character/language';
@@ -360,7 +360,7 @@ $(document).ready(function()
   });
 
   // Item proficiency create.
-  $('.add-item-proficiency').click(function(e)
+  $proficiencies.on('click', '.add-item-proficiency', function(e)
   {
     e.preventDefault();
     let url = '/ajax/character/item-proficiency';
@@ -378,7 +378,7 @@ $(document).ready(function()
   });
 
   // Item type proficiency create.
-  $('.add-item-type-proficiency').click(function(e)
+  $proficiencies.on('click', '.add-item-type-proficiency', function(e)
   {
     e.preventDefault();
     let url = '/ajax/character/item-type-proficiency';

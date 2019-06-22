@@ -20,9 +20,15 @@ class HTMLTemplate
 
   function __construct()
   {
+    // Global.
     $this->addCssFilePath('/themes/default/css/page.css');
     $this->addCssFilePath('/themes/default/css/form.css');
+
+    // Jquery.
     $this->addJsFilePath('/libraries/jquery/jquery.min.js');
+    $this->addJsFilePath('/libraries/jquery/jquery-ui.min.js');
+    $this->addCssFilePath('/libraries/jquery-ui.min.css');
+
     $this->addJsFilePath('/libraries/global.js');
   }
 

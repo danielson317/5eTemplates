@@ -20,7 +20,7 @@ function itemList()
     $template->addOperation(a('Prev Page', '/item', $attr));
   }
 
-  if (count($items) >= DEFAULT_PAGER_SIZE)
+  if (count($items) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
@@ -371,7 +371,7 @@ function itemPrintForm()
     $template->addOperation(a('Prev Page', '/item/print', $attr));
   }
 
-  if (count($items) >= DEFAULT_PAGER_SIZE)
+  if (count($items) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

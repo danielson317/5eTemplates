@@ -22,7 +22,7 @@ function speedList()
     $template->addOperation(a('Prev Page', '/speed', $attr));
   }
 
-  if (count($speeds) >= DEFAULT_PAGER_SIZE)
+  if (count($speeds) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

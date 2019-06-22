@@ -27,7 +27,7 @@ function damageTypeList()
     $template->addOperation(htmlWrap('a', 'Prev Page', $attr));
   }
 
-  if (count($damage_types) >= DEFAULT_PAGER_SIZE)
+  if (count($damage_types) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'href' => '?page=' . ($page + 1),

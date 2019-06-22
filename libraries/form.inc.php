@@ -323,9 +323,7 @@ class FieldSelect extends Field
 
     // Select.
     $attr = $this->attr;
-//    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
-    $attr['type'] = 'text';
     $output .= htmlWrap('select', $select_options, $attr);
 
     // Wrapper.
@@ -337,6 +335,51 @@ class FieldSelect extends Field
   function setOptions($options)
   {
     $this->options = $options;
+    return $this;
+  }
+}
+
+class FieldAutocomplete extends Field
+{
+  protected $url;
+
+  function __construct($id, $name, $url)
+  {
+    parent::__construct($id, $name);
+    $this->setUrl($url);
+  }
+
+  function __toString()
+  {
+    $output = '';
+
+    // Label.
+    $attr = array('class' => array('label'), 'for' => $this->id);
+    $output .= htmlWrap('label', $this->label, $attr);
+
+    // Visible Field.
+    $attr = $this->attr;
+    $attr['name'] = $this->id . '-search';
+    $attr['type'] = 'autocomplete';
+    $attr['callback'] = $this->url;
+    $output .= htmlWrap('input', '', $attr);
+
+    // Invisible ID storage.
+    $attr = $this->attr;
+    $attr['name'] = $this->id;
+    $attr['type'] = 'hidden';
+//    $attr['class'] = array('hidden');
+    $output .= htmlWrap('input', '', $attr);
+
+    // Wrapper.
+    $attr = array('class' => array('field', 'autocomplete', $this->id));
+    $output = htmlWrap('div', $output, $attr);
+    return $output;
+  }
+
+  function setUrl($url)
+  {
+    $this->url = $url;
     return $this;
   }
 }

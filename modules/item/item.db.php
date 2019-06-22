@@ -93,7 +93,36 @@ function getItemPager($page = 1)
   return $db->select($query);
 }
 
-/**
+function getItemAutocompleteAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $term = getUrlText('term');
+
+  GLOBAL $db;
+
+  $query = new SelectQuery('items');
+  $query->addField('id');
+  $query->addField('name', 'value');
+  $query->addField('name', 'label');
+
+//  if ($key)
+//  {
+//    $query->addConditionSimple('id', $key);
+//  }
+//  else
+//  {
+    $query->addConditionSimple('name', $db->likeEscape($term) . '%', QueryCondition::COMPARE_LIKE);
+    $query->addPager(1, PAGER_SIZE_MINIMUM);
+//  }
+
+  $response['data'] = $db->select($query);
+
+  jsonResponseDie($response);
+}
+
+
+
+  /**
  * @param int $item_id
  *
  * @return array|false

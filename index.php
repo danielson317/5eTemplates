@@ -62,6 +62,7 @@ function getRegistry($path = FALSE)
     'ajax/character/item-type-proficiency' => 'characterItemTypeProficiencyUpsertFormAjax',
     'ajax/character/proficiencies' => 'characterItemTypeProficiencyAjax',
     'ajax/character/skill' => 'characterSkillUpsertFormAjax',
+    'ajax/item/autocomplete' => 'getItemAutocompleteAjax',
     'ajax/item/damage' => 'itemDamageUpsertFormAjax',
     'ajax/subclass' => 'subclassAjax',
     'ajax/subrace' => 'subraceAjax',

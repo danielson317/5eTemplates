@@ -259,7 +259,7 @@ class SelectQuery extends Query
     $this->orders[] = $order;
   }
 
-  function addPager($page = 1, $page_size = DEFAULT_PAGER_SIZE)
+  function addPager($page = 1, $page_size = PAGER_SIZE_DEFAULT)
   {
     $this->page = $page;
     $this->page_size = $page_size;

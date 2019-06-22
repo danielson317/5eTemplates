@@ -25,7 +25,7 @@ function characterList()
     $template->addOperation(a('Prev Page', '/character', $attr));
   }
 
-  if (count($characters) >= DEFAULT_PAGER_SIZE)
+  if (count($characters) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => $page + 1),
@@ -289,109 +289,13 @@ function characterUpsertForm()
   /*******************
    * Proficiencies.
    *******************/
-  $proficiency_table = new TableTemplate('proficiencies');
 
-  // Languages
-  $languages = getLanguageList();
-  $character_language_maps = getCharacterLanguageList($character_id);
-  $list = array();
-  foreach($character_language_maps as $character_language_map)
-  {
-    $attr = array(
-      'query' => array(
-        'character_id' => $character_id,
-        'language_id' => $character_language_map['language_id'],
-      ),
-      'class' => array('language'),
-    );
-    $list[] = a($languages[$character_language_map['language_id']], '/ajax/character/language', $attr);
-  }
-  $proficiency_table->addRow(array('Languages', implode(', ', $list)));
-
-  $proficiency_types = array();
-  // Items types.
-  $character_item_type_proficiency_map = getCharacterItemTypeProficiencyList($character_id);
-//  foreach($character_item_type_proficiency_map as $character_item_proficiency)
-//  {
-//    $item = getItem($character_item_proficiency['item_id']);
-//
-//    do
-//    {
-//      $item_type_id = $item['item_type_id'];
-//      $item_type = getItemType($item_type_id);
-//    } while ($item_type['parent_item_type_id'] !== 0);
-//
-//    if (!isset($proficiency_types[$item_type_id]))
-//    {
-//      $proficiency_types[$item_type_id] = array();
-//    }
-//    $proficiency_types[$item_type_id][] = $item;
-//  }
-
-  // Items.
-  $character_item_proficiency_map = getCharacterItemProficiencyList($character_id);
-  foreach($character_item_proficiency_map as $character_item_proficiency)
-  {
-    $item = getItem($character_item_proficiency['item_id']);
-
-    do
-    {
-      $item_type_id = $item['item_type_id'];
-      $item_type = getItemType($item_type_id);
-    } while ($item_type['parent_item_type_id'] !== 0);
-
-    if (!isset($proficiency_types[$item_type_id]))
-    {
-      $proficiency_types[$item_type_id] = array();
-    }
-    $proficiency_types[$item_type_id][] = $item;
-  }
-
-  // Render lists.
-  $item_types = getItemTypeList();
-  foreach($proficiency_types as $proficiency_type)
-  {
-    $row = array();
-    foreach($proficiency_type as $item)
-    {
-      $attr = array(
-        'query' => array(
-          'item_id' => $item['id'],
-          'character_id' => $character['id'],
-        ),
-      );
-      $row[] = a($item['name'], '/ajax/character/item-proficiency', $attr);
-    }
-    $proficiency_table->addRow(array($item_types[$item['item_type_id']], implode(', ', $row)));
-  }
-
-  // Create links.
-  $links = array();
-  $attr = array(
-    'query' => array('character_id' => $character_id),
-    'class' => array('add-language'),
-  );
-  $links[] = a('Add Language', '/ajax/character/language', $attr);
-
-  $attr = array(
-    'query' => array('character_id' => $character_id),
-    'class' => array('add-item-proficiency'),
-  );
-  $links[] = a('Add Item', '/ajax/character/item-proficiency', $attr);
-
-  $attr = array(
-    'query' => array('character_id' => $character_id),
-    'class' => array('add-item-type-proficiency'),
-  );
-  $links[] = a('Add Item Type', '/ajax/character/item-type-proficiency', $attr);
-
-  $proficiency_table->addRow(array(join(', ', $links)), array('colspan' => 2));
+  $proficiency_table = getCharacterProficiencyTable($character_id);
 
   // Field wrapper.
   $field = new FieldMarkup('proficiencies', 'Proficiencies', $proficiency_table->__toString());
   $field->setGroup($group);
   $form->addField($field);
-
 
   /*****************
    * Stats Group
@@ -1005,7 +909,11 @@ function characterItemTypeProficiencyAjax()
       throw new AjaxException('Unknown operation', EXCEPTION_UNKNOWN_OPTION);
     }
 
-    getUrlID('');
+    $character_id = getUrlID('character_id');
+
+    $proficiency_table = getCharacterProficiencyTable($character_id);
+
+    $response['data'] = $proficiency_table->__toString();
   }
   catch(AjaxException $e)
   {
@@ -1138,6 +1046,129 @@ function characterLanguageUpsertSubmitAjax()
   else
   {
     createCharacterlanguage($character_language_map);
+  }
+
+  jsonResponseDie($response);
+}
+
+/******************************************************************************
+ *
+ * Character Item Proficiency Upsert
+ *
+ ******************************************************************************/
+function characterItemProficiencyUpsertFormAjax()
+{
+  $response = getAjaxDefaultResponse();
+
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  {
+    characterItemProficiencyUpsertSubmitAjax();
+  }
+
+  $character_id = getUrlID('character_id');
+  $item_id = getUrlID('item_id');
+  if (!$character_id)
+  {
+    $response['status'] = FALSE;
+    $response['data'] = 'Missing parameter character_id.';
+    jsonResponseDie($response);
+  }
+
+  $character = getCharacter($character_id);
+
+  $form = new Form('character_item_proficiency_map_form');
+  if ($item_id)
+  {
+    $character_item_proficiency = getCharacterItemProficiency($character_id, $item_id);
+    $form->setValues($character_item_proficiency);
+    $title = 'Delete character ' . htmlWrap('em', $character['name']) . '\'s item proficiency.';
+
+    $field = new FieldHidden('operation', 'delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $title = 'Add New item proficiency to ' . htmlWrap('em', $character['name']);
+
+    $field = new FieldHidden('operation', 'create');
+    $form->addField($field);
+  }
+  $form->setTitle($title);
+
+  // Character.
+  $field = new FieldHidden('character_id');
+  $field->setValue($character_id);
+  $form->addField($field);
+
+  // Submit
+  if ($item_id)
+  {
+    $field = new FieldHidden('item_id');
+    $form->addField($field);
+
+    $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
+    $form->addField($field);
+
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $field = new FieldAutocomplete('item_id', 'Item', '/ajax/item/autocomplete');
+    $form->addField($field);
+
+    $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
+    $field->setValue(0);
+    $form->addField($field);
+
+    $field = new FieldSubmit('submit', 'Add');
+    $form->addField($field);
+  }
+
+  $response['data'] = $form->__toString();
+
+  jsonResponseDie($response);
+}
+
+function characterItemProficiencyListAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_id = getUrlID('character_id');
+
+
+  $itemProficiencys = getItemProficiencyList();
+  $character_itemProficiency_maps = getCharacterItemProficiencyList($character_id);
+
+  $list = array();
+  foreach($character_itemProficiency_maps as $character_itemProficiency_map)
+  {
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'itemProficiency_id' => $character_itemProficiency_map['itemProficiency_id'],
+      ),
+      'class' => array('itemProficiency'),
+    );
+    $list[] = a($itemProficiencys[$character_itemProficiency_map['itemProficiency_id']], '/ajax/character/itemProficiency', $attr);
+  }
+
+  $response['data'] = implode(', ', $list);
+  jsonResponseDie($response);
+}
+
+function characterItemProficiencyUpsertSubmitAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_itemProficiency_map = $_POST;
+
+  if (isset($_POST['delete']))
+  {
+    deleteCharacteritemProficiency($character_itemProficiency_map);
+  }
+  // Create.
+  else
+  {
+    createCharacteritemProficiency($character_itemProficiency_map);
   }
 
   jsonResponseDie($response);

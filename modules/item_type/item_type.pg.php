@@ -23,7 +23,7 @@ function itemTypeList()
     $template->addOperation(a('Prev Page', '/item-type', $attr));
   }
 
-  if (count($item_types) >= DEFAULT_PAGER_SIZE)
+  if (count($item_types) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

@@ -23,7 +23,7 @@ function attributeList()
     $template->addOperation(a('Prev Page', '/attribute', $attr));
   }
 
-  if (count($attributes) >= DEFAULT_PAGER_SIZE)
+  if (count($attributes) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

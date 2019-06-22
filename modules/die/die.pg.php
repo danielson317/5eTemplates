@@ -22,7 +22,7 @@ function dieList()
     $template->addOperation(a('Prev Page', '/die', $attr));
   }
 
-  if (count($dice) >= DEFAULT_PAGER_SIZE)
+  if (count($dice) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

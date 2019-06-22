@@ -23,7 +23,7 @@ function raceList()
     $template->addOperation(a('Prev Page', '/race', $attr));
   }
 
-  if (count($races) >= DEFAULT_PAGER_SIZE)
+  if (count($races) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),

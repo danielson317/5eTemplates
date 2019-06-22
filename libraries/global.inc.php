@@ -5,7 +5,8 @@
  * Constants
  *
  ******************************************************************************/
-define('DEFAULT_PAGER_SIZE', 100);
+define('PAGER_SIZE_DEFAULT', 100);
+define('PAGER_SIZE_MINIMUM', 20);
 
 define('SEC_MIN', 60);
 define('SEC_HOUR', 3600);
@@ -136,6 +137,42 @@ function getUrlID($name, $default = FALSE)
   }
 
   return abs($_GET[$name]);
+}
+
+/******************
+ *  Text
+ ******************/
+function getUrlText($name, $default = FALSE)
+{
+  if (!array_key_exists($name, $_GET) || $_GET[$name] === '')
+  {
+    return $default;
+  }
+  return rawurldecode($_GET[$name]);
+}
+
+/**
+ * @param $name
+ *
+ * @return string
+ * @throws AjaxException
+ */
+function getUrlTextRequired($name)
+{
+  if (!array_key_exists($name, $_GET) || $_GET[$name] === '')
+  {
+    throw new AjaxException('Missing required argument ' . $name);
+  }
+  return rawurldecode($_GET[$name]);
+}
+
+function getPostText($name, $default = FALSE)
+{
+  if (!array_key_exists($name, $_POST) || $_POST[$name] === '')
+  {
+    return $default;
+  }
+  return $_POST[$name];
 }
 
 /**

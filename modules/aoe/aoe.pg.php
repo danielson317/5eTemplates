@@ -22,7 +22,7 @@ function aoeList()
     $template->addOperation(a('Prev Page', '/aoe', $attr));
   }
 
-  if (count($aoes) >= DEFAULT_PAGER_SIZE)
+  if (count($aoes) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
