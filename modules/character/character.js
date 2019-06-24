@@ -499,12 +499,12 @@ $(document).ready(function()
       e.preventDefault();
       let url = '/ajax/character/item-proficiency';
       let values =
-        {
-          operation: $operation,
-          character_id: $wrapper.find('[name="character_id"]').val(),
-          item_id: $wrapper.find('[name="item_id"]').val(),
-          proficiency: $wrapper.find('[name="proficiency"]').val(),
-        };
+      {
+        operation: $operation,
+        character_id: $wrapper.find('[name="character_id"]').val(),
+        item_id: $wrapper.find('[name="item_id"]').val(),
+        proficiency: $wrapper.find('[name="proficiency"]').val()
+      };
       $.post(url, values, function()
       {
         $proficiencies.refresh();

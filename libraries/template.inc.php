@@ -27,7 +27,7 @@ class HTMLTemplate
     // Jquery.
     $this->addJsFilePath('/libraries/jquery/jquery.min.js');
     $this->addJsFilePath('/libraries/jquery/jquery-ui.min.js');
-    $this->addCssFilePath('/libraries/jquery-ui.min.css');
+    $this->addCssFilePath('/libraries/jquery/jquery-ui.min.css');
 
     $this->addJsFilePath('/libraries/global.js');
   }

@@ -132,7 +132,7 @@ function formBehaviors($form)
           {
             $this.val(ui.item.value);
           }
-          $this.siblings('input[type="hidden"]').val(ui.item.value);
+          $this.siblings('input[type="hidden"]').val(ui.item.id);
         }
         // $(this).trigger('change');
         // return false;
