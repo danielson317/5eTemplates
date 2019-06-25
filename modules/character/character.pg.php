@@ -303,6 +303,11 @@ function characterUpsertForm()
   $group = 'stats';
   $form->addGroup($group);
 
+  // AC.
+  $field = new FieldNumber('ac', 'Armor Class');
+  $field->setGroup($group);
+  $form->addField($field);
+
   // Max HP.
   $field = new FieldNumber('hp', 'Max HP');
   $field->setGroup($group);
@@ -317,6 +322,34 @@ function characterUpsertForm()
   // Speed.
   $field = new FieldNumber('speed', 'Speed');
   $field->setValue(30);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Hit Dice
+  $dice = getDiceList();
+  $character_die_map = getCharacterDieMap($character_id);
+  $list = array();
+  foreach($character_die_map as $character_die)
+  {
+    $attr = array(
+      'query' => array(
+        'character_id' => $character_id,
+        'die_id' => $character_die['skill_id']
+      ),
+      'class' => array('skill'),
+    );
+    $list[] = a($skills[$dice['die_id']], '/ajax/character/hit-die', $attr);
+  }
+
+  $attr = array(
+    'query' => array(
+      'character_id' => $character_id
+    ),
+    'class' => array('add-skill'),
+  );
+  $link[] = a('Add Hit Die', '/ajax/character/hit-die', $attr);
+
+  $field = new FieldMarkup('hit_dice', 'Hit Dice', implode(',', $list));
   $field->setGroup($group);
   $form->addField($field);
 
@@ -1106,9 +1139,6 @@ function characterItemProficiencyUpsertFormAjax()
     $field = new FieldHidden('item_id');
     $form->addField($field);
 
-    $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
-    $form->addField($field);
-
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
   }
@@ -1116,9 +1146,103 @@ function characterItemProficiencyUpsertFormAjax()
   {
     $field = new FieldAutocomplete('item_id', 'Item', '/ajax/item/autocomplete');
     $form->addField($field);
+  }
 
-    $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
-    $field->setValue(0);
+  $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
+  $field->setValue(0);
+  $form->addField($field);
+
+  $field = new FieldSubmit('submit', 'Add');
+  $form->addField($field);
+
+  $response['data'] = $form->__toString();
+
+  jsonResponseDie($response);
+}
+
+function characterItemProficiencyUpsertSubmitAjax()
+{
+  $response = getAjaxDefaultResponse();
+  $character_item_proficiency_map = $_POST;
+
+  if (isset($_POST['delete']))
+  {
+    deleteCharacteritemProficiency($character_item_proficiency_map);
+  }
+  elseif ($character_item_proficiency_map['item_id'])
+  {
+    updateCharacterItemProficiency($character_item_proficiency_map);
+  }
+  else
+  {
+    createCharacterItemProficiency($character_item_proficiency_map);
+  }
+
+  jsonResponseDie($response);
+}
+
+/******************************************************************************
+ *
+ * Character Item Proficiency Upsert
+ *
+ ******************************************************************************/
+function characterItemTypeProficiencyUpsertFormAjax()
+{
+  $response = getAjaxDefaultResponse();
+
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
+  {
+    characterItemTypeProficiencyUpsertSubmitAjax();
+  }
+
+  $character_id = getUrlID('character_id');
+  $item_type_id = getUrlID('item_type_id');
+  if (!$character_id)
+  {
+    $response['status'] = FALSE;
+    $response['data'] = 'Missing parameter character_id.';
+    jsonResponseDie($response);
+  }
+
+  $character = getCharacter($character_id);
+
+  $form = new Form('character_item_type_proficiency_map_form');
+  if ($item_type_id)
+  {
+    $character_item_type_proficiency = getCharacterItemTypeProficiency($character_id, $item_type_id);
+    $form->setValues($character_item_type_proficiency);
+    $title = 'Delete character ' . htmlWrap('em', $character['name']) . '\'s item type proficiency.';
+
+    $field = new FieldHidden('operation', 'delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $title = 'Add new item type proficiency to ' . htmlWrap('em', $character['name']);
+
+    $field = new FieldHidden('operation', 'create');
+    $form->addField($field);
+  }
+  $form->setTitle($title);
+
+  // Character.
+  $field = new FieldHidden('character_id');
+  $field->setValue($character_id);
+  $form->addField($field);
+
+  // Submit
+  if ($item_type_id)
+  {
+    $field = new FieldHidden('item_type_id');
+    $form->addField($field);
+
+    $field = new FieldSubmit('delete', 'Delete');
+    $form->addField($field);
+  }
+  else
+  {
+    $options = getItemTypeList();
+    $field = new FieldSelect('item_type_id', 'Item', $options);
     $form->addField($field);
 
     $field = new FieldSubmit('submit', 'Add');
@@ -1130,45 +1254,19 @@ function characterItemProficiencyUpsertFormAjax()
   jsonResponseDie($response);
 }
 
-function characterItemProficiencyListAjax()
+function characterItemTypeProficiencyUpsertSubmitAjax()
 {
   $response = getAjaxDefaultResponse();
-  $character_id = getUrlID('character_id');
-
-
-  $itemProficiencys = getItemProficiencyList();
-  $character_itemProficiency_maps = getCharacterItemProficiencyList($character_id);
-
-  $list = array();
-  foreach($character_itemProficiency_maps as $character_itemProficiency_map)
-  {
-    $attr = array(
-      'query' => array(
-        'character_id' => $character_id,
-        'itemProficiency_id' => $character_itemProficiency_map['itemProficiency_id'],
-      ),
-      'class' => array('itemProficiency'),
-    );
-    $list[] = a($itemProficiencys[$character_itemProficiency_map['itemProficiency_id']], '/ajax/character/itemProficiency', $attr);
-  }
-
-  $response['data'] = implode(', ', $list);
-  jsonResponseDie($response);
-}
-
-function characterItemProficiencyUpsertSubmitAjax()
-{
-  $response = getAjaxDefaultResponse();
-  $character_itemProficiency_map = $_POST;
+  $character_item_type_proficiency_map = $_POST;
 
   if (isset($_POST['delete']))
   {
-    deleteCharacteritemProficiency($character_itemProficiency_map);
+    deleteCharacterItemTypeProficiency($character_item_type_proficiency_map);
   }
   // Create.
   else
   {
-    createCharacteritemProficiency($character_itemProficiency_map);
+    createCharacterItemTypeProficiency($character_item_type_proficiency_map);
   }
 
   jsonResponseDie($response);

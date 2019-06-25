@@ -503,7 +503,7 @@ class FieldMarkup extends Field
     $output .= htmlWrap('div', $this->value, array('class' => 'markup-value'));
 
     // Wrapper.
-    $attr = array('class' => array('field', 'text', $this->id));
+    $attr = array('class' => array('field', 'markup', $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }

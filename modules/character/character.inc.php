@@ -92,6 +92,7 @@ function getCharacterProficiencyTable($character_id)
       $proficiency_types[$item_type['id']] = array();
     }
     $proficiency['type'] = 'item';
+    $proficiency['proficiency'] = $character_item_proficiency['proficiency'];
     $proficiency_types[$item_type['id']][] = $proficiency;
   }
 
@@ -109,18 +110,26 @@ function getCharacterProficiencyTable($character_id)
             'item_type_id' => $proficiency['id'],
             'character_id' => $character_id,
           ),
+          'class' => array('item-type-proficiency'),
         );
         $row[] = a($proficiency['name'], '/ajax/character/item-type-proficiency', $attr);
       }
       else
       {
+        $name = $proficiency['name'];
+        if ($proficiency['proficiency'])
+        {
+          $name .= '(' . $proficiency['proficiency'] . 'x)';
+        }
+
         $attr = array(
           'query' => array(
             'item_id' => $proficiency['id'],
             'character_id' => $character_id,
           ),
+          'class' => array('item-proficiency'),
         );
-        $row[] = a($proficiency['name'], '/ajax/character/item-proficiency', $attr);
+        $row[] = a($name, '/ajax/character/item-proficiency', $attr);
       }
     }
     $proficiency_table->addRow(array($item_types[$proficiency_item_type_id], implode(', ', $row)));

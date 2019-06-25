@@ -28,13 +28,6 @@ function installCharacter()
   $query->addField('features', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('character_class_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('class_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('subclass_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('level', 'INTEGER', 0, array('N'), 0);
-  $db->create($query);
-
   $query = new CreateQuery('character_attribute_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('attribute_id', 'INTEGER', 0, array('P', 'N'));
@@ -42,6 +35,19 @@ function installCharacter()
   $query->addField('modifier', 'INTEGER', 0, array('N'), -1);
   $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
   $query->addField('saving_throw', 'INTEGER', 0, array('N'), -1);
+  $db->create($query);
+
+  $query = new CreateQuery('character_class_map');
+  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('class_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('subclass_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('level', 'INTEGER', 0, array('N'), 0);
+  $db->create($query);
+
+  $query = new CreateQuery('character_die_map');
+  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('die_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('die_count', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_skill_map');
@@ -714,5 +720,87 @@ function deleteCharacterItemProficiency($character_item_proficiency)
   $query = new DeleteQuery('character_item_proficiency_map');
   $query->addConditionSimple('character_id', $character_item_proficiency['character_id']);
   $query->addConditionSimple('item_id', $character_item_proficiency['item_id']);
+  $db->delete($query);
+}
+
+/******************************************************************************
+ *
+ *  Character Item Types Proficiencies.
+ *
+ ******************************************************************************/
+
+/**
+ * @param int $character_id
+ *
+ * @return array|false
+ */
+function getCharacterDieList($character_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_die_map');
+  $query->addField('die_id');
+  $query->addField('die_count');
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addOrderSimple('die_id', QueryOrder::DIRECTION_DESC);
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  return $results;
+}
+
+/**
+ * @param int $character_id
+ * @param int $item_type_id
+ *
+ * @return array|mixed
+ */
+function getCharacterDie($character_id, $item_type_id)
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('character_die_map');
+  $query->addField('character_id');
+  $query->addField('die_id');
+  $query->addField('die_count');
+  $query->addConditionSimple('character_id', $character_id);
+  $query->addConditionSimple('die_id', $item_type_id);
+  $results = $db->select($query);
+
+  if (!$results)
+  {
+    return array();
+  }
+  $result = array_shift($results);
+  return $result;
+}
+
+/**
+ * @param array $character_die
+ */
+function createCharacterDie($character_die)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('character_die_map');
+  $query->addField('character_id', $character_die['character_id']);
+  $query->addField('die_id', $character_die['item_type_id']);
+  $query->addField('die_count', $character_die['count']);
+  $db->insert($query);
+}
+
+/**
+ * @param array $character_die
+ */
+function deleteCharacterDieMap($character_die)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('character_die_map');
+  $query->addConditionSimple('character_id', $character_die['character_id']);
+  $query->addConditionSimple('die_id', $character_die['die_id']);
   $db->delete($query);
 }

@@ -28,3 +28,8 @@ body > form {
 .field textarea {
   clear: left;
 }
+
+/* line 42, ../scss/form.scss */
+.field.markup .markup-value {
+  clear: left;
+}

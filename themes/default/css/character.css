@@ -25,4 +25,20 @@
 /* line 37, ../scss/character.scss */
 #character_form .field_group.attributes_group {
   clear: left;
+  padding-right: 10px;
+}
+/* line 42, ../scss/character.scss */
+#character_form .field_group.attributes_group .markup {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* line 46, ../scss/character.scss */
+#character_form .field_group.attributes_group .markup .markup-value {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* line 51, ../scss/character.scss */
+#character_form .field_group.attributes_group .markup .markup-value table {
+  width: 100%;
+  box-sizing: border-box;
 }
