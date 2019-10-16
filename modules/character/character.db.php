@@ -758,7 +758,7 @@ function getCharacterDieList($character_id)
  *
  * @return array|mixed
  */
-function getCharacterDie($character_id, $item_type_id)
+function getCharacterDie($character_id, $die_id)
 {
   GLOBAL $db;
 
@@ -767,7 +767,7 @@ function getCharacterDie($character_id, $item_type_id)
   $query->addField('die_id');
   $query->addField('die_count');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addConditionSimple('die_id', $item_type_id);
+  $query->addConditionSimple('die_id', $die_id);
   $results = $db->select($query);
 
   if (!$results)
@@ -795,7 +795,7 @@ function createCharacterDie($character_die)
 /**
  * @param array $character_die
  */
-function deleteCharacterDieMap($character_die)
+function deleteCharacterDie($character_die)
 {
   GLOBAL $db;
 

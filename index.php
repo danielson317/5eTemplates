@@ -80,6 +80,7 @@ function getRegistry($path = FALSE)
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
+    'character/wizard/race' => 'characterWizardRaceForm',
 
     'class' => 'classUpsertForm',
     'classes' => 'classList',
@@ -166,6 +167,8 @@ function menu()
   // Characters
   $output .= a('Characters', '/characters');
   $submenu = new ListTemplate('ul');
+  $submenu->addListItem(a('Characters', '/characters'));
+  $submenu->addListItem(a('Wizard', '/character/wizard/race'));
   $submenu->addListItem(a('Attributes', '/attributes'));
   $submenu->addListItem(a('Classes', '/classes'));
   $submenu->addListItem(a('Languages', '/languages'));

@@ -326,10 +326,10 @@ function characterUpsertForm()
   $form->addField($field);
 
   // Hit Dice
-  $dice = getDiceList();
-  $character_die_map = getCharacterDieMap($character_id);
+  $dice = getDieList();
+  $character_dice = getCharacterDieList($character_id);
   $list = array();
-  foreach($character_die_map as $character_die)
+  foreach($character_dice as $character_die)
   {
     $attr = array(
       'query' => array(
@@ -347,7 +347,7 @@ function characterUpsertForm()
     ),
     'class' => array('add-skill'),
   );
-  $link[] = a('Add Hit Die', '/ajax/character/hit-die', $attr);
+  $link = a('Add Hit Die', '/ajax/character/hit-die', $attr);
 
   $field = new FieldMarkup('hit_dice', 'Hit Dice', implode(',', $list));
   $field->setGroup($group);
