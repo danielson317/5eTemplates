@@ -1,8 +1,8 @@
 <div class="spell print-card">
   <div class="name"><?php echo $name; ?></div>
   <div class="school"><?php echo $school; ?> </div>
-  <div class="attributes">
-    <table class="attributes">
+  <div class="abilities">
+    <table class="abilities">
       <thead><tr><th>Speed</th><th>Range</th><th>Duration</th></tr></thead>
       <tbody><tr>
         <td class="speed"><?php echo $speed; ?></td>

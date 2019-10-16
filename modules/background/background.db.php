@@ -105,13 +105,10 @@ function createBackground($background)
   GLOBAL $db;
   
   $query = new InsertQuery('backgrounds');
-  
-  $query->addField('id', $background['id']);
   $query->addField('name', $background['name']);
   $query->addField('description', $background['description']);
   $query->addField('source_id', $background['source_id']);
-  $query->addConditionSimple('id', $background['id']);
-  
+
   return $db->insert($query);
 }
 
@@ -121,7 +118,6 @@ function updateBackground($background)
   
   $query = new UpdateQuery('backgrounds');
   
-  $query->addField('id', $background['id']);
   $query->addField('name', $background['name']);
   $query->addField('description', $background['description']);
   $query->addField('skill_count', $background['skill_count']);

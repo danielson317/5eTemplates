@@ -4,7 +4,7 @@ function subraceAjax()
 {
   $race_id = getUrlID('race_id');
 
-  $list = array(0 => '--Select One--') + getSubraceList($race_id);
+  $list = getSubraceList($race_id);
 
   die(optionList($list));
 }

@@ -96,12 +96,12 @@ function classUpsertForm()
   $form->addField($field);
 
   // Saving Throw Proficiency 1
-  $options = array(0 => '--Select One--') + getAttributeList();
+  $options = array(0 => '--Select One--') + getAbilityList();
   $field = new FieldSelect('stp1', 'Saving Throw 1', $options);
   $form->addField($field);
 
   // Saving Throw Proficiency 2.
-  $options = array(0 => '--Select One--') + getAttributeList();
+  $options = array(0 => '--Select One--') + getAbilityList();
   $field = new FieldSelect('stp2', 'Saving Throw 2', $options);
   $form->addField($field);
 

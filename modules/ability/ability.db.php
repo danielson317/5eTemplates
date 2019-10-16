@@ -1,17 +1,17 @@
 <?php
 
-function installAttribute()
+function installAbility()
 {
   GLOBAL $db;
 
-  $query = new CreateQuery('attributes');
+  $query = new CreateQuery('abilities');
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('code', 'TEXT', 8, array('N'));
   $query->addField('name', 'TEXT', 32, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
-  $attributes = array(
+  $abilities = array(
     array(
       'code' => 'STR',
       'name' => 'Strength',
@@ -44,17 +44,17 @@ function installAttribute()
     ),
   );
 
-  foreach($attributes as $attribute)
+  foreach($abilities as $ability)
   {
-    createAttribute($attribute);
+    createAbility($ability);
   }
 }
 
-function getAttributePager($page = 1)
+function getAbilityPager($page = 1)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('attributes');
+  $query = new SelectQuery('abilities');
   $query->addField('id');
   $query->addField('name');
   $query->addField('code');
@@ -70,31 +70,31 @@ function getAttributePager($page = 1)
   return $results;
 }
 
-function getAttributeList()
+function getAbilityList()
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('attributes');
+  $query = new SelectQuery('abilities');
   $query->addField('id')->addField('name', 'value');
 
   return $db->selectList($query);
 }
 
-function getAttributeCodeList()
+function getAbilityCodeList()
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('attributes');
+  $query = new SelectQuery('abilities');
   $query->addField('id')->addField('code', 'value');
 
   return $db->selectList($query);
 }
 
-function getAttribute($id)
+function getAbility($id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('attributes');
+  $query = new SelectQuery('abilities');
   $query->addField('id');
   $query->addField('name');
   $query->addField('code');
@@ -104,36 +104,36 @@ function getAttribute($id)
   return $db->selectObject($query);
 }
 
-function createAttribute($attribute)
+function createAbility($ability)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('attributes');
-  $query->addField('name', $attribute['name']);
-  $query->addField('code', $attribute['code']);
-  $query->addField('description', $attribute['description']);
+  $query = new InsertQuery('abilities');
+  $query->addField('name', $ability['name']);
+  $query->addField('code', $ability['code']);
+  $query->addField('description', $ability['description']);
 
   return $db->insert($query);
 }
 
-function updateAttribute($attribute)
+function updateAbility($ability)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('attributes');
-  $query->addField('name', $attribute['name']);
-  $query->addField('code', $attribute['code']);
-  $query->addField('description', $attribute['description']);
-  $query->addConditionSimple('id', $attribute['id']);
+  $query = new UpdateQuery('abilities');
+  $query->addField('name', $ability['name']);
+  $query->addField('code', $ability['code']);
+  $query->addField('description', $ability['description']);
+  $query->addConditionSimple('id', $ability['id']);
 
   $db->update($query);
 }
 
-function deleteAttribute($id)
+function deleteAbility($id)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('attributes');
+  $query = new DeleteQuery('abilities');
   $query->addConditionSimple('id', $id);
 
   $db->delete($query);

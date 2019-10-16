@@ -1,44 +1,50 @@
-/* line 11, ../scss/character.scss */
+/* line 5, ../scss/character.scss */
+#character_summary .group {
+  float: left;
+  width: 200px;
+}
+
+/* line 20, ../scss/character.scss */
 #character_form .field_group.header_upper {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 17, ../scss/character.scss */
+/* line 26, ../scss/character.scss */
 #character_form .field_group.header_upper .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 24, ../scss/character.scss */
+/* line 33, ../scss/character.scss */
 #character_form .field_group.header_lower {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 30, ../scss/character.scss */
+/* line 39, ../scss/character.scss */
 #character_form .field_group.header_lower .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 37, ../scss/character.scss */
-#character_form .field_group.attributes_group {
+/* line 46, ../scss/character.scss */
+#character_form .field_group.abilities_group {
   clear: left;
   padding-right: 10px;
 }
-/* line 42, ../scss/character.scss */
-#character_form .field_group.attributes_group .markup {
-  width: 100%;
-  box-sizing: border-box;
-}
-/* line 46, ../scss/character.scss */
-#character_form .field_group.attributes_group .markup .markup-value {
-  width: 100%;
-  box-sizing: border-box;
-}
 /* line 51, ../scss/character.scss */
-#character_form .field_group.attributes_group .markup .markup-value table {
+#character_form .field_group.abilities_group .markup {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* line 55, ../scss/character.scss */
+#character_form .field_group.abilities_group .markup .markup-value {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* line 60, ../scss/character.scss */
+#character_form .field_group.abilities_group .markup .markup-value table {
   width: 100%;
   box-sizing: border-box;
 }

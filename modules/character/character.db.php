@@ -28,9 +28,9 @@ function installCharacter()
   $query->addField('features', 'TEXT');
   $db->create($query);
 
-  $query = new CreateQuery('character_attribute_map');
+  $query = new CreateQuery('character_ability_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('attribute_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('ability_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('score', 'INTEGER', 0, array('N'), 8);
   $query->addField('modifier', 'INTEGER', 0, array('N'), -1);
   $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
@@ -132,6 +132,22 @@ function getCharacter($id)
   }
   $result = array_shift($results);
   return $result;
+}
+
+function createCharacterSimple($character)
+{
+  GLOBAL $db;
+
+  $query = new InsertQuery('characters');
+  $query->addField('name', $character['name']);
+  $query->addField('race_id', $character['race_id']);
+  $query->addField('subrace_id', $character['subrace_id']);
+  $query->addField('player_id', $character['player_id']);
+  $query->addField('alignment', $character['alignment']);
+  $query->addField('xp', 0);
+  $query->addField('hp', 0);
+
+  return $db->insert($query);
 }
 
 function createCharacter($character)
@@ -265,7 +281,7 @@ function deleteCharacterClass($character_class)
 
 /******************************************************************************
  *
- *  Character Attributes.
+ *  Character abilities.
  *
  ******************************************************************************/
 /**
@@ -273,19 +289,19 @@ function deleteCharacterClass($character_class)
  *
  * @return array|bool
  */
-function getCharacterAttributeList($character_id)
+function getCharacterAbilityList($character_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attribute_map');
+  $query = new SelectQuery('character_ability_map');
   $query->addField('character_id');
-  $query->addField('attribute_id');
+  $query->addField('ability_id');
   $query->addField('score');
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addOrderSimple('attribute_id', QueryOrder::DIRECTION_ASC);
+  $query->addOrderSimple('ability_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
 
   if (!$results)
@@ -297,23 +313,23 @@ function getCharacterAttributeList($character_id)
 
 /**
  * @param int $character_id
- * @param int $attribute_id
+ * @param int $ability_id
  *
  * @return array|mixed
  */
-function getCharacterAttribute($character_id, $attribute_id)
+function getCharacterAbility($character_id, $ability_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('character_attribute_map');
+  $query = new SelectQuery('character_ability_map');
   $query->addField('character_id');
-  $query->addField('attribute_id');
+  $query->addField('ability_id');
   $query->addField('score');
   $query->addField('modifier');
   $query->addField('proficiency');
   $query->addField('saving_throw');
   $query->addConditionSimple('character_id', $character_id);
-  $query->addConditionSimple('attribute_id', $attribute_id);
+  $query->addConditionSimple('ability_id', $ability_id);
   $results = $db->select($query);
 
   if (!$results)
@@ -325,49 +341,49 @@ function getCharacterAttribute($character_id, $attribute_id)
 }
 
 /**
- * @param array $character_attribute
+ * @param array $character_ability
  */
-function createCharacterAttribute($character_attribute)
+function createCharacterAbility($character_ability)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('character_attribute_map');
-  $query->addField('character_id', $character_attribute['character_id']);
-  $query->addField('attribute_id', $character_attribute['attribute_id']);
-  $query->addField('score', $character_attribute['score']);
-  $query->addField('modifier', $character_attribute['modifier']);
-  $query->addField('proficiency', $character_attribute['proficiency']);
-  $query->addField('saving_throw', $character_attribute['saving_throw']);
+  $query = new InsertQuery('character_ability_map');
+  $query->addField('character_id', $character_ability['character_id']);
+  $query->addField('ability_id', $character_ability['ability_id']);
+  $query->addField('score', $character_ability['score']);
+  $query->addField('modifier', $character_ability['modifier']);
+  $query->addField('proficiency', $character_ability['proficiency']);
+  $query->addField('saving_throw', $character_ability['saving_throw']);
   $db->insert($query);
 }
 
 /**
- * @param array $character_attribute
+ * @param array $character_ability
  */
-function updateCharacterAttribute($character_attribute)
+function updateCharacterAbility($character_ability)
 {
   GLOBAL $db;
 
-  $query = new UpdateQuery('character_attribute_map');
-  $query->addField('score', $character_attribute['score']);
-  $query->addField('modifier', $character_attribute['modifier']);
-  $query->addField('proficiency', $character_attribute['proficiency']);
-  $query->addField('saving_throw', $character_attribute['saving_throw']);
-  $query->addConditionSimple('character_id', $character_attribute['character_id']);
-  $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
+  $query = new UpdateQuery('character_ability_map');
+  $query->addField('score', $character_ability['score']);
+  $query->addField('modifier', $character_ability['modifier']);
+  $query->addField('proficiency', $character_ability['proficiency']);
+  $query->addField('saving_throw', $character_ability['saving_throw']);
+  $query->addConditionSimple('character_id', $character_ability['character_id']);
+  $query->addConditionSimple('ability_id', $character_ability['ability_id']);
   $db->update($query);
 }
 
 /**
- * @param array $character_attribute
+ * @param array $character_ability
  */
-function deleteCharacterAttribute($character_attribute)
+function deleteCharacterAbility($character_ability)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('character_attribute_map');
-  $query->addConditionSimple('character_id', $character_attribute['character_id']);
-  $query->addConditionSimple('attribute_id', $character_attribute['attribute_id']);
+  $query = new DeleteQuery('character_ability_map');
+  $query->addConditionSimple('character_id', $character_ability['character_id']);
+  $query->addConditionSimple('ability_id', $character_ability['ability_id']);
   $db->delete($query);
 }
 

@@ -55,7 +55,7 @@ function getRegistry($path = FALSE)
     'unknown' => 'unknown',
 
     // Ajax.
-    'ajax/character/attribute' => 'characterAttributeUpsertFormAjax',
+    'ajax/character/ability' => 'characterabilityUpsertFormAjax',
     'ajax/character/class' => 'characterClassUpsertFormAjax',
     'ajax/character/language' => 'characterLanguageUpsertFormAjax',
     'ajax/character/item-proficiency' => 'characterItemProficiencyUpsertFormAjax',
@@ -71,8 +71,8 @@ function getRegistry($path = FALSE)
     'aoe' => 'aoeUpsertForm',
     'aoes' => 'aoeList',
 
-    'attribute' => 'attributeUpsertForm',
-    'attributes' => 'attributeList',
+    'ability' => 'abilityUpsertForm',
+    'abilities' => 'abilityList',
 
     'background' => 'backgroundUpsertForm',
     'backgrounds' => 'backgroundList',
@@ -80,7 +80,10 @@ function getRegistry($path = FALSE)
     'character' => 'characterUpsertForm',
     'character/print' => 'characterPrint',
     'characters' => 'characterList',
+
     'character/wizard/race' => 'characterWizardRaceForm',
+    'character/wizard/class' => 'characterWizardClassForm',
+    'character/wizard/ability' => 'characterWizardAbilityForm',
 
     'class' => 'classUpsertForm',
     'classes' => 'classList',
@@ -169,7 +172,7 @@ function menu()
   $submenu = new ListTemplate('ul');
   $submenu->addListItem(a('Characters', '/characters'));
   $submenu->addListItem(a('Wizard', '/character/wizard/race'));
-  $submenu->addListItem(a('Attributes', '/attributes'));
+  $submenu->addListItem(a('Abilities', '/abilities'));
   $submenu->addListItem(a('Classes', '/classes'));
   $submenu->addListItem(a('Languages', '/languages'));
   $submenu->addListItem(a('Races', '/races'));

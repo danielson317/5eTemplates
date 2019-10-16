@@ -13,18 +13,18 @@
   padding-bottom: 5px;
 }
 /* line 20, ../scss/spell.scss */
-.print-card.spell table.attributes {
+.print-card.spell table.abilities {
   width: 100%;
   background-color: #FFE3AA;
 }
 /* line 24, ../scss/spell.scss */
-.print-card.spell table.attributes th, .print-card.spell table.attributes td {
+.print-card.spell table.abilities th, .print-card.spell table.abilities td {
   width: 33%;
   text-align: center;
   border: none;
 }
 /* line 30, ../scss/spell.scss */
-.print-card.spell table.attributes .concentration {
+.print-card.spell table.abilities .concentration {
   padding: 0 3px 0 2px;
   border: 1px solid black;
   border-radius: 3px;

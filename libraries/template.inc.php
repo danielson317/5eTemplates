@@ -37,15 +37,47 @@ class HTMLTemplate
     if (isset($_SESSION) && isset($_SESSION['messages']))
     {
       $this->messages = $_SESSION['messages'];
-      $_SESSION = array();
+      $_SESSION['messages'] = array();
     }
 
-    extract(get_object_vars($this));
-    ob_start();
+    // Head.
+    $output = '';
+    $output .= htmlWrap('title', $this->title);
+    foreach($this->css_file_paths as $css_file_path)
+    {
+      $attr = array(
+        'rel' => 'stylesheet',
+      );
+      if (CLEAN_URLS)
+      {
+        $attr['href'] = $css_file_path;
+      }
+      else
+      {
+        $attr['href'] = 'http://127.0.0.1/5eTemplates' . $css_file_path;
+      }
+      $output .= htmlSolo('link', $attr);
+    }
+    $output .= htmlWrap('script', 'var CLEAN_URLS=' . CLEAN_URLS . ';');
+    foreach($this->js_file_paths as $js_file_path)
+    {
+      $attr = array();
+      if (CLEAN_URLS)
+      {
+        $attr['src'] = $js_file_path;
+      }
+      else
+      {
+        $attr['src'] = 'http://127.0.0.1/5eTemplates' . $js_file_path;
+      }
+      $output .= htmlWrap('script', '', $attr);
+    }
+    $output = htmlWrap('head', $output);
 
-    include ROOT_PATH . '/themes/default/templates/html.tpl.php';
-
-    return ob_get_clean();
+    // Body.
+    $output .= htmlWrap('body', $this->body, $this->body_attr);
+    $output = '<!DOCTYPE HTML>' . htmlWrap('html', $output);
+    return $output;
   }
 
   function setTitle($title)
@@ -138,6 +170,7 @@ class FormPageTemplate extends HTMLTemplate
 {
   protected $messages = '';
   protected $form = '';
+  protected $upper = '';
 
   function __construct()
   {
@@ -150,6 +183,7 @@ class FormPageTemplate extends HTMLTemplate
     $body = '';
     $body .= menu();
     $body .= $this->messages;
+    $body .= $this->upper;
     $body .= $this->form;
     $this->setBody($body);
 
@@ -172,6 +206,14 @@ class FormPageTemplate extends HTMLTemplate
     $this->setTitle($form->getTitle());
 
     $this->form = $form;
+  }
+
+  /**
+   * @param string $upper
+   */
+  public function setUpper($upper)
+  {
+    $this->upper = $upper;
   }
 }
 

@@ -87,41 +87,41 @@ body {
   border-right: 10px solid transparent;
 }
 /* line 112, ../scss/character-classic.scss */
-.details td.left .attributes,
+.details td.left .abilities,
 .details td.left .modifiers {
   float: left;
 }
 /* line 118, ../scss/character-classic.scss */
-.details td.left .attributes {
+.details td.left .abilities {
   width: 66px;
   margin-right: 10px;
 }
 /* line 124, ../scss/character-classic.scss */
-.details td.left .attributes .attribute {
+.details td.left .abilities .ability {
   border: 1px solid black;
   border-radius: 5px;
   margin-bottom: 15px;
   position: relative;
 }
 /* line 131, ../scss/character-classic.scss */
-.details td.left .attributes .attribute .label,
-.details td.left .attributes .attribute .modifier,
-.details td.left .attributes .attribute .score {
+.details td.left .abilities .ability .label,
+.details td.left .abilities .ability .modifier,
+.details td.left .abilities .ability .score {
   text-align: center;
 }
 /* line 138, ../scss/character-classic.scss */
-.details td.left .attributes .attribute .label {
+.details td.left .abilities .ability .label {
   padding-top: 5px;
   font-size: 12px;
 }
 /* line 144, ../scss/character-classic.scss */
-.details td.left .attributes .attribute .modifier {
+.details td.left .abilities .ability .modifier {
   font-size: 32px;
   line-height: 52px;
   height: 69px;
 }
 /* line 150, ../scss/character-classic.scss */
-.details td.left .attributes .attribute .score {
+.details td.left .abilities .ability .score {
   border: 1px solid black;
   border-radius: 15px;
   position: absolute;

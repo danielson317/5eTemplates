@@ -9,6 +9,8 @@ if (!file_exists($platform_path))
 }
 include $platform_path;
 
+date_default_timezone_set('America/Denver');
+
 /*******************************
  * Environment settings.
  *******************************/
@@ -56,8 +58,8 @@ include ROOT_PATH . '/libraries/user/user.pg.php';
 include ROOT_PATH . '/modules/aoe/aoe.db.php';
 include ROOT_PATH . '/modules/aoe/aoe.pg.php';
 
-include ROOT_PATH . '/modules/attribute/attribute.db.php';
-include ROOT_PATH . '/modules/attribute/attribute.pg.php';
+include ROOT_PATH . '/modules/ability/ability.db.php';
+include ROOT_PATH . '/modules/ability/ability.pg.php';
 
 include ROOT_PATH . '/modules/background/background.db.php';
 include ROOT_PATH . '/modules/background/background.pg.php';

@@ -8,124 +8,124 @@ function installSkill()
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('code', 'TEXT', 8, array('N'));
   $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('attribute_id', 'INTEGER', 0, array('N'));
+  $query->addField('ability_id', 'INTEGER', 0, array('N'));
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
 
-  $attributes = array_flip(getAttributeCodeList());
+  $abilities = array_flip(getAbilityCodeList());
   $skills = array(
     array(
       'code' => 'Acb',
       'name' => 'Acrobatics',
-      'attribute_id' => $attributes['DEX'],
+      'ability_id' => $abilities['DEX'],
       'description' => '',
     ),
     array(
       'code' => 'AnH',
       'name' => 'Animal Handling',
-      'attribute_id' => $attributes['WIS'],
+      'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
       'code' => 'Arc',
       'name' => 'Arcana',
-      'attribute_id' => $attributes['INT'],
+      'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
       'code' => 'Ath',
       'name' => 'Athletics',
-      'attribute_id' => $attributes['STR'],
+      'ability_id' => $abilities['STR'],
       'description' => '',
     ),
     array(
       'code' => 'Dec',
       'name' => 'Deception',
-      'attribute_id' => $attributes['CHR'],
+      'ability_id' => $abilities['CHR'],
       'description' => '',
     ),
     array(
       'code' => 'His',
       'name' => 'History',
-      'attribute_id' => $attributes['INT'],
+      'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
       'code' => 'Ins',
       'name' => 'Insight',
-      'attribute_id' => $attributes['WIS'],
+      'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
       'code' => 'Itm',
       'name' => 'Intimidation',
-      'attribute_id' => $attributes['CHR'],
+      'ability_id' => $abilities['CHR'],
       'description' => '',
     ),
     array(
       'code' => 'Inv',
       'name' => 'Investigation',
-      'attribute_id' => $attributes['INT'],
+      'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
       'code' => 'Med',
       'name' => 'Medicine',
-      'attribute_id' => $attributes['WIS'],
+      'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
       'code' => 'Nat',
       'name' => 'Nature',
-      'attribute_id' => $attributes['INT'],
+      'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
       'code' => 'Prc',
       'name' => 'Perception',
-      'attribute_id' => $attributes['WIS'],
+      'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
       'code' => 'Prf',
       'name' => 'Performance',
-      'attribute_id' => $attributes['CHR'],
+      'ability_id' => $abilities['CHR'],
       'description' => '',
     ),
     array(
       'code' => 'Prs',
       'name' => 'Persuasion',
-      'attribute_id' => $attributes['CHR'],
+      'ability_id' => $abilities['CHR'],
       'description' => '',
     ),
     array(
       'code' => 'Rel',
       'name' => 'Religion',
-      'attribute_id' => $attributes['INT'],
+      'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
       'code' => 'SoH',
       'name' => 'Slight of Hand',
-      'attribute_id' => $attributes['DEX'],
+      'ability_id' => $abilities['DEX'],
       'description' => '',
     ),
     array(
       'code' => 'Stl',
       'name' => 'Stealth',
-      'attribute_id' => $attributes['DEX'],
+      'ability_id' => $abilities['DEX'],
       'description' => '',
     ),
     array(
       'code' => 'Srv',
       'name' => 'Survival',
-      'attribute_id' => $attributes['WIS'],
+      'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
   );
 
 //  echo '<pre>';
-//  print_r($attributes);
+//  print_r($abilities);
 //  print_r($skills);
 //  die('</pre>');
   foreach($skills as $skill)
@@ -143,7 +143,7 @@ function getSkillPager($page = 1)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addField('attribute_id');
+  $query->addField('ability_id');
   $query->addOrderSimple('name');
   $query->addPager($page);
 
@@ -176,7 +176,7 @@ function getSkill($id)
   $query->addField('name');
   $query->addField('code');
   $query->addField('description');
-  $query->addField('attribute_id');
+  $query->addField('ability_id');
   $query->addConditionSimple('id', $id);
 
   return $db->selectObject($query);
@@ -190,7 +190,7 @@ function createSkill($skill)
   $query->addField('name', $skill['name']);
   $query->addField('code', $skill['code']);
   $query->addField('description', $skill['description']);
-  $query->addField('attribute_id', $skill['attribute_id']);
+  $query->addField('ability_id', $skill['ability_id']);
 
   return $db->insert($query);
 }
@@ -203,7 +203,7 @@ function updateSkill($skill)
   $query->addField('name', $skill['name']);
   $query->addField('code', $skill['code']);
   $query->addField('description', $skill['description']);
-  $query->addField('attribute_id', $skill['attribute_id']);
+  $query->addField('ability_id', $skill['ability_id']);
   $query->addConditionSimple('id', $skill['id']);
 
   $db->update($query);

@@ -57,7 +57,7 @@
 * **#/#Line**: affects a #foot long, #foot wide Line. If the second number is excluded it is assumed to be 5ft wide.
 * **#Sphere**: Affects a #foot radius sphere.
 
-### Attributes - All Caps and 3 characters.
+### Abilities - All Caps and 3 characters.
 * **STR**: Strength Modifier
 * **DEX**: Dexterity Modifier
 * **CON**: Constitution Modifier
@@ -94,7 +94,7 @@
 * **lvl**: Level the character or classes level.
 * **Qt**: Quantity - Usually associated with ammunition supply of a ranged weapon.
 * **Rg 30/60**: Distance to attack with a ranged weapon. The first number is the maximum range for an attack without disadvantage. The second number is the max range with disadvantage.
-* **SA**: Spell-casting ability modifier. An attribute modifier like Wisdom, Intelligence, or Charisma depending on your class.
+* **SA**: Spell-casting ability modifier. An ability modifier like Wisdom, Intelligence, or Charisma depending on your class.
 * **SL**: Spell level. The spell slot used for casting. Note capital 'L' vs Slashing damage which has a lowercase 'l'. Should also be obvious from context.
 * **SP**: Sorcery Point.
 * **ST**: Saving Throw

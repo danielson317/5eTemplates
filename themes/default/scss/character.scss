@@ -1,5 +1,14 @@
 @import "_constants.scss";
 
+#character_summary
+{
+  .group
+  {
+    float: left;
+    width: 200px;
+  }
+}
+
 #character_form
 {
   .field_group
@@ -34,7 +43,7 @@
         clear: none;
       }
     }
-    &.attributes_group
+    &.abilities_group
     {
       clear: left;
       padding-right: 10px;

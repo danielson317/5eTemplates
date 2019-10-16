@@ -20,34 +20,34 @@
   <table class="details">
     <tr>
       <td class="left">
-        <div class="attributes">
+        <div class="abilities">
           <div class="scores">
-            <div class="str attribute">
+            <div class="str ability">
               <div class="label">Strength</div>
               <div class="modifier">-1</div>
               <div class="score">8</div>
             </div>
-            <div class="dex attribute">
+            <div class="dex ability">
               <div class="label">Dexterity</div>
               <div class="modifier">+4</div>
               <div class="score">18</div>
             </div>
-            <div class="con attribute">
+            <div class="con ability">
               <div class="label">Constitution</div>
               <div class="modifier">+2</div>
               <div class="score">14</div>
             </div>
-            <div class="int attribute">
+            <div class="int ability">
               <div class="label">Intelligence</div>
               <div class="modifier">+3</div>
               <div class="score">16</div>
             </div>
-            <div class="wis attribute">
+            <div class="wis ability">
               <div class="label">Wisdom</div>
               <div class="modifier">0</div>
               <div class="score">10</div>
             </div>
-            <div class="cha attribute">
+            <div class="cha ability">
               <div class="label">Charisma</div>
               <div class="modifier">0</div>
               <div class="score">10</div>

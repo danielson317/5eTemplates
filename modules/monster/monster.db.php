@@ -39,9 +39,9 @@ function installMonster()
   $db->create($query);
 
   // Constitution, Dexterity, Strength, etc.
-  $query = new CreateQuery('monster_attributes');
+  $query = new CreateQuery('monster_abilities');
   $query->addField('monster_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('attribute_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('ability_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('score', 'INTEGER', 0, array('N'), 8);
   $query->addField('modifier', 'INTEGER', 0, array('N'), -1);
   $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);

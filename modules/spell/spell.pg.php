@@ -358,7 +358,7 @@ function spellPrintSubmit()
         $spell['school'] = $levels[$spell['level']];
       }
 
-      // Attributes.
+      // abilities.
       $spell['speed'] = $casting_times[$spell['speed']];
       $spell['range'] = $ranges[$spell['range']];
       $spell['duration'] = $duration[$spell['duration']];

@@ -19,11 +19,11 @@ if (!file_exists(DB_PATH))
 //  installArmor();
 //  installArmorType();
   installAoe();
-  installAttribute();
+  installAbility();
   installBackground(); // Depends on Source.
   installBackgroundCharacteristics(); // Depends on Source, Background.
   installCharacter();
-  installClass(); // Depends on Attribute, Source
+  installClass(); // Depends on ability, Source
   installDamageType();
   installDie();
   installItemType();
@@ -38,7 +38,7 @@ if (!file_exists(DB_PATH))
   installRace(); // Depends on Source
   installRange();
   installSchool();
-  installSkill(); // Depends on Attribute.
+  installSkill(); // Depends on ability.
   installSpeed();
   installSpell();
   installSubclass(); // Depends on Class, Source

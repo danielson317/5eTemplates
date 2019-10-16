@@ -21,14 +21,14 @@ function installClass()
   $db->create($query);
 
   $sources = array_flip(getSourceList());
-  $attributes = array_flip(getAttributeList());
+  $abilities = array_flip(getAbilityCodeList());
   $classes = array(
     array(
       'name' => 'Cleric',
       'description' => '',
       'hit_die' => 8,
-      'stp1' => $attributes['WIS'],
-      'stp2' => $attributes['CHA'],
+      'stp1' => $abilities['WIS'],
+      'stp2' => $abilities['CHA'],
       'subclass_name' => 'Divine Domain',
       'source_id' => $sources['BR'],
     ),
@@ -36,8 +36,8 @@ function installClass()
       'name' => 'Fighter',
       'description' => '',
       'hit_die' => 10,
-      'stp1' => $attributes['STR'],
-      'stp2' => $attributes['CON'],
+      'stp1' => $abilities['STR'],
+      'stp2' => $abilities['CON'],
       'subclass_name' => 'Martial Archetype',
       'source_id' => $sources['BR'],
     ),
@@ -45,8 +45,8 @@ function installClass()
       'name' => 'Rogue',
       'description' => '',
       'hit_die' => 8,
-      'stp1' => $attributes['DEX'],
-      'stp2' => $attributes['INT'],
+      'stp1' => $abilities['DEX'],
+      'stp2' => $abilities['INT'],
       'subclass_name' => 'Roguish Archetype',
       'source_id' => $sources['BR'],
     ),
@@ -54,8 +54,8 @@ function installClass()
       'name' => 'Wizard',
       'description' => '',
       'hit_die' => 6,
-      'stp1' => $attributes['INT'],
-      'stp2' => $attributes['WIS'],
+      'stp1' => $abilities['INT'],
+      'stp2' => $abilities['WIS'],
       'subclass_name' => 'Arcane Tradition',
       'source_id' => $sources['BR'],
     ),

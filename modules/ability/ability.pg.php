@@ -2,49 +2,49 @@
 
 /******************************************************************************
  *
- * Attribute List
+ * Ability List
  *
  ******************************************************************************/
-function attributeList()
+function abilityList()
 {
   $page = getUrlID('page', 1);
-  $attributes = getAttributePager($page);
+  $abilities = getAbilityPager($page);
 
-  $template = new ListPageTemplate('Attributes');
+  $template = new ListPageTemplate('Abilities');
 
   // Operations.
-  $template->addOperation(a('New Attribute', '/attribute'));
+  $template->addOperation(a('New Ability', '/ability'));
 
   if ($page > 1)
   {
     $attr = array(
       'query' => array('page' => ($page - 1)),
     );
-    $template->addOperation(a('Prev Page', '/attribute', $attr));
+    $template->addOperation(a('Prev Page', '/ability', $attr));
   }
 
-  if (count($attributes) >= PAGER_SIZE_DEFAULT)
+  if (count($abilities) >= PAGER_SIZE_DEFAULT)
   {
     $attr = array(
       'query' => array('page' => ($page + 1)),
     );
-    $template->addOperation(a('Next Page', '/attribute', $attr));
+    $template->addOperation(a('Next Page', '/ability', $attr));
   }
 
   // List
   $table = new TableTemplate();
-  $table->setAttr('class', array('attribute-list'));
+  $table->setAttr('class', array('ability-list'));
   $table->setHeader(array('Name', 'Code', 'Description'));
 
-  foreach ($attributes as $attribute)
+  foreach ($abilities as $ability)
   {
     $row = array();
     $attr = array(
-      'query' => array('id' => $attribute['id']),
+      'query' => array('id' => $ability['id']),
     );
-    $row[] = a($attribute['name'], '/attribute', $attr);
-    $row[] = $attribute['code'];
-    $row[] = $attribute['description'];
+    $row[] = a($ability['name'], '/ability', $attr);
+    $row[] = $ability['code'];
+    $row[] = $ability['description'];
     $table->addRow($row);
   }
   $template->setList($table);
@@ -53,28 +53,28 @@ function attributeList()
 
 /******************************************************************************
  *
- * Attribute Upsert
+ * Ability Upsert
  *
  ******************************************************************************/
-function attributeUpsertForm()
+function abilityUpsertForm()
 {
   $template = new FormPageTemplate();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    $template->addMessage(attributeUpsertSubmit());
+    $template->addMessage(abilityUpsertSubmit());
   }
 
-  $attribute_id = getUrlID('id');
+  $ability_id = getUrlID('id');
 
-  $form = new Form('attribute_form');
-  $title = 'Add New Attribute';
-  if ($attribute_id)
+  $form = new Form('ability_form');
+  $title = 'Add New Ability';
+  if ($ability_id)
   {
-    $attribute = getAttribute($attribute_id);
-    $form->setValues($attribute);
-    $title = 'Edit attribute ' . htmlWrap('em', $attribute['name']);
+    $ability = getAbility($ability_id);
+    $form->setValues($ability);
+    $title = 'Edit ability ' . htmlWrap('em', $ability['name']);
   }
   $form->setTitle($title);
 
@@ -96,7 +96,7 @@ function attributeUpsertForm()
 
   // Submit
   $value = 'Add';
-  if ($attribute_id)
+  if ($ability_id)
   {
     $value = 'Update';
   }
@@ -104,7 +104,7 @@ function attributeUpsertForm()
   $form->addField($field);
 
   // Delete.
-  if ($attribute_id)
+  if ($ability_id)
   {
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
@@ -115,28 +115,28 @@ function attributeUpsertForm()
   return $template;
 }
 
-function attributeUpsertSubmit()
+function abilityUpsertSubmit()
 {
-  $attribute = $_POST;
-  unset($attribute['submit']);
+  $ability = $_POST;
+  unset($ability['submit']);
 
   if (isset($_POST['delete']))
   {
-    deleteAttribute($_POST['id']);
-    redirect('/attribute');
+    deleteAbility($_POST['id']);
+    redirect('/ability');
   }
 
   // Update.
   if ($_POST['id'])
   {
-    updateAttribute($attribute);
-    return htmlWrap('h3', 'Attribute ' . htmlWrap('em', $attribute['name']) . ' (' . $attribute['id'] . ') updated.');
+    updateAbility($ability);
+    return htmlWrap('h3', 'Ability ' . htmlWrap('em', $ability['name']) . ' (' . $ability['id'] . ') updated.');
   }
   // Create.
   else
   {
-    unset($attribute['id']);
-    $attribute['id'] = createAttribute($attribute);
-    return htmlWrap('h3', 'Attribute ' . htmlWrap('em', $attribute['name']) . ' (' . $attribute['id'] . ') created.');
+    unset($ability['id']);
+    $ability['id'] = createAbility($ability);
+    return htmlWrap('h3', 'Ability ' . htmlWrap('em', $ability['name']) . ' (' . $ability['id'] . ') created.');
   }
 }

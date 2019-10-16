@@ -259,7 +259,7 @@ function jsonResponseDie($response)
  ******************************************************************************/
 function buildAttr($attr)
 {
-  assert(is_array($attr), 'Attributes passed to buildAttr should be an array().');
+  assert(is_array($attr), 'abilities passed to buildAttr should be an array().');
   $attr_string = '';
   foreach ($attr as $name => $value)
   {
@@ -310,6 +310,16 @@ function optionList($list, $selected = FALSE)
   return $output;
 }
 
+function lineItem($label, $value)
+{
+  $output = '';
+  $output .= htmlWrap('strong', $label . ': ', array('class' => array('label')));
+  $output .= htmlWrap('span', $value, array('class' => array('value')));
+  $output = htmlWrap('span', $output, array('class' => 'line-item'));
+  $output .= '<br>';
+
+  return $output;
+}
 /*****************************************************************************
  *
  * Other Helpers
@@ -496,12 +506,12 @@ function _sanitizeXssHelper($m, $store = FALSE)
     return "</$elem>";
   }
 
-  // Is there a closing XHTML slash at the end of the attribute?
+  // Is there a closing XHTML slash at the end of the ability?
   $attrlist = preg_replace('%(\s?)/\s*$%', '\1', $attrlist, -1, $count);
   $xhtml_slash = $count ? ' /' : '';
 
-  // Clean up attribute.
-//  $attr2 = implode(' ', $attrlist); //_filter_xss_attributes($attrlist));
+  // Clean up ability.
+//  $attr2 = implode(' ', $attrlist); //_filter_xss_abilities($attrlist));
   $attr2 = preg_replace('/[<>]/', '', $attrlist);
   $attr2 = strlen($attr2) ? ' ' . $attr2 : '';
 

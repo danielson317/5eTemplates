@@ -34,9 +34,9 @@ function skillList()
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('skill-list'));
-  $table->setHeader(array('Name', 'Code', 'Attribute', 'Description'));
+  $table->setHeader(array('Name', 'Code', 'ability', 'Description'));
 
-  $attributes = getAttributeList();
+  $abilities = getAbilityList();
   foreach ($skills as $skill)
   {
     $row = array();
@@ -45,7 +45,7 @@ function skillList()
     );
     $row[] = a($skill['name'], '/skill', $attr);
     $row[] = $skill['code'];
-    $row[] = $attributes[$skill['attribute_id']];
+    $row[] = $abilities[$skill['ability_id']];
     $row[] = $skill['description'];
     $table->addRow($row);
   }
@@ -93,9 +93,9 @@ function skillUpsertForm()
   $field = new FieldText('code', 'Code');
   $form->addField($field);
 
-  // Attribute
-  $options = array(0 => '---Select One---') + getAttributeList();
-  $field = new FieldSelect('attribute_id', 'Parent Attribute', $options);
+  // ability
+  $options = array(0 => '---Select One---') + getAbilityList();
+  $field = new FieldSelect('ability_id', 'Parent ability', $options);
   $form->addField($field);
 
   // Description

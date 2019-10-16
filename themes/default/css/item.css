@@ -7,23 +7,23 @@
   padding: 5px;
 }
 /* line 14, ../scss/item.scss */
-.print-card.item .attributes {
+.print-card.item .abilities {
   height: 18px;
   background-color: #FFE3AA;
   padding: 5px;
 }
 /* line 20, ../scss/item.scss */
-.print-card.item .attributes .type,
-.print-card.item .attributes .magic,
-.print-card.item .attributes .attunement {
+.print-card.item .abilities .type,
+.print-card.item .abilities .magic,
+.print-card.item .abilities .attunement {
   float: left;
 }
 /* line 26, ../scss/item.scss */
-.print-card.item .attributes .type {
+.print-card.item .abilities .type {
   width: 130px;
 }
 /* line 30, ../scss/item.scss */
-.print-card.item .attributes .value {
+.print-card.item .abilities .value {
   float: right;
   text-align: right;
 }

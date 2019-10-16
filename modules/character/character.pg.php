@@ -214,30 +214,30 @@ function characterUpsertForm()
   $form->addField($field);
 
   /********************
-   * Attributes Group
+   * abilities Group
    ********************/
-  $group = 'attributes_group';
+  $group = 'abilities_group';
   $form->addGroup($group);
 
-  $attributes = getAttributeList();
-  $character_attribute_map = getCharacterAttributeList($character_id);
+  $abilities = getAbilityList();
+  $character_ability_map = getCharacterabilityList($character_id);
   $table = new TableTemplate();
   $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
-  foreach($character_attribute_map as $character_attribute)
+  foreach($character_ability_map as $character_ability)
   {
     $row = array();
     $attr = array(
       'query' => array(
         'character_id' => $character_id,
-        'attribute_id' => $character_attribute['attribute_id'],
+        'ability_id' => $character_ability['ability_id'],
       ),
-      'class' => array('attribute'),
+      'class' => array('ability'),
     );
-    $row[] = a($attributes[$character_attribute['attribute_id']], '/ajax/character/attribute', $attr);
-    $row[] = $character_attribute['score'];
-    $row[] = $character_attribute['modifier'];
-    $row[] = $character_attribute['proficiency'];
-    $row[] = $character_attribute['saving_throw'];
+    $row[] = a($abilities[$character_ability['ability_id']], '/ajax/character/ability', $attr);
+    $row[] = $character_ability['score'];
+    $row[] = $character_ability['modifier'];
+    $row[] = $character_ability['proficiency'];
+    $row[] = $character_ability['saving_throw'];
     $table->addRow($row);
   }
 
@@ -245,11 +245,11 @@ function characterUpsertForm()
     'query' => array(
       'character_id' => $character_id,
     ),
-    'class' => array('add-attribute'),
+    'class' => array('add-ability'),
   );
-  $link = a('Add New Attribute', '/ajax/character/attribute', $attr);
+  $link = a('Add New ability', '/ajax/character/ability', $attr);
 
-  $field = new FieldMarkup('attribute', 'Attributes', $table . $link);
+  $field = new FieldMarkup('ability', 'abilities', $table . $link);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -591,10 +591,10 @@ function characterClassListAjax()
 
 /******************************************************************************
  *
- * Character Attribute Upsert
+ * Character ability Upsert
  *
  ******************************************************************************/
-function characterAttributeUpsertFormAjax()
+function characterabilityUpsertFormAjax()
 {
   $response = getAjaxDefaultResponse();
 
@@ -602,11 +602,11 @@ function characterAttributeUpsertFormAjax()
   $operation = getUrlOperation();
   if ($operation === 'list')
   {
-    characterAttributeListAjax();
+    characterabilityListAjax();
   }
   elseif (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
   {
-    characterAttributeUpsertSubmitAjax();
+    characterabilityUpsertSubmitAjax();
   }
 
   $character_id = getUrlID('character_id');
@@ -615,20 +615,20 @@ function characterAttributeUpsertFormAjax()
     die('Missing parameter character_id.');
   }
   $character = getCharacter($character_id);
-  $attribute_id = getUrlID('attribute_id');
-  $attributes = getAttributeList();
-  $character_attribute_map = getCharacterAttributeList($character_id);
+  $ability_id = getUrlID('ability_id');
+  $abilities = getAbilityList();
+  $character_ability_map = getCharacterabilityList($character_id);
 
-  $form = new Form('character_attribute_form');
-  if ($attribute_id)
+  $form = new Form('character_ability_form');
+  if ($ability_id)
   {
-    $character_attribute = getCharacterAttribute($character_id, $attribute_id);
-    $form->setValues($character_attribute);
-    $title = 'Edit character ' . htmlWrap('em', $character['name']) . '\'s attribute ' . htmlWrap('em', $attributes[$character_attribute['attribute_id']]);
+    $character_ability = getCharacterability($character_id, $ability_id);
+    $form->setValues($character_ability);
+    $title = 'Edit character ' . htmlWrap('em', $character['name']) . '\'s ability ' . htmlWrap('em', $abilities[$character_ability['ability_id']]);
   }
   else
   {
-    $title = 'Add New Attribute to ' . htmlWrap('em', $character['name']);
+    $title = 'Add New ability to ' . htmlWrap('em', $character['name']);
   }
   $form->setTitle($title);
 
@@ -641,20 +641,20 @@ function characterAttributeUpsertFormAjax()
   $field->setValue($character_id);
   $form->addField($field);
 
-  // Attribute.
-  if (!$attribute_id)
+  // ability.
+  if (!$ability_id)
   {
-    $options = $attributes;
-    foreach ($character_attribute_map as $character_attribute)
+    $options = $abilities;
+    foreach ($character_ability_map as $character_ability)
     {
-      unset($options[$character_attribute['attribute_id']]);
+      unset($options[$character_ability['ability_id']]);
     }
-    $field = new FieldSelect('attribute_id', 'Attribute', $options);
+    $field = new FieldSelect('ability_id', 'ability', $options);
     $form->addField($field);
   }
   else
   {
-    $field = new FieldHidden('attribute_id');
+    $field = new FieldHidden('ability_id');
     $form->addField($field);
   }
 
@@ -680,14 +680,14 @@ function characterAttributeUpsertFormAjax()
 
   // Submit
   $value = 'Add';
-  if ($attribute_id)
+  if ($ability_id)
   {
     $value = 'Update';
   }
   $field = new FieldSubmit('submit', $value);
   $form->addField($field);
 
-  if ($attribute_id)
+  if ($ability_id)
   {
     $field = new FieldSubmit('delete', 'Delete');
     $form->addField($field);
@@ -697,56 +697,56 @@ function characterAttributeUpsertFormAjax()
   jsonResponseDie($response);
 }
 
-function characterAttributeUpsertSubmitAjax()
+function characterabilityUpsertSubmitAjax()
 {
   $response = getAjaxDefaultResponse();
-  $character_attribute = $_POST;
+  $character_ability = $_POST;
 
   if (isset($_POST['delete']))
   {
-    deleteCharacterAttribute($character_attribute);
-    $attr = array('query' => array('id' => $character_attribute['character_id']));
+    deleteCharacterability($character_ability);
+    $attr = array('query' => array('id' => $character_ability['character_id']));
     redirect('/character', $attr);
   }
   // Update.
   elseif ($_POST['operation'] == 'update')
   {
-    updateCharacterAttribute($character_attribute);
+    updateCharacterability($character_ability);
     $response['data'] = 'Updated';
   }
   // Create.
   else
   {
-    createCharacterAttribute($character_attribute);
+    createCharacterability($character_ability);
     $response['data'] = 'created';
   }
   jsonResponseDie($response);
 }
 
-function characterAttributeListAjax()
+function characterabilityListAjax()
 {
   $response = getAjaxDefaultResponse();
   $character_id = getUrlID('character_id');
 
   $output = '';
-  $attributes = getAttributeList();
-  $character_attribute_map = getCharacterAttributeList($character_id);
-  foreach ($character_attribute_map as $character_attribute)
+  $abilities = getAbilityList();
+  $character_ability_map = getCharacterabilityList($character_id);
+  foreach ($character_ability_map as $character_ability)
   {
 
     $row = array();
     $attr = array(
       'query' => array(
         'character_id' => $character_id,
-        'attribute_id' => $character_attribute['attribute_id'],
+        'ability_id' => $character_ability['ability_id'],
       ),
-      'class' => 'attribute',
+      'class' => 'ability',
     );
-    $row[] = a($attributes[$character_attribute['attribute_id']], '/character/class', $attr);
-    $row[] = $character_attribute['score'];
-    $row[] = $character_attribute['modifier'];
-    $row[] = $character_attribute['proficiency'];
-    $row[] = $character_attribute['saving_throw'];
+    $row[] = a($abilities[$character_ability['ability_id']], '/character/class', $attr);
+    $row[] = $character_ability['score'];
+    $row[] = $character_ability['modifier'];
+    $row[] = $character_ability['proficiency'];
+    $row[] = $character_ability['saving_throw'];
     $output .= TableTemplate::tableRow($row);
   }
   $response['data'] = $output;
@@ -809,11 +809,11 @@ function characterSkillUpsertFormAjax()
 
   if ($skill_id)
   {
-    $attributes = getAttributeList();
+    $abilities = getAbilityList();
     $skill = getSkill($character_skill['skill_id']);
-    $character_attribute = getCharacterAttribute($character_id, $skill['attribute_id']);
-    $markup = htmlWrap('span', $character_attribute['modifier'], array('class' => array('attribute_modifier')));
-    $field = new FieldMarkup('attribute_modifier', $attributes[$skill['attribute_id']] . ' Modifier', $markup);
+    $character_ability = getCharacterability($character_id, $skill['ability_id']);
+    $markup = htmlWrap('span', $character_ability['modifier'], array('class' => array('ability_modifier')));
+    $field = new FieldMarkup('ability_modifier', $abilities[$skill['ability_id']] . ' Modifier', $markup);
     $form->addField($field);
   }
 

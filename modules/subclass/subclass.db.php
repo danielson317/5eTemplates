@@ -11,6 +11,133 @@ function installSubclass()
   $query->addField('source_id', 'INTEGER');
   $query->addField('description', 'TEXT', 1024);
   $db->create($query);
+
+  $sources = array_flip(getSourceList());
+  $classes = array_flip(getClassList());
+  $subclasses = array();
+
+  // Cleric.
+  $subclasses += array(
+    array(
+      'name' => 'Knowledge',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Life',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Light',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Nature',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Tempest',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Trickery',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'War',
+      'class_id' => $classes['Cleric'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  // Fighter.
+  $subclasses += array(
+    array(
+      'name' => 'Champion',
+      'class_id' => $classes['Fighter'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  // Rogue.
+  $subclasses += array(
+    array(
+      'name' => 'Thief',
+      'class_id' => $classes['Rogue'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  // Wizard.
+  $subclasses += array(
+    array(
+      'name' => 'Abjuration',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Conjuration',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Divination',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Enchantment',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Evocation',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Illusion',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Necromancy',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+    array(
+      'name' => 'Transmutation',
+      'class_id' => $classes['Wizard'],
+      'description' => '',
+      'source_id' => $sources['BR'],
+    ),
+  );
+
+  foreach ($subclasses as $subclass)
+  {
+    createSubclass($subclass);
+  }
 }
 
 /**

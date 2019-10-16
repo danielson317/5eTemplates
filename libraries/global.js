@@ -200,3 +200,13 @@ function getUrlParameter(param, url)
   }
   return false;
 }
+
+function u(url)
+{
+  if (CLEAN_URLS)
+  {
+    return url;
+  }
+
+  return 'http://127.0.0.1/5eTemplates?q=' + url;
+}
