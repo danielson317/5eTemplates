@@ -572,3 +572,17 @@ function iis($array, $key, $default = '')
   return $default;
 }
 
+function getListItem($list, $id = FALSE, $default = FALSE)
+{
+  if (!$id)
+  {
+    return $list;
+  }
+
+  if (array_key_exists($id, $list))
+  {
+    return $list[$id];
+  }
+
+  return $default;
+}

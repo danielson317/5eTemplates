@@ -15,6 +15,7 @@ function installCharacter()
   $query->addField('xp', 'INTEGER', 0, array('N'));
   $query->addField('race_id', 'INTEGER', 0, array('N'));
   $query->addField('subrace_id', 'INTEGER', 0);
+  $query->addField('gender', 'TEXT', 1);
   $query->addField('alignment', 'TEXT', 8, array('N'));
   $query->addField('pb', 'TEXT', 8, array('N'), 2);
   $query->addField('speed', 'INTEGER', 0, array('N'), 30);
@@ -33,7 +34,7 @@ function installCharacter()
   $query->addField('ability_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('score', 'INTEGER', 0, array('N'), 8);
   $query->addField('modifier', 'INTEGER', 0, array('N'), -1);
-  $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
+  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
   $query->addField('saving_throw', 'INTEGER', 0, array('N'), -1);
   $db->create($query);
 
@@ -53,7 +54,7 @@ function installCharacter()
   $query = new CreateQuery('character_skill_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('skill_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
+  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
   $query->addField('modifier', 'INTEGER', 0, array('N'), 0);
   $db->create($query);
 
@@ -70,7 +71,7 @@ function installCharacter()
   $query = new CreateQuery('character_item_proficiency_map');
   $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
   $query->addField('item_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('proficiency', 'INTEGER', 0, array('N'), 0);
+  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
   $db->create($query);
 }
 
@@ -110,6 +111,7 @@ function getCharacter($id)
   $query->addField('name');
   $query->addField('race_id');
   $query->addField('subrace_id');
+  $query->addField('gender');
   $query->addField('player_id');
   $query->addField('background_id');
   $query->addField('xp');
@@ -142,7 +144,9 @@ function createCharacterSimple($character)
   $query->addField('name', $character['name']);
   $query->addField('race_id', $character['race_id']);
   $query->addField('subrace_id', $character['subrace_id']);
+  $query->addField('gender', $character['gender']);
   $query->addField('player_id', $character['player_id']);
+  $query->addField('background_id', $character['background_id']);
   $query->addField('alignment', $character['alignment']);
   $query->addField('xp', 0);
   $query->addField('hp', 0);

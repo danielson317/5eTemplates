@@ -210,3 +210,19 @@ function u(url)
 
   return 'http://127.0.0.1/5eTemplates?q=' + url;
 }
+
+function htmlCheckbox(name, label, checked)
+{
+  let $element = $('<div></div>');
+  $element.addClass('field').addClass('checkbox').addClass(name);
+
+  let $input = $('<input>');
+  $input.attr('name', name).attr('type', 'checkbox').attr('checked', checked);
+  $element.append($input);
+
+  let $label = $('<label></label>');
+  $label.addClass('label').attr('for', name).text(label);
+  $element.append($label);
+
+  return $element;
+}

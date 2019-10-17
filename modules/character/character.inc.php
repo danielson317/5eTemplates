@@ -6,51 +6,74 @@ function characterDisplay($character_id)
 
   // Name.
   $output = '';
-  $output .= lineItem('Name', $character['name']);
-
-  // Players.
-  $players = getPlayerList();
-  $output .= lineItem('Player', $players[$character['player_id']]);
-
-  // Alignment.
-  $alignments = getAlignmentList();
-  $output .= lineItem('Alignment', $alignments[$character['alignment']]);
+  $output .= lineItem('Name', $character['name'] . ' (' . getGenderList($character['gender']) . ')');
 
   // Race.
-  $races = getRaceList();
-  $subraces = getSubraceList();
-  $race = $races[$character['race_id']];
+  $list = getRaceList();
+  $sublist = getSubraceList();
+  $race = $list[$character['race_id']];
   if ($character['subrace_id'])
   {
-   $race .= ' (' . $subraces[$character['subrace_id']] . ')';
+   $race .= ' (' . $sublist[$character['subrace_id']] . ')';
   }
   $output .= lineItem('Race', $race);
 
   // Class.
-  $classes = getClassList();
-  $subclasses = getSubclassList();
+  $list = getClassList();
+  $sublist = getSubclassList();
   $character_classes = getCharacterClassList($character_id);
   foreach($character_classes as $character_class)
   {
-    $class = $classes[$character_class['class_id']];
+    $class = $list[$character_class['class_id']];
     if ($character_class['subclass_id'])
     {
-      $class .= ' (' . $subclasses[$character_class['subclass_id']] . ')';
+      $class .= ' (' . $sublist[$character_class['subclass_id']] . ')';
     }
     $class .= ' ' . $character_class['level'];
     $output .= lineItem('Class', $class);
   }
+
+  // Background.
+  $list = getBackgroundList();
+  $output .= lineItem('Background', $list[$character['background_id']]);
+
+  // Alignment.
+  $list = getAlignmentList();
+  $output .= lineItem('Alignment', $list[$character['alignment']]);
+
+  // Players.
+  $list = getPlayerList();
+  $output .= lineItem('Player', $list[$character['player_id']]);
+
+  // Primary group.
   $output = htmlWrap('div', $output, array('class' => array('primary', 'group')));
 
   // Abilities.
   $group = '';
-  $abilities = getAbilityList();
+  $list = getAbilityList();
   $character_abilities = getCharacterAbilityList($character_id);
   foreach($character_abilities as $character_ability)
   {
-    $group .= lineItem($abilities[$character_ability['ability_id']], $character_ability['modifier'] . ' (' . $character_ability['score'] . ')');
+    $group .= lineItem($list[$character_ability['ability_id']], $character_ability['modifier'] . ' (' . $character_ability['score'] . ')');
   }
   $output .= htmlWrap('div', $group, array('class' => array('abilities', 'group')));
+
+  // Abilities.
+  $group = '';
+  $list = getSkillList();
+  $character_skills = getCharacterSkillList($character_id);
+  $count = 0;
+  foreach($character_skills as $character_skill)
+  {
+    $group .= lineItem($list[$character_skill['skill_id']], $character_skill['modifier'] . ' (x' . $character_skill['proficiency'] . ')');
+    $count++;
+    if (($count % 6) === 0)
+    {
+      $output .= htmlWrap('div', $group, array('class' => array('skills-' . ($count/6), 'group')));
+      $group = '';
+    }
+  }
+  $output .= htmlWrap('div', $group, array('class' => array('skills-' . ($count/6 + 1), 'group')));
 
   return htmlWrap('div', $output, array('id' => 'character_summary'));
 }
@@ -213,4 +236,14 @@ function getCharacterProficiencyTable($character_id)
   $proficiency_table->addRow(array(join(', ', $links)), array('colspan' => 2));
 
   return $proficiency_table;
+}
+
+function getGenderList($id = FALSE)
+{
+  $list = array(
+    'm' => 'Male',
+    'f' => 'Female',
+  );
+
+  return getListItem($list, $id);
 }

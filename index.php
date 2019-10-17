@@ -84,6 +84,11 @@ function getRegistry($path = FALSE)
     'character/wizard/race' => 'characterWizardRaceForm',
     'character/wizard/class' => 'characterWizardClassForm',
     'character/wizard/ability' => 'characterWizardAbilityForm',
+    'character/wizard/skill' => 'characterWizardSkillForm',
+    'character/wizard/proficiency' => 'characterWizardProficiencyForm',
+    'character/wizard/personality' => 'characterWizardPersonalityForm',
+    'character/wizard/equipment' => 'characterWizardEquipmentForm',
+    'character/wizard/spell' => 'characterWizardSpellForm',
 
     'class' => 'classUpsertForm',
     'classes' => 'classList',

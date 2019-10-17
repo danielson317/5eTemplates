@@ -1,9 +1,12 @@
 $(document).ready(function()
 {
-  let $character_wizard_race_form = $('#character_wizard_race_form');
-  if ($character_wizard_race_form.length)
+  /***************
+   * Race
+   ***************/
+  let $race_form = $('#character_wizard_race_form');
+  if ($race_form.length)
   {
-    $character_wizard_race_form.find('.field.race_id select').change(function()
+    $race_form.find('.field.race_id select').change(function()
     {
       $.get(u('/ajax/subrace'), {race_id: $(this).val()}, function(response)
       {
@@ -12,6 +15,55 @@ $(document).ready(function()
     });
   }
 
+  /***************
+   * Class
+   ***************/
+  let $class_form = $('#character_wizard_class_form');
+  if ($class_form.length)
+  {
+    $class_form.find('.field.class_id select').change(function()
+    {
+      $.get(u('/ajax/subclass'), {class_id: $(this).val()}, function(response)
+      {
+        $('.field.subclass_id select').html(response);
+      });
+    });
+  }
+
+  /***************
+   * Proficiency
+   ***************/
+  let $proficiency_form = $('#character_wizard_proficiency_form');
+  if ($proficiency_form.length)
+  {
+    let $language_list = $proficiency_form.find('.field.language_list .markup-value');
+    let $language_options = $proficiency_form.find('.field.language_id select');
+
+    // Add language.
+    $language_options.change(function()
+    {
+      let $selected = $(this).find('option:selected');
+      let name = 'language_' + $selected.val();
+      if ($language_list.find('input[name="' + name + '"]').length || $selected.val() === '<none>')
+      {
+        return;
+      }
+      $language_list.append(htmlCheckbox(name, $selected.text(), 'checked'));
+      $(this).find('option[value="' + $selected.val() + '"]').hide();
+    });
+
+    // Remove language.
+    $language_list.on('click', '.checkbox input', function()
+    {
+      let name = $(this).attr('name');
+      $language_list.find('.field.' + name).remove();
+      $language_options.find('option[value="' + name.substr('language_'.length) + '"]').show();
+    });
+  }
+
+  /***************
+   * Full Character.
+   ***************/
   let $character_form = $('#character_form');
   if ($character_form.length)
   {

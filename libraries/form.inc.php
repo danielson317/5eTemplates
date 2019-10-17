@@ -278,7 +278,7 @@ class FieldNumber extends Field
 //    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
     $attr['type'] = 'number';
-    if ($this->value)
+    if ($this->value !== FALSE)
     {
       $attr['value'] = $this->value;
     }
@@ -406,7 +406,7 @@ class FieldCheckbox extends Field
     $output .= htmlWrap('label', $this->label, $attr);
 
     // Wrapper.
-    $attr = array('class' => array('field', 'select', $this->id));
+    $attr = array('class' => array('field', 'checkbox', $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }

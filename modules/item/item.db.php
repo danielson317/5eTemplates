@@ -22,7 +22,8 @@ function installItem()
   // All items.
   $query->addField('id', 'INTEGER', 0, array('P', 'A'));
   $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('item_type_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('parent_id', 'INTEGER', 0, array('N'), 0);
+  $query->addField('is_category', 'BOOL', 0, array('N'), 0);
   $query->addField('value', 'INTEGER', 0, array('N'), 0);
   $query->addField('weight', 'INTEGER', 0, array('N'), 0);
   $query->addField('description', 'TEXT', 1024);
