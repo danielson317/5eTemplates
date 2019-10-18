@@ -394,7 +394,7 @@ function itemPrintForm()
 
     // Count.
     $attr = array(
-      'type' => 'integer',
+      'type' => CreateQuery::TYPE_INTEGER,
       'name' => $item['id'],
       'class' => array('button'),
     );

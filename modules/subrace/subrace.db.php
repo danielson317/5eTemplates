@@ -5,11 +5,11 @@ function installSubrace()
   GLOBAL $db;
 
   $query = new CreateQuery('subraces');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('race_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
-  $query->addField('source_id', 'INTEGER');
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('race_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
+  $query->addField('source_id', CreateQuery::TYPE_INTEGER);
   $db->create($query);
 
   $sources = array_flip(getSourceList());

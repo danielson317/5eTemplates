@@ -5,11 +5,11 @@ function installSession()
   GLOBAL $db;
 
   $query = new CreateQuery('sessions');
-  $query->addField('id', 'TEXT', 128, array('P', 'U'));
-  $query->addField('user_id', 'INTEGER', 0);
-  $query->addField('ip', 'TEXT', 128, array('N'));
-  $query->addField('timestamp', 'INTEGER', 0, array('N'));
-  $query->addField('data', 'TEXT', 'max');
+  $query->addField('id', CreateQuery::TYPE_STRING, 128, array('P', 'U'));
+  $query->addField('user_id', CreateQuery::TYPE_INTEGER, 0);
+  $query->addField('ip', CreateQuery::TYPE_STRING, 128, array('N'));
+  $query->addField('timestamp', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('data', CreateQuery::TYPE_STRING, 'max');
 
   $db->create($query);
 }

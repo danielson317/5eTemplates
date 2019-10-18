@@ -221,7 +221,7 @@ class FieldText extends Field
     $attr = $this->attr;
 //    $attr['id'] = $this->id;
     $attr['name'] = $this->id;
-    $attr['type'] = 'text';
+    $attr['type'] = CreateQuery::TYPE_STRING;
 //    if ($this->value)
 //    {
       $attr['value'] = $this->value;
@@ -229,7 +229,7 @@ class FieldText extends Field
     $output .= htmlSolo('input', $attr);
 
     // Wrapper.
-    $attr = array('class' => array('field', 'text', $this->id));
+    $attr = array('class' => array('field', CreateQuery::TYPE_STRING, $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }
@@ -257,7 +257,7 @@ class FieldPassword extends Field
     $output .= htmlSolo('input', $attr);
 
     // Wrapper.
-    $attr = array('class' => array('field', 'text', $this->id));
+    $attr = array('class' => array('field', CreateQuery::TYPE_STRING, $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }
@@ -285,7 +285,7 @@ class FieldNumber extends Field
     $output .= htmlSolo('input', $attr);
 
     // Wrapper.
-    $attr = array('class' => array('field', 'text', $this->id));
+    $attr = array('class' => array('field', CreateQuery::TYPE_STRING, $this->id));
     $output = htmlWrap('div', $output, $attr);
     return $output;
   }

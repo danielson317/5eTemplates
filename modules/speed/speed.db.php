@@ -6,10 +6,10 @@ function installSpeed()
 
   // Action, Reaction, 1 minute, etc.
   $query = new CreateQuery('speeds');
-  $query->addField('id', 'INTEGER', 0, array('P', 'U'));
-  $query->addField('casting_time', 'TEXT', 32, array('N'));
-  $query->addField('duration', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'U'));
+  $query->addField('casting_time', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('duration', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $db->create($query);
 
   $speeds = array(

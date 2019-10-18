@@ -9,10 +9,10 @@ function installDamageType()
 
   // Bludgeoning, Force, Psychic, etc.
   $query = new CreateQuery('damage_types');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('code', 'TEXT', 8, array('N'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('code', CreateQuery::TYPE_STRING, 8, array('N'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $db->create($query);
 
   $damage_types = array(

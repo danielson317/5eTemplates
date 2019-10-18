@@ -5,11 +5,11 @@ function installBackgroundCharacteristics()
   GLOBAL $db;
 
   $query = new CreateQuery('background_characteristics');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('background_id', 'INTEGER', 0, array('N'));
-  $query->addField('characteristic', 'TEXT', 8, array('N')); // special, trait, ideal, bond, flaw
-  $query->addField('alignment', 'TEXT', 2);
-  $query->addField('description', 'TEXT', 1024, array('N'));
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('background_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('characteristic', CreateQuery::TYPE_STRING, 8, array('N')); // special, trait, ideal, bond, flaw
+  $query->addField('alignment', CreateQuery::TYPE_STRING, 2);
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024, array('N'));
   $db->create($query);
 
   $backgrounds = array_flip(getBackgroundList());

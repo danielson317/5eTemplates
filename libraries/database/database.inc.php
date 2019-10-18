@@ -350,12 +350,19 @@ class DeleteQuery extends Query
  */
 class CreateQuery extends Query
 {
+  const TYPE_INTEGER = 1;
+  const TYPE_BOOL = 2;
+  const TYPE_STRING = 3;
+  const TYPE_DATETIME = 4;
+  const TYPE_CURRENCY = 5;
+  const TYPE_DECIMAL = 6;
+
   // Flags:
   // A = Auto Increment
   // P = Primary Key
   // N = Not Null
   // U = Unique
-  function addField($name, $type = 'INTEGER', $length = 0, $flags = array(), $default = FALSE)
+  function addField($name, $type = CreateQuery::TYPE_INTEGER, $length = 0, $flags = array(), $default = FALSE)
   {
     assert(is_int($length) || strtolower($length) === 'max', 'Length must be an integer or "max"');
     $this->fields[$name] = array(

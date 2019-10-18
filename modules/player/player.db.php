@@ -5,8 +5,8 @@ function installPlayer()
   GLOBAL $db;
 
   $query = new CreateQuery('players');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
   $db->create($query);
 
   $player = array('name' => 'Daniel P. Henry');

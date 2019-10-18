@@ -208,7 +208,7 @@ function monsterUpsertSubmit()
 //
 //    // Count.
 //    $attr = array(
-//      'type' => 'integer',
+//      'type' => CreateQuery::TYPE_INTEGER,
 //      'name' => $monster['id'],
 //      'class' => array('button'),
 //    );

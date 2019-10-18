@@ -267,7 +267,7 @@ function spellPrintForm()
 
     // Count.
     $attr = array(
-      'type' => 'integer',
+      'type' => CreateQuery::TYPE_INTEGER,
       'name' => $spell['id'],
       'class' => array('button'),
     );

@@ -5,11 +5,11 @@ function installSubclass()
   GLOBAL $db;
 
   $query = new CreateQuery('subclasses');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('class_id', 'INTEGER', 0, array('N'));
-  $query->addField('source_id', 'INTEGER');
-  $query->addField('description', 'TEXT', 1024);
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('class_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('source_id', CreateQuery::TYPE_INTEGER);
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $db->create($query);
 
   $sources = array_flip(getSourceList());

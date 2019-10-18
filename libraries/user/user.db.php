@@ -5,12 +5,12 @@ function installUser()
   GLOBAL $db;
 
   $query = new CreateQuery('users');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('email', 'TEXT', 128, array('U', 'N'));
-  $query->addField('username', 'TEXT', 64, array('U', 'N'));
-  $query->addField('password', 'TEXT', 256, array('N'));
-  $query->addField('reset_code', 'TEXT', 256);
-  $query->addField('reset_timestamp', 'INTEGER', 0);
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('email', CreateQuery::TYPE_STRING, 128, array('U', 'N'));
+  $query->addField('username', CreateQuery::TYPE_STRING, 64, array('U', 'N'));
+  $query->addField('password', CreateQuery::TYPE_STRING, 256, array('N'));
+  $query->addField('reset_code', CreateQuery::TYPE_STRING, 256);
+  $query->addField('reset_timestamp', CreateQuery::TYPE_INTEGER, 0);
 
   $db->create($query);
 

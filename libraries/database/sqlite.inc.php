@@ -181,8 +181,7 @@ class SQLite extends Database
 
     foreach ($query->getFields() as $name => $value)
     {
-      assert(self::isValidDataTypes($value['type']), 'Unsupported type');
-      $sql .= ' ' . self::structureEscape($name) . ' ' . $value['type'];
+      $sql .= ' ' . self::structureEscape($name) . ' ' . self::dataTypeList($value['type']);
 
       foreach ($value['flags'] as $flag)
       {
@@ -465,15 +464,17 @@ class SQLite extends Database
     return '"' . $string . '"';
   }
 
-  function isValidDataTypes($type)
+  function dataTypeList($type)
   {
     $list = array(
-      'integer',
-      'text',
-      'real',
-      'blob',
+      CreateQuery::TYPE_INTEGER => CreateQuery::TYPE_INTEGER,
+      CreateQuery::TYPE_BOOL => CreateQuery::TYPE_INTEGER,
+      CreateQuery::TYPE_STRING => CreateQuery::TYPE_STRING,
+      CreateQuery::TYPE_CURRENCY => 'real',
+      CreateQuery::TYPE_DATETIME => 'datetime',
+      CreateQuery::TYPE_DECIMAL => 'real',
     );
 
-    return in_array(strtolower($type), $list);
+    return getListItem($list, $type);
   }
 }

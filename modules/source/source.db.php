@@ -5,9 +5,9 @@ function installSource()
   GLOBAL $db;
 
   $query = new CreateQuery('sources');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('code', 'TEXT', 8, array('N'));
-  $query->addField('name', 'TEXT', 32, array('N'));
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('code', CreateQuery::TYPE_STRING, 8, array('N'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
   $db->create($query);
 
   $sources = array(

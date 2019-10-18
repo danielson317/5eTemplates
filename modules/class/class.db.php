@@ -10,14 +10,14 @@ function installClass()
   GLOBAL $db;
 
   $query = new CreateQuery('classes');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('description', 'TEXT', 1024);
-  $query->addField('hit_die', 'INTEGER');
-  $query->addField('stp1', 'INTEGER');
-  $query->addField('stp2', 'INTEGER');
-  $query->addField('subclass_name', 'TEXT', 32);
-  $query->addField('source_id', 'INTEGER');
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
+  $query->addField('hit_die', CreateQuery::TYPE_INTEGER);
+  $query->addField('stp1', CreateQuery::TYPE_INTEGER);
+  $query->addField('stp2', CreateQuery::TYPE_INTEGER);
+  $query->addField('subclass_name', CreateQuery::TYPE_STRING, 32);
+  $query->addField('source_id', CreateQuery::TYPE_INTEGER);
   $db->create($query);
 
   $sources = array_flip(getSourceList());

@@ -10,67 +10,67 @@ function installCharacter()
   GLOBAL $db;
 
   $query = new CreateQuery('characters');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('xp', 'INTEGER', 0, array('N'));
-  $query->addField('race_id', 'INTEGER', 0, array('N'));
-  $query->addField('subrace_id', 'INTEGER', 0);
-  $query->addField('gender', 'TEXT', 1);
-  $query->addField('alignment', 'TEXT', 8, array('N'));
-  $query->addField('pb', 'TEXT', 8, array('N'), 2);
-  $query->addField('speed', 'INTEGER', 0, array('N'), 30);
-  $query->addField('hp', 'INTEGER', 0, array('N'));
-  $query->addField('player_id', 'INTEGER');
-  $query->addField('background_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('personality', 'TEXT');
-  $query->addField('ideals', 'TEXT');
-  $query->addField('bonds', 'TEXT');
-  $query->addField('flaws', 'TEXT');
-  $query->addField('features', 'TEXT');
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('xp', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('race_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('subrace_id', CreateQuery::TYPE_INTEGER, 0);
+  $query->addField('gender', CreateQuery::TYPE_STRING, 1);
+  $query->addField('alignment', CreateQuery::TYPE_STRING, 8, array('N'));
+  $query->addField('pb', CreateQuery::TYPE_STRING, 8, array('N'), 2);
+  $query->addField('speed', CreateQuery::TYPE_INTEGER, 0, array('N'), 30);
+  $query->addField('hp', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('player_id', CreateQuery::TYPE_INTEGER);
+  $query->addField('background_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('personality', CreateQuery::TYPE_STRING);
+  $query->addField('ideals', CreateQuery::TYPE_STRING);
+  $query->addField('bonds', CreateQuery::TYPE_STRING);
+  $query->addField('flaws', CreateQuery::TYPE_STRING);
+  $query->addField('features', CreateQuery::TYPE_STRING);
   $db->create($query);
 
   $query = new CreateQuery('character_ability_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('ability_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('score', 'INTEGER', 0, array('N'), 8);
-  $query->addField('modifier', 'INTEGER', 0, array('N'), -1);
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('ability_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('score', CreateQuery::TYPE_INTEGER, 0, array('N'), 8);
+  $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
   $query->addField('proficiency', 'REAL', 0, array('N'), 0);
-  $query->addField('saving_throw', 'INTEGER', 0, array('N'), -1);
+  $query->addField('saving_throw', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
   $db->create($query);
 
   $query = new CreateQuery('character_class_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('class_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('subclass_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('level', 'INTEGER', 0, array('N'), 0);
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('class_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('subclass_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('level', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_die_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('die_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('die_count', 'INTEGER', 0, array('N'), 0);
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('die_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('die_count', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_skill_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('skill_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('skill_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('proficiency', 'REAL', 0, array('N'), 0);
-  $query->addField('modifier', 'INTEGER', 0, array('N'), 0);
+  $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_language_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('language_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('language_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $db->create($query);
 
   $query = new CreateQuery('character_item_type_proficiency_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('item_type_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('item_type_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $db->create($query);
 
   $query = new CreateQuery('character_item_proficiency_map');
-  $query->addField('character_id', 'INTEGER', 0, array('P', 'N'));
-  $query->addField('item_id', 'INTEGER', 0, array('P', 'N'));
+  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
+  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('proficiency', 'REAL', 0, array('N'), 0);
   $db->create($query);
 }

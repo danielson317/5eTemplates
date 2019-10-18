@@ -6,24 +6,24 @@ function installSpell()
 
   // Spells.
   $query = new CreateQuery('spells');
-  $query->addField('id', 'INTEGER', 0, array('P', 'A'));
-  $query->addField('name', 'TEXT', 32, array('N'));
-  $query->addField('school_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('level', 'INTEGER', 0, array('N'), 0);
-  $query->addField('speed', 'INTEGER', 0, array('N'), 0);
-  $query->addField('range', 'INTEGER', 0, array('N'), 0);
-  $query->addField('ritual', 'INTEGER', 0, array('N'), 0);
-  $query->addField('concentration', 'INTEGER', 0, array('N'), 0);
-  $query->addField('verbal', 'INTEGER', 0, array('N'), 0);
-  $query->addField('semantic', 'INTEGER', 0, array('N'), 0);
-  $query->addField('material', 'TEXT', 128, array('N'), 0);
-  $query->addField('duration', 'INTEGER', 32, array('N'), 0);
-  $query->addField('aoe_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('aoe_range', 'INTEGER', 0, array('N'), 0);
-  $query->addField('description', 'TEXT', 1024);
-  $query->addField('alternate', 'TEXT', 1024);
-  $query->addField('source_id', 'INTEGER', 0, array('N'), 0);
-  $query->addField('source_location', 'INTEGER', 0, array('N'), 0);
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
+  $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('school_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('level', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('speed', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('range', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('ritual', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('concentration', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('verbal', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('semantic', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('material', CreateQuery::TYPE_STRING, 128, array('N'), 0);
+  $query->addField('duration', CreateQuery::TYPE_INTEGER, 32, array('N'), 0);
+  $query->addField('aoe_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('aoe_range', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('description', CreateQuery::TYPE_STRING, 1024);
+  $query->addField('alternate', CreateQuery::TYPE_STRING, 1024);
+  $query->addField('source_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('source_location', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 }
 
