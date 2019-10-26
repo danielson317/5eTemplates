@@ -11,7 +11,6 @@ function installUser()
   $query->addField('password', CreateQuery::TYPE_STRING, 256, array('N'));
   $query->addField('reset_code', CreateQuery::TYPE_STRING, 256);
   $query->addField('reset_timestamp', CreateQuery::TYPE_INTEGER, 0);
-
   $db->create($query);
 
   $initial_user = array(

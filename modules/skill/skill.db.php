@@ -41,7 +41,7 @@ function installSkill()
     array(
       'code' => 'Dec',
       'name' => 'Deception',
-      'ability_id' => $abilities['CHR'],
+      'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
@@ -59,7 +59,7 @@ function installSkill()
     array(
       'code' => 'Itm',
       'name' => 'Intimidation',
-      'ability_id' => $abilities['CHR'],
+      'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
@@ -89,13 +89,13 @@ function installSkill()
     array(
       'code' => 'Prf',
       'name' => 'Performance',
-      'ability_id' => $abilities['CHR'],
+      'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
       'code' => 'Prs',
       'name' => 'Persuasion',
-      'ability_id' => $abilities['CHR'],
+      'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(

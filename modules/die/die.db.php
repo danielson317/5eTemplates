@@ -11,11 +11,11 @@ function installDie()
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $db->create($query);
 
-  $default_list =  array(
+  $default_list = array(
     array(
       'id' => 2,
       'name' => 'd2',
-      'description ' => '',
+      'description' => '',
     ),
     array(
       'id' => 4,

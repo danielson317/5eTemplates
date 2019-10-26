@@ -3,6 +3,7 @@
 class SQLite extends Database
 {
   const PLACEHOLDER_TOKEN = ':';
+  const STRUCTURE_JOIN_CHARACTER = '.';
 
   function __construct($db_path, $username = '', $password = '')
   {
@@ -33,7 +34,7 @@ class SQLite extends Database
       }
       else
       {
-        $sql .= ' ' . self::structureEscape($details['table_alias']) . '.' . self::structureEscape($details['name']);
+        $sql .= ' ' . $this->fieldTable($details['name'], $details['table_alias']);
       }
 
       $sql .= ' AS ' . self::structureEscape($alias) . ',';
@@ -70,7 +71,7 @@ class SQLite extends Database
 
     if ($query->getDebug())
     {
-      die($sql);
+      $this->debugPrint($sql, $query->getDebug(), $query->getValues());
     }
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
@@ -112,6 +113,11 @@ class SQLite extends Database
 
     $sql .= ')';
 
+    if ($query->getDebug())
+    {
+      $this->debugPrint($sql, $query->getDebug(), $query->getValues());
+    }
+
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
     return $this->db->lastInsertId();
@@ -144,6 +150,11 @@ class SQLite extends Database
       $sql .= ' WHERE ' . $this->_buildConditionGroup($query);
     }
 
+    if ($query->getDebug())
+    {
+      $this->debugPrint($sql, $query->getDebug(), $query->getValues());
+    }
+
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
   }
@@ -157,6 +168,11 @@ class SQLite extends Database
     if ($query->getConditions())
     {
       $sql .= ' WHERE ' . $this->_buildConditionGroup($query);
+    }
+
+    if ($query->getDebug())
+    {
+      $this->debugPrint($sql, $query->getDebug(), $query->getValues());
     }
 
     $prepared_statement = $this->db->prepare($sql);
@@ -222,11 +238,11 @@ class SQLite extends Database
     $sql = trim($sql, ',');
 
     $sql .= ')';
-    
-    //if (key($query->getTables()) === 'characters')
-    //{
-    //die($sql);
-    //}
+
+    if ($query->getDebug())
+    {
+      $this->debugPrint($sql, $query->getDebug(), $query->getValues());
+    }
 
     $prepared_statement = $this->db->prepare($sql);
     $prepared_statement->execute($query->getValues());
@@ -292,7 +308,7 @@ class SQLite extends Database
 
   protected function _buildCondition(Query $query, QueryCondition $condition)
   {
-    $sql = self::structureEscape($condition->getTable()) . '.' . self::structureEscape($condition->getField());
+    $sql = $this->fieldTable($condition->getField(), $condition->getTable());
     switch($condition->getComparison())
     {
       case QueryCondition::COMPARE_EQUAL:
@@ -414,9 +430,7 @@ class SQLite extends Database
   protected function _buildOrder(QueryOrder $order)
   {
     $sql = '';
-    $sql .= self::structureEscape($order->getTable());
-    $sql .= '.';
-    $sql .= self::structureEscape($order->getField());
+    $sql .= $this->fieldTable($order->getField(), $order->getTable());
     $sql .= ' ';
     if ($order->getDirection() == QueryOrder::DIRECTION_ASC)
     {
@@ -467,14 +481,33 @@ class SQLite extends Database
   function dataTypeList($type)
   {
     $list = array(
-      CreateQuery::TYPE_INTEGER => CreateQuery::TYPE_INTEGER,
-      CreateQuery::TYPE_BOOL => CreateQuery::TYPE_INTEGER,
-      CreateQuery::TYPE_STRING => CreateQuery::TYPE_STRING,
-      CreateQuery::TYPE_CURRENCY => 'real',
-      CreateQuery::TYPE_DATETIME => 'datetime',
-      CreateQuery::TYPE_DECIMAL => 'real',
+      CreateQuery::TYPE_INTEGER => 'INTEGER',
+      CreateQuery::TYPE_BOOL => 'INTEGER',
+      CreateQuery::TYPE_STRING => 'TEXT',
+      CreateQuery::TYPE_CURRENCY => 'REAL',
+      CreateQuery::TYPE_DATETIME => 'TEXT',
+      CreateQuery::TYPE_DECIMAL => 'REAL',
     );
 
     return getListItem($list, $type);
+  }
+
+  function fieldTable($field, $table_alias)
+  {
+    return $this->structureEscape($table_alias) . self::STRUCTURE_JOIN_CHARACTER . $this->structureEscape($field);
+  }
+
+  function debugPrint($sql, $debug, $values)
+  {
+    $output = sql_formater($sql, array());
+    // Die only works on a debug platform.
+    if ($debug === 'die')
+    {
+      die('<pre>' . $output . '</pre>');
+    }
+    else
+    {
+      error_log(str_replace("\n", '<br>', $output));
+    }
   }
 }

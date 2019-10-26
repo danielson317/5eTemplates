@@ -26,10 +26,9 @@ if (!file_exists(DB_PATH))
   installClass(); // Depends on ability, Source
   installDamageType();
   installDie();
-  installItemType();
+//  installItemType();
   installRarity();
   installItem(); // Depends on Source, Rarity, Item Type.
-  
   
   installScript(); // Depends on Source.
   installLanguage(); // Depends on Script, Source

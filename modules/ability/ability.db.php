@@ -38,7 +38,7 @@ function installAbility()
       'description' => 'The ability to process information and form logical conclusions.',
     ),
     array(
-      'code' => 'CHR',
+      'code' => 'CHA',
       'name' => 'Charisma',
       'description' => 'The ability to communicate with people and persuade, manipulate, or impress them.',
     ),

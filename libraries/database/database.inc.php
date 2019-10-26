@@ -47,6 +47,15 @@ abstract class Database
   }
 
   /**
+   * @param SelectQuery[] $select_queries - An array of inner select queries.
+   * @param int|FALSE $limit
+   * @param string|FALSE $order
+   *
+   * @return mixed
+   */
+//  abstract function selectUnion($select_queries, $limit = FALSE, $order = FALSE);
+
+  /**
    * @param InsertQuery $query
    * @return bool|int
    */
@@ -69,6 +78,11 @@ abstract class Database
 
   // Database structure.
   abstract function create(CreateQuery $query);
+//  abstract function alterAdd(AlterAddQuery $query);
+//  abstract function alterAlter(AlterAlterQuery $query);
+//  abstract function alterRename(AlterRenameQuery $query);
+//  abstract function addIndex(AddIndexQuery $query);
+//  abstract function drop(DropQuery $query);
 
   // Helpers.
   abstract protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
@@ -82,6 +96,10 @@ abstract class Database
   abstract function literal($string);
   abstract function likeEscape($string);
   abstract function structureEscape($string);
+  abstract function fieldTable($field, $table_alias);
+  abstract function dataTypeList($type);
+
+  abstract function debugPrint($sql, $debug, $values);
 }
 
 /**
@@ -95,6 +113,7 @@ abstract class Query
   protected $condition_groups = array();
   protected $values = array();
   protected $debug = FALSE;
+  protected $argument_prefix = '';
 
   /**
    * @param string $table_name
@@ -133,6 +152,11 @@ abstract class Query
   function getConditionGroups()
   {
     return $this->condition_groups;
+  }
+
+  function getArgumentPrefix()
+  {
+    return $this->argument_prefix;
   }
 
   // Setters.
@@ -188,6 +212,11 @@ abstract class Query
     $this->values[$placeholder] = $value;
   }
 
+  function setArgumentPrefix($prefix)
+  {
+    $this->argument_prefix = $prefix;
+  }
+
   function setDebug($debug = TRUE)
   {
     $this->debug = $debug;
@@ -207,6 +236,7 @@ class SelectQuery extends Query
   protected $orders = array();
   protected $page = FALSE;
   protected $page_size = FALSE;
+  protected $group_by = array();
 
   /**
    * @return QueryOrder[]
@@ -214,6 +244,10 @@ class SelectQuery extends Query
   function getOrders()
   {
     return $this->orders;
+  }
+  function getGroupBy()
+  {
+    return $this->group_by;
   }
   function getPage()
   {
@@ -629,4 +663,143 @@ Class QueryOrder
   {
     return $this->direction;
   }
+}
+
+function sql_formater($sql, $args)
+{
+  // Syntax
+  $clause_start_prefix = array(
+    'INSERT',
+    'LEFT',
+    'ORDER',
+    'RIGHT',
+  );
+  $clause_start = array(
+    'CREATE',
+    'FROM',
+    'INSERT INTO',
+    'JOIN',
+    'LEFT JOIN',
+    'ORDER BY',
+    'RIGHT JOIN',
+    'SELECT',
+    'UPDATE',
+    'WHERE',
+  );
+
+  // Break on spaces and reverse so foreach treats it as a stack.
+  $pieces = preg_split('/\s+/', $sql, -1, PREG_SPLIT_NO_EMPTY);
+
+  // Break into clauses. A clause is logical construct that should start on a new line and reset indents.
+  $clauses = array();
+  $clause = array();
+  $hold = FALSE;
+  foreach($pieces as $word)
+  {
+    // Two word clause starters.
+    if (!$hold && in_array($word, $clause_start_prefix))
+    {
+      $hold = $word;
+      continue;
+    }
+
+    // Deal with the hold.
+    if ($hold)
+    {
+      if (in_array($hold . ' ' . $word, $clause_start))
+      {
+        $word = $hold . ' ' . $word;
+      }
+      else
+      {
+        $clause[] = $hold;
+      }
+      $hold = FALSE;
+    }
+
+    // Append to clause.
+    if ($clause && in_array($word, $clause_start))
+    {
+      $clauses[] = $clause;
+      $clause = array();
+    }
+    $clause[] = $word;
+  }
+  $clauses[] = $clause;
+
+  // Break into phrases. A phrase is a single printed line.
+  $phrases = array();
+  foreach ($clauses as $clause)
+  {
+    $clause_start = array_shift($clause);
+    switch($clause_start)
+    {
+      case 'SELECT':
+      {
+        $phrases[] = $clause_start;
+        $phrase = '    ';
+
+        foreach ($clause as $word)
+        {
+          if (strrpos($word, ','))
+          {
+            $phrase .= rtrim($word);
+            $phrases[] = $phrase;
+            $phrase = '    ';
+          }
+          else
+          {
+            $phrase .= $word . ' ';
+          }
+        }
+        $phrases[] = rtrim($phrase);
+        break;
+      }
+      case 'WHERE':
+      {
+        $phrase = $clause_start . ' ';
+        foreach ($clause as $word)
+        {
+          if ($word === 'AND')
+          {
+            $phrases[] = rtrim($phrase);
+            $phrase = '  ' . $word . ' ';
+          }
+          elseif ($word === 'OR')
+          {
+            $phrases[] = rtrim($phrase);
+            $phrase = '   ' . $word . ' ';
+          }
+          else
+          {
+            $phrase .= $word . ' ';
+          }
+        }
+        break;
+      }
+      case 'CREATE':
+      case 'FROM':
+      case 'INSERT INTO':
+      case 'LEFT JOIN':
+      case 'RIGHT JOIN':
+      case 'UPDATE':
+      case 'ORDER BY':
+      {
+        $phrases[] = $clause_start . ' ' . implode(' ', $clause);
+        break;
+      }
+      default:
+      {
+        assert(FALSE, 'Syntax error or unhandled clause.');
+      }
+    }
+  }
+
+  // Build output.
+  $output = '';
+  foreach($phrases as $phrase)
+  {
+    $output .= $phrase . "\n";
+  }
+  return rtrim($output);
 }

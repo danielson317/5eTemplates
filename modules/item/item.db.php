@@ -21,7 +21,7 @@ function installItem()
   $query = new CreateQuery('items');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
   $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
-  $query->addField('item_type_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('item_type', CreateQuery::TYPE_STRING, 16, array('N'));
   $query->addField('parent_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0); // -1 for category, 0 for no parent.
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $query->addField('source_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
@@ -77,126 +77,134 @@ function installItem()
   $item_types = array(
     array(
       'name' => 'Simple Melee Weapon',
-      'parent_item_type_id' => $item_type_list['Weapon'],
+      'item_type' => 'weapon',
+      'parent_id' => -1,
       'description' => '',
       'source_id' => $sources['BR'],
+      'source_location' => 0
     ),
     array(
       'name' => 'Simple Ranged Weapon',
-      'parent_item_type_id' => $item_type_list['Weapon'],
+      'item_type' => 'weapon',
+      'parent_id' => -1,
       'description' => '',
       'source_id' => $sources['BR'],
+      'source_location' => 0
     ),
     array(
       'name' => 'Martial Melee Weapon',
-      'parent_item_type_id' => $item_type_list['Weapon'],
+      'item_type' => 'weapon',
+      'parent_id' => -1,
       'description' => '',
       'source_id' => $sources['BR'],
+      'source_location' => 0
     ),
     array(
       'name' => 'Martial Ranged Weapon',
-      'parent_item_type_id' => $item_type_list['Weapon'],
+      'item_type' => 'weapon',
+      'parent_id' => -1,
       'description' => '',
       'source_id' => $sources['BR'],
+      'source_location' => 0
     ),
   );
   foreach($item_types as $item_type)
   {
-    createItemType($item_type);
+    createItem($item_type);
   }
 
-  // Armor Categories.
-  $item_type_list = array_flip(getItemTypeList());
-  $item_types = array(
-    array(
-      'name' => 'Light Armor',
-      'parent_item_type_id' => $item_type_list['Armor'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Medium Armor',
-      'parent_item_type_id' => $item_type_list['Armor'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Heavy Armor',
-      'parent_item_type_id' => $item_type_list['Armor'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Shield',
-      'parent_item_type_id' => $item_type_list['Armor'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-  );
-  foreach($item_types as $item_type)
-  {
-    createItemType($item_type);
-  }
-
-  // Armor Categories.
-  $item_type_list = array_flip(getItemTypeList());
-  $item_types = array(
-    array(
-      'name' => 'Ammunition',
-      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Arcane Focus',
-      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Druidic Focus',
-      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Holy Symbol',
-      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-  );
-  foreach($item_types as $item_type)
-  {
-    createItemType($item_type);
-  }
-
-  // Tools.
-  $item_type_list = array_flip(getItemTypeList());
-  $item_types = array(
-    array(
-      'name' => 'Artisan\'s Tools',
-      'parent_item_type_id' => $item_type_list['Tool'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Gaming Set',
-      'parent_item_type_id' => $item_type_list['Tool'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-    array(
-      'name' => 'Musical Instrument',
-      'parent_item_type_id' => $item_type_list['Tool'],
-      'description' => '',
-      'source_id' => $sources['BR'],
-    ),
-  );
-  foreach($item_types as $item_type)
-  {
-    createItemType($item_type);
-  }
+//  // Armor Categories.
+//  $item_type_list = array_flip(getItemTypeList());
+//  $item_types = array(
+//    array(
+//      'name' => 'Light Armor',
+//      'parent_item_type_id' => $item_type_list['Armor'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Medium Armor',
+//      'parent_item_type_id' => $item_type_list['Armor'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Heavy Armor',
+//      'parent_item_type_id' => $item_type_list['Armor'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Shield',
+//      'parent_item_type_id' => $item_type_list['Armor'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//  );
+//  foreach($item_types as $item_type)
+//  {
+//    createItemType($item_type);
+//  }
+//
+//  // Armor Categories.
+//  $item_type_list = array_flip(getItemTypeList());
+//  $item_types = array(
+//    array(
+//      'name' => 'Ammunition',
+//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Arcane Focus',
+//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Druidic Focus',
+//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Holy Symbol',
+//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//  );
+//  foreach($item_types as $item_type)
+//  {
+//    createItemType($item_type);
+//  }
+//
+//  // Tools.
+//  $item_type_list = array_flip(getItemTypeList());
+//  $item_types = array(
+//    array(
+//      'name' => 'Artisan\'s Tools',
+//      'parent_item_type_id' => $item_type_list['Tool'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Gaming Set',
+//      'parent_item_type_id' => $item_type_list['Tool'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//    array(
+//      'name' => 'Musical Instrument',
+//      'parent_item_type_id' => $item_type_list['Tool'],
+//      'description' => '',
+//      'source_id' => $sources['BR'],
+//    ),
+//  );
+//  foreach($item_types as $item_type)
+//  {
+//    createItemType($item_type);
+//  }
 }
 
 /******************************************************************************
@@ -312,6 +320,7 @@ function createItem($item)
 
   // All items.
   $query->addField('name', $item['name']);
+  $query->addField('item_type', $item['item_type']);
   $query->addField('parent_id', $item['parent_id']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
