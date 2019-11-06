@@ -285,6 +285,7 @@ function characterWizardProficiencyForm()
   $field = new FieldSelect('language_id', 'Add Language', $options);
   $form->addField($field);
 
+  $field = new FieldMarkup('item_list', 'Items');
 
   $field = new FieldSubmit('submit', 'Continue');
   $form->addField($field);

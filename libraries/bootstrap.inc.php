@@ -82,11 +82,8 @@ include ROOT_PATH . '/modules/die/die.db.php';
 include ROOT_PATH . '/modules/die/die.pg.php';
 
 include ROOT_PATH . '/modules/item/item.db.php';
+include ROOT_PATH . '/modules/item/item.inc.php';
 include ROOT_PATH . '/modules/item/item.pg.php';
-
-include ROOT_PATH . '/modules/item_type/item_type.db.php';
-include ROOT_PATH . '/modules/item_type/item_type.pg.php';
-include ROOT_PATH . '/modules/item_type/item_type.lib.php';
 
 include ROOT_PATH . '/modules/language/language.db.php';
 include ROOT_PATH . '/modules/language/language.pg.php';

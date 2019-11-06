@@ -44,6 +44,6 @@ function getItemTypeList($key = FALSE)
       'description' => '',
     ),
   );
-
+  
   return getListItem($items, $key);
 }

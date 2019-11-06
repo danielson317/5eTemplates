@@ -36,9 +36,8 @@ function itemList()
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('item-list'));
-  $table->setHeader(array('Name', 'Value', 'Type', 'Description'));
+  $table->setHeader(array('Name', 'Category', 'Type', 'Value', 'Weight', 'Description'));
 
-  $item_types = getItemTypeList();
   foreach($items as $item)
   {
     $row = array();
@@ -46,8 +45,10 @@ function itemList()
       'query' => array('id' => $item['id']),
     );
     $row[] = a($item['name'], '/item', $attr);
+    $row[] = $item['parent_id'] ? 'Category' : 'Item';
+    $row[] = getItemTypeList($item['item_type'])['name'];
     $row[] = $item['value'];
-    $row[] = $item_types[$item['item_type_id']];
+    $row[] = $item['weight'];
     $row[] = $item['description'];
     $table->addRow($row);
   }

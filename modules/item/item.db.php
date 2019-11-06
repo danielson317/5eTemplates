@@ -21,6 +21,8 @@ function installItem()
   $query = new CreateQuery('items');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
   $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
+  $query->addField('value', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('weight', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('item_type', CreateQuery::TYPE_STRING, 16, array('N'));
   $query->addField('parent_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0); // -1 for category, 0 for no parent.
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
@@ -31,8 +33,6 @@ function installItem()
   // Items Details.
   $query = new CreateQuery('item_details');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-  $query->addField('value', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('weight', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
 
   // Magical items.
   $query->addField('magic', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
@@ -225,9 +225,11 @@ function getItemPager($page = 1)
   $query->addField('id');
   $query->addField('name');
   $query->addField('value');
-  $query->addField('item_type_id');
+  $query->addField('weight');
+  $query->addField('item_type');
+  $query->addField('parent_id');
   $query->addField('description');
-  $query->addOrderSimple('id');
+  $query->addOrderSimple('name');
   $query->addPager($page);
 
   return $db->select($query);
