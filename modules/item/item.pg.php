@@ -45,8 +45,8 @@ function itemList()
       'query' => array('id' => $item['id']),
     );
     $row[] = a($item['name'], '/item', $attr);
-    $row[] = $item['parent_id'] ? 'Category' : 'Item';
-    $row[] = getItemTypeList($item['item_type'])['name'];
+    $row[] = $item['is_category'] ? 'Category' : 'Item';
+    $row[] = '';
     $row[] = $item['value'];
     $row[] = $item['weight'];
     $row[] = $item['description'];
@@ -68,7 +68,6 @@ function itemUpsertForm()
   $template->addCssFilePath('/themes/default/css/item.css');
   $template->addJsFilePath('/modules/item/item.js');
 
-  installItemType();
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
   {
@@ -108,19 +107,25 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  // value.
+  $field = new fieldtext('value', 'value (cp)');
+  $field->setgroup($group);
+  $form->addfield($field);
+
+  // weight.
+  $field = new fieldtext('weight', 'weight (lbs)');
+  $field->setgroup($group);
+  $form->addfield($field);
+ 
   // Type.
   $options = getItemTypeList();
-  $field = new FieldSelect('item_type_id', 'Type', $options);
+  $field = new FieldSelect('item_type', 'Type', $options);
   $field->setGroup($group);
   $form->addField($field);
 
-  // Value.
-  $field = new FieldText('value', 'Value (cp)');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Weight.
-  $field = new FieldText('weight', 'Weight (lbs)');
+  // Parent.
+  $options = array(0 => '--none--') + getItemList();
+  $field = new FieldSelect('parent_id', 'Parent', $options);  
   $field->setGroup($group);
   $form->addField($field);
 
@@ -140,178 +145,6 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
-  /*****************
-   * Magic.
-   *****************/
-  $group = 'magic_group';
-  $form->addGroup($group);
-
-  // Heading.
-  $field = new FieldMarkup('magic_heading');
-  $field->setValue(htmlWrap('h3', 'Magic'));
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Magical items.
-  $field = new FieldCheckbox('magic', 'Magical');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Rarity.
-  $options = getRarityList();
-  $field = new FieldSelect('rarity_id', 'Rarity', $options);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Bonus.
-  $field = new FieldNumber('bonus', 'Weapon/Armor Bonus');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Attunement.
-  $field = new FieldCheckbox('attunement', 'Requires Attunement');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Attunement Requirements.
-  $field = new FieldText('attunement_requirements', 'Attunement Conditions');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  /*****************
-   * Weapons.
-   *****************/
-  $group = 'weapon_group';
-  $form->addGroup($group);
-
-  // Heading.
-  $field = new FieldMarkup('weapon_heading');
-  $field->setValue(htmlWrap('h3', 'Weapons'));
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Range.
-  $ranges = getRangeList();
-  $field = new FieldSelect('range_id', 'Range', $ranges);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Max Range.
-  $field = new FieldSelect('max_range_id', 'Max Range', $ranges);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Light.
-  $field = new FieldCheckbox('light', 'Light');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Finesse.
-  $field = new FieldCheckbox('finesse', 'Finesse');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Thrown.
-  $field = new FieldCheckbox('thrown', 'Thrown');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Ammunition.
-  $field = new FieldCheckbox('ammunition', 'Ammunition');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Loading.
-  $field = new FieldCheckbox('loading', 'Loading');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Heavy.
-  $field = new FieldCheckbox('heavy', 'Heavy');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Reach.
-  $field = new FieldCheckbox('reach', 'Reach');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Special.
-  $field = new FieldCheckbox('special', 'Special');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Two Handed.
-  $field = new FieldCheckbox('two_handed', 'Two Handed');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Damage
-  $damage_type = getDamageTypeList();
-  $item_damages = getItemDamageList($item_id);
-  $die = getDieList();
-
-  $table = new TableTemplate();
-  $table->setHeader(array('Damage Type', 'Count', 'Versatile'));
-  foreach($item_damages as $item_damage)
-  {
-    $row = array();
-    $attr = array(
-      'query' => array(
-        'item_damage_id' => $item_damage['id'],
-      ),
-      'class' => array('item-damage'),
-    );
-    $row[] = a($damage_type[$item_damage['damage_type_id']], '/ajax/item/damage', $attr);
-    $row[] = $item_damage['die_count'] . $die[$item_damage['die_id']];
-    $row[] = $item_damage['versatile'] ? 'Two-Handed' : '';
-    $table->addRow($row);
-  }
-  $attr = array(
-    'query' => array('item_id' => $item_id),
-    'class' => array('add-damage'),
-  );
-  $link = a('Add Damage Type', '/ajax/item/damage', $attr);
-
-  $field = new FieldMarkup('damage', 'Damage', $table . $link);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  /*****************
-   * Armor.
-   *****************/
-  $group = 'armor_group';
-  $form->addGroup($group);
-
-  // Heading.
-  $field = new FieldMarkup('armor_heading');
-  $field->setValue(htmlWrap('h3', 'Armor'));
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Base AC.
-  $field = new FieldNumber('base_ac', 'Base AC');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Dexterity Cap.
-  $field = new FieldNumber('dex_cap', 'Dexterity Cap');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Strength Requirement.
-  $field = new FieldNumber('strength_requirement', 'Strength Requirement');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Stealth Disadvantage.
-  $field = new FieldNumber('stealth_disadvantage', 'Stealth Disadvantage');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  /*****************
-   * Submit.
-   *****************/
   // Submit
   $value = 'Create';
   if ($item_id)

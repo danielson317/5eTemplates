@@ -2,12 +2,6 @@
 /***
  *
  * item.db.php
- *
- * items - any physical object that a creature may poses. Includes armor, weapons, tools, adventure gear, money, etc.
- * item_types - The hierarchical classification of the item that describes how game rules apply to it or groups
- *    the items by proficiencies and usages. "armor" => "light armor", "weapon", "tool", "adventure gear" => "holy symbol", etc.
- *
- *
  */
 
 /**
@@ -23,8 +17,8 @@ function installItem()
   $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
   $query->addField('value', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('weight', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('item_type', CreateQuery::TYPE_STRING, 16, array('N'));
-  $query->addField('parent_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0); // -1 for category, 0 for no parent.
+  $query->addField('parent_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0); 
+  $query->addField('is_category', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $query->addField('source_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('source_location', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
@@ -73,42 +67,169 @@ function installItem()
 
   $sources = array_flip(getSourceList());
 
+  // Top level categories.
+  $items = array(
+    array(
+      'id' => ITEM_WEAPON,
+      'name' => 'Weapon',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_ARMOR,
+      'name' => 'Armor',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_GEAR,
+      'name' => 'Adventuring Gear',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_BAG,
+      'name' => 'Container',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_TOOL,
+      'name' => 'Tool',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_MOUNT,
+      'name' => 'Mount or Vehicle',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_TRADE,
+      'name' => 'Trade Good',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_FOOD,
+      'name' => 'Food, Drink, and Lodging',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_SERVICE,
+      'name' => 'Service',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'id' => ITEM_TRINKET,
+      'name' => 'Trinket',
+      'parent_id' => 0,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+  );
+
+  foreach ($items as $item)
+  {
+    createItem($item, TRUE);
+  }
+
   // Weapon categories.
-  $item_types = array(
+  $items = array(
     array(
       'name' => 'Simple Melee Weapon',
-      'item_type' => 'weapon',
-      'parent_id' => -1,
+      'parent_id' => ITEM_WEAPON,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
       'source_location' => 0
     ),
     array(
       'name' => 'Simple Ranged Weapon',
-      'item_type' => 'weapon',
-      'parent_id' => -1,
+      'parent_id' => ITEM_WEAPON,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
       'source_location' => 0
     ),
     array(
       'name' => 'Martial Melee Weapon',
-      'item_type' => 'weapon',
-      'parent_id' => -1,
+      'parent_id' => ITEM_WEAPON,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
       'source_location' => 0
     ),
     array(
       'name' => 'Martial Ranged Weapon',
-      'item_type' => 'weapon',
-      'parent_id' => -1,
+      'parent_id' => ITEM_WEAPON,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
       'source_location' => 0
     ),
   );
-  foreach($item_types as $item_type)
+  foreach($items as $item_type)
   {
     createItem($item_type);
   }
@@ -226,7 +347,7 @@ function getItemPager($page = 1)
   $query->addField('name');
   $query->addField('value');
   $query->addField('weight');
-  $query->addField('item_type');
+  $query->addField('is_category');
   $query->addField('parent_id');
   $query->addField('description');
   $query->addOrderSimple('name');
@@ -262,7 +383,15 @@ function getItemAutocompleteAjax()
   jsonResponseDie($response);
 }
 
-
+function getItemList($key = FALSE)
+{
+  GLOBAL $db;
+  $query = new SelectQuery('items');
+  $query->addField('id');
+  $query->addField('name', 'value');
+  $list = $db->selectList($query);
+  return getListItem($list, $key);
+}
 
   /**
  * @param int $item_id
@@ -278,51 +407,33 @@ function getItem($item_id)
   // All items.
   $query->addField('id');
   $query->addField('name');
-  $query->addField('item_type_id');
   $query->addField('value');
   $query->addField('weight');
+  $query->addField('item_type');
+  $query->addField('parent_id');
   $query->addField('description');
   $query->addField('source_id');
   $query->addField('source_location');
 
-  // Magic.
-  $query->addField('magic');
-  $query->addField('rarity_id');
-  $query->addField('bonus');
-  $query->addField('attunement');
-  $query->addField('attunement_requirements');
-
-  // Weapons.
-  $query->addField('range_id');
-  $query->addField('max_range_id');
-  $query->addField('light');
-  $query->addField('finesse');
-  $query->addField('thrown');
-  $query->addField('ammunition');
-  $query->addField('loading');
-  $query->addField('heavy');
-  $query->addField('reach');
-  $query->addField('special');
-  $query->addField('two_handed');
-
-  // Armor.
-  $query->addField('base_ac');
-  $query->addField('dex_cap');
-  $query->addField('strength_requirement');
-  $query->addField('stealth_disadvantage');
-
   $query->addConditionSimple('id', $item_id);
+
   return $db->selectObject($query);
 }
 
-function createItem($item)
+function createItem($item, $with_id = FALSE)
 {
   GLOBAL $db;
   $query = new InsertQuery('items');
 
   // All items.
+  if ($with_id)
+  {
+    $query->addField('id', $item['id']);
+  }
   $query->addField('name', $item['name']);
-  $query->addField('item_type', $item['item_type']);
+  $query->addField('value', $item['value']);
+  $query->addField('weight', $item['weight']);
+  $query->addField('is_category', $item['is_category']);
   $query->addField('parent_id', $item['parent_id']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
@@ -368,19 +479,6 @@ function createItemDetails($item)
 
 function updateItem($item)
 {
-
-  $item['magic'] = isset($_POST['magic']) ? 1 : 0;
-  $item['attunement'] = isset($_POST['attunement']) ? 1 : 0;
-  $item['light'] = isset($_POST['light']) ? 1 : 0;
-  $item['finesse'] = isset($_POST['finesse']) ? 1 : 0;
-  $item['thrown'] = isset($_POST['thrown']) ? 1 : 0;
-  $item['ammunition'] = isset($_POST['ammunition']) ? 1 : 0;
-  $item['loading'] = isset($_POST['loading']) ? 1 : 0;
-  $item['heavy'] = isset($_POST['heavy']) ? 1 : 0;
-  $item['reach'] = isset($_POST['reach']) ? 1 : 0;
-  $item['special'] = isset($_POST['special']) ? 1 : 0;
-  $item['two_handed'] = isset($_POST['two_handed']) ? 1 : 0;
-
   GLOBAL $db;
   $query = new UpdateQuery('items');
 

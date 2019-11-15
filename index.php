@@ -103,9 +103,6 @@ function getRegistry($path = FALSE)
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
 
-    'item-type' => 'itemTypeUpsertForm',
-    'item-types' => 'itemTypeList',
-
     'language' => 'languageUpsertForm',
     'languages' => 'languageList',
 
@@ -189,7 +186,6 @@ function menu()
   $output .= a('Items', '/items');
   $submenu = new ListTemplate('ul');
   $submenu->addListItem(a('Damage Types', '/damage-types'));
-  $submenu->addListItem(a('Item Types', '/item-types'));
   $submenu->addListItem(a('Properties', '/properties'));
   $submenu->addListItem(a('Rarities', '/rarities'));
   $output .= $submenu;
