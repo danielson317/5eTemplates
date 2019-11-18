@@ -24,18 +24,18 @@ function installItem()
   $query->addField('source_location', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
-  // Items Details.
-  $query = new CreateQuery('item_details');
+  // Magic.
+  $query = new CreateQuery('item_magics');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-
-  // Magical items.
-  $query->addField('magic', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('bonus', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('attunement', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('attunement_requirements', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $db->create($query);
 
-  // Weapons
+  // Weapon.
+  $query = new CreateQuery('item_weapons');
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
   $query->addField('range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('max_range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('light', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
@@ -47,8 +47,11 @@ function installItem()
   $query->addField('reach', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('special', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('two_handed', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $db->create($query);
 
   // Armor
+  $query = new CreateQuery('item_armors');
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
   $query->addField('base_ac', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('dex_cap', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('strength_requirement', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
