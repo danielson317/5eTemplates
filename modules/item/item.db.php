@@ -26,46 +26,46 @@ function installItem()
 
   // Magic.
   $query = new CreateQuery('item_magics');
-  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
   $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('bonus', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('attunement', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('attunement_requirements', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0);
   $db->create($query);
 
   // Weapon.
   $query = new CreateQuery('item_weapons');
-  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
   $query->addField('range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('max_range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('light', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('finesse', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('thrown', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('ammunition', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('loading', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('heavy', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('reach', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('special', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('two_handed', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('light', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('finesse', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('thrown', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('ammunition', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('loading', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('heavy', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('reach', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('special', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('two_handed', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
   $db->create($query);
 
   // Armor
   $query = new CreateQuery('item_armors');
-  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
   $query->addField('base_ac', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('dex_cap', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('strength_requirement', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('stealth_disadvantage', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('stealth_disadvantage', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
   $db->create($query);
 
   // Item damage many to many map.
   $query = new CreateQuery('item_damages');
-  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P'));
+  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N', 'P', 'A'));
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-  $query->addField('die_count', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('die_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('damage_type_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('versatile', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('die_count', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('die_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('damage_type_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
+  $query->addField('versatile', CreateQuery::TYPE_BOOL, 0, array('N'));
   $db->create($query);
 
   $sources = array_flip(getSourceList());
@@ -81,7 +81,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 48,
     ),
     array(
       'id' => ITEM_ARMOR,
@@ -92,7 +92,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 46,
     ),
     array(
       'id' => ITEM_GEAR,
@@ -103,7 +103,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 50,
     ),
     array(
       'id' => ITEM_BAG,
@@ -114,7 +114,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 52,
     ),
     array(
       'id' => ITEM_TOOL,
@@ -125,7 +125,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 52,
     ),
     array(
       'id' => ITEM_MOUNT,
@@ -136,7 +136,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 54,
     ),
     array(
       'id' => ITEM_TRADE,
@@ -147,7 +147,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 54,
     ),
     array(
       'id' => ITEM_FOOD,
@@ -158,7 +158,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 55,
     ),
     array(
       'id' => ITEM_SERVICE,
@@ -169,7 +169,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 56,
     ),
     array(
       'id' => ITEM_TRINKET,
@@ -180,7 +180,7 @@ function installItem()
       'weight' => 0,
       'description' => '',
       'source_id' => $sources['BR'],
-      'source_location' => 0,
+      'source_location' => 56,
     ),
   );
 
@@ -237,98 +237,135 @@ function installItem()
     createItem($item_type);
   }
 
-//  // Armor Categories.
-//  $item_type_list = array_flip(getItemTypeList());
-//  $item_types = array(
-//    array(
-//      'name' => 'Light Armor',
-//      'parent_item_type_id' => $item_type_list['Armor'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Medium Armor',
-//      'parent_item_type_id' => $item_type_list['Armor'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Heavy Armor',
-//      'parent_item_type_id' => $item_type_list['Armor'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Shield',
-//      'parent_item_type_id' => $item_type_list['Armor'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//  );
-//  foreach($item_types as $item_type)
-//  {
-//    createItemType($item_type);
-//  }
-//
-//  // Armor Categories.
-//  $item_type_list = array_flip(getItemTypeList());
-//  $item_types = array(
-//    array(
-//      'name' => 'Ammunition',
-//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Arcane Focus',
-//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Druidic Focus',
-//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Holy Symbol',
-//      'parent_item_type_id' => $item_type_list['Adventuring Gear'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//  );
-//  foreach($item_types as $item_type)
-//  {
-//    createItemType($item_type);
-//  }
-//
-//  // Tools.
-//  $item_type_list = array_flip(getItemTypeList());
-//  $item_types = array(
-//    array(
-//      'name' => 'Artisan\'s Tools',
-//      'parent_item_type_id' => $item_type_list['Tool'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Gaming Set',
-//      'parent_item_type_id' => $item_type_list['Tool'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//    array(
-//      'name' => 'Musical Instrument',
-//      'parent_item_type_id' => $item_type_list['Tool'],
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//    ),
-//  );
-//  foreach($item_types as $item_type)
-//  {
-//    createItemType($item_type);
-//  }
+  // Armor Categories.
+  $item = array(
+    array(
+      'name' => 'Light Armor',
+      'parent_id' => ITEM_ARMOR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'name' => 'Medium Armor',
+      'parent_id' => ITEM_ARMOR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'name' => 'Heavy Armor',
+      'parent_id' => ITEM_ARMOR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+    array(
+      'name' => 'Shield',
+      'parent_id' => ITEM_ARMOR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 0,
+    ),
+  );
+  foreach($item as $item)
+  {
+    createItem($item);
+  }
+
+  // Gear Categories.
+  $item = array(
+    array(
+      'name' => 'Ammunition',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 50,
+    ),
+    array(
+      'name' => 'Arcane focus',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 50,
+    ),
+    array(
+      'name' => 'Druidic focus',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 50,
+    ),
+    array(
+      'name' => 'Holy symbol',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 50,
+    ),
+  );
+ 
+  foreach($item as $item)
+  {
+    createItem($item);
+  }
+
+  $items = array(
+    array(
+      'name' => 'Artisan\'s tools',
+      'parent_id' => ITEM_TOOL,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 52,
+    ),
+    array(
+      'name' => 'Gaming Kit',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 52,
+    ),
+    array(
+      'name' => 'Musical instrument',
+      'parent_id' => ITEM_GEAR,
+      'is_category' => 1,
+      'value' => 0,
+      'weight' => 0,
+      'description' => '',
+      'source_id' => $sources['BR'],
+      'source_location' => 52,
+    ),
+  );
 }
 
 /******************************************************************************
@@ -350,10 +387,10 @@ function getItemPager($page = 1)
   $query->addField('name');
   $query->addField('value');
   $query->addField('weight');
-  $query->addField('is_category');
   $query->addField('parent_id');
   $query->addField('description');
   $query->addOrderSimple('name');
+  $query->addConditionSimple('is_category', 0);
   $query->addPager($page);
 
   return $db->select($query);
@@ -386,6 +423,28 @@ function getItemAutocompleteAjax()
   jsonResponseDie($response);
 }
 
+function getItemCategoryList($parent_id = FALSE)
+{
+  GLOBAL $db;
+  
+  $query = new SelectQuery('items');
+  $query->addField('id');
+  $query->addField('name');
+  $query->addField('value');
+  $query->addField('weight');
+  $query->addField('parent_id');
+  $query->addField('is_category');
+  $query->addField('description');
+  $query->addConditionSimple('is_category', 1);
+  
+  if ($parent_id !== FALSE)
+  {
+    $query->addConditionSimple('parent_id', $parent_id);
+  }
+
+  return $db->select($query);
+}
+
 function getItemList($key = FALSE)
 {
   GLOBAL $db;
@@ -412,7 +471,7 @@ function getItem($item_id)
   $query->addField('name');
   $query->addField('value');
   $query->addField('weight');
-  $query->addField('item_type');
+  $query->addField('is_category');
   $query->addField('parent_id');
   $query->addField('description');
   $query->addField('source_id');
@@ -487,38 +546,13 @@ function updateItem($item)
 
   // All items.
   $query->addField('name', $item['name']);
-  $query->addField('item_type_id', $item['item_type_id']);
+  $query->addField('parent_id', $item['parent_id']);
+  $query->addField('is_category', $item['is_category']);
   $query->addField('value', $item['value']);
   $query->addField('weight', $item['weight']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
   $query->addField('source_location', $item['source_location']);
-
-  // Magic.
-  $query->addField('magic', $item['magic']);
-  $query->addField('rarity_id', $item['rarity_id']);
-  $query->addField('bonus', $item['bonus']);
-  $query->addField('attunement', $item['attunement']);
-  $query->addField('attunement_requirements', $item['attunement_requirements']);
-
-  // Weapons.
-  $query->addField('range_id', $item['range_id']);
-  $query->addField('max_range_id', $item['max_range_id']);
-  $query->addField('light', $item['light']);
-  $query->addField('finesse', $item['finesse']);
-  $query->addField('thrown', $item['thrown']);
-  $query->addField('ammunition', $item['ammunition']);
-  $query->addField('loading', $item['loading']);
-  $query->addField('heavy', $item['heavy']);
-  $query->addField('reach', $item['reach']);
-  $query->addField('special', $item['special']);
-  $query->addField('two_handed', $item['two_handed']);
-
-  // Armor.
-  $query->addField('base_ac', $item['base_ac']);
-  $query->addField('dex_cap', $item['dex_cap']);
-  $query->addField('strength_requirement', $item['strength_requirement']);
-  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
 
   $query->addConditionSimple('id', $item['id']);
   $db->update($query);

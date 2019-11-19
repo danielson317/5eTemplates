@@ -28,3 +28,19 @@ function getItemTypeList($key = FALSE)
   
   return getListItem($items, $key);
 }
+
+function itemCategoryList($parent_id = 0, $level = 0)
+{
+  $list = array();
+  $categories = getItemCategoryList($parent_id);
+  foreach($categories as $category)
+  {
+    $list[] = str_repeat('-', $level) . $category['name'];
+    if ($category['is_category'])
+    {
+      $list[] += itemCategoryList($category['parent_id'], $level + 1);
+    }
+  }
+  return $list;
+}
+

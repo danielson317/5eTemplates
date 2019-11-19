@@ -3,6 +3,9 @@
 
 function itemList()
 {
+  echo '<pre>';
+  print_r(itemCategoryList());
+  die('</pre>');
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
