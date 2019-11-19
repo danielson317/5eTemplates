@@ -42,20 +42,26 @@
   }
 }
 
-table.item-list
+// Item Page.
+#items
 {
-  .column-1
+  .items
   {
-    width: 200px;
-  }
-  .column-2
-  {
-    width: 100px;
-  }
-  .column-2,
-  .column-3
-  {
-    text-align: right;
+    margin-left: 20px;
+    margin-right: 20px;
+    border-top: 2px solid $color_brown;
+    padding-top: 5px;
+
+    .item
+    {
+      float: left;
+      clear: left;
+
+      min-width: 200px;
+      border-bottom: 2px solid $color_grey;
+      padding-bottom: 5px;
+      margin-bottom: 5px;
+    }
   }
 }
 

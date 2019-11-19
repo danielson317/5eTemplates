@@ -1,15 +1,15 @@
 <?php
 
-define('ITEM_WEAPON', 1000000);
-define('ITEM_ARMOR', 1000001);
-define('ITEM_GEAR', 1000002);
-define('ITEM_BAG', 1000003);
-define('ITEM_TOOL', 1000004);
-define('ITEM_MOUNT', 1000005);
-define('ITEM_TRADE', 1000006);
-define('ITEM_FOOD', 1000008);
-define('ITEM_SERVICE', 1000009);
-define('ITEM_TRINKET', 1000010);
+define('ITEM_WEAPON', 1);
+define('ITEM_ARMOR', 2);
+define('ITEM_GEAR', 3);
+define('ITEM_BAG', 4);
+define('ITEM_TOOL', 5);
+define('ITEM_MOUNT', 6);
+define('ITEM_TRADE', 7);
+define('ITEM_FOOD', 8);
+define('ITEM_SERVICE', 9);
+define('ITEM_TRINKET', 10);
 
 function getItemTypeList($key = FALSE)
 {
@@ -35,12 +35,23 @@ function itemCategoryList($parent_id = 0, $level = 0)
   $categories = getItemCategoryList($parent_id);
   foreach($categories as $category)
   {
-    $list[] = str_repeat('-', $level) . $category['name'];
+    $list[$category['id']] = str_repeat('-', $level) . $category['name'];
     if ($category['is_category'])
     {
-      $list[] += itemCategoryList($category['parent_id'], $level + 1);
+      $list += itemCategoryList($category['id'], $level + 1);
     }
   }
   return $list;
 }
 
+function itemCategoryHierarchy($item_id)
+{
+  $output = '';
+  $item = getItem($item_id);
+  if ($item['parent_id'] && $item['parent_id'] > 0)
+  {
+    $output .= itemCategoryHierarchy($item['parent_id']) . ' >> ';
+  }
+  $output .= $item['name'];
+  return $output;
+}

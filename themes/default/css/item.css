@@ -34,21 +34,24 @@
   padding: 5px;
 }
 
-/* line 47, ../scss/item.scss */
-table.item-list .column-1 {
-  width: 200px;
-}
-/* line 51, ../scss/item.scss */
-table.item-list .column-2 {
-  width: 100px;
+/* line 48, ../scss/item.scss */
+#items .items {
+  margin-left: 20px;
+  margin-right: 20px;
+  border-top: 2px solid #553900;
+  padding-top: 5px;
 }
 /* line 55, ../scss/item.scss */
-table.item-list .column-2,
-table.item-list .column-3 {
-  text-align: right;
+#items .items .item {
+  float: left;
+  clear: left;
+  min-width: 200px;
+  border-bottom: 2px solid #838383;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
 }
 
-/* line 64, ../scss/item.scss */
+/* line 70, ../scss/item.scss */
 table.item-print-list .column-3 {
   width: 100px;
   text-align: right;

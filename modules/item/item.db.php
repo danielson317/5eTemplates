@@ -495,7 +495,7 @@ function createItem($item, $with_id = FALSE)
   $query->addField('name', $item['name']);
   $query->addField('value', $item['value']);
   $query->addField('weight', $item['weight']);
-  $query->addField('is_category', $item['is_category']);
+  $query->addField('is_category', iis($item, 'is_category', 0));
   $query->addField('parent_id', $item['parent_id']);
   $query->addField('description', $item['description']);
   $query->addField('source_id', $item['source_id']);
@@ -547,7 +547,7 @@ function updateItem($item)
   // All items.
   $query->addField('name', $item['name']);
   $query->addField('parent_id', $item['parent_id']);
-  $query->addField('is_category', $item['is_category']);
+  $query->addField('is_category', iis($item, 'is_category', 0));
   $query->addField('value', $item['value']);
   $query->addField('weight', $item['weight']);
   $query->addField('description', $item['description']);

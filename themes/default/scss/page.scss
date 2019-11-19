@@ -143,7 +143,7 @@ table.print-list
   z-index: 99;
   width: 100%;
   height: 100%;
-  background-color: $black;
+  background-color: $color_black;
   opacity: 0.2;
 }
 
@@ -156,12 +156,12 @@ table.print-list
   z-index: 100;
   width: 500px;
   height: 300px;
-  background-color: $white;
+  background-color: $color_white;
 
   padding: 10px;
-  border: 2px solid $grey;
+  border: 2px solid $color_grey;
   border-radius: 5px;
-  box-shadow: 0 5px 5px 1px $grey;
+  box-shadow: 0 5px 5px 1px $color_grey;
 
   #close-modal
   {

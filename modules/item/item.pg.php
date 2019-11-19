@@ -3,9 +3,6 @@
 
 function itemList()
 {
-  echo '<pre>';
-  print_r(itemCategoryList());
-  die('</pre>');
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
@@ -31,31 +28,27 @@ function itemList()
     $template->addOperation(a('Next Page', '/item', $attr));
   }
 
-  $attr = array(
-    'query' => array('page' => $page),
-  );
-  $template->addOperation(a('Print Cards', '/items/print', $attr));
-
   // List
   $table = new TableTemplate();
   $table->setAttr('class', array('item-list'));
-  $table->setHeader(array('Name', 'Category', 'Type', 'Value', 'Weight', 'Description'));
+  $table->setHeader(array('Name', 'Type', 'Value', 'Weight', 'Description'));
 
+  $output = '';
   foreach($items as $item)
   {
-    $row = array();
     $attr = array(
       'query' => array('id' => $item['id']),
     );
-    $row[] = a($item['name'], '/item', $attr);
-    $row[] = $item['is_category'] ? 'Category' : 'Item';
-    $row[] = '';
-    $row[] = $item['value'];
-    $row[] = $item['weight'];
-    $row[] = $item['description'];
-    $table->addRow($row);
+    $group = a($item['name'], '/item', $attr) . htmlSolo('br');
+    $group .= lineItem('Category', itemCategoryHierarchy($item['parent_id']));
+    $group .= lineItem('value', $item['value']);
+    $group .= lineItem('weight', $item['weight']);
+    $group .= $item['description'];
+    $output .= htmlWrap('div', $group, array('class' => array('item')));
   }
-  $template->setList($table);
+
+  $output = htmlWrap('div', $output, array('class' => array('items')));
+  $template->setList($output);
   return $template;
 }
 
@@ -120,14 +113,13 @@ function itemUpsertForm()
   $field->setgroup($group);
   $form->addfield($field);
  
-  // Type.
-  $options = getItemTypeList();
-  $field = new FieldSelect('item_type', 'Type', $options);
+  // Category.
+  $field = new FieldCheckbox('is_category', 'Category');
   $field->setGroup($group);
   $form->addField($field);
 
   // Parent.
-  $options = array(0 => '--none--') + getItemList();
+  $options = array(0 => '--none--') + itemCategoryList();
   $field = new FieldSelect('parent_id', 'Parent', $options);  
   $field->setGroup($group);
   $form->addField($field);
@@ -155,6 +147,7 @@ function itemUpsertForm()
     $value = 'Update';
   }
   $field = new FieldSubmit('submit', $value);
+  $field->setGroup($group);
   $form->addField($field);
 
   $template->setForm($form);
