@@ -29,6 +29,7 @@ function installItem()
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
   $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('bonus', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('bonus_ability_id', CreateQuery::TYPE_INTEGER, 0, array('N'),
   $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
   $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0);
   $db->create($query);
@@ -504,41 +505,6 @@ function createItem($item, $with_id = FALSE)
   return $db->insert($query);
 }
 
-function createItemDetails($item)
-{
-  GLOBAL $db;
-  $query = new InsertQuery('item_details');
-
-  // Magic.
-  $query->addField('id', $item['id']);
-  $query->addField('magic', $item['magic']);
-  $query->addField('rarity_id', $item['rarity_id']);
-  $query->addField('bonus', $item['bonus']);
-  $query->addField('attunement', $item['attunement']);
-  $query->addField('attunement_requirements', $item['attunement_requirements']);
-
-  // Weapons.
-  $query->addField('range_id', $item['range_id']);
-  $query->addField('max_range_id', $item['max_range_id']);
-  $query->addField('light', $item['light']);
-  $query->addField('finesse', $item['finesse']);
-  $query->addField('thrown', $item['thrown']);
-  $query->addField('ammunition', $item['ammunition']);
-  $query->addField('loading', $item['loading']);
-  $query->addField('heavy', $item['heavy']);
-  $query->addField('reach', $item['reach']);
-  $query->addField('special', $item['special']);
-  $query->addField('two_handed', $item['two_handed']);
-
-  // Armor.
-  $query->addField('base_ac', $item['base_ac']);
-  $query->addField('dex_cap', $item['dex_cap']);
-  $query->addField('strength_requirement', $item['strength_requirement']);
-  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
-
-  return $db->insert($query);
-}
-
 function updateItem($item)
 {
   GLOBAL $db;
@@ -568,6 +534,22 @@ function deleteItem($item_id)
   $query = new DeleteQuery('items');
   $query->addConditionSimple('id', $item_id);
   $db->delete($query);
+}
+/******************************************************************************
+ *
+ *  Item Damage
+ *
+ ******************************************************************************/
+function getItemMagic($item_id)
+{
+  GLOBAL $db;
+  $query = new SelectQuery('item_magics');
+  $query->addField('rarity_id');
+  $query->addField('bonus');
+  $query->addField('bonus_ability_id');
+  $query->addField('attunement');
+  $query->addField('attunement_requirements');
+  return $db->selectObject($query);
 }
 
 /******************************************************************************

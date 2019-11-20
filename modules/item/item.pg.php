@@ -150,8 +150,60 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
-  $template->setForm($form);
+  /****************
+   * Magic Group
+   ****************/
+  $item_magic = FALSE; 
+  if ($item_id)
+  {
+    $item_magic = getItemMagic($item_id);
+    $form->addValues($item_magic);
+  }
+  $group = 'magic_group';
+  $form->addGroup($group);
 
+  $field = new FieldCheckbox('is_magic', 'Magical');
+  $field->setGroup($group)->setValue(isset($item_magic));
+  $form->addField($field);
+
+  $options = getRarityList();
+  $field = new FieldOption('rarity_id', 'Rarity', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldNumber('bonus', 'Damage/AC/Stat Bonus');
+  $field->setGroup($group);
+  $form->addField($field);
+  
+  $options = getAbilityList();
+  $field = new FieldOption('bonus_ability_id', 'Bonus Attribute', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldCheckbox('attunement', 'Requires Attunement');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldTextarea('attunement_requirements', 'Attunement Requirements');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /****************
+   * Weapon Group
+   ****************/
+  $group = 'weapon_group';
+  $form->addGroup($group);
+
+  /****************
+   * Armor Group
+   ****************/
+  $group = 'armor_group';
+  $form->addGroup($group);
+ 
+  /***********
+   * Handlers
+   ***********/
+  $template->setForm($form);
   return $template;
 }
 

@@ -52,6 +52,10 @@ class Form
     $this->values = $values;
   }
 
+  function addValues($values)
+  {
+    $this->values += $values;
+  }
   function setTitle($title)
   {
     $this->title = $title;
