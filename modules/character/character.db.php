@@ -17,7 +17,6 @@ function installCharacter()
   $query->addField('subrace_id', CreateQuery::TYPE_INTEGER, 0);
   $query->addField('gender', CreateQuery::TYPE_STRING, 1);
   $query->addField('alignment', CreateQuery::TYPE_STRING, 8, array('N'));
-  $query->addField('pb', CreateQuery::TYPE_STRING, 8, array('N'), 2);
   $query->addField('speed', CreateQuery::TYPE_INTEGER, 0, array('N'), 30);
   $query->addField('hp', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('player_id', CreateQuery::TYPE_INTEGER);
@@ -33,9 +32,7 @@ function installCharacter()
   $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('ability_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('score', CreateQuery::TYPE_INTEGER, 0, array('N'), 8);
-  $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
-  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
-  $query->addField('saving_throw', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
+  $query->addField('proficiency_multiplier', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_class_map');
@@ -45,17 +42,10 @@ function installCharacter()
   $query->addField('level', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
-  $query = new CreateQuery('character_die_map');
-  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('die_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('die_count', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $db->create($query);
-
   $query = new CreateQuery('character_skill_map');
   $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('skill_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
-  $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('proficiency_multiplier', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $db->create($query);
 
   $query = new CreateQuery('character_language_map');
@@ -63,15 +53,10 @@ function installCharacter()
   $query->addField('language_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $db->create($query);
 
-  $query = new CreateQuery('character_item_type_proficiency_map');
-  $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('item_type_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $db->create($query);
-
   $query = new CreateQuery('character_item_proficiency_map');
   $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
+  $query->addField('proficiency_multiplier', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $db->create($query);
 }
 
@@ -117,7 +102,6 @@ function getCharacter($id)
   $query->addField('xp');
   $query->addField('alignment');
   $query->addField('hp');
-  $query->addField('pb');
   $query->addField('speed');
   $query->addField('personality');
   $query->addField('ideals');
@@ -167,7 +151,6 @@ function createCharacter($character)
   $query->addField('xp', $character['xp']);
   $query->addField('alignment', $character['alignment']);
   $query->addField('hp', $character['hp']);
-  $query->addField('pb', $character['pb']);
   $query->addField('speed', $character['speed']);
   $query->addField('personality', $character['personality']);
   $query->addField('ideals', $character['ideals']);
@@ -191,7 +174,6 @@ function updateCharacter($character)
   $query->addField('xp', $character['xp']);
   $query->addField('alignment', $character['alignment']);
   $query->addField('hp', $character['hp']);
-  $query->addField('pb', $character['pb']);
   $query->addField('speed', $character['speed']);
   $query->addField('personality', $character['personality']);
   $query->addField('ideals', $character['ideals']);
@@ -301,9 +283,7 @@ function getCharacterAbilityList($character_id)
   $query->addField('character_id');
   $query->addField('ability_id');
   $query->addField('score');
-  $query->addField('modifier');
-  $query->addField('proficiency');
-  $query->addField('saving_throw');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addOrderSimple('ability_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
@@ -329,9 +309,7 @@ function getCharacterAbility($character_id, $ability_id)
   $query->addField('character_id');
   $query->addField('ability_id');
   $query->addField('score');
-  $query->addField('modifier');
-  $query->addField('proficiency');
-  $query->addField('saving_throw');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addConditionSimple('ability_id', $ability_id);
   $results = $db->select($query);
@@ -355,9 +333,7 @@ function createCharacterAbility($character_ability)
   $query->addField('character_id', $character_ability['character_id']);
   $query->addField('ability_id', $character_ability['ability_id']);
   $query->addField('score', $character_ability['score']);
-  $query->addField('modifier', $character_ability['modifier']);
-  $query->addField('proficiency', $character_ability['proficiency']);
-  $query->addField('saving_throw', $character_ability['saving_throw']);
+  $query->addField('proficiency_multiplier', $character_ability['proficiency_multiplier']);
   $db->insert($query);
 }
 
@@ -370,9 +346,7 @@ function updateCharacterAbility($character_ability)
 
   $query = new UpdateQuery('character_ability_map');
   $query->addField('score', $character_ability['score']);
-  $query->addField('modifier', $character_ability['modifier']);
-  $query->addField('proficiency', $character_ability['proficiency']);
-  $query->addField('saving_throw', $character_ability['saving_throw']);
+  $query->addField('proficiency_multiplier', $character_ability['proficiency_multiplier']);
   $query->addConditionSimple('character_id', $character_ability['character_id']);
   $query->addConditionSimple('ability_id', $character_ability['ability_id']);
   $db->update($query);
@@ -408,8 +382,7 @@ function getCharacterSkillList($character_id)
 
   $query = new SelectQuery('character_skill_map');
   $query->addField('skill_id');
-  $query->addField('proficiency');
-  $query->addField('modifier');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addOrderSimple('skill_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
@@ -434,8 +407,7 @@ function getCharacterSkill($character_id, $skill_id)
   $query = new SelectQuery('character_skill_map');
   $query->addField('character_id');
   $query->addField('skill_id');
-  $query->addField('proficiency');
-  $query->addField('modifier');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addConditionSimple('skill_id', $skill_id);
   $results = $db->select($query);
@@ -458,8 +430,7 @@ function createCharacterSkill($character_skill)
   $query = new InsertQuery('character_skill_map');
   $query->addField('character_id', $character_skill['character_id']);
   $query->addField('skill_id', $character_skill['skill_id']);
-  $query->addField('proficiency', $character_skill['proficiency']);
-  $query->addField('modifier', $character_skill['modifier']);
+  $query->addField('proficiency_multiplier', $character_skill['proficiency_multiplier']);
   $db->insert($query);
 }
 
@@ -471,8 +442,7 @@ function updateCharacterSkill($character_skill)
   GLOBAL $db;
 
   $query = new UpdateQuery('character_skill_map');
-  $query->addField('proficiency', $character_skill['proficiency']);
-  $query->addField('modifier', $character_skill['modifier']);
+  $query->addField('proficiency_multiplier', $character_skill['proficiency_multiplier']);
   $query->addConditionSimple('character_id', $character_skill['character_id']);
   $query->addConditionSimple('skill_id', $character_skill['skill_id']);
   $db->update($query);
@@ -666,7 +636,7 @@ function getCharacterItemProficiencyList($character_id)
 
   $query = new SelectQuery('character_item_proficiency_map');
   $query->addField('item_id');
-  $query->addField('proficiency');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addOrderSimple('item_id', QueryOrder::DIRECTION_ASC);
   $results = $db->select($query);
@@ -691,7 +661,7 @@ function getCharacterItemProficiency($character_id, $item_id)
   $query = new SelectQuery('character_item_proficiency_map');
   $query->addField('character_id');
   $query->addField('item_id');
-  $query->addField('proficiency');
+  $query->addField('proficiency_multiplier');
   $query->addConditionSimple('character_id', $character_id);
   $query->addConditionSimple('item_id', $item_id);
   $results = $db->select($query);
@@ -714,7 +684,7 @@ function createCharacterItemProficiency($character_item_proficiency)
   $query = new InsertQuery('character_item_proficiency_map');
   $query->addField('character_id', $character_item_proficiency['character_id']);
   $query->addField('item_id', $character_item_proficiency['item_id']);
-  $query->addField('proficiency', $character_item_proficiency['proficiency']);
+  $query->addField('proficiency_multiplier', $character_item_proficiency['proficiency_multiplier']);
   $db->insert($query);
 }
 
@@ -723,7 +693,7 @@ function updateCharacterItemProficiency($character_item_proficiency)
   GLOBAL $db;
 
   $query = new UpdateQuery('character_item_proficiency_map');
-  $query->addField('proficiency', $character_item_proficiency['proficiency']);
+  $query->addField('proficiency_multiplier', $character_item_proficiency['proficiency_multiplier']);
   $query->addConditionSimple('character_id', $character_item_proficiency['character_id']);
   $query->addConditionSimple('item_id', $character_item_proficiency['item_id']);
 

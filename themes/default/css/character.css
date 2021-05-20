@@ -1,49 +1,55 @@
-/* line 5, ../scss/character.scss */
+/* line 3, ../scss/character.scss */
+#character_summary {
+  clear: left;
+  margin-left: 20px;
+  padding-top: 10px;
+}
+/* line 8, ../scss/character.scss */
 #character_summary .group {
   float: left;
   width: 200px;
 }
 
-/* line 20, ../scss/character.scss */
+/* line 23, ../scss/character.scss */
 #character_form .field_group.header_upper {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 26, ../scss/character.scss */
+/* line 29, ../scss/character.scss */
 #character_form .field_group.header_upper .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 33, ../scss/character.scss */
+/* line 36, ../scss/character.scss */
 #character_form .field_group.header_lower {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 39, ../scss/character.scss */
+/* line 42, ../scss/character.scss */
 #character_form .field_group.header_lower .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 46, ../scss/character.scss */
+/* line 49, ../scss/character.scss */
 #character_form .field_group.abilities_group {
   clear: left;
   padding-right: 10px;
 }
-/* line 51, ../scss/character.scss */
+/* line 54, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup {
   width: 100%;
   box-sizing: border-box;
 }
-/* line 55, ../scss/character.scss */
+/* line 58, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup .markup-value {
   width: 100%;
   box-sizing: border-box;
 }
-/* line 60, ../scss/character.scss */
+/* line 63, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup .markup-value table {
   width: 100%;
   box-sizing: border-box;

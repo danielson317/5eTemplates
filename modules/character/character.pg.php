@@ -238,9 +238,9 @@ function characterUpsertForm()
     );
     $row[] = a($abilities[$character_ability['ability_id']], '/ajax/character/ability', $attr);
     $row[] = $character_ability['score'];
-    $row[] = $character_ability['modifier'];
+    $row[] = getAbilityModifier($character_ability['score']);
     $row[] = $character_ability['proficiency'];
-    $row[] = $character_ability['saving_throw'];
+    $row[] = getSkillModifier($character_ability['score'], $proficiency, $character_ability['proficiency']);
     $table->addRow($row);
   }
 
@@ -597,7 +597,7 @@ function characterClassListAjax()
  * Character ability Upsert
  *
  ******************************************************************************/
-function characterabilityUpsertFormAjax()
+function characterAbilityUpsertFormAjax()
 {
   $response = getAjaxDefaultResponse();
 

@@ -4,9 +4,15 @@ function characterDisplay($character_id)
 {
   $character = getCharacter($character_id);
 
-  // Name.
-  $output = '';
-  $output .= lineItem('Name', $character['name'] . ' (' . getGenderList($character['gender']) . ')');
+  $output = htmlWrap('h3', $character['name']);
+
+  /***********************
+   * Primary.
+   ***********************/
+  $group = '';
+
+  // Gender
+  $group .= lineItem('Gender',  '(' . getGenderList($character['gender']) . ')');
 
   // Race.
   $list = getRaceList();
@@ -16,7 +22,7 @@ function characterDisplay($character_id)
   {
    $race .= ' (' . $sublist[$character['subrace_id']] . ')';
   }
-  $output .= lineItem('Race', $race);
+  $group .= lineItem('Race', $race);
 
   // Class.
   $list = getClassList();
@@ -30,31 +36,33 @@ function characterDisplay($character_id)
       $class .= ' (' . $sublist[$character_class['subclass_id']] . ')';
     }
     $class .= ' ' . $character_class['level'];
-    $output .= lineItem('Class', $class);
+    $group .= lineItem('Class', $class);
   }
 
   // Background.
   $list = getBackgroundList();
-  $output .= lineItem('Background', $list[$character['background_id']]);
+  $group .= lineItem('Background', $list[$character['background_id']]);
 
   // Alignment.
   $list = getAlignmentList();
-  $output .= lineItem('Alignment', $list[$character['alignment']]);
+  $group .= lineItem('Alignment', $list[$character['alignment']]);
 
   // Players.
   $list = getPlayerList();
-  $output .= lineItem('Player', $list[$character['player_id']]);
+  $group .= lineItem('Player', $list[$character['player_id']]);
 
   // Primary group.
-  $output = htmlWrap('div', $output, array('class' => array('primary', 'group')));
+  $output .= htmlWrap('div', $group, array('class' => array('primary', 'group')));
 
-  // Abilities.
+  /***********************
+   * Abilities.
+   ***********************/
   $group = '';
   $list = getAbilityList();
   $character_abilities = getCharacterAbilityList($character_id);
   foreach($character_abilities as $character_ability)
   {
-    $group .= lineItem($list[$character_ability['ability_id']], $character_ability['modifier'] . ' (' . $character_ability['score'] . ')');
+    $group .= lineItem($list[$character_ability['ability_id']], getAbilityModifier($character_ability['score']) . ' (' . $character_ability['score'] . ')');
   }
   $output .= htmlWrap('div', $group, array('class' => array('abilities', 'group')));
 
@@ -65,7 +73,9 @@ function characterDisplay($character_id)
   $count = 0;
   foreach($character_skills as $character_skill)
   {
-    $group .= lineItem($list[$character_skill['skill_id']], $character_skill['modifier'] . ' (x' . $character_skill['proficiency'] . ')');
+    $skill = getSkill($character_skill['skill_id']);
+    $character_ability = getCharacterAbility($character_id, $skill['ability_id']);
+    $group .= lineItem($list[$character_skill['skill_id']], getSkillModifier($character_ability['score'], 1, $character_skill['proficiency_multiplier']) . ' (x' . $character_skill['proficiency_multiplier'] . ')');
     $count++;
     if (($count % 6) === 0)
     {
@@ -83,25 +93,6 @@ function printCharacterSheet()
   ob_start();
   include ROOT_PATH . '/themes/default/templates/character.tpl.php';
   return ob_get_clean();
-}
-
-function getAlignmentList()
-{
-  return array(
-    'lg' => 'Lawful Good',
-    'ng' => 'Neutral Good',
-    'cg' => 'Chaotic Good',
-    'ln' => 'Lawful Neutral',
-    'cn' => 'Chaotic Neutral',
-    'le' => 'Lawful Evil',
-    'ne' => 'Neutral Evil',
-    'ce' => 'Chaotic Evil',
-    'l' => 'Lawful',
-    'n' => 'Neutral',
-    'c' => 'Chaotic',
-    'g' => 'Good',
-    'e' => 'Evil',
-  );
 }
 
 function getCharacterProficiencyTable($character_id)

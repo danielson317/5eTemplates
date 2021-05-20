@@ -58,6 +58,7 @@ include ROOT_PATH . '/libraries/user/user.pg.php';
 
 include ROOT_PATH . '/modules/ability/ability.db.php';
 include ROOT_PATH . '/modules/ability/ability.pg.php';
+include ROOT_PATH . '/modules/ability/ability.lib.php';
 include ROOT_PATH . '/modules/ability/skill.db.php';
 include ROOT_PATH . '/modules/ability/skill.pg.php';
 
@@ -67,6 +68,7 @@ include ROOT_PATH . '/modules/background/background_characteristic.db.php';
 
 include ROOT_PATH . '/modules/character/character.db.php';
 include ROOT_PATH . '/modules/character/character.inc.php';
+include ROOT_PATH . '/modules/character/character.lib.php';
 include ROOT_PATH . '/modules/character/character.pg.php';
 include ROOT_PATH . '/modules/character/character_wizard.pg.php';
 

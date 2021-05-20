@@ -63,7 +63,7 @@ function installSubclass()
   );
 
   // Fighter.
-  $subclasses += array(
+  $new_subclasses = array(
     array(
       'name' => 'Champion',
       'class_id' => $classes['Fighter'],
@@ -71,9 +71,10 @@ function installSubclass()
       'source_id' => $sources['BR'],
     ),
   );
+  $subclasses = array_merge($subclasses, $new_subclasses);
 
   // Rogue.
-  $subclasses += array(
+  $new_subclasses = array(
     array(
       'name' => 'Thief',
       'class_id' => $classes['Rogue'],
@@ -81,9 +82,10 @@ function installSubclass()
       'source_id' => $sources['BR'],
     ),
   );
+  $subclasses = array_merge($subclasses, $new_subclasses);
 
   // Wizard.
-  $subclasses += array(
+  $new_subclasses = array(
     array(
       'name' => 'Abjuration',
       'class_id' => $classes['Wizard'],
@@ -133,6 +135,7 @@ function installSubclass()
       'source_id' => $sources['BR'],
     ),
   );
+  $subclasses = array_merge($subclasses, $new_subclasses);
 
   foreach ($subclasses as $subclass)
   {

@@ -77,7 +77,7 @@ function characterWizardClassForm()
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
-  $template->setUpper(characterDisplay($character_id));
+//  $template->setUpper();
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
@@ -103,7 +103,8 @@ function characterWizardClassForm()
   $form->addField($field);
 
   $template->setForm($form);
-  return $template;
+
+  return $template . characterDisplay($character_id);
 }
 
 function characterWizardClassSubmit()
@@ -130,7 +131,6 @@ function characterWizardAbilityForm()
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
-  $template->setUpper(characterDisplay($character_id));
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
@@ -156,7 +156,7 @@ function characterWizardAbilityForm()
   $form->addField($field);
 
   $template->setForm($form);
-  return $template;
+  return $template . characterDisplay($character_id);
 }
 
 function characterWizardAbilitySubmit()
@@ -172,9 +172,7 @@ function characterWizardAbilitySubmit()
       'character_id' => $character_id,
       'ability_id' => $ability_id,
       'score' => $ability_score,
-      'modifier' => floor($ability_score/2) - 5,
-      'proficiency' => 0,
-      'saving_throw' => floor($ability_score/2) - 5,
+      'proficiency_multiplier' => 0,
     );
     createCharacterAbility($character_ability);
   }
@@ -215,7 +213,7 @@ function characterWizardSkillForm()
   $skills = getSkillList();
   foreach($skills as $id => $skill)
   {
-    $field = new FieldNumber($id, $skill);
+    $field = new FieldSelect($id, $skill);
     $field->setValue(0);
     $form->addField($field);
   }
@@ -233,13 +231,12 @@ function characterWizardSkillSubmit()
   unset($_POST['character_id']);
   unset($_POST['submit']);
 
-  foreach($_POST as $skill_id => $modifier)
+  foreach($_POST as $skill_id => $proficiency_multiplier)
   {
     $character_skill = array(
       'character_id' => $character_id,
       'skill_id' => $skill_id,
-      'proficiency' => 0,
-      'modifier' => $modifier,
+      'proficiency_multiplier' => $proficiency_multiplier,
     );
     createCharacterSkill($character_skill);
   }
