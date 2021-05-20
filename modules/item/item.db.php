@@ -29,7 +29,7 @@ function installItem()
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
   $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('bonus', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('bonus_ability_id', CreateQuery::TYPE_INTEGER, 0, array('N'),
+  $query->addField('bonus_ability_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
   $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0);
   $db->create($query);
@@ -59,7 +59,7 @@ function installItem()
   $query->addField('stealth_disadvantage', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
   $db->create($query);
 
-  // Item damage many to many map.
+  // Item damage - many to many map.
   $query = new CreateQuery('item_damages');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N', 'P', 'A'));
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N'));

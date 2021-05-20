@@ -45,21 +45,21 @@ function installMonster()
   $query->addField('score', CreateQuery::TYPE_INTEGER, 0, array('N'), 8);
   $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
   $query->addField('proficiency', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('saving_throw', 'real', 0, array('N'), 0);
+  $query->addField('saving_throw', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $db->create($query);
 
   // Immune to charmed, etc. 0 = immune, 0.5 = resistant, 1 = normal, 2 = vulnerable
   $query = new CreateQuery('monster_conditions');
   $query->addField('monster_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('condition_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('modifier', 'REAL', 0, array('N'), 1);
+  $query->addField('modifier', CreateQuery::TYPE_DECIMAL, 0, array('N'), 1);
   $db->create($query);
 
   // Immune to poison, vulnerable to bludgeoning, resistant to piercing, etc. 0 = immune, 0.5 = resistant, 1 = normal, 2 = vulnerable
   $query = new CreateQuery('monster_damage_types');
   $query->addField('monster_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('damage_type_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('modifier', 'REAL', 0, array('N'), 1);
+  $query->addField('modifier', CreateQuery::TYPE_DECIMAL, 0, array('N'), 1);
   $db->create($query);
 
   // Common, Dwarfish, Orc.

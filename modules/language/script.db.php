@@ -7,8 +7,8 @@ function installScript()
   $query = new CreateQuery('scripts');
   $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('P', 'A'));
   $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
-  $query->addField('source_id', CreateQuery::TYPE_INTEGER);
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
+  $query->addField('source_id', CreateQuery::TYPE_INTEGER);
   $db->create($query);
 
   $sources = array_flip(getSourceList());

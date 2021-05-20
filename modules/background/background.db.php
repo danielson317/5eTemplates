@@ -14,6 +14,7 @@ function installBackground()
   $query->addField('name', CreateQuery::TYPE_STRING, 0, array('N'));
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $query->addField('source_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('source_location', CreateQuery::TYPE_INTEGER);
   $db->create($query);
 
   $sources = array_flip(getSourceList());
@@ -48,7 +49,6 @@ function installBackground()
       'description' => '',
       'source_id' => $sources['BR'],
     ),
-
   );
   foreach ($backgrounds as $background)
   {

@@ -12,7 +12,7 @@ function languageList()
   $template = new ListPageTemplate('Languages');
 
   // Operations.
-  $template->addOperation(a('New Language', '/language', $attr));
+  $template->addOperation(a('New Language', '/language'));
 
   if ($page > 1)
   {

@@ -15,55 +15,55 @@ function installSkill()
   $abilities = array_flip(getAbilityCodeList());
   $skills = array(
     array(
-      'code' => 'Acb',
+      'code' => 'Acro',
       'name' => 'Acrobatics',
       'ability_id' => $abilities['DEX'],
       'description' => '',
     ),
     array(
-      'code' => 'AnH',
+      'code' => 'AnmH',
       'name' => 'Animal Handling',
       'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
-      'code' => 'Arc',
+      'code' => 'Arca',
       'name' => 'Arcana',
       'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
-      'code' => 'Ath',
+      'code' => 'Athl',
       'name' => 'Athletics',
       'ability_id' => $abilities['STR'],
       'description' => '',
     ),
     array(
-      'code' => 'Dec',
+      'code' => 'Decn',
       'name' => 'Deception',
       'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
-      'code' => 'His',
+      'code' => 'Hist',
       'name' => 'History',
       'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
-      'code' => 'Ins',
+      'code' => 'Inst',
       'name' => 'Insight',
       'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
-      'code' => 'Itm',
+      'code' => 'Intm',
       'name' => 'Intimidation',
       'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
-      'code' => 'Inv',
+      'code' => 'Invn',
       'name' => 'Investigation',
       'ability_id' => $abilities['INT'],
       'description' => '',
@@ -75,37 +75,37 @@ function installSkill()
       'description' => '',
     ),
     array(
-      'code' => 'Nat',
+      'code' => 'Natr',
       'name' => 'Nature',
       'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
-      'code' => 'Prc',
+      'code' => 'Perc',
       'name' => 'Perception',
       'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
     array(
-      'code' => 'Prf',
+      'code' => 'Perf',
       'name' => 'Performance',
       'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
-      'code' => 'Prs',
+      'code' => 'Pers',
       'name' => 'Persuasion',
       'ability_id' => $abilities['CHA'],
       'description' => '',
     ),
     array(
-      'code' => 'Rel',
+      'code' => 'Rlgn',
       'name' => 'Religion',
       'ability_id' => $abilities['INT'],
       'description' => '',
     ),
     array(
-      'code' => 'SoH',
+      'code' => 'SloH',
       'name' => 'Slight of Hand',
       'ability_id' => $abilities['DEX'],
       'description' => '',
@@ -117,17 +117,13 @@ function installSkill()
       'description' => '',
     ),
     array(
-      'code' => 'Srv',
+      'code' => 'Surv',
       'name' => 'Survival',
       'ability_id' => $abilities['WIS'],
       'description' => '',
     ),
   );
 
-//  echo '<pre>';
-//  print_r($abilities);
-//  print_r($skills);
-//  die('</pre>');
   foreach($skills as $skill)
   {
     createSkill($skill);

@@ -11,6 +11,9 @@ function installPlayer()
 
   $player = array('name' => 'Daniel P. Henry');
   createPlayer($player);
+
+  $player = array('name' => 'Joanna K. Henry');
+  createPlayer($player);
 }
 
 /**

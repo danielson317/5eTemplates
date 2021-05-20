@@ -195,12 +195,15 @@ function characterUpsertForm()
   $field->setRequired();
   $form->addField($field);
 
-  // Race.
-  $options = array(0 => '--Select One--') + getSubraceList($character['race_id']);
-  $field = new FieldSelect('subrace_id', 'Subrace', $options);
-  $field->setGroup($group);
-  $field->setRequired();
-  $form->addField($field);
+  // Subrace.
+  if ($character_id)
+  {
+    $options = array(0 => '--Select One--') + getSubraceList($character['race_id']);
+    $field = new FieldSelect('subrace_id', 'Subrace', $options);
+    $field->setGroup($group);
+    $field->setRequired();
+    $form->addField($field);
+  }
 
   // XP.
   $field = new FieldNumber('xp', 'Experience Points');
@@ -249,7 +252,7 @@ function characterUpsertForm()
   );
   $link = a('Add New ability', '/ajax/character/ability', $attr);
 
-  $field = new FieldMarkup('ability', 'abilities', $table . $link);
+  $field = new FieldMarkup('ability', 'Abilities', $table . $link);
   $field->setGroup($group);
   $form->addField($field);
 

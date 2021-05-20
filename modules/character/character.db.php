@@ -34,7 +34,7 @@ function installCharacter()
   $query->addField('ability_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('score', CreateQuery::TYPE_INTEGER, 0, array('N'), 8);
   $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
-  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
+  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $query->addField('saving_throw', CreateQuery::TYPE_INTEGER, 0, array('N'), -1);
   $db->create($query);
 
@@ -54,7 +54,7 @@ function installCharacter()
   $query = new CreateQuery('character_skill_map');
   $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('skill_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
+  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $query->addField('modifier', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $db->create($query);
 
@@ -71,7 +71,7 @@ function installCharacter()
   $query = new CreateQuery('character_item_proficiency_map');
   $query->addField('character_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('P', 'N'));
-  $query->addField('proficiency', 'REAL', 0, array('N'), 0);
+  $query->addField('proficiency', CreateQuery::TYPE_DECIMAL, 0, array('N'), 0);
   $db->create($query);
 }
 

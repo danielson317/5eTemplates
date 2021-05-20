@@ -14,10 +14,11 @@ function installClass()
   $query->addField('name', CreateQuery::TYPE_STRING, 32, array('N'));
   $query->addField('description', CreateQuery::TYPE_STRING, 1024);
   $query->addField('hit_die', CreateQuery::TYPE_INTEGER);
-  $query->addField('stp1', CreateQuery::TYPE_INTEGER);
-  $query->addField('stp2', CreateQuery::TYPE_INTEGER);
+  $query->addField('stp1', CreateQuery::TYPE_INTEGER); // Saving throw proficiency 1
+  $query->addField('stp2', CreateQuery::TYPE_INTEGER); // Saving throw proficiency 2
   $query->addField('subclass_name', CreateQuery::TYPE_STRING, 32);
   $query->addField('source_id', CreateQuery::TYPE_INTEGER);
+  $query->addField('source_location', CreateQuery::TYPE_INTEGER);
   $db->create($query);
 
   $sources = array_flip(getSourceList());

@@ -68,9 +68,6 @@ function getRegistry($path = FALSE)
     'ajax/subrace' => 'subraceAjax',
 
     // Modules.
-    'aoe' => 'aoeUpsertForm',
-    'aoes' => 'aoeList',
-
     'ability' => 'abilityUpsertForm',
     'abilities' => 'abilityList',
 
@@ -93,12 +90,6 @@ function getRegistry($path = FALSE)
     'class' => 'classUpsertForm',
     'classes' => 'classList',
 
-    'damage-type' => 'damageTypeUpsertForm',
-    'damage-types' => 'damageTypeList',
-
-    'die' => 'dieUpsertForm',
-    'dice' => 'dieList',
-
     'item' => 'itemUpsertForm',
     'items' => 'itemList',
     'items/print' => 'itemPrintForm',
@@ -109,20 +100,8 @@ function getRegistry($path = FALSE)
     'player' => 'playerUpsertForm',
     'players' => 'playerList',
 
-    'properties' => 'propertyList',
-    'property' => 'propertyUpsertForm',
-
     'race' => 'raceUpsertForm',
     'races' => 'raceList',
-
-    'range' => 'rangeUpsertForm',
-    'ranges' => 'rangeList',
-
-    'rarities' => 'rarityList',
-    'rarity' => 'rarityUpsertForm',
-
-    'school' => 'schoolUpsertForm',
-    'schools' => 'schoolList',
 
     'script' => 'scriptUpsertForm',
     'scripts' => 'scriptList',
@@ -132,9 +111,6 @@ function getRegistry($path = FALSE)
 
     'source' => 'sourceUpsertForm',
     'sources' => 'sourceList',
-
-    'speed' => 'speedUpsertForm',
-    'speeds' => 'speedList',
 
     'spell' => 'spellUpsertForm',
     'spells' => 'spellList',
@@ -184,30 +160,18 @@ function menu()
 
   // Items.
   $output .= a('Items', '/items');
-  $submenu = new ListTemplate('ul');
-  $submenu->addListItem(a('Damage Types', '/damage-types'));
-  $submenu->addListItem(a('Properties', '/properties'));
-  $submenu->addListItem(a('Rarities', '/rarities'));
-  $output .= $submenu;
 
   // Monsters.
   $output .= a('Monsters', '/monsters');
 
   // Spells.
   $output .= a('Spells', '/spells');
-  $submenu = new ListTemplate('ul');
-  $submenu->addListItem(a('AOEs', '/aoes'));
-  $submenu->addListItem(a('Ranges', '/ranges'));
-  $submenu->addListItem(a('Schools', '/schools'));
-  $submenu->addListItem(a('Speeds', '/speeds'));
-  $output .= $submenu;
 
   // Other.
   $output .= a('Other', '/players');
   $submenu = new ListTemplate('ul');
   $submenu->addListItem(a('Sources', '/sources'));
   $submenu->addListItem(a('Players', '/players'));
-  $submenu->addListItem(a('Dice', '/dice'));
   $output .= $submenu;
 
   // Users.

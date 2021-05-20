@@ -44,6 +44,10 @@ function installSource()
       'name' => 'Xanathar\'s Guide to Everything',
     ),
     array(
+      'code' => 'TCE',
+      'name' => 'Tasha\'s Cauldron of Everything',
+    ),
+    array(
       'code' => 'HB',
       'name' => 'Homebrew',
     ),

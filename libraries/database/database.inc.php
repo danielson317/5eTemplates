@@ -391,11 +391,11 @@ class CreateQuery extends Query
   const TYPE_CURRENCY = 5;
   const TYPE_DECIMAL = 6;
 
-  // Flags:
-  // A = Auto Increment
-  // P = Primary Key
-  // N = Not Null
-  // U = Unique
+  const FLAG_AUTOINCREMENT = 'A';
+  const FLAG_PRIMARY_KEY = 'P';
+  const FLAG_NOT_NULL = 'N';
+  const FLAG_UNIQUE = 'U';
+
   function addField($name, $type = CreateQuery::TYPE_INTEGER, $length = 0, $flags = array(), $default = FALSE)
   {
     assert(is_int($length) || strtolower($length) === 'max', 'Length must be an integer or "max"');

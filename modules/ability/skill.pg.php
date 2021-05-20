@@ -13,7 +13,7 @@ function skillList()
   $template = new ListPageTemplate('Skills');
 
   // Operations.
-  $template->addOperation(a('New Skill', 'skill', $attr));
+  $template->addOperation(a('New Skill', 'skill'));
 
   if ($page > 1)
   {

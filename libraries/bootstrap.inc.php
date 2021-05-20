@@ -1,4 +1,5 @@
 <?php
+
 DEFINE('ROOT_PATH', __DIR__ . '/..');
 
 // Include the platform file.
@@ -55,16 +56,14 @@ include ROOT_PATH . '/libraries/user/user.pg.php';
  * Modules.
  ****************/
 
-include ROOT_PATH . '/modules/aoe/aoe.db.php';
-include ROOT_PATH . '/modules/aoe/aoe.pg.php';
-
 include ROOT_PATH . '/modules/ability/ability.db.php';
 include ROOT_PATH . '/modules/ability/ability.pg.php';
+include ROOT_PATH . '/modules/ability/skill.db.php';
+include ROOT_PATH . '/modules/ability/skill.pg.php';
 
 include ROOT_PATH . '/modules/background/background.db.php';
 include ROOT_PATH . '/modules/background/background.pg.php';
-
-include ROOT_PATH . '/modules/background_characteristic/background_characteristic.db.php';
+include ROOT_PATH . '/modules/background/background_characteristic.db.php';
 
 include ROOT_PATH . '/modules/character/character.db.php';
 include ROOT_PATH . '/modules/character/character.inc.php';
@@ -74,12 +73,8 @@ include ROOT_PATH . '/modules/character/character_wizard.pg.php';
 include ROOT_PATH . '/modules/class/class.db.php';
 include ROOT_PATH . '/modules/class/class.inc.php';
 include ROOT_PATH . '/modules/class/class.pg.php';
-
-include ROOT_PATH . '/modules/damage_type/damage_type.db.php';
-include ROOT_PATH . '/modules/damage_type/damage_type.pg.php';
-
-include ROOT_PATH . '/modules/die/die.db.php';
-include ROOT_PATH . '/modules/die/die.pg.php';
+include ROOT_PATH . '/modules/class/subclass.db.php';
+include ROOT_PATH . '/modules/class/subclass.pg.php';
 
 include ROOT_PATH . '/modules/item/item.db.php';
 include ROOT_PATH . '/modules/item/item.inc.php';
@@ -87,40 +82,20 @@ include ROOT_PATH . '/modules/item/item.pg.php';
 
 include ROOT_PATH . '/modules/language/language.db.php';
 include ROOT_PATH . '/modules/language/language.pg.php';
+include ROOT_PATH . '/modules/language/script.db.php';
+include ROOT_PATH . '/modules/language/script.pg.php';
 
 include ROOT_PATH . '/modules/player/player.db.php';
 include ROOT_PATH . '/modules/player/player.pg.php';
 
 include ROOT_PATH . '/modules/race/race.db.php';
 include ROOT_PATH . '/modules/race/race.pg.php';
-
-include ROOT_PATH . '/modules/range/range.db.php';
-include ROOT_PATH . '/modules/range/range.pg.php';
-
-include ROOT_PATH . '/modules/rarity/rarity.db.php';
-include ROOT_PATH . '/modules/rarity/rarity.pg.php';
-
-include ROOT_PATH . '/modules/school/school.db.php';
-include ROOT_PATH . '/modules/school/school.pg.php';
-
-include ROOT_PATH . '/modules/script/script.db.php';
-include ROOT_PATH . '/modules/script/script.pg.php';
-
-include ROOT_PATH . '/modules/skill/skill.db.php';
-include ROOT_PATH . '/modules/skill/skill.pg.php';
+include ROOT_PATH . '/modules/race/subrace.db.php';
+include ROOT_PATH . '/modules/race/subrace.pg.php';
 
 include ROOT_PATH . '/modules/source/source.db.php';
 include ROOT_PATH . '/modules/source/source.pg.php';
 
-include ROOT_PATH . '/modules/speed/speed.db.php';
-include ROOT_PATH . '/modules/speed/speed.pg.php';
-
 include ROOT_PATH . '/modules/spell/spell.inc.php';
 include ROOT_PATH . '/modules/spell/spell.db.php';
 include ROOT_PATH . '/modules/spell/spell.pg.php';
-
-include ROOT_PATH . '/modules/subclass/subclass.db.php';
-include ROOT_PATH . '/modules/subclass/subclass.pg.php';
-
-include ROOT_PATH . '/modules/subrace/subrace.db.php';
-include ROOT_PATH . '/modules/subrace/subrace.pg.php';

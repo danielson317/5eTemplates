@@ -9,43 +9,40 @@ if (!file_exists(DB_PATH))
   {
     die(DB_PATH . ' is not writable. Unable to perform install.');
   }
+
   // Create the database and it's tables.
   $db = new SQLite(DB_PATH);
+
+  // Interface tables.
   installUser();
   installSession();
 
+  // Dependencies.
   installSource();
 
-//  installArmor();
-//  installArmorType();
-  installAoe();
   installAbility();
+  installSkill(); // Depends on ability.
+
   installBackground(); // Depends on Source.
   installBackgroundCharacteristics(); // Depends on Source, Background.
+
   installCharacter();
+
   installClass(); // Depends on ability, Source
-  installDamageType();
-  installDie();
-//  installItemType();
-  installRarity();
-  installItem(); // Depends on Source, Rarity, Item Type.
-  
+  installSubclass(); // Depends on Class, Source
+
+
   installScript(); // Depends on Source.
   installLanguage(); // Depends on Script, Source
-//  installMonster();
-  installPlayer();
+
   installRace(); // Depends on Source
-  installRange();
-  installSchool();
-  installSkill(); // Depends on ability.
-  installSpeed();
-  installSpell();
-  installSubclass(); // Depends on Class, Source
   installSubrace(); // Depends on Race, Source
-//  installTool();
-//  installToolType();
-//  installWeapon();
-//  installWeaponType();
+
+  installPlayer();
+
+  installSpell();
+  installItem(); // Depends on Source.
+//  installMonster(); // Depends on Source.
 }
 
 redirect('/');

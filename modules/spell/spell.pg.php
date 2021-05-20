@@ -119,7 +119,7 @@ function spellUpsertForm()
   $form->addField($field);
 
   // Speed.
-  $options = getSpeedCastingTimeList();
+  $options = getSpeedList();
   $field = new FieldSelect('speed', 'Casting Time', $options);
   $field->setValue('6');
   $form->addField($field);
@@ -151,7 +151,7 @@ function spellUpsertForm()
   $form->addField($field);
 
   // Duration
-  $options = getSpeedDurationList();
+  $options = getDurationList();
   $field = new FieldSelect('duration', 'Duration', $options);
   $field->setValue(1);
   $form->addField($field);
@@ -330,8 +330,8 @@ function spellPrintSubmit()
   unset($spells['print']);
   $schools = getSchoolList();
   $levels = getLevelList();
-  $casting_times = getSpeedCastingTimeList();
-  $duration = getSpeedDurationList();
+  $casting_times = getSpeedList();
+  $duration = getDurationList();
   $ranges = getRangeList();
   foreach($spells as $spell_id => $qty)
   {
