@@ -298,6 +298,7 @@ class FieldNumber extends Field
 class FieldSelect extends Field
 {
   protected $options;
+  protected $multiple = FALSE;
 
   function __construct($id, $name = '', $options = array())
   {
@@ -328,6 +329,10 @@ class FieldSelect extends Field
     // Select.
     $attr = $this->attr;
     $attr['name'] = $this->id;
+    if ($this->multiple)
+    {
+      $attr['multiple'] = 'multiple';
+    }
     $output .= htmlWrap('select', $select_options, $attr);
 
     // Wrapper.
@@ -339,6 +344,12 @@ class FieldSelect extends Field
   function setOptions($options)
   {
     $this->options = $options;
+    return $this;
+  }
+
+  function setMultiple($multiple = TRUE)
+  {
+    $this->multiple = $multiple;
     return $this;
   }
 }

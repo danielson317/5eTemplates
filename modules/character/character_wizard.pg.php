@@ -260,7 +260,6 @@ function characterWizardProficiencyForm()
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
-  $template->setUpper(characterDisplay($character_id));
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
@@ -279,7 +278,8 @@ function characterWizardProficiencyForm()
   $form->addField($field);
 
   $options = array('<none>' => '--Select One--') + getLanguageList();
-  $field = new FieldSelect('language_id', 'Add Language', $options);
+  $field = new FieldSelect('language_id', '<none>', $options);
+  $field->setMultiple();
   $form->addField($field);
 
   $field = new FieldMarkup('item_list', 'Items');
@@ -288,7 +288,7 @@ function characterWizardProficiencyForm()
   $form->addField($field);
 
   $template->setForm($form);
-  return $template;
+  return $template . characterDisplay($character_id);
 }
 
 function characterWizardProficiencySubmit()

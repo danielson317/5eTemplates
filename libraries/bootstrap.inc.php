@@ -68,7 +68,6 @@ include ROOT_PATH . '/modules/background/background_characteristic.db.php';
 
 include ROOT_PATH . '/modules/character/character.db.php';
 include ROOT_PATH . '/modules/character/character.inc.php';
-include ROOT_PATH . '/modules/character/character.lib.php';
 include ROOT_PATH . '/modules/character/character.pg.php';
 include ROOT_PATH . '/modules/character/character_wizard.pg.php';
 
