@@ -196,7 +196,6 @@ function characterWizardSkillForm()
   $template = new FormPageTemplate();
   $template->addCssFilePath('/themes/default/css/character.css');
   $template->addJsFilePath('/modules/character/character.js');
-  $template->setUpper(characterDisplay($character_id));
 
   // Submit.
   if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
@@ -205,15 +204,16 @@ function characterWizardSkillForm()
   }
 
   $form = new Form('character_wizard_skills_form');
-  $form->setTitle('Choose your skills.');
+  $form->setTitle('Which skills have proficiency?');
 
   $field = new FieldHidden('character_id', $character_id);
   $form->addField($field);
 
   $skills = getSkillList();
+  $options = getProficiencyMultiplierList();
   foreach($skills as $id => $skill)
   {
-    $field = new FieldSelect($id, $skill);
+    $field = new FieldRadio($id, $skill, $options);
     $field->setValue(0);
     $form->addField($field);
   }
@@ -222,7 +222,7 @@ function characterWizardSkillForm()
   $form->addField($field);
 
   $template->setForm($form);
-  return $template;
+  return $template . characterDisplay($character_id);
 }
 
 function characterWizardSkillSubmit()

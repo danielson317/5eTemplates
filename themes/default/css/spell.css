@@ -8,7 +8,7 @@
 /* line 12, ../scss/spell.scss */
 .print-card.spell .school {
   text-align: center;
-  font-size: 10px;
+  font-size: 8px;
   background-color: #D4B26A;
   padding-bottom: 5px;
 }
@@ -34,7 +34,7 @@
 }
 /* line 42, ../scss/spell.scss */
 .print-card.spell .components {
-  font-size: 10px;
+  font-size: 8px;
   background-color: #D4B26A;
   padding: 2px 5px 2px 5px;
 }
@@ -45,7 +45,7 @@
 }
 /* line 54, ../scss/spell.scss */
 .print-card.spell .alternate-label {
-  font-size: 10px;
+  font-size: 8px;
   padding: 2px 5px 2px 5px;
   text-align: center;
   background-color: #D4B26A;

@@ -54,3 +54,18 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+/* line 78, ../scss/character.scss */
+#character_wizard_skills_form div.radio .heading {
+  display: block;
+  font-weight: 700;
+}
+/* line 83, ../scss/character.scss */
+#character_wizard_skills_form div.radio .radio-option {
+  display: inline-block;
+  margin-right: 5px;
+}
+/* line 89, ../scss/character.scss */
+#character_wizard_skills_form div.radio .radio-option input {
+  clear: none;
+}

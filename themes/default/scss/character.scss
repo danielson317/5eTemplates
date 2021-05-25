@@ -70,3 +70,26 @@
     }
   }
 }
+
+#character_wizard_skills_form
+{
+  div.radio
+  {
+    .heading
+    {
+      display: block;
+      font-weight: 700;
+    }
+    .radio-option
+    {
+      display: inline-block;
+      //width: 400px;
+      margin-right: 5px;
+
+      input
+      {
+        clear: none;
+      }
+    }
+  }
+}

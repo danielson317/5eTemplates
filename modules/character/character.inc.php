@@ -238,3 +238,8 @@ function getGenderList($id = FALSE)
 
   return getListItem($list, $id);
 }
+
+function getCharacterProficiencyBonus($level)
+{
+  return floor((7 + $level) / 4);
+}

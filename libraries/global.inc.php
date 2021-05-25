@@ -759,3 +759,13 @@ function getAlignmentList()
     'e' => 'Evil',
   );
 }
+
+function getProficiencyMultiplierList()
+{
+  return array(
+    '0' => 'None',
+    '0.5' => 'Half',
+    '1' => 'Proficient',
+    '2' => 'Double Proficient',
+  );
+}

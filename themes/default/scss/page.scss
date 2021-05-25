@@ -1,8 +1,98 @@
 @import "_constants.scss";
 
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/thin.ttf');
+  font-weight: 100;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/thin-italic.ttf');
+  font-weight: 100;
+  font-style: italic;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/light.ttf');
+  font-weight: 300;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/light-italic.ttf');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/regular.ttf');
+  font-weight: 400;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/regular-italic.ttf');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/medium.ttf');
+  font-weight: 500;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/medium-italic.ttf');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/semibold.ttf');
+  font-weight: 600;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/semibold-italic.ttf');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/bold.ttf');
+  font-weight: 700;
+}
+
+@font-face
+{
+  font-family: custom;
+  src: url('../fonts/roboto-mono/bold-italic.ttf');
+  font-weight: 700;
+  font-style: italic;
+}
+
 *
 {
-  font-family: arial, helvetica, sans-serif;
+  font-family: custom, monospace;
 }
 
 body

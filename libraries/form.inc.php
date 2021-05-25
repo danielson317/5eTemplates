@@ -343,6 +343,50 @@ class FieldSelect extends Field
   }
 }
 
+class FieldRadio extends FieldSelect
+{
+
+  function __toString()
+  {
+    $output = '';
+
+    // Options.
+    foreach($this->options as $id => $label)
+    {
+      $option = '';
+      // Input.
+      $attr = array(
+        'type' => 'radio',
+        'name' => $this->id,
+        'value' => $id,
+      );
+      if ($id == $this->value)
+      {
+        $attr['checked'] = 'checked';
+      }
+      $option .= htmlSolo('input', $attr);
+
+      // Label.
+      $attr = array(
+        'for' => $id,
+      );
+      $option .= htmlWrap('label', $label, $attr);
+
+      // Option wrapper.
+      $attr = array('class' => array('radio-option'));
+      $output .= htmlWrap('div', $option, $attr);
+    }
+
+    // Heading.
+    $heading = htmlWrap('span', $this->label, array('class' => array('heading')));
+
+    // Wrapper.
+    $output = htmlWrap('div', $heading . $output, array('class' => array('field', 'radio', $this->id)));
+    return $output;
+  }
+
+}
+
 class FieldAutocomplete extends Field
 {
   protected $url;
