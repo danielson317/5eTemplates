@@ -123,8 +123,18 @@ function characterUpsertForm()
   $form->addGroup($group);
 
   // Name.
-  $field = new FieldText('name', 'Name');
+  $field = new FieldText('name', 'Character Name');
   $field->setGroup($group)->setRequired();
+  $form->addField($field);
+
+  // Submit
+  $value = 'Create';
+  if ($character_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $field->setGroup($group);
   $form->addField($field);
 
   /*****************
@@ -134,6 +144,7 @@ function characterUpsertForm()
   $form->addGroup($group);
 
   // Classes
+  $total_level = 0;
   $classes = getClassList();
   $subclasses = getSubclassList();
   if ($character_id)
@@ -156,6 +167,7 @@ function characterUpsertForm()
       $row[] = ($character_class['subclass_id'] > 0) ? $subclasses[$character_class['subclass_id']] : '';
       $row[] = $character_class['level'];
       $table->addRow($row);
+      $total_level += $character_class['level'];
     }
 
     $attr = array(
@@ -165,6 +177,12 @@ function characterUpsertForm()
     $link = a('Add New Class', '/character/class', $attr);
 
     $field = new FieldMarkup('classes', 'Classes', $table . $link);
+    $field->setGroup($group);
+    $form->addField($field);
+  }
+  else
+  {
+    $field = new FieldSelect('class_id', 'Class', $classes);
     $field->setGroup($group);
     $form->addField($field);
   }
@@ -189,25 +207,10 @@ function characterUpsertForm()
   $form->addGroup($group);
 
   // Race.
-  $options = array(0 => '--Select One--') + getRaceList();
-  $field = new FieldSelect('race_id', 'Race', $options);
+  $options = array(0 => '--Select One--') + getRaceCompleteList();
+  $field = new FieldSelect('subrace_id', 'Race', $options);
   $field->setGroup($group);
   $field->setRequired();
-  $form->addField($field);
-
-  // Subrace.
-  if ($character_id)
-  {
-    $options = array(0 => '--Select One--') + getSubraceList($character['race_id']);
-    $field = new FieldSelect('subrace_id', 'Subrace', $options);
-    $field->setGroup($group);
-    $field->setRequired();
-    $form->addField($field);
-  }
-
-  // XP.
-  $field = new FieldNumber('xp', 'Experience Points');
-  $field->setGroup($group);
   $form->addField($field);
 
   // Alignment.
@@ -216,8 +219,13 @@ function characterUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  // XP.
+  $field = new FieldNumber('xp', 'Experience Points');
+  $field->setGroup($group);
+  $form->addField($field);
+
   /********************
-   * abilities Group
+   * Abilities Group
    ********************/
   $group = 'abilities_group';
   $form->addGroup($group);
@@ -225,7 +233,7 @@ function characterUpsertForm()
   $abilities = getAbilityList();
   $character_ability_map = getCharacterabilityList($character_id);
   $table = new TableTemplate();
-  $table->setHeader(array('Attr', 'Score', 'Mod', 'Prof', 'ST'));
+  $table->setHeader(array('Ability', 'Score', 'Mod', 'Prof', 'ST'));
   foreach($character_ability_map as $character_ability)
   {
     $row = array();
@@ -239,8 +247,8 @@ function characterUpsertForm()
     $row[] = a($abilities[$character_ability['ability_id']], '/ajax/character/ability', $attr);
     $row[] = $character_ability['score'];
     $row[] = getAbilityModifier($character_ability['score']);
-    $row[] = $character_ability['proficiency'];
-    $row[] = getSkillModifier($character_ability['score'], $proficiency, $character_ability['proficiency']);
+    $row[] = $character_ability['proficiency_multiplier'];
+    $row[] = getSkillModifier($character_ability['score'], $total_level, $character_ability['proficiency_multiplier']);
     $table->addRow($row);
   }
 
@@ -263,6 +271,8 @@ function characterUpsertForm()
   $table->setHeader(array('Skill', 'Prof', 'Mod'));
   foreach($character_skill_map as $character_skill)
   {
+    $skill = getSkill($character_skill['skill_id']);
+    $character_ability = getCharacterAbility($character_id, $skill['ability_id']);
     $row = array();
     $attr = array(
       'query' => array(
@@ -272,8 +282,8 @@ function characterUpsertForm()
       'class' => array('skill'),
     );
     $row[] = a($skills[$character_skill['skill_id']], '/ajax/character/skill', $attr);
-    $row[] = $character_skill['proficiency'];
-    $row[] = $character_skill['modifier'];
+    $row[] = $character_skill['proficiency_multiplier'];
+    $row[] = getSkillModifier($character_ability['score'], $total_level, $character_skill['proficiency_multiplier']);
     $table->addRow($row);
   }
 
@@ -293,68 +303,68 @@ function characterUpsertForm()
    * Proficiencies.
    *******************/
 
-  $proficiency_table = getCharacterProficiencyTable($character_id);
-
-  // Field wrapper.
-  $field = new FieldMarkup('proficiencies', 'Proficiencies', $proficiency_table->__toString());
-  $field->setGroup($group);
-  $form->addField($field);
-
-  /*****************
-   * Stats Group
-   *****************/
-  $group = 'stats';
-  $form->addGroup($group);
-
-  // AC.
-  $field = new FieldNumber('ac', 'Armor Class');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Max HP.
-  $field = new FieldNumber('hp', 'Max HP');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Proficiency Bonus.
-  $field = new FieldNumber('pb', 'Proficiency Bonus');
-  $field->setValue(2);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Speed.
-  $field = new FieldNumber('speed', 'Speed');
-  $field->setValue(30);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Hit Dice
-  $dice = getDieList();
-  $character_dice = getCharacterDieList($character_id);
-  $list = array();
-  foreach($character_dice as $character_die)
-  {
-    $attr = array(
-      'query' => array(
-        'character_id' => $character_id,
-        'die_id' => $character_die['skill_id']
-      ),
-      'class' => array('skill'),
-    );
-    $list[] = a($skills[$dice['die_id']], '/ajax/character/hit-die', $attr);
-  }
-
-  $attr = array(
-    'query' => array(
-      'character_id' => $character_id
-    ),
-    'class' => array('add-skill'),
-  );
-  $link = a('Add Hit Die', '/ajax/character/hit-die', $attr);
-
-  $field = new FieldMarkup('hit_dice', 'Hit Dice', implode(',', $list));
-  $field->setGroup($group);
-  $form->addField($field);
+//  $proficiency_table = getCharacterProficiencyTable($character_id);
+//
+//  // Field wrapper.
+//  $field = new FieldMarkup('proficiencies', 'Proficiencies', $proficiency_table->__toString());
+//  $field->setGroup($group);
+//  $form->addField($field);
+//
+//  /*****************
+//   * Stats Group
+//   *****************/
+//  $group = 'stats';
+//  $form->addGroup($group);
+//
+//  // AC.
+//  $field = new FieldNumber('ac', 'Armor Class');
+//  $field->setGroup($group);
+//  $form->addField($field);
+//
+//  // Max HP.
+//  $field = new FieldNumber('hp', 'Max HP');
+//  $field->setGroup($group);
+//  $form->addField($field);
+//
+//  // Proficiency Bonus.
+//  $field = new FieldNumber('pb', 'Proficiency Bonus');
+//  $field->setValue(2);
+//  $field->setGroup($group);
+//  $form->addField($field);
+//
+//  // Speed.
+//  $field = new FieldNumber('speed', 'Speed');
+//  $field->setValue(30);
+//  $field->setGroup($group);
+//  $form->addField($field);
+//
+//  // Hit Dice
+//  $dice = getDieList();
+//  $character_dice = getCharacterDieList($character_id);
+//  $list = array();
+//  foreach($character_dice as $character_die)
+//  {
+//    $attr = array(
+//      'query' => array(
+//        'character_id' => $character_id,
+//        'die_id' => $character_die['skill_id']
+//      ),
+//      'class' => array('skill'),
+//    );
+//    $list[] = a($skills[$dice['die_id']], '/ajax/character/hit-die', $attr);
+//  }
+//
+//  $attr = array(
+//    'query' => array(
+//      'character_id' => $character_id
+//    ),
+//    'class' => array('add-skill'),
+//  );
+//  $link = a('Add Hit Die', '/ajax/character/hit-die', $attr);
+//
+//  $field = new FieldMarkup('hit_dice', 'Hit Dice', implode(',', $list));
+//  $field->setGroup($group);
+//  $form->addField($field);
 
   /*********************
    * Personality Group
@@ -391,23 +401,6 @@ function characterUpsertForm()
   $field->setAttr('maxlength', '1000')->setRows(30)->setCols(30);
   $field->setGroup($group);
   $form->addField($field);
-
-  /*********************
-   * Operations Group
-   *********************/
-  $group = 'operations';
-  $form->addGroup($group);
-
-  // Submit
-  $value = 'Create';
-  if ($character_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $field->setGroup($group);
-  $form->addField($field);
-
   $template->setForm($form);
 
   return $template;

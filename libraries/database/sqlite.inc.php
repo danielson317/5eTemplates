@@ -308,7 +308,31 @@ class SQLite extends Database
 
   protected function _buildCondition(Query $query, QueryCondition $condition)
   {
-    $sql = $this->fieldTable($condition->getField(), $condition->getTable());
+    $sql = '';
+    $all_fields = $condition->getFields();
+    $field_parts = array();
+    foreach ($all_fields as $field)
+    {
+      switch ($field['data_type'])
+      {
+        case 'literal':
+        {
+          $field_parts[] = $this->literal($field['field']);
+          break;
+        }
+        case 'bypass':
+        {
+          $field_parts[] = $field['field'];
+          break;
+        }
+        default:
+        {
+          $field_parts[] = $this->fieldTable($field['field'], $field['table_alias']);
+        }
+      }
+    }
+    $sql .= implode(' + ', $field_parts);
+
     switch($condition->getComparison())
     {
       case QueryCondition::COMPARE_EQUAL:
@@ -360,11 +384,12 @@ class SQLite extends Database
 
     if ($condition->isValueField())
     {
-      $sql .= ' ' . $condition->getValue();
+      $sql .= self::fieldTable($condition->getValueField(), $condition->getValueTable());
     }
     else
     {
-      $placeholder = $placeholder_base = self::PLACEHOLDER_TOKEN . $condition->getTable() . '_' . $condition->getField();
+      $first_field = reset($all_fields);
+      $placeholder_base = $placeholder = self::PLACEHOLDER_TOKEN . $query->getArgumentPrefix() . $this->sanitizePlacholderName($first_field['table_alias'] . '_' . $first_field['field']);
 
       $values = $query->getValues();
       $count = 1;
@@ -430,8 +455,23 @@ class SQLite extends Database
   protected function _buildOrder(QueryOrder $order)
   {
     $sql = '';
-    $sql .= $this->fieldTable($order->getField(), $order->getTable());
+    switch ($order->getSortFunction())
+    {
+      case 'max':
+        $sql .= 'MAX(' . self::fieldTable($order->getField(), $order->getTableAlias()) . ')';
+        break;
+      case 'pad-50':
+        $sql .= 'RIGHT(' . $this->concatenate($this->literal(str_repeat(' ', 50)), self::fieldTable($order->getField(), $order->getTableAlias())) . ', 50)';
+        break;
+      case 'null-sort':
+        $sql .= 'CASE WHEN ' . self::fieldTable($order->getField(), $order->getTableAlias()) . ' IS NULL THEN 1 ELSE 0 END';
+        break;
+      default:
+        $sql = self::fieldTable($order->getField(), $order->getTableAlias());
+    }
+
     $sql .= ' ';
+
     if ($order->getDirection() == QueryOrder::DIRECTION_ASC)
     {
       $sql .= 'ASC';
@@ -449,7 +489,7 @@ class SQLite extends Database
     return $sql;
   }
 
-  function concatenate()
+  function concatenate($args)
   {
     $string = '';
     $args = func_get_args();
@@ -499,15 +539,104 @@ class SQLite extends Database
 
   function debugPrint($sql, $debug, $values)
   {
-    $output = sql_formater($sql, array());
     // Die only works on a debug platform.
-    if ($debug === 'die')
+    if ($debug === 'return')
     {
-      die('<pre>' . $output . '</pre>');
+      return SqlFormatter::format($sql, FALSE, $values);
+    }
+    if ($debug === 'die' && DEBUG)
+    {
+      $debug_query = '';
+      $debug_query .= htmlWrap('h1', 'Values');
+      $debug_query .= htmlWrap('pre', print_r($values, TRUE));
+
+      $debug_query .= htmlWrap('h1', 'Query');
+      $debug_query .= SqlFormatter::format($sql, TRUE);
+
+      $debug_query .= htmlWrap('h1', 'Low Confidence Build');
+      $debug_query .= SqlFormatter::format($sql, TRUE, $values);
+      die($debug_query);
     }
     else
     {
-      error_log(str_replace("\n", '<br>', $output));
+      $new_line = "\n";
+      $debug_query = '';
+      $debug_query .= $new_line . $new_line . '###############################';
+      $debug_query .= $new_line . '# Values';
+      $debug_query .= $new_line . '###############################';
+      $debug_query .= $new_line . print_r($values, TRUE);
+
+      $debug_query .= $new_line . $new_line . '###############################';
+      $debug_query .= $new_line . '# Query';
+      $debug_query .= $new_line . '###############################';
+      $debug_query .= $new_line . SqlFormatter::format($sql, FALSE);
+
+      $debug_query .= $new_line . $new_line . '###############################';
+      $debug_query .= $new_line . '# Low Confidence Build';
+      $debug_query .= $new_line . '###############################';
+      $debug_query .= $new_line . SqlFormatter::format($sql, FALSE, $values);
+      error_log($debug_query);
     }
+  }
+
+  function selectUnion($select_queries, $limit = FALSE, $order = FALSE)
+  {
+    // TODO: Implement selectUnion() method.
+  }
+
+  function alterAdd(AlterAddQuery $query)
+  {
+    // TODO: Implement alterAdd() method.
+  }
+
+  function alterAlter(AlterAlterQuery $query)
+  {
+    // TODO: Implement alterAlter() method.
+  }
+
+  function alterRename(AlterRenameQuery $query)
+  {
+    // TODO: Implement alterRename() method.
+  }
+
+  function addIndex(AddIndexQuery $query)
+  {
+    // TODO: Implement addIndex() method.
+  }
+
+  function drop(DropQuery $query)
+  {
+    // TODO: Implement drop() method.
+  }
+
+  function dbExists($name)
+  {
+    // TODO: Implement dbExists() method.
+  }
+
+  function truncate(TruncateQuery $query)
+  {
+    // TODO: Implement truncate() method.
+  }
+
+  function backupDatabase($db_name)
+  {
+    // TODO: Implement backupDatabase() method.
+  }
+
+  function restoreDatabase($file_path, $database_name)
+  {
+    // TODO: Implement restoreDatabase() method.
+  }
+
+  function coalesce($args)
+  {
+    // TODO: Implement coalesce() method.
+  }
+
+  function sanitizePlacholderName($string)
+  {
+    $new_name = strtolower($string);
+    return preg_replace("/[^a-z_0-9]/i", "_", $new_name);
   }
 }

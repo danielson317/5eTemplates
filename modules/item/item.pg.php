@@ -3,6 +3,7 @@
 
 function itemList()
 {
+//  installItem();
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
@@ -28,11 +29,6 @@ function itemList()
     $template->addOperation(a('Next Page', '/item', $attr));
   }
 
-  // List
-  $table = new TableTemplate();
-  $table->setAttr('class', array('item-list'));
-  $table->setHeader(array('Name', 'Type', 'Value', 'Weight', 'Description'));
-
   $output = '';
   foreach($items as $item)
   {
@@ -40,9 +36,9 @@ function itemList()
       'query' => array('id' => $item['id']),
     );
     $group = a($item['name'], '/item', $attr) . htmlSolo('br');
-    $group .= lineItem('Category', itemCategoryHierarchy($item['parent_id']));
-    $group .= lineItem('value', $item['value']);
-    $group .= lineItem('weight', $item['weight']);
+    $group .= lineItem('Category', ItemCategory::getList($item['category_id']));
+    $group .= lineItem('Value', itemFormatCost($item['value']));
+    $group .= lineItem('Weight', itemWeightFormat($item['weight']));
     $group .= $item['description'];
     $output .= htmlWrap('div', $group, array('class' => array('item')));
   }
@@ -92,35 +88,24 @@ function itemUpsertForm()
   $group = 'base_group';
   $form->addGroup($group);
 
-  // Heading.
-  $field = new FieldMarkup('base_heading');
-  $field->setValue(htmlWrap('h3', 'Base'));
-  $field->setGroup($group);
-  $form->addField($field);
-
   // Name.
   $field = new FieldText('name', 'Name');
   $field->setGroup($group);
   $form->addField($field);
 
   // value.
-  $field = new fieldtext('value', 'value (cp)');
+  $field = new fieldtext('value', 'Cost (cp)');
   $field->setgroup($group);
   $form->addfield($field);
 
   // weight.
-  $field = new fieldtext('weight', 'weight (lbs)');
+  $field = new fieldtext('weight', 'Weight (lbs)');
   $field->setgroup($group);
   $form->addfield($field);
  
   // Category.
-  $field = new FieldCheckbox('is_category', 'Category');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  // Parent.
-  $options = array(0 => '--none--') + itemCategoryList();
-  $field = new FieldSelect('parent_id', 'Parent', $options);  
+  $options = array(0 => '--none--') + ItemCategory::getHierarchyList();
+  $field = new FieldSelect('category_id', 'Category', $options);
   $field->setGroup($group);
   $form->addField($field);
 
@@ -154,37 +139,21 @@ function itemUpsertForm()
    * Magic Group
    ****************/
   $item_magic = FALSE; 
-  if ($item_id)
-  {
-    $item_magic = getItemMagic($item_id);
-    $form->addValues($item_magic);
-  }
+//  if ($item_id)
+//  {
+//    $item_magic = getItemMagic($item_id);
+//    $form->addValues($item_magic);
+//  }
   $group = 'magic_group';
   $form->addGroup($group);
 
+  // Heading.
+  $field = new FieldMarkup('magic_heading');
+  $field->setValue(htmlWrap('h3', 'Magic'));
+  $field->setGroup($group);
+  $form->addField($field);
+
   $field = new FieldCheckbox('is_magic', 'Magical');
-  $field->setGroup($group)->setValue(isset($item_magic));
-  $form->addField($field);
-
-  $options = getRarityList();
-  $field = new FieldOption('rarity_id', 'Rarity', $options);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  $field = new FieldNumber('bonus', 'Damage/AC/Stat Bonus');
-  $field->setGroup($group);
-  $form->addField($field);
-  
-  $options = getAbilityList();
-  $field = new FieldOption('bonus_ability_id', 'Bonus Attribute', $options);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  $field = new FieldCheckbox('attunement', 'Requires Attunement');
-  $field->setGroup($group);
-  $form->addField($field);
-
-  $field = new FieldTextarea('attunement_requirements', 'Attunement Requirements');
   $field->setGroup($group);
   $form->addField($field);
 
@@ -194,12 +163,24 @@ function itemUpsertForm()
   $group = 'weapon_group';
   $form->addGroup($group);
 
+  // Heading.
+  $field = new FieldMarkup('weapon_heading');
+  $field->setValue(htmlWrap('h3', 'Weapon'));
+  $field->setGroup($group);
+  $form->addField($field);
+
   /****************
    * Armor Group
    ****************/
   $group = 'armor_group';
   $form->addGroup($group);
- 
+
+  // Heading.
+  $field = new FieldMarkup('armor_heading');
+  $field->setValue(htmlWrap('h3', 'Armor'));
+  $field->setGroup($group);
+  $form->addField($field);
+
   /***********
    * Handlers
    ***********/

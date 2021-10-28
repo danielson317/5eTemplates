@@ -16,10 +16,13 @@
 {
   .field_group
   {
-    &.header_name
+    width: auto;
+    .field.submit
     {
-      //height: 200px;
+      clear: none;
+      margin: 20px 0 0 10px;
     }
+
     &.header_upper
     {
       float: left;

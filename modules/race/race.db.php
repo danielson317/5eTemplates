@@ -90,6 +90,32 @@ function getRaceList()
 }
 
 /**
+ * @return array
+ */
+function getRaceCompleteList()
+{
+  GLOBAL $db;
+
+  $query = new SelectQuery('races');
+  $query->addField('id', 'id', 'subraces');
+  $query->addField('name', 'value', 'subraces');
+
+  $order = new QueryOrder('name', 'races');
+  $query->addOrder($order);
+  $order = new QueryOrder('name', 'subraces');
+  $query->addOrder($order);
+
+  // Join subraces.
+  $condition = new QueryCondition('id', 'races');
+  $condition->setValueField('race_id', 'subraces');
+  $table = new QueryTable('subraces', 'subraces', QueryTable::INNER_JOIN, $condition);
+  $query->addTable($table);
+//  $query->setDebug('die');
+
+  return $db->selectList($query);
+}
+
+/**
  * @param int $race_id
  *
  * @return array|false

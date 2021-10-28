@@ -44,6 +44,7 @@ include ROOT_PATH . '/libraries/database/database.inc.php';
 include ROOT_PATH . '/libraries/database/sqlite.inc.php';
 include ROOT_PATH . '/libraries/form.inc.php';
 include ROOT_PATH . '/libraries/template.inc.php';
+include ROOT_PATH . '/libraries/external/sqlformater.inc.php';
 
 include ROOT_PATH . '/libraries/session/session.inc.php';
 include ROOT_PATH . '/libraries/session/session.db.php';

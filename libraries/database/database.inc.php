@@ -19,7 +19,7 @@ abstract class Database
    * @param SelectQuery $query
    * @return array
    */
-  function selectList(SelectQuery $query)
+  function selectList(SelectQuery $query, $id = FALSE)
   {
     $results = $this->select($query);
 
@@ -28,12 +28,12 @@ abstract class Database
     {
       $list[$result['id']] = $result['value'];
     }
-    return $list;
+    return getListItem($list, $id);
   }
 
   /**
    * @param SelectQuery $query
-   * @return array|false
+   * @return bool|FALSE
    */
   function selectObject(SelectQuery $query)
   {
@@ -47,17 +47,34 @@ abstract class Database
   }
 
   /**
+   * @param SelectQuery $query
+   * @param string      $field_alias
+   *
+   * @return bool|mixed
+   */
+  function selectField(SelectQuery $query, $field_alias, $default = FALSE)
+  {
+    $results = $this->select($query);
+    if (!$results)
+    {
+      return FALSE;
+    }
+    $result = array_shift($results);
+    return iis($result, $field_alias, $default);
+  }
+
+  /**
    * @param SelectQuery[] $select_queries - An array of inner select queries.
    * @param int|FALSE $limit
    * @param string|FALSE $order
    *
    * @return mixed
    */
-//  abstract function selectUnion($select_queries, $limit = FALSE, $order = FALSE);
+  abstract function selectUnion($select_queries, $limit = FALSE, $order = FALSE);
 
   /**
    * @param InsertQuery $query
-   * @return bool|int
+   * @return int|FALSE
    */
   abstract function insert(InsertQuery $query);
 
@@ -78,11 +95,15 @@ abstract class Database
 
   // Database structure.
   abstract function create(CreateQuery $query);
-//  abstract function alterAdd(AlterAddQuery $query);
-//  abstract function alterAlter(AlterAlterQuery $query);
-//  abstract function alterRename(AlterRenameQuery $query);
-//  abstract function addIndex(AddIndexQuery $query);
-//  abstract function drop(DropQuery $query);
+  abstract function alterAdd(AlterAddQuery $query);
+  abstract function alterAlter(AlterAlterQuery $query);
+  abstract function alterRename(AlterRenameQuery $query);
+  abstract function addIndex(AddIndexQuery $query);
+  abstract function drop(DropQuery $query);
+  abstract function dbExists($name);
+  abstract function truncate(TruncateQuery $query);
+  abstract function backupDatabase($db_name);
+  abstract function restoreDatabase($file_path, $database_name);
 
   // Helpers.
   abstract protected function _buildConditionGroup(Query $query, $group_name = 'default', $type = QueryConditionGroup::GROUP_AND);
@@ -92,12 +113,23 @@ abstract class Database
   abstract protected function _buildOrder(QueryOrder $order);
 
   // String manipulation.
-  abstract function concatenate();
+
+  /**
+   * @param string[] ...$args
+   * @return mixed
+   */
+  abstract function concatenate($args);
+  /**
+   * @param string[] ...$args
+   * @return mixed
+   */
+  abstract function coalesce($args);
   abstract function literal($string);
   abstract function likeEscape($string);
   abstract function structureEscape($string);
   abstract function fieldTable($field, $table_alias);
   abstract function dataTypeList($type);
+  abstract function sanitizePlacholderName($string);
 
   abstract function debugPrint($sql, $debug, $values);
 }
@@ -107,6 +139,34 @@ abstract class Database
  */
 abstract class Query
 {
+  CONST FIELD_FORMAT_DATETIME = 'date';
+  CONST FIELD_FORMAT_CURRENCY = 'currency';
+  CONST FIELD_FORMAT_DATE = 'date_only';
+  CONST FIELD_FORMAT_BYPASS = 'bypass';
+  CONST FIELD_FORMAT_LOWER = 'lower';
+  CONST FIELD_FORMAT_MAX = 'max';
+  CONST FIELD_FORMAT_TIME = 'time';
+  CONST FIELD_FORMAT_COUNT = 'count';
+  CONST FIELD_FORMAT_COUNTALL = 'countall';
+  CONST FIELD_FORMAT_SUM = 'sum';
+
+  public static function getFieldFormats($key = FALSE)
+  {
+    $list = array(
+      self::FIELD_FORMAT_DATETIME =>  'date',
+      self::FIELD_FORMAT_CURRENCY => 'currency',
+      self::FIELD_FORMAT_DATE => 'date_only',
+      self::FIELD_FORMAT_BYPASS => 'bypass',
+      self::FIELD_FORMAT_LOWER => 'lower',
+      self::FIELD_FORMAT_MAX => 'max',
+      self::FIELD_FORMAT_TIME => 'time',
+      self::FIELD_FORMAT_COUNT => 'count',
+      self::FIELD_FORMAT_COUNTALL => 'countall',
+      self::FIELD_FORMAT_SUM => 'sum',
+    );
+    return getListItem($list, $key);
+  }
+
   protected $tables = array();
   protected $fields = array();
   protected $conditions = array();
@@ -185,9 +245,9 @@ abstract class Query
     $this->conditions[] = $condition;
   }
 
-  function addConditionSimple($field_alias, $value, $comparison = QueryCondition::COMPARE_EQUAL)
+  function addConditionSimple($field, $value, $comparison = QueryCondition::COMPARE_EQUAL)
   {
-    $this->conditions[] = new QueryCondition($field_alias, key($this->getTables()), $comparison, $value);
+    $this->conditions[] = new QueryCondition($field, key($this->getTables()), $comparison, $value);
   }
 
   function addField($name, $alias = '', $table_alias = '')
@@ -217,9 +277,14 @@ abstract class Query
     $this->argument_prefix = $prefix;
   }
 
+  /**
+   * @param bool|string $debug
+   * @return Query
+   */
   function setDebug($debug = TRUE)
   {
     $this->debug = $debug;
+    return $this;
   }
 
   function getDebug()
@@ -237,6 +302,8 @@ class SelectQuery extends Query
   protected $page = FALSE;
   protected $page_size = FALSE;
   protected $group_by = array();
+  protected $distinct = FALSE;
+  protected $special_instruction = FALSE;
 
   /**
    * @return QueryOrder[]
@@ -257,9 +324,18 @@ class SelectQuery extends Query
   {
     return $this->page_size;
   }
+  function setDistinct($distinct = TRUE)
+  {
+    $this->distinct = $distinct;
+  }
+  function getDistinct()
+  {
+    return $this->distinct;
+  }
 
   function addField($name, $alias = '', $table_alias = '', $format = FALSE)
   {
+    assert(!$format || Query::getFieldFormats($format), 'Unknown format passed to add field.');
     if (!$alias)
     {
       $alias = $name;
@@ -276,15 +352,21 @@ class SelectQuery extends Query
     return $this;
   }
 
+  /**
+   * @param string $name
+   * @param string $alias
+   *
+   * @return $this
+   */
   function addFieldBypass($name, $alias = '')
   {
     $this->addField($name, $alias, '', 'bypass');
     return $this;
   }
 
-  function addOrderSimple($alias, $dir = QueryOrder::DIRECTION_ASC)
+  function addOrderSimple($field, $dir = QueryOrder::DIRECTION_ASC)
   {
-    $this->orders[] = new QueryOrder($alias, key($this->tables), $dir);
+    $this->orders[] = new QueryOrder($field, key($this->tables), $dir);
     return $this;
   }
 
@@ -303,6 +385,30 @@ class SelectQuery extends Query
   {
     $this->page_size = $limit;
   }
+
+  function addGroupBy($field, $table_alias = false)
+  {
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
+    }
+
+    $this->group_by[] = array(
+      'field' => $field,
+      'table_alias' => $table_alias,
+    );
+    return $this;
+  }
+
+  function addSpecialInstruction($instruction)
+  {
+    $this->special_instruction = $instruction;
+  }
+
+  function getSpecialInstruction()
+  {
+    return $this->special_instruction;
+  }
 }
 
 /**
@@ -310,6 +416,7 @@ class SelectQuery extends Query
  */
 class InsertQuery extends Query
 {
+  protected $identity_insert = FALSE;
   function addField($name, $value = 0, $field_alias = '', $table_alias = '')
   {
     if (!$field_alias)
@@ -327,6 +434,14 @@ class InsertQuery extends Query
     );
     return $this;
   }
+  function setIdentityInsert()
+  {
+    $this->identity_insert = TRUE;
+  }
+  function getIdentityInsert()
+  {
+    return $this->identity_insert;
+  }
 }
 
 /**
@@ -334,6 +449,8 @@ class InsertQuery extends Query
  */
 class UpdateQuery extends Query
 {
+  protected $skip_condition = FALSE;
+
   function addField($name, $value = 0, $field_alias = '', $table_alias = '')
   {
     if (!$field_alias)
@@ -370,6 +487,16 @@ class UpdateQuery extends Query
     );
     return $this;
   }
+
+  function skipCondition($skip_condition = TRUE)
+  {
+    $this->skip_condition = $skip_condition;
+  }
+
+  functIon getSkipCondition()
+  {
+    return $this->skip_condition;
+  }
 }
 
 /**
@@ -377,6 +504,17 @@ class UpdateQuery extends Query
  */
 class DeleteQuery extends Query
 {
+  protected $page_size = FALSE;
+
+  function getPageSize()
+  {
+    return $this->page_size;
+  }
+
+  function addLimit($limit)
+  {
+    $this->page_size = $limit;
+  }
 }
 
 /**
@@ -384,18 +522,46 @@ class DeleteQuery extends Query
  */
 class CreateQuery extends Query
 {
+  // Data types.
   const TYPE_INTEGER = 1;
   const TYPE_BOOL = 2;
   const TYPE_STRING = 3;
   const TYPE_DATETIME = 4;
   const TYPE_CURRENCY = 5;
   const TYPE_DECIMAL = 6;
+  const TYPE_DATE = 7;
 
+  // Flags.
   const FLAG_AUTOINCREMENT = 'A';
   const FLAG_PRIMARY_KEY = 'P';
   const FLAG_NOT_NULL = 'N';
   const FLAG_UNIQUE = 'U';
 
+  function addField($name, $type = CreateQuery::TYPE_INTEGER, $length = 0, $flags = array(), $default = FALSE)
+  {
+//    assert((is_int($length) && $type !== CreateQuery::TYPE_DECIMAL) || (strtolower($length) === 'max' && $type !== CreateQuery::TYPE_DECIMAL), 'Length must be an integer or "max"');
+    $this->fields[$name] = array(
+      'type' => $type,
+      'length' => $length,
+      'flags' => $flags,
+      'default' => $default
+    );
+    return $this;
+  }
+}
+
+/**
+ * Class DropQuery
+ */
+class DropQuery extends Query
+{
+}
+
+/**
+ * Class CreateQuery
+ */
+class AlterAddQuery extends Query
+{
   function addField($name, $type = CreateQuery::TYPE_INTEGER, $length = 0, $flags = array(), $default = FALSE)
   {
     assert(is_int($length) || strtolower($length) === 'max', 'Length must be an integer or "max"');
@@ -407,6 +573,55 @@ class CreateQuery extends Query
     );
     return $this;
   }
+}
+
+/**
+ * Class AlterAlterQuery
+ *
+ * Identical to the add query so just inherit from there.
+ */
+class AlterAlterQuery extends AlterAddQuery
+{
+}
+
+/**
+ * Class AlterRenameQuery
+ */
+class AlterRenameQuery extends Query
+{
+  function addField($name, $new_name = '', $empty = '')
+  {
+    $this->fields[$name] = $new_name;
+    return $this;
+  }
+}
+
+class AddIndexQuery extends Query
+{
+  function addField($name, $alias = '', $table_alias = '')
+  {
+    if (!$alias)
+    {
+      $alias = $name;
+    }
+    if (!$table_alias)
+    {
+      $table_alias = key($this->tables);
+    }
+    $this->fields[$alias] = array(
+      'name' => $name,
+      'table_alias' => $table_alias,
+      'type' => 'NONCLUSTERED',
+    );
+    return $this;
+  }
+}
+
+/**
+ * Class Truncate Query
+ */
+class TruncateQuery extends Query
+{
 }
 
 /**
@@ -424,27 +639,39 @@ class QueryCondition
   const COMPARE_NOT_NULL = 8;
   const COMPARE_LIKE = 9;
   const COMPARE_IN = 10;
+  const COMPARE_NOT_IN = 11;
+  const COMPARE_LENGTH_GREATER_THAN = 12;
+  const COMPARE_EXISTS = 13;
+  const COMPARE_NOT_EXISTS = 14;
 
-  protected $field_alias;
-  protected $table_alias;
+  const COMPARE_NULL_0 = 100;
+  const COMPARE_NOT_NULL_0 = 101;
+
+
+  protected $fields = array();
+//  protected $table_alias;
   protected $comparison;
   protected $value;
   protected $group;
-  protected $value_field_alias = FALSE;
+  protected $value_field = FALSE;
   protected $value_field_table_alias = FALSE;
 
   /**
-   * @param string $field_alias
+   * @param string $field
    * @param string $table_alias
-   * @param int $comparison
-   * @param mixed $value
+   * @param int    $comparison
+   * @param mixed  $value
+   * @param string $data_type
    */
 
-  function __construct($field_alias, $table_alias, $comparison = QueryCondition::COMPARE_EQUAL, $value = FALSE)
+  function __construct($field, $table_alias, $comparison = QueryCondition::COMPARE_EQUAL, $value = FALSE, $data_type = '<none>')
   {
-    $this->field_alias = $field_alias;
-    $this->table_alias = $table_alias;
-    $this->value_field_alias = FALSE;
+    $this->fields[] = array(
+      'field' => $field,
+      'table_alias' => $table_alias,
+      'data_type' => $data_type,
+    );
+    $this->value_field = FALSE;
     $this->value_field_table_alias = FALSE;
     $this->comparison = $comparison;
     $this->value = $value;
@@ -459,32 +686,74 @@ class QueryCondition
     $this->value = $value;
   }
 
+  function setFieldSelectQuery(SelectQuery $select_query)
+  {
+    $this->fields = array();
+    $this->fields[] = array(
+      'field' => $select_query,
+      'table_alias' => '',
+      'data_type' => 'field-select-query',
+    );
+  }
+
+  function setValueSelectQuery(SelectQuery $select_query)
+  {
+    $this->value_field = $select_query;
+  }
+
+  function setFieldBypass($string)
+  {
+    $this->fields = array();
+    $this->fields[] = array(
+      'field' => $string,
+      'table_alias' => '',
+      'data_type' => 'bypass',
+    );
+  }
+
   /**
    * @param string $group
    */
-  function setGroup($group)
+  function setGroupName($group)
   {
     $this->group = $group;
   }
 
-  function setValueField($field_alias, $table_alias)
+  /**
+   * @param QueryConditionGroup $group
+   */
+  function setGroup(QueryConditionGroup $group)
   {
-    $this->value_field_alias = $field_alias;
+    $this->group = $group->getName();
+  }
+
+  function setValueField($field, $table_alias)
+  {
+    $this->value_field = $field;
     $this->value_field_table_alias = $table_alias;
   }
 
-  /**
-   * @return string
-   */
-  function getField()
+  function addConcatField($field, $table_alias, $data_type = '<none>')
   {
-    return $this->field_alias;
+    $this->fields[] = array(
+      'field' => $field,
+      'table_alias' => $table_alias,
+      'data_type' => $data_type,
+    );
   }
 
-  function getTable()
+  /**
+   * @return array()
+   */
+  function getFields()
   {
-    return $this->table_alias;
+    return $this->fields;
   }
+
+//  function getTable()
+//  {
+//    return $this->table_alias;
+//  }
 
   function getComparison()
   {
@@ -502,16 +771,24 @@ class QueryCondition
     return (bool)$this->value_field_table_alias;
   }
 
+  function isValueSelectQuery()
+  {
+    return (bool)$this->value_field && !(bool)$this->value_field_table_alias;
+  }
+
   function getValueTable()
   {
     assert((bool)$this->value_field_table_alias, 'No value table. Use setValueField or getValue.');
     return $this->value_field_table_alias;
   }
 
+  /**
+   * @return string|SelectQuery
+   */
   function getValueField()
   {
-    assert((bool)$this->value_field_table_alias, 'No value table. Use setValueField or getValue.');
-    return $this->value_field_alias;
+    assert((bool)$this->value_field, 'No value table. Use setValueField or getValue.');
+    return $this->value_field;
   }
 
   function getGroup()
@@ -534,14 +811,15 @@ class QueryConditionGroup
 
   function __construct($name, $type = QueryConditionGroup::GROUP_AND, $parent = 'default')
   {
+    assert($name !== 'default', 'Default is a condition for restricted groups');
     $this->name = $name;
     $this->type = $type;
     $this->parent = $parent;
   }
 
-  function setParent($parent)
+  function setParent(QueryConditionGroup $parent)
   {
-    $this->parent = $parent;
+    $this->parent = $parent->getName();
   }
 
   function setType($type)
@@ -639,14 +917,16 @@ Class QueryOrder
   const DIRECTION_DESC = 2;
 
   protected $field;
-  protected $table;
+  protected $table_alias;
   protected $direction;
+  protected $sort_function;
 
-  function __construct($field, $table, $direction = self::DIRECTION_ASC)
+  function __construct($field, $table_alias, $direction = self::DIRECTION_ASC, $sort_function = FALSE)
   {
     $this->field = $field;
-    $this->table = $table;
+    $this->table_alias = $table_alias;
     $this->direction = $direction;
+    $this->sort_function = $sort_function;
   }
 
   function getField()
@@ -654,152 +934,18 @@ Class QueryOrder
     return $this->field;
   }
 
-  function getTable()
+  function getTableAlias()
   {
-    return $this->table;
+    return $this->table_alias;
   }
 
   function getDirection()
   {
     return $this->direction;
   }
-}
 
-function sql_formater($sql, $args)
-{
-  // Syntax
-  $clause_start_prefix = array(
-    'INSERT',
-    'LEFT',
-    'ORDER',
-    'RIGHT',
-  );
-  $clause_start = array(
-    'CREATE',
-    'FROM',
-    'INSERT INTO',
-    'JOIN',
-    'LEFT JOIN',
-    'ORDER BY',
-    'RIGHT JOIN',
-    'SELECT',
-    'UPDATE',
-    'WHERE',
-  );
-
-  // Break on spaces and reverse so foreach treats it as a stack.
-  $pieces = preg_split('/\s+/', $sql, -1, PREG_SPLIT_NO_EMPTY);
-
-  // Break into clauses. A clause is logical construct that should start on a new line and reset indents.
-  $clauses = array();
-  $clause = array();
-  $hold = FALSE;
-  foreach($pieces as $word)
+  function getSortFunction()
   {
-    // Two word clause starters.
-    if (!$hold && in_array($word, $clause_start_prefix))
-    {
-      $hold = $word;
-      continue;
-    }
-
-    // Deal with the hold.
-    if ($hold)
-    {
-      if (in_array($hold . ' ' . $word, $clause_start))
-      {
-        $word = $hold . ' ' . $word;
-      }
-      else
-      {
-        $clause[] = $hold;
-      }
-      $hold = FALSE;
-    }
-
-    // Append to clause.
-    if ($clause && in_array($word, $clause_start))
-    {
-      $clauses[] = $clause;
-      $clause = array();
-    }
-    $clause[] = $word;
+    return $this->sort_function;
   }
-  $clauses[] = $clause;
-
-  // Break into phrases. A phrase is a single printed line.
-  $phrases = array();
-  foreach ($clauses as $clause)
-  {
-    $clause_start = array_shift($clause);
-    switch($clause_start)
-    {
-      case 'SELECT':
-      {
-        $phrases[] = $clause_start;
-        $phrase = '    ';
-
-        foreach ($clause as $word)
-        {
-          if (strrpos($word, ','))
-          {
-            $phrase .= rtrim($word);
-            $phrases[] = $phrase;
-            $phrase = '    ';
-          }
-          else
-          {
-            $phrase .= $word . ' ';
-          }
-        }
-        $phrases[] = rtrim($phrase);
-        break;
-      }
-      case 'WHERE':
-      {
-        $phrase = $clause_start . ' ';
-        foreach ($clause as $word)
-        {
-          if ($word === 'AND')
-          {
-            $phrases[] = rtrim($phrase);
-            $phrase = '  ' . $word . ' ';
-          }
-          elseif ($word === 'OR')
-          {
-            $phrases[] = rtrim($phrase);
-            $phrase = '   ' . $word . ' ';
-          }
-          else
-          {
-            $phrase .= $word . ' ';
-          }
-        }
-        break;
-      }
-      case 'CREATE':
-      case 'FROM':
-      case 'INSERT INTO':
-      case 'LEFT JOIN':
-      case 'RIGHT JOIN':
-      case 'UPDATE':
-      case 'ORDER BY':
-      {
-        $phrases[] = $clause_start . ' ' . implode(' ', $clause);
-        break;
-      }
-      default:
-      {
-        assert(FALSE, 'Syntax error or unhandled clause.');
-      }
-    }
-  }
-
-  // Build output.
-  $output = '';
-  foreach($phrases as $phrase)
-  {
-    $output .= $phrase . "\n";
-  }
-  return rtrim($output);
 }

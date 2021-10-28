@@ -10,62 +10,71 @@
   width: 200px;
 }
 
-/* line 23, ../scss/character.scss */
+/* line 17, ../scss/character.scss */
+#character_form .field_group {
+  width: auto;
+}
+/* line 20, ../scss/character.scss */
+#character_form .field_group .field.submit {
+  clear: none;
+  margin: 20px 0 0 10px;
+}
+/* line 26, ../scss/character.scss */
 #character_form .field_group.header_upper {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 29, ../scss/character.scss */
+/* line 32, ../scss/character.scss */
 #character_form .field_group.header_upper .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 36, ../scss/character.scss */
+/* line 39, ../scss/character.scss */
 #character_form .field_group.header_lower {
   float: left;
   clear: left;
   width: 600px;
 }
-/* line 42, ../scss/character.scss */
+/* line 45, ../scss/character.scss */
 #character_form .field_group.header_lower .field {
   margin-right: 10px;
   float: left;
   clear: none;
 }
-/* line 49, ../scss/character.scss */
+/* line 52, ../scss/character.scss */
 #character_form .field_group.abilities_group {
   clear: left;
   padding-right: 10px;
 }
-/* line 54, ../scss/character.scss */
+/* line 57, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup {
   width: 100%;
   box-sizing: border-box;
 }
-/* line 58, ../scss/character.scss */
+/* line 61, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup .markup-value {
   width: 100%;
   box-sizing: border-box;
 }
-/* line 63, ../scss/character.scss */
+/* line 66, ../scss/character.scss */
 #character_form .field_group.abilities_group .markup .markup-value table {
   width: 100%;
   box-sizing: border-box;
 }
 
-/* line 78, ../scss/character.scss */
+/* line 81, ../scss/character.scss */
 #character_wizard_skills_form div.radio .heading {
   display: block;
   font-weight: 700;
 }
-/* line 83, ../scss/character.scss */
+/* line 86, ../scss/character.scss */
 #character_wizard_skills_form div.radio .radio-option {
   display: inline-block;
   margin-right: 5px;
 }
-/* line 89, ../scss/character.scss */
+/* line 92, ../scss/character.scss */
 #character_wizard_skills_form div.radio .radio-option input {
   clear: none;
 }
