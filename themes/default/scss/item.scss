@@ -42,7 +42,7 @@
   }
 }
 
-// Item Page.
+// Item List Page.
 #items
 {
   .items
@@ -71,5 +71,51 @@ table.item-print-list
   {
     width: 100px;
     text-align: right;
+  }
+}
+
+#item_form
+{
+  h1, .field.submit
+  {
+    float: left;
+    margin: 10px 0 0 0;
+  }
+  .field.submit
+  {
+    clear: none;
+    margin: 15px 0 0 10px;
+  }
+  .base_group
+  {
+    clear: left;
+  }
+  .field_group
+  {
+    width: 300px;
+    margin-right: 10px;
+
+    input, select, textarea
+    {
+      max-width: 300px;
+      box-sizing: border-box;
+    }
+  }
+  .magic_group
+  {
+    .field
+    {
+      &.rarity_id,
+      &.bonus,
+      &.attunement,
+      &.attunement_requirements
+      {
+        display: none;
+      }
+    }
+  }
+  .weapon_group, .armor_group
+  {
+    display: none;
   }
 }

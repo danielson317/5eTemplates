@@ -32,13 +32,13 @@ class Form
     }
 
     // Fields.
-    $fields_output = $this->buildGroup();
+    $output .= $this->buildGroup();
 
     // Form.
     $attr = $this->attr;
     $attr['id'] = $this->id;
     $attr['method'] = 'post';
-    $output .= htmlWrap('form', $fields_output, $attr);
+    $output = htmlWrap('form', $output, $attr);
     return $output;
   }
 

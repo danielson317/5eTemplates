@@ -30,14 +30,13 @@ function installItem()
   $db->update($query);
 
   // Magic.
-//  $query = new CreateQuery('item_magics');
-//  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
-//  $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('bonus', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('bonus_ability_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0);
-//  $db->create($query);
+  $query = new CreateQuery('item_magics');
+  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
+  $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
+  $query->addField('bonus', CreateQuery::TYPE_STRING, 128, array('N'), 0); // +1 to AC, +2 to hit and damage, Resistant to Fire Damage.
+  $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
+  $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0); // Only usable by druid, or evil.
+  $db->create($query);
 
   // Weapon.
 //  $query = new CreateQuery('item_weapons');

@@ -82,6 +82,16 @@ function itemUpsertForm()
   $field = new FieldHidden('id');
   $form->addField($field);
 
+  // Submit
+  $value = 'Create';
+  if ($item_id)
+  {
+    $value = 'Update';
+  }
+  $field = new FieldSubmit('submit', $value);
+  $form->addField($field);
+
+
   /*****************
    * Base items.
    *****************/
@@ -125,38 +135,6 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
-  // Submit
-  $value = 'Create';
-  if ($item_id)
-  {
-    $value = 'Update';
-  }
-  $field = new FieldSubmit('submit', $value);
-  $field->setGroup($group);
-  $form->addField($field);
-
-  /****************
-   * Magic Group
-   ****************/
-  $item_magic = FALSE; 
-//  if ($item_id)
-//  {
-//    $item_magic = getItemMagic($item_id);
-//    $form->addValues($item_magic);
-//  }
-  $group = 'magic_group';
-  $form->addGroup($group);
-
-  // Heading.
-  $field = new FieldMarkup('magic_heading');
-  $field->setValue(htmlWrap('h3', 'Magic'));
-  $field->setGroup($group);
-  $form->addField($field);
-
-  $field = new FieldCheckbox('is_magic', 'Magical');
-  $field->setGroup($group);
-  $form->addField($field);
-
   /****************
    * Weapon Group
    ****************/
@@ -178,6 +156,45 @@ function itemUpsertForm()
   // Heading.
   $field = new FieldMarkup('armor_heading');
   $field->setValue(htmlWrap('h3', 'Armor'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /****************
+   * Magic Group
+   ****************/
+  $item_magic = FALSE;
+//  if ($item_id)
+//  {
+//    $item_magic = getItemMagic($item_id);
+//    $form->addValues($item_magic);
+//  }
+  $group = 'magic_group';
+  $form->addGroup($group);
+
+  // Heading.
+  $field = new FieldMarkup('magic_heading');
+  $field->setValue(htmlWrap('h3', 'Magic'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldCheckbox('is_magic', 'Magical');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $options = ItemRarity::getList();
+  $field = new FieldSelect('rarity_id', 'Rarity', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldText('bonus', 'Bonus');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldCheckbox('attunement', 'Requires Attunement');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  $field = new FieldText('attunement_requirements', 'Attunement Requirements');
   $field->setGroup($group);
   $form->addField($field);
 

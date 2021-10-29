@@ -56,3 +56,36 @@ table.item-print-list .column-3 {
   width: 100px;
   text-align: right;
 }
+
+/* line 79, ../scss/item.scss */
+#item_form h1, #item_form .field.submit {
+  float: left;
+  margin: 10px 0 0 0;
+}
+/* line 84, ../scss/item.scss */
+#item_form .field.submit {
+  clear: none;
+  margin: 15px 0 0 10px;
+}
+/* line 89, ../scss/item.scss */
+#item_form .base_group {
+  clear: left;
+}
+/* line 93, ../scss/item.scss */
+#item_form .field_group {
+  width: 300px;
+  margin-right: 10px;
+}
+/* line 98, ../scss/item.scss */
+#item_form .field_group input, #item_form .field_group select, #item_form .field_group textarea {
+  max-width: 300px;
+  box-sizing: border-box;
+}
+/* line 108, ../scss/item.scss */
+#item_form .magic_group .field.rarity_id, #item_form .magic_group .field.bonus, #item_form .magic_group .field.attunement, #item_form .magic_group .field.attunement_requirements {
+  display: none;
+}
+/* line 117, ../scss/item.scss */
+#item_form .weapon_group, #item_form .armor_group {
+  display: none;
+}

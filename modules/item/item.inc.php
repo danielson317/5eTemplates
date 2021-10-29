@@ -41,10 +41,18 @@ class ItemCategory
   const TRADE = 700;
 
   // Food
-  const FOOD = 800;
+  const CONSUMABLE = 800;
+  const CONSUMABLE_FOOD = 801;
+  const CONSUMABLE_DRINK = 802;
+  const CONSUMABLE_POTION = 803;
 
   // Services
   const SERVICE = 900;
+  const SERVICE_TRANSPORT = 901;
+  const SERVICE_LODGING = 902;
+  const SERVICE_HIRELING = 903;
+  const SERVICE_TAXES = 904; // Tolls, Cover Charge, Property, Even illigitimateEtc
+  const SERVICE_PROFESSIONAL = 905; // Any skilled artisen service.
 
   // Trinkets
   const TRINKET = 1000;
@@ -79,7 +87,7 @@ class ItemCategory
         ItemCategory::TOOL_INSTRUMENT => 'Musical Instrument',
       ItemCategory::MOUNT => 'Mount or Vehicle',
       ItemCategory::TRADE => 'Trade Good',
-      ItemCategory::FOOD => 'Food, Drink, and Lodging',
+      ItemCategory::CONSUMABLE => 'Consumable',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',
@@ -113,13 +121,37 @@ class ItemCategory
         ItemCategory::TOOL_INSTRUMENT => '--Musical Instrument',
       ItemCategory::MOUNT => 'Mount or Vehicle',
       ItemCategory::TRADE => 'Trade Good',
-      ItemCategory::FOOD => 'Food, Drink, and Lodging',
+      ItemCategory::CONSUMABLE => 'Consumable',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',
     );
 
     return getListItem($items, $key);
+  }
+}
+
+class ItemRarity
+{
+  const COMMON = 1;
+  const UNCOMMON = 2;
+  const RARE = 3;
+  const VERY_RARE = 4;
+  const LEGENDARY = 5;
+  const ARTIFACT = 6;
+
+  public static function getList($key = FALSE)
+  {
+    $list = array(
+      ItemRarity::COMMON => 'Common',
+      ItemRarity::UNCOMMON => 'Uncommon',
+      ItemRarity::RARE => 'Rare',
+      ItemRarity::VERY_RARE => 'Very Rare',
+      ItemRarity::LEGENDARY => 'Legendary',
+      ItemRarity::ARTIFACT => 'Artifact',
+    );
+
+    return getListItem($list, $key);
   }
 }
 
