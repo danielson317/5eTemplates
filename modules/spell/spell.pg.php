@@ -46,7 +46,7 @@ function spellList()
   $table->setAttr('class', array('spell-list'));
   $table->setHeader(array('Name', 'Level', 'School', 'Description'));
 
-  $schools = getSchoolList();
+  $schools = SpellSchool::getList();
   $spells = getSpellPager($page);
   foreach ($spells as $spell)
   {
@@ -57,7 +57,7 @@ function spellList()
     $row[] = htmlWrap('a', $spell['name'], $attr);
     $row[] = $spell['level'];
     $row[] = $schools[$spell['school_id']];
-    $row[] = $spell['description'];
+    $row[] = $spell['shorthand'];
     $table->addRow($row);
   }
   $template->setList($table);
@@ -93,89 +93,6 @@ function spellUpsertForm()
   }
   $form->setTitle($title);
 
-  // ID.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Name.
-  $field = new FieldText('name', 'Name');
-  $form->addField($field);
-
-  // Source.
-  $options = getSourceDetailList();
-  $field = new FieldSelect('source_id', 'Source', $options);
-  $field->setValue(1);
-  $form->addField($field);
-
-  // School.
-  $options = getSchoolList();
-  $field = new FieldSelect('school_id', 'School', $options);
-  $form->addField($field);
-
-  // Level.
-  $options = getLevelList();
-  $field = new FieldSelect('level', 'Level', $options);
-  $field->setValue(1);
-  $form->addField($field);
-
-  // Speed.
-  $options = getSpeedList();
-  $field = new FieldSelect('speed', 'Casting Time', $options);
-  $field->setValue('6');
-  $form->addField($field);
-
-  // Range.
-  $options = getRangeList();
-  $field = new FieldSelect('range', 'Range', $options);
-  $field->setValue('5');
-  $form->addField($field);
-
-  // Ritual.
-  $field = new FieldCheckbox('ritual', 'Can be Cast as a Ritual');
-  $form->addField($field);
-
-  // Concentration.
-  $field = new FieldCheckbox('concentration', 'Requires Concentration');
-  $form->addField($field);
-
-  // Verbal.
-  $field = new FieldCheckbox('verbal', 'Verbal');
-  $form->addField($field);
-
-  // Semantic.
-  $field = new FieldCheckbox('semantic', 'Semantic (gesture)');
-  $form->addField($field);
-
-  // Material.
-  $field = new FieldText('material', 'Materials');
-  $form->addField($field);
-
-  // Duration
-  $options = getDurationList();
-  $field = new FieldSelect('duration', 'Duration', $options);
-  $field->setValue(1);
-  $form->addField($field);
-
-  // AOE
-  $options = array(0 => '') + getAoeList();
-  $field = new FieldSelect('aoe_id', 'Area of Effect', $options);
-  $field->setValue(0);
-  $form->addField($field);
-
-  // AOE Range
-  $options = array(0 => '') + getRangeList();
-  $field = new FieldSelect('aoe_range', 'AOE Range', $options);
-  $field->setValue(0);
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('description', 'Description');
-  $form->addField($field);
-
-  // Description.
-  $field = new FieldTextarea('alternate', 'At Higher Levels');
-  $form->addField($field);
-
   // Submit
   $value = 'Create';
   if ($spell_id)
@@ -184,6 +101,128 @@ function spellUpsertForm()
   }
   $field = new FieldSubmit('submit', $value);
   $form->addField($field);
+
+  // ID.
+  $field = new FieldHidden('id');
+  $form->addField($field);
+
+  /***********************************
+   * Specs
+   ***********************************/
+  $group = 'specs';
+  $form->addGroup($group);
+
+  // Name.
+  $field = new FieldText('name', 'Name');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Level.
+  $options = SpellLevel::getList();
+  $field = new FieldSelect('level', 'Level', $options);
+  $field->setGroup($group);
+  $field->setValue(1);
+  $form->addField($field);
+
+  // School.
+  $options = SpellSchool::getList();
+  $field = new FieldSelect('school_id', 'School', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Ritual.
+  $field = new FieldCheckbox('ritual', 'Can be Cast as a Ritual');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Speed.
+  $options = SpellSpeed::getList();
+  $field = new FieldSelect('speed', 'Casting Time', $options);
+  $field->setValue(SpellSpeed::ACTION);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Range.
+  $options = SpellRange::getList();
+  $field = new FieldSelect('range', 'Range', $options);
+  $field->setValue(SpellRange::TOUCH);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Concentration.
+  $field = new FieldCheckbox('concentration', 'Requires Concentration');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Verbal.
+  $field = new FieldCheckbox('verbal', 'Verbal');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Semantic.
+  $field = new FieldCheckbox('semantic', 'Semantic (gesture)');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Material.
+  $field = new FieldText('material', 'Materials');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Duration
+  $options = SpellDuration::getList();
+  $field = new FieldSelect('duration', 'Duration', $options);
+  $field->setValue(1);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  /***********************************
+   * Details
+   ***********************************/
+  $group = 'details';
+  $form->addGroup($group);
+
+  // AOE
+  $options = array(0 => '') + SpellAOE::getList();
+  $field = new FieldSelect('aoe_id', 'Area of Effect', $options);
+  $field->setValue(0);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // AOE Range
+  $options = array(0 => '') + SpellRange::getList();
+  $field = new FieldSelect('aoe_range', 'AOE Range', $options);
+  $field->setValue(0);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Description.
+  $field = new FieldText('shorthand', 'Shorthand');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Description.
+  $field = new FieldTextarea('description', 'Description');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Alternate.
+  $field = new FieldTextarea('alternate', 'At Higher Levels');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Source.
+  $options = getSourceDetailList();
+  $field = new FieldSelect('source_id', 'Source', $options);
+  $field->setValue(1);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Description.
+  $field = new FieldText('source_location', 'Source Location');
+  $field->setGroup($group);
+  $form->addField($field);
+
 
   $template->setForm($form);
 
@@ -202,13 +241,13 @@ function spellUpsertSubmit()
   if ($spell['id'])
   {
     updateSpell($spell);
-    echo htmlWrap('h3', 'Spell ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') updated.');
+    return htmlWrap('h3', 'Spell ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') updated.');
   }
   else
   {
     unset($spell['id']);
     $spell['id'] = createSpell($spell);
-    echo htmlWrap('h3', 'New spell ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') created.');
+    return htmlWrap('h3', 'New spell ' . htmlWrap('em', $spell['name']) . ' (' . $spell['id'] . ') created.');
   }
 }
 
@@ -255,7 +294,7 @@ function spellPrintForm()
   $table->setAttr('class', array('spell-print-list', 'print-list'));
   $table->setHeader(array('Qty', 'Name', 'Level', 'Type', 'Description'));
 
-  $schools = getSchoolList();
+  $schools = SpellSchool::getList();
   $levels = getLevelList();
   $spells = getSpellPager($page);
   foreach ($spells as $spell)
@@ -328,11 +367,11 @@ function spellPrintSubmit()
   $output = '';
   $spells = $_POST;
   unset($spells['print']);
-  $schools = getSchoolList();
-  $levels = getLevelList();
-  $casting_times = getSpeedList();
-  $duration = getDurationList();
-  $ranges = getRangeList();
+  $schools = SpellSchool::getList();
+  $levels = SpellLevel::getList();
+  $casting_times = SpellSpeed::getList();
+  $duration = SpellDuration::getList();
+  $ranges = SpellRange::getList();
   foreach($spells as $spell_id => $qty)
   {
     if (!$qty || $qty < 0)

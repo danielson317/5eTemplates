@@ -431,7 +431,7 @@ function itemDamageUpsertFormAjax()
   $form->addField($field);
 
   // Damage type id.
-  $damage_types = getDamageTypeList();
+  $damage_types = SpellDamageType::getList();
   $field = new FieldSelect('damage_type_id', 'Damage Type', $damage_types);
   $form->addField($field);
 
@@ -461,7 +461,7 @@ function itemDamageListAjax()
   $item_id = getUrlID('item_id');
 
   // Damage
-  $damage_types = getDamageTypeList();
+  $damage_types = SpellDamageType::getList();
   $item_damages = getItemDamageList($item_id);
   $dice = getDieList();
 
