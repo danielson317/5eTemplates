@@ -212,13 +212,26 @@ function itemUpsertSubmit()
   if ($item['id'])
   {
     updateItem($item);
-    return htmlWrap('h3', 'Item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') updated.');
   }
   else
   {
     $item['id'] = createItem($item);
-    return htmlWrap('h3', 'New item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') created.');
   }
+
+  if ($item['is_magical'])
+  {
+    $item_magic = getItemMagic($item['id']);
+    if ($item_magic)
+    {
+      updateitemMagic($item);
+    }
+    else
+    {
+      createItemMagic($item);
+    }
+  }
+
+  return htmlWrap('h3', 'Item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') updated.');
 }
 
 /******************************************************************************
