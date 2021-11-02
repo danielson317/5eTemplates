@@ -522,6 +522,8 @@ class DeleteQuery extends Query
  */
 class CreateQuery extends Query
 {
+  private $constraints = array();
+
   // Data types.
   const TYPE_INTEGER = 1;
   const TYPE_BOOL = 2;
@@ -547,6 +549,20 @@ class CreateQuery extends Query
       'default' => $default
     );
     return $this;
+  }
+
+  function addForeignKeyConstraint($name, $foreign_name, $foreign_table)
+  {
+    $this->constraints[] = array(
+      'name' => $name,
+      'foreign_name' => $foreign_name,
+      'foreign_table' => $foreign_table,
+    );
+  }
+
+  function getConstraints() : array
+  {
+    return $this->constraints;
   }
 }
 

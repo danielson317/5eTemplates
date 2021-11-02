@@ -4,6 +4,7 @@
 function itemList()
 {
 //  installItem();
+//  installItemMagic();
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
@@ -162,12 +163,6 @@ function itemUpsertForm()
   /****************
    * Magic Group
    ****************/
-  $item_magic = FALSE;
-//  if ($item_id)
-//  {
-//    $item_magic = getItemMagic($item_id);
-//    $form->addValues($item_magic);
-//  }
   $group = 'magic_group';
   $form->addGroup($group);
 
@@ -177,15 +172,24 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  // Is magic.
   $field = new FieldCheckbox('is_magic', 'Magical');
   $field->setGroup($group);
+  if ($item_id)
+  {
+    $field->setValue(TRUE);
+    $item_magic = getItemMagic($item_id);
+    $form->addValues($item_magic);
+  }
   $form->addField($field);
 
+  // Rarity
   $options = ItemRarity::getList();
   $field = new FieldSelect('rarity_id', 'Rarity', $options);
   $field->setGroup($group);
   $form->addField($field);
 
+  // Bonus
   $field = new FieldText('bonus', 'Bonus');
   $field->setGroup($group);
   $form->addField($field);
@@ -218,8 +222,10 @@ function itemUpsertSubmit()
     $item['id'] = createItem($item);
   }
 
-  if ($item['is_magical'])
+  $item['is_magic'] = iis($item, 'is_magic', 0);
+  if ($item['is_magic'])
   {
+    $item['attunement'] = iis($item, 'attunement', 0);
     $item_magic = getItemMagic($item['id']);
     if ($item_magic)
     {

@@ -42,6 +42,7 @@ if (!file_exists(DB_PATH))
 
   installSpell();
   installItem(); // Depends on Source.
+  installItemMagic();
 //  installMonster(); // Depends on Source.
 }
 

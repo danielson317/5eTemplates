@@ -235,6 +235,11 @@ class SQLite extends Database
       $sql = trim($sql, ', ');
       $sql .= ')';
     }
+    $constraints = $query->getConstraints();
+    foreach($constraints as $constraint)
+    {
+      $sql .= 'FOREIGN KEY (' . $constraint['name'] . ') REFERENCES ' . $constraint['foreign_table'] . '(' . $constraint['foreign_name'] . ')';
+    }
     $sql = trim($sql, ',');
 
     $sql .= ')';
