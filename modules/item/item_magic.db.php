@@ -12,7 +12,7 @@ function installItemMagic()
   GLOBAL $db;
 
   // Magic.
-  $query = new CreateQuery('item_magic');
+  $query = new CreateQuery('items_magic');
   $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U', 'P'));
   $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
   $query->addField('bonus', CreateQuery::TYPE_STRING, 128, array('N'), 0); // +1 to AC, +2 to hit and damage, Resistant to Fire Damage.
@@ -37,7 +37,7 @@ function getItemMagic($item_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('item_magic');
+  $query = new SelectQuery('items_magic');
 
   // All items.
   $query->addField('item_id', 'id');
@@ -54,7 +54,7 @@ function getItemMagic($item_id)
 function createItemMagic($item)
 {
   GLOBAL $db;
-  $query = new InsertQuery('item_magic');
+  $query = new InsertQuery('items_magic');
 
   $query->addField('item_id', $item['id']);
   $query->addField('rarity_id', $item['rarity_id']);
@@ -68,7 +68,7 @@ function createItemMagic($item)
 function updateItemMagic($item)
 {
   GLOBAL $db;
-  $query = new UpdateQuery('item_magic');
+  $query = new UpdateQuery('items_magic');
 
   // All items.
   $query->addField('rarity_id', $item['rarity_id']);
@@ -87,7 +87,7 @@ function deleteItemMagic($item_id)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('item_magic');
+  $query = new DeleteQuery('items_magic');
   $query->addConditionSimple('item_id', $item_id);
   $db->delete($query);
 }

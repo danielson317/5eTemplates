@@ -41,8 +41,11 @@ if (!file_exists(DB_PATH))
   installPlayer();
 
   installSpell();
+
   installItem(); // Depends on Source.
   installItemMagic();
+  installItemWeapon();
+
 //  installMonster(); // Depends on Source.
 }
 

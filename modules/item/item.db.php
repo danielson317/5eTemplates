@@ -29,40 +29,6 @@ function installItem()
   $query->addConditionSimple('name', 'items');
   $db->update($query);
 
-  // Magic.
-  $query = new CreateQuery('item_magic');
-  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
-  $query->addField('rarity_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-  $query->addField('bonus', CreateQuery::TYPE_STRING, 128, array('N'), 0); // +1 to AC, +2 to hit and damage, Resistant to Fire Damage.
-  $query->addField('attunement', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-  $query->addField('attunement_requirements', CreateQuery::TYPE_STRING, 1024, array('N'), 0); // Only usable by druid, or evil.
-  $db->create($query);
-
-  // Weapon.
-//  $query = new CreateQuery('item_weapons');
-//  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
-//  $query->addField('range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('max_range_id', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('light', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('finesse', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('thrown', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('ammunition', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('loading', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('heavy', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('reach', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('special', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $query->addField('two_handed', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $db->create($query);
-
-  // Armor
-//  $query = new CreateQuery('item_armors');
-//  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N', 'U'));
-//  $query->addField('base_ac', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('dex_cap', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('strength_requirement', CreateQuery::TYPE_INTEGER, 0, array('N'), 0);
-//  $query->addField('stealth_disadvantage', CreateQuery::TYPE_BOOL, 0, array('N'), 0);
-//  $db->create($query);
-
   // Item damage - many to many map.
 //  $query = new CreateQuery('item_damages');
 //  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N', 'P', 'A'));
@@ -86,87 +52,6 @@ function installItem()
       'source_id' => $sources['PHB'],
       'source_location' => 149,
     ),
-//    array(
-//      'name' => 'Armor',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 46,
-//    ),
-//    array(
-//      'name' => 'Adventuring Gear',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 50,
-//    ),
-//    array(
-//      'name' => 'Container',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 52,
-//    ),
-//    array(
-//      'name' => 'Tool',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 52,
-//    ),
-//    array(
-//      'name' => 'Mount or Vehicle',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 54,
-//    ),
-//    array(
-//      'name' => 'Trade Good',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 54,
-//    ),
-//    array(
-//      'name' => 'Food, Drink, and Lodging',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 55,
-//    ),
-//    array(
-//      'name' => 'Service',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 56,
-//    ),
-//    array(
-//      'name' => 'Trinket',
-//      'category_id' => 0,
-//      'value' => 0,
-//      'weight' => 0,
-//      'description' => '',
-//      'source_id' => $sources['BR'],
-//      'source_location' => 56,
-//    ),
   );
 
   foreach ($items as $item)
@@ -189,15 +74,42 @@ function getItemPager($page = 1)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('items');
+  $query = new SelectQuery('items', 'i');
   $query->addField('id');
   $query->addField('name');
   $query->addField('value');
   $query->addField('weight');
   $query->addField('category_id');
   $query->addField('description');
+
+  // Join Magic Item Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'im');
+  $table = new QueryTable('items_magic', 'im', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_magic', 'im');
+  $query->addField('rarity_id', 'rarity_id', 'im');
+
+  // Join Weapon Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'iw');
+  $table = new QueryTable('items_weapon', 'iw', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_weapon', 'iw');
+  $query->addField('range_id', 'range_id', 'iw');
+  $query->addField('max_range_id', 'max_range_id', 'iw');
+  $query->addField('ammunition', 'ammunition', 'iw');
+  $query->addField('finesse', 'finesse', 'iw');
+  $query->addField('heavy', 'heavy', 'iw');
+  $query->addField('light', 'light', 'iw');
+  $query->addField('loading', 'loading', 'iw');
+  $query->addField('reach', 'reach', 'iw');
+  $query->addField('thrown', 'thrown', 'iw');
+  $query->addField('two_handed', 'two_handed', 'iw');
+
   $query->addOrderSimple('category_id')->addOrderSimple('name');
   $query->addPager($page);
+//  $query->setDebug('die');
 
   return $db->select($query);
 }

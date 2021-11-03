@@ -138,7 +138,7 @@ class SpellRange
       SpellRange::SELF => 'Self',
       SpellRange::UNLIMITED => 'Anywhere',
       SpellRange::SEE => 'See',
-      SpellRange::TOUCH => 'Touch',
+      SpellRange::TOUCH => 'Touch/Reach',
       SpellRange::PLANE_SAME => 'In the Same Plane',
       SpellRange::PLANE_OTHER => 'In a Different Plane',
       SpellRange::FEET_10 => '10 Feet',

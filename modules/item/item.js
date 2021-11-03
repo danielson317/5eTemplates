@@ -1,5 +1,8 @@
+dnd.categories =
+{
 
-$(document).ready(function() 
+}
+$(document).ready(function()
 {
   let $form = $('#item_form');
   if ($form.length)
@@ -10,9 +13,13 @@ $(document).ready(function()
 
 function itemFormBehaviors($form)
 {
+  let $category = $form.find('.field.category_id select');
+
   /***********************
    * Magic Group.
    ***********************/
+
+  // Show/Hide is_magic checkbox.
   let $magic_group = $form.find('.magic_group');
   function item_process_is_magic($checkbox)
   {
@@ -30,13 +37,11 @@ function itemFormBehaviors($form)
       $magic_group.find('.attunement_requirements').show();
     }
   }
-  $magic_group.find('.field.is_magic input').click(function()
-  {
-    item_process_is_magic($(this));
-  });
+  $magic_group.find('.field.is_magic input').click(function(){item_process_is_magic($(this));});
   item_process_is_magic($magic_group.find('.field.is_magic input'));
 
-  function item_process_attunement()
+  // Show/Hide attunement requirements.
+  $magic_group.find('.field.attunement input').click(function()
   {
     if ($(this).prop('checked'))
     {
@@ -46,6 +51,26 @@ function itemFormBehaviors($form)
     {
       $magic_group.find('.attunement_requirements').hide();
     }
+  });
+
+  /***********************
+   * Weapon Group.
+   ***********************/
+  let $weapon_group = $form.find('.weapon_group');
+  function item_process_is_weapon($category)
+  {
+    // Weapon categories are all 1XX.
+    let category_id = parseInt($category.val());
+    if (category_id >= 100 && category_id < 200)
+    {
+      $weapon_group.show();
+    }
+    else
+    {
+      $weapon_group.hide();
+    }
   }
-  $magic_group.find('.field.attunement input').click(item_process_attunement);
+  $category.change(function(){item_process_is_weapon($(this));});
+  item_process_is_weapon($category);
+
 }

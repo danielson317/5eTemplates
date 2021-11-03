@@ -129,6 +129,11 @@ class ItemCategory
 
     return getListItem($items, $key);
   }
+
+  public static function isWeapon($category_id)
+  {
+    return ($category_id >= 100 && $category_id < 200);
+  }
 }
 
 class ItemRarity
@@ -186,4 +191,65 @@ function itemWeightFormat(int $pounds)
     $unit .= 's';
   }
   return $pounds . ' ' . $unit;
+}
+
+function itemFormatWeaponProperties($item)
+{
+  $properties = '';
+  if ($item['range_id'])
+  {
+    if (((int)$item['range_id'] === SpellRange::TOUCH) || $item['thrown'])
+    {
+      $properties .= 'Melee ';
+    }
+    else
+    {
+      $properties .= 'Ranged (' . SpellRange::getList($item['range_id']);
+      if ($item['max_range_id'])
+      {
+        $properties .= '/' . SpellRange::getList($item['max_range_id']);
+      }
+      $properties .= ') ';
+    }
+  }
+
+  if ($item['ammunition'])
+  {
+    $properties .= ' Ammunition';
+  }
+  if ($item['finesse'])
+  {
+    $properties .= ' Finesse';
+  }
+  if ($item['heavy'])
+  {
+    $properties .= ' Heavy';
+  }
+  if ($item['light'])
+  {
+    $properties .= ' Light';
+  }
+  if ($item['loading'])
+  {
+    $properties .= ' Loading';
+  }
+  if ($item['reach'])
+  {
+    $properties .= ' Reach';
+  }
+  if ($item['thrown'])
+  {
+    $properties .= 'Thrown (' . SpellRange::getList($item['range_id']);
+    if ($item['max_range_id'])
+    {
+      $properties .= '/' . SpellRange::getList($item['max_range_id']);
+    }
+    $properties .= ') ';
+  }
+  if ($item['two_handed'])
+  {
+    $properties .= ' Two Handed';
+  }
+
+  return $properties;
 }

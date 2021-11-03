@@ -5,6 +5,7 @@ function itemList()
 {
 //  installItem();
 //  installItemMagic();
+//  installItemWeapon();
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
@@ -38,9 +39,17 @@ function itemList()
     );
     $group = a($item['name'], '/item', $attr) . htmlSolo('br');
     $group .= lineItem('Category', ItemCategory::getList($item['category_id']));
-    $group .= lineItem('Value', itemFormatCost($item['value']));
+    $group .= lineItem('Value', $item['value'] ? itemFormatCost($item['value']) : '-');
     $group .= lineItem('Weight', itemWeightFormat($item['weight']));
-    $group .= $item['description'];
+    if ($item['is_magic'])
+    {
+      $group .= lineItem('Magical', ItemRarity::getList($item['rarity_id']));
+    }
+    if (ItemCategory::isWeapon($item['category_id']) && $item['is_weapon'])
+    {
+      $group .= lineItem('Weapon', itemFormatWeaponProperties($item));
+    }
+    $group .= htmlWrap('strong', 'Description: ') . $item['description'];
     $output .= htmlWrap('div', $group, array('class' => array('item')));
   }
 
@@ -139,12 +148,73 @@ function itemUpsertForm()
   /****************
    * Weapon Group
    ****************/
+  if ($item_id && ItemCategory::isWeapon($item['category_id']))
+  {
+    $item_weapon = getItemWeapon($item_id);
+    if ($item_weapon)
+    {
+      $form->addValues($item_weapon);
+    }
+  }
+
   $group = 'weapon_group';
   $form->addGroup($group);
 
   // Heading.
   $field = new FieldMarkup('weapon_heading');
-  $field->setValue(htmlWrap('h3', 'Weapon'));
+  $field->setValue(htmlWrap('h3', 'Weapon Properties'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Range
+  $options = array(0 => '--Select One--') + SpellRange::getList();
+  $field = new FieldSelect('range_id', 'Range', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Range
+  $options = array(0 => '--Select One--') + SpellRange::getList();
+  $field = new FieldSelect('max_range_id', 'Max Range', $options);
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Ammunition
+  $field = new FieldCheckbox('ammunition', 'Ammunition');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Finesse
+  $field = new FieldCheckbox('finesse', 'Finesse');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Heavy
+  $field = new FieldCheckbox('heavy', 'Heavy');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Light
+  $field = new FieldCheckbox('light', 'Light');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Loading
+  $field = new FieldCheckbox('loading', 'Loading');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Reach
+  $field = new FieldCheckbox('reach', 'Reach');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Thrown
+  $field = new FieldCheckbox('thrown', 'Thrown');
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Two-Handed
+  $field = new FieldCheckbox('two_handed', 'Two Handed');
   $field->setGroup($group);
   $form->addField($field);
 
@@ -173,13 +243,16 @@ function itemUpsertForm()
   $form->addField($field);
 
   // Is magic.
-  $field = new FieldCheckbox('is_magic', 'Magical');
+  $field = new FieldCheckbox('is_magic', 'Magical Properties');
   $field->setGroup($group);
   if ($item_id)
   {
-    $field->setValue(TRUE);
     $item_magic = getItemMagic($item_id);
-    $form->addValues($item_magic);
+    if ($item_magic)
+    {
+      $field->setValue(TRUE);
+      $form->addValues($item_magic);
+    }
   }
   $form->addField($field);
 
@@ -237,6 +310,28 @@ function itemUpsertSubmit()
     }
   }
 
+  if (ItemCategory::isWeapon($item['category_id']))
+  {
+    $item['ammunition'] = iis($item, 'ammunition', 0);
+    $item['finesse'] = iis($item, 'finesse', 0);
+    $item['heavy'] = iis($item, 'heavy', 0);
+    $item['light'] = iis($item, 'light', 0);
+    $item['loading'] = iis($item, 'loading', 0);
+    $item['reach'] = iis($item, 'reach', 0);
+    $item['thrown'] = iis($item, 'thrown', 0);
+    $item['two_handed'] = iis($item, 'two_handed', 0);
+
+    $item_weapon = getItemWeapon($item['id']);
+    if ($item_weapon)
+    {
+      updateItemWeapon($item);
+    }
+    else
+    {
+      createItemWeapon($item);
+    }
+  }
+
   return htmlWrap('h3', 'Item ' . htmlWrap('em', $item['name']) . ' (' . $item['id'] . ') updated.');
 }
 
@@ -248,7 +343,7 @@ function itemUpsertSubmit()
 
 function itemPrintForm()
 {
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
+  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] === 'POST'))
   {
     return itemPrintSubmit();
   }
