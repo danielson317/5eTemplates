@@ -6,6 +6,8 @@ function itemList()
 //  installItem();
 //  installItemMagic();
 //  installItemWeapon();
+//  installItemArmor();
+//  installItemDamage();
   $page = getUrlID('page', 1);
   $items = getItemPager($page);
 
@@ -113,8 +115,8 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
-  // value.
-  $field = new fieldtext('value', 'Cost (cp)');
+  // Value.
+  $field = new FieldText('value', 'Cost (cp)');
   $field->setgroup($group);
   $form->addfield($field);
 
@@ -224,9 +226,38 @@ function itemUpsertForm()
   $group = 'armor_group';
   $form->addGroup($group);
 
+  if ($item_id && ItemCategory::isArmor($item['category_id']))
+  {
+    $item_armor = getItemArmor($item_id);
+    if ($item_armor)
+    {
+      $form->addValues($item_armor);
+    }
+  }
+
   // Heading.
   $field = new FieldMarkup('armor_heading');
   $field->setValue(htmlWrap('h3', 'Armor'));
+  $field->setGroup($group);
+  $form->addField($field);
+
+  // Base AC.
+  $field = new FieldText('base_ac', 'Base AC');
+  $field->setgroup($group);
+  $form->addfield($field);
+
+  // Dexterity.
+  $field = new FieldText('dex_cap', 'Dex Cap');
+  $field->setgroup($group);
+  $form->addfield($field);
+
+  // Strength.
+  $field = new FieldText('str_score', 'Required Strength Score');
+  $field->setgroup($group);
+  $form->addfield($field);
+
+  // Disadvantage
+  $field = new FieldCheckbox('stealth_disadvantage', 'Disadvantage to Stealth');
   $field->setGroup($group);
   $form->addField($field);
 
@@ -329,6 +360,21 @@ function itemUpsertSubmit()
     else
     {
       createItemWeapon($item);
+    }
+  }
+
+  if (ItemCategory::isArmor($item['category_id']))
+  {
+    $item['stealth_disadvantage'] = iis($item, 'stealth_disadvantage', 0);
+
+    $item_armor = getItemArmor($item['id']);
+    if ($item_armor)
+    {
+      updateItemArmor($item);
+    }
+    else
+    {
+      createItemArmor($item);
     }
   }
 

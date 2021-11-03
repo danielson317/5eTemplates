@@ -134,6 +134,11 @@ class ItemCategory
   {
     return ($category_id >= 100 && $category_id < 200);
   }
+
+  public static function isArmor($category_id)
+  {
+    return ($category_id >= 200 && $category_id < 300);
+  }
 }
 
 class ItemRarity

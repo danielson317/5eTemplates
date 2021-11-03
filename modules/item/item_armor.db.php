@@ -52,38 +52,26 @@ function getItemArmor($item_id)
 function createItemArmor($item)
 {
   GLOBAL $db;
-  $query = new InsertQuery('items_weapon');
+  $query = new InsertQuery('items_armor');
 
   $query->addField('item_id', $item['id']);
-  $query->addField('range_id', $item['range_id']);
-  $query->addField('max_range_id', $item['max_range_id']);
-  $query->addField('ammunition', $item['ammunition']);
-  $query->addField('finesse', $item['finesse']);
-  $query->addField('heavy', $item['heavy']);
-  $query->addField('light', $item['light']);
-  $query->addField('loading', $item['loading']);
-  $query->addField('reach', $item['reach']);
-  $query->addField('thrown', $item['thrown']);
-  $query->addField('two_handed', $item['two_handed']);
+  $query->addField('base_ac', $item['base_ac']);
+  $query->addField('dex_cap', $item['dex_cap']);
+  $query->addField('str_score', $item['str_score']);
+  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
 
   $db->insert($query);
 }
 
-function updateItemWeapon($item)
+function updateItemArmor($item)
 {
   GLOBAL $db;
-  $query = new UpdateQuery('items_weapon');
+  $query = new UpdateQuery('items_armor');
 
-  $query->addField('range_id', $item['range_id']);
-  $query->addField('max_range_id', $item['max_range_id']);
-  $query->addField('ammunition', $item['ammunition']);
-  $query->addField('finesse', $item['finesse']);
-  $query->addField('heavy', $item['heavy']);
-  $query->addField('light', $item['light']);
-  $query->addField('loading', $item['loading']);
-  $query->addField('reach', $item['reach']);
-  $query->addField('thrown', $item['thrown']);
-  $query->addField('two_handed', $item['two_handed']);
+  $query->addField('base_ac', $item['base_ac']);
+  $query->addField('dex_cap', $item['dex_cap']);
+  $query->addField('str_score', $item['str_score']);
+  $query->addField('stealth_disadvantage', $item['stealth_disadvantage']);
 
   $query->addConditionSimple('item_id', $item['id']);
   $db->update($query);
@@ -92,11 +80,11 @@ function updateItemWeapon($item)
 /**
  * @param int $item_id
  */
-function deleteItemWeapon($item_id)
+function deleteItemArmor($item_id)
 {
   GLOBAL $db;
 
-  $query = new DeleteQuery('items_weapon');
+  $query = new DeleteQuery('items_armor');
   $query->addConditionSimple('item_id', $item_id);
   $db->delete($query);
 }

@@ -81,6 +81,8 @@ include ROOT_PATH . '/modules/class/subclass.pg.php';
 include ROOT_PATH . '/modules/item/item.db.php';
 include ROOT_PATH . '/modules/item/item_magic.db.php';
 include ROOT_PATH . '/modules/item/item_weapon.db.php';
+include ROOT_PATH . '/modules/item/item_armor.db.php';
+include ROOT_PATH . '/modules/item/item_damage.db.php';
 include ROOT_PATH . '/modules/item/item.inc.php';
 include ROOT_PATH . '/modules/item/item.pg.php';
 

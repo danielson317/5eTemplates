@@ -73,4 +73,23 @@ function itemFormBehaviors($form)
   $category.change(function(){item_process_is_weapon($(this));});
   item_process_is_weapon($category);
 
+  /***********************
+   * Armor Group.
+   ***********************/
+  let $armor_group = $form.find('.armor_group');
+  function item_process_is_armor($category)
+  {
+    // Armor categories are all 2XX.
+    let category_id = parseInt($category.val());
+    if (category_id >= 200 && category_id < 300)
+    {
+      $armor_group.show();
+    }
+    else
+    {
+      $armor_group.hide();
+    }
+  }
+  $category.change(function(){item_process_is_armor($(this));});
+  item_process_is_armor($category);
 }

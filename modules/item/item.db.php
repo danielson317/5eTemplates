@@ -29,16 +29,6 @@ function installItem()
   $query->addConditionSimple('name', 'items');
   $db->update($query);
 
-  // Item damage - many to many map.
-//  $query = new CreateQuery('item_damages');
-//  $query->addField('id', CreateQuery::TYPE_INTEGER, 0, array('N', 'P', 'A'));
-//  $query->addField('item_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-//  $query->addField('die_count', CreateQuery::TYPE_INTEGER, 0, array('N'));
-//  $query->addField('die_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-//  $query->addField('damage_type_id', CreateQuery::TYPE_INTEGER, 0, array('N'));
-//  $query->addField('versatile', CreateQuery::TYPE_BOOL, 0, array('N'));
-//  $db->create($query);
-
   $sources = array_flip(getSourceList());
 
   // Top level categories.

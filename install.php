@@ -45,6 +45,8 @@ if (!file_exists(DB_PATH))
   installItem(); // Depends on Source.
   installItemMagic();
   installItemWeapon();
+  installItemArmor();
+  installItemDamage();
 
 //  installMonster(); // Depends on Source.
 }
