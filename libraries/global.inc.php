@@ -210,6 +210,16 @@ function getUrlOption($name, $options, $default = FALSE)
   return $_GET[$name];
 }
 
+function getPostOption($name, $options, $default = FALSE)
+{
+  if (!isset($_POST[$name]) || !array_key_exists($_POST[$name], $options))
+  {
+    return $default;
+  }
+
+  return $_POST[$name];
+}
+
 function getUrlOperation()
 {
   $operations = array(
@@ -218,7 +228,18 @@ function getUrlOperation()
     'update' => 'Update',
     'delete' => 'Delete',
   );
-  return getUrlOption('operation', $operations, FALSE);
+  return getUrlOption('operation', $operations);
+}
+
+function getPostOperation()
+{
+  $operations = array(
+    'list' => 'List',
+    'create' => 'Create',
+    'update' => 'Update',
+    'delete' => 'Delete',
+  );
+  return getPostOption('operation', $operations, FALSE);
 }
 
 function redirect($path, $statusCode = '303', $attr = array())

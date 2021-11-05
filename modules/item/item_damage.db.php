@@ -64,12 +64,25 @@ function updateItemDamage($item_damage)
 {
   GLOBAL $db;
 
-  $query = new InsertQuery('items_damage');
+  $query = new UpdateQuery('items_damage');
   $query->addField('die_count', $item_damage['die_count']);
   $query->addField('die_id', $item_damage['die_id']);
   $query->addField('damage_type_id', $item_damage['damage_type_id']);
   $query->addField('versatile', $item_damage['versatile']);
 
-  $query->addConditionSimple('id', $item_damage['id']);
-  return $db->insert($query);
+  $query->addConditionSimple('id', $item_damage['item_damage_id']);
+  $db->update($query);
+}
+
+
+/**
+ * @param int $item_damage_id
+ */
+function deleteItemDamage(int $item_damage_id)
+{
+  GLOBAL $db;
+
+  $query = new DeleteQuery('items_damage');
+  $query->addConditionSimple('id', $item_damage_id);
+  $db->delete($query);
 }

@@ -85,6 +85,7 @@ include ROOT_PATH . '/modules/item/item_armor.db.php';
 include ROOT_PATH . '/modules/item/item_damage.db.php';
 include ROOT_PATH . '/modules/item/item.inc.php';
 include ROOT_PATH . '/modules/item/item.pg.php';
+include ROOT_PATH . '/modules/item/item_damage.pg.php';
 
 include ROOT_PATH . '/modules/language/language.db.php';
 include ROOT_PATH . '/modules/language/language.pg.php';

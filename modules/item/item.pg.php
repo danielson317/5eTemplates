@@ -306,6 +306,42 @@ function itemUpsertForm()
   $field->setGroup($group);
   $form->addField($field);
 
+  /****************
+   * Damage Group
+   ****************/
+  if ($item['id'])
+  {
+    $group = 'damage_group';
+    $form->addGroup($group);
+
+    // Heading.
+    $field = new FieldMarkup('damage_heading');
+    $field->setValue(htmlWrap('h3', 'Damage'));
+    $field->setGroup($group);
+    $form->addField($field);
+
+    // Operations.
+    $markup = a('Add', '/ajax/item/damage', array('class' => array('create'), 'query' => array('operation' => 'create', 'item_id' => $item['id'])));
+    $field = new FieldMarkup('damage_buttons');
+    $field->setGroup($group)->setValue($markup);
+    $form->addField($field);
+
+    // Table.
+    $item_damages = getItemDamageList($item['id']);
+    $table = new TableTemplate('item_damage');
+    $table->setHeader(array('Damage', 'Type', 'Versatile'));
+    foreach ($item_damages as $item_damage)
+    {
+      $row = array();
+      $row[] = a($item_damage['die_count'] . 'd' . $item_damage['die_id'], '/ajax/item/damage', array('class' => array('update'), 'query' => array('operation' => 'update', 'item_damage_id' => $item_damage['id'])));
+      $row[] = SpellDamageType::getList($item_damage['damage_type_id']);
+      $row[] = $item_damage['versatile'];
+      $table->addRow($row);
+    }
+    $field = new FieldMarkup('damage_table');
+    $field->setGroup($group)->setValue($table->__toString());
+    $form->addField($field);
+  }
   /***********
    * Handlers
    ***********/
@@ -525,145 +561,3 @@ function printItemCard($item)
   return ob_get_clean();
 }
 
-/******************************************************************************
- *
- * Item Damage Upsert
- *
- ******************************************************************************/
-function itemDamageUpsertFormAjax()
-{
-  $response = getAjaxDefaultResponse();
-
-  $operation = getUrlOperation();
-  if ($operation === 'list')
-  {
-    itemDamageListAjax();
-  }
-  if (isset($_SERVER['REQUEST_METHOD']) && ($_SERVER['REQUEST_METHOD'] == 'POST'))
-  {
-    itemDamageUpsertSubmitAjax();
-  }
-
-  $form = new Form('item_damage_form');
-
-  $item_id = getUrlID('item_id');
-  $item_damage_id = getUrlID('item_damage_id');
-  if ($item_damage_id)
-  {
-    $item_damage = getItemDamage($item_damage_id);
-    $form->setValues($item_damage);
-    $operation = 'update';
-    $title = 'Edit Damage Type';
-  }
-  elseif ($item_id)
-  {
-    $operation = 'create';
-    $title = 'Add New Damage Type';
-  }
-  else
-  {
-    $response['status'] = FALSE;
-    $response['data'] = 'Missing parameter item_id.';
-    jsonResponseDie($response);
-    die();
-  }
-  $form->setTitle($title);
-
-  $field = new FieldHidden('operation', $operation);
-  $form->addField($field);
-
-  // Item damage id.
-  $field = new FieldHidden('id');
-  $form->addField($field);
-
-  // Item id.
-  $field = new FieldHidden('item_id');
-  $field->setValue($item_id);
-  $form->addField($field);
-
-  // Die count.
-  $field = new FieldNumber('die_count', 'Number of Dice');
-  $form->addField($field);
-
-  // Die id.
-  $dice = getDieList();
-  $field = new FieldSelect('die_id', 'Die', $dice);
-  $form->addField($field);
-
-  // Damage type id.
-  $damage_types = SpellDamageType::getList();
-  $field = new FieldSelect('damage_type_id', 'Damage Type', $damage_types);
-  $form->addField($field);
-
-  // Versatile.
-  $field = new FieldCheckbox('versatile', 'Versatile');
-  $form->addField($field);
-
-  // Delete
-  if ($operation === 'update')
-  {
-    $field = new FieldSubmit('delete', 'Delete');
-    $form->addField($field);
-  }
-
-  // Submit
-  $field = new FieldSubmit('submit', 'Submit');
-  $form->addField($field);
-
-  $response['data'] = $form->__toString();
-
-  jsonResponseDie($response);
-}
-
-function itemDamageListAjax()
-{
-  $response = getAjaxDefaultResponse();
-  $item_id = getUrlID('item_id');
-
-  // Damage
-  $damage_types = SpellDamageType::getList();
-  $item_damages = getItemDamageList($item_id);
-  $dice = getDieList();
-
-  $output = '';
-  foreach($item_damages as $item_damage)
-  {
-    $row = array();
-    $attr = array(
-      'query' => array(
-        'item_damage_id' => $item_damage['id'],
-      ),
-      'class' => array('item-damage'),
-    );
-    $row[] = a($damage_types[$item_damage['damage_type_id']], '/ajax/item/damage', $attr);
-    $row[] = $item_damage['die_count'] . $dice[$item_damage['die_id']];
-    $row[] = $item_damage['versatile'] ? 'Two-Handed' : '';
-    $output .= TableTemplate::tableRow($row);
-  }
-
-  $response['data'] = $output;
-  jsonResponseDie($response);
-}
-
-function itemDamageUpsertSubmitAjax()
-{
-  $response = getAjaxDefaultResponse();
-  $item_damage = $_POST;
-
-  if (isset($item_damage['delete']))
-  {
-    deleteItemDamage($item_damage['id']);
-  }
-  // Create.
-  elseif ($item_damage['operation'] === 'create')
-  {
-    createItemDamage($item_damage);
-  }
-  // Update.
-  elseif ($item_damage['operation'] === 'update')
-  {
-    updateItemDamage($item_damage);
-  }
-
-  jsonResponseDie($response);
-}

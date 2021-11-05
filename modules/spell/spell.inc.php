@@ -226,17 +226,17 @@ class SpellDamageType
   {
     $list = array(
       SpellDamageType::ACID => 'Acid',
-      SpellDamageType::BLUDGEONING => 'Bl', // Bludgeoning
+      SpellDamageType::BLUDGEONING => 'Bludgeoning', // Bludgeoning
       SpellDamageType::COLD => 'Cold',
       SpellDamageType::FIRE => 'Fire',
       SpellDamageType::FORCE => 'Force',
       SpellDamageType::LIGHTNING => 'Lightning',
       SpellDamageType::NECROTIC => 'Necrotic',
-      SpellDamageType::PIERCING => 'Pi', // Piercing
+      SpellDamageType::PIERCING => 'Piercing', // Piercing
       SpellDamageType::POISON => 'Poison',
       SpellDamageType::PSYCHIC => 'Psychic',
       SpellDamageType::RADIANT => 'Radiant',
-      SpellDamageType::SLASHING => 'Sl', // Slashing
+      SpellDamageType::SLASHING => 'Slashing', // Slashing
       SpellDamageType::THUNDER => 'Thunder',
     );
 
