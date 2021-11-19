@@ -97,6 +97,17 @@ function getItemPager($page = 1)
   $query->addField('thrown', 'thrown', 'iw');
   $query->addField('two_handed', 'two_handed', 'iw');
 
+  // Join Weapon Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'ia');
+  $table = new QueryTable('items_armor', 'ia', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_armor', 'ia');
+  $query->addField('base_ac', 'base_ac', 'ia');
+  $query->addField('dex_cap', 'dex_cap', 'ia');
+  $query->addField('str_score', 'str_score', 'ia');
+  $query->addField('stealth_disadvantage', 'stealth_disadvantage', 'ia');
+
   $query->addOrderSimple('category_id')->addOrderSimple('name');
   $query->addPager($page);
 //  $query->setDebug('die');

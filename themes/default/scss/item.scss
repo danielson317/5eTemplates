@@ -76,6 +76,10 @@ table.item-print-list
 
 #item_form
 {
+  h3
+  {
+    margin: 0;
+  }
   h1, .field.submit
   {
     float: left;
@@ -117,5 +121,19 @@ table.item-print-list
   .weapon_group, .armor_group
   {
     display: none;
+  }
+  .damage_group
+  {
+    .damage_buttons
+    {
+      float: right;
+      clear: none;
+    }
+    .damage_table,
+    .damage_table table
+    {
+      width: 100%;
+      box-sizing: border-box;
+    }
   }
 }

@@ -160,7 +160,7 @@ function itemFormBehaviors($form)
         die_count: $modal.find('input[name="die_count"]').val(),
         die_id: $modal.find('select[name="die_id"]').val(),
         damage_type_id: $modal.find('select[name="damage_type_id"]').val(),
-        versatile: $modal.find('input[name="versatile"]').val(),
+        versatile: $modal.find('input[name="versatile"]').prop('checked') ? 1 : 0,
       }
       $.post(url, values, function(response)
       {

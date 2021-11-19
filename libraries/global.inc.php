@@ -539,6 +539,10 @@ function _sanitizeXssHelper($m, $store = FALSE)
   return "<$elem$attr2$xhtml_slash>";
 }
 
+function formatBool($value)
+{
+  return $value ? 'Yes' : 'No';
+}
 /******************************************************************************
  *
  * Global Lists.

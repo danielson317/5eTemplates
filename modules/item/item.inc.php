@@ -258,3 +258,22 @@ function itemFormatWeaponProperties($item)
 
   return $properties;
 }
+
+function itemFormatArmorProperties($item)
+{
+  $properties = $item['base_ac'];
+  if ($item['dex_cap'] >= 0)
+  {
+    $properties .= ' + DEX';
+  }
+  if ($item['dex_cap'] > 0)
+  {
+    $properties .= '(' . $item['dex_cap'] . ')';
+  }
+  if ($item['stealth_disadvantage'])
+  {
+     $properties .= ' [Dis Stealth]';
+  }
+
+  return $properties;
+}

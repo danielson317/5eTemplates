@@ -150,7 +150,7 @@ function itemDamageListAjax()
     $row = array();
     $row[] = a($item_damage['die_count'] . 'd' . $item_damage['die_id'], '/ajax/item/damage', array('class' => array('update'), 'query' => array('operation' => 'update', 'item_damage_id' => $item_damage['id'])));
     $row[] = SpellDamageType::getList($item_damage['damage_type_id']);
-    $row[] = $item_damage['versatile'];
+    $row[] = formatBool($item_damage['versatile']);
     $table->addRow($row);
   }
 

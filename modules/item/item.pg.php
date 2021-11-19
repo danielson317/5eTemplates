@@ -51,6 +51,10 @@ function itemList()
     {
       $group .= lineItem('Weapon', itemFormatWeaponProperties($item));
     }
+    if (ItemCategory::isArmor($item['category_id']) && $item['is_armor'])
+    {
+      $group .= lineItem('Armor', itemFormatArmorProperties($item));
+    }
     $group .= htmlWrap('strong', 'Description: ') . $item['description'];
     $output .= htmlWrap('div', $group, array('class' => array('item')));
   }
@@ -309,7 +313,7 @@ function itemUpsertForm()
   /****************
    * Damage Group
    ****************/
-  if ($item['id'])
+  if ($item_id)
   {
     $group = 'damage_group';
     $form->addGroup($group);
@@ -335,7 +339,7 @@ function itemUpsertForm()
       $row = array();
       $row[] = a($item_damage['die_count'] . 'd' . $item_damage['die_id'], '/ajax/item/damage', array('class' => array('update'), 'query' => array('operation' => 'update', 'item_damage_id' => $item_damage['id'])));
       $row[] = SpellDamageType::getList($item_damage['damage_type_id']);
-      $row[] = $item_damage['versatile'];
+      $row[] = formatBool($item_damage['versatile']);
       $table->addRow($row);
     }
     $field = new FieldMarkup('damage_table');
