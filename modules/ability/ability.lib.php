@@ -7,5 +7,5 @@ function getAbilityModifier($score)
 
 function getSkillModifier($ability_score, $level, $proficiency_multiplier)
 {
-  return floor(getCharacterProficiencyBonus($level) * $proficiency_multiplier) + getAbilityModifier($ability_score);
+  return floor(getCharacterProficiencyBonusForLevel($level) * $proficiency_multiplier) + getAbilityModifier($ability_score);
 }

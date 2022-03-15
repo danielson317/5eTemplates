@@ -172,7 +172,7 @@ $(document).ready(function()
             character_id: $wrapper.find('[name="character_id"]').val(),
             class_id: $wrapper.find('[name="class_id"]').val()
           };
-        $.post(url, values, function ()
+        $.post(url, values, function()
         {
           $classes.refresh();
           modalHide();
@@ -181,11 +181,11 @@ $(document).ready(function()
     }
 
     /**********************
-     * abilities.
+     * Abilities.
      **********************/
-    var $abilities = $('.field.ability');
+    let $abilities = $('.field.ability');
     // View - Refresh the list.
-    $abilities.refresh(function ()
+    $abilities.refresh(function()
     {
       let url = '/ajax/character/ability';
       let values =
@@ -204,7 +204,7 @@ $(document).ready(function()
     });
 
     // Create - Add new character ability.
-    $abilities.click(function (e)
+    $abilities.find('a.add-ability').click(function(e)
     {
       e.preventDefault();
       let url = '/ajax/character/ability';
@@ -217,7 +217,7 @@ $(document).ready(function()
       $.get(url, values, function (response)
       {
         let $modal = modalShow(response['data']);
-        characterabilityBehaviors($modal, 'create');
+        characterAbilityBehaviors($modal, 'create');
       })
     });
 
@@ -227,20 +227,20 @@ $(document).ready(function()
       e.preventDefault();
       let url = '/ajax/character/ability';
       let values =
-        {
-          operation: 'update',
-          character_id: getUrlParameter('character_id', $(this).attr('href')),
-          ability_id: getUrlParameter('ability_id', $(this).attr('href'))
-        };
+      {
+        operation: 'update',
+        character_id: getUrlParameter('character_id', $(this).attr('href')),
+        ability_id: getUrlParameter('ability_id', $(this).attr('href'))
+      };
 
       $.get(url, values, function (response)
       {
         var $modal = modalShow(response['data']);
-        characterabilityBehaviors($modal, 'update');
+        characterAbilityBehaviors($modal, 'update');
       })
     });
 
-    function characterabilityBehaviors($wrapper, $operation)
+    function characterAbilityBehaviors($wrapper, $operation)
     {
       // Submit.
       $wrapper.find('.field.submit input').click(function (e)
@@ -253,9 +253,7 @@ $(document).ready(function()
             character_id: $wrapper.find('[name="character_id"]').val(),
             ability_id: $wrapper.find('[name="ability_id"]').val(),
             score: $wrapper.find('[name="score"]').val(),
-            modifier: $wrapper.find('[name="modifier"]').val(),
-            proficiency: $wrapper.find('[name="proficiency"]').val(),
-            saving_throw: $wrapper.find('[name="saving_throw"]').val()
+            proficiency_multiplier: $wrapper.find('[name="proficiency_multiplier"]').val(),
           };
         $.post(url, values, function ()
         {
@@ -287,8 +285,9 @@ $(document).ready(function()
      * Skills.
      **********************/
     let $skills = $('.field.skills');
+
     // View - Refresh the list.
-    $skills.refresh(function ()
+    $skills.refresh(function()
     {
       let url = '/ajax/character/skill';
       let values =
@@ -297,7 +296,7 @@ $(document).ready(function()
           character_id: getUrlParameter('id')
         };
 
-      $.get(url, values, function (response)
+      $.get(url, values, function(response)
       {
         if (response['status'])
         {
@@ -307,7 +306,7 @@ $(document).ready(function()
     });
 
     // Create - Add new character skill.
-    $('.add-skill').click(function (e)
+    $skills.find('.add-skill').click(function(e)
     {
       e.preventDefault();
       let url = '/ajax/character/skill';
@@ -317,7 +316,7 @@ $(document).ready(function()
           character_id: getUrlParameter('id')
         };
 
-      $.get(url, values, function (response)
+      $.get(url, values, function(response)
       {
         let $modal = modalShow(response['data']);
         characterSkillBehaviors($modal, 'create');
@@ -325,7 +324,7 @@ $(document).ready(function()
     });
 
     // Update - Edit character skill.
-    $skills.on('click', 'a.skill', function (e)
+    $skills.on('click', 'a.skill', function(e)
     {
       e.preventDefault();
       let url = '/ajax/character/skill';
@@ -336,7 +335,7 @@ $(document).ready(function()
           skill_id: getUrlParameter('skill_id', $(this).attr('href'))
         };
 
-      $.get(url, values, function (response)
+      $.get(url, values, function(response)
       {
         let $modal = modalShow(response['data']);
         characterSkillBehaviors($modal, 'update');

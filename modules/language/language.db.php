@@ -144,14 +144,14 @@ function getLanguagePager($page = 1)
 /**
  * @return array
  */
-function getLanguageList()
+function getLanguageList($id = FALSE)
 {
   GLOBAL $db;
 
   $query = new SelectQuery('languages');
   $query->addField('id')->addField('name', 'value');
 
-  return $db->selectList($query);
+  return $db->selectList($query, $id);
 }
 
 /**

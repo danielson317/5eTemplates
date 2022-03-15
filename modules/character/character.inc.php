@@ -239,7 +239,24 @@ function getGenderList($id = FALSE)
   return getListItem($list, $id);
 }
 
-function getCharacterProficiencyBonus($level)
+function getCharacterProficiencyBonusForLevel($level)
 {
   return floor((7 + $level) / 4);
+}
+
+function getCharacterLevel($character_id)
+{
+  $class_list = getCharacterClassList($character_id);
+  $level = 0;
+  foreach ($class_list as $class)
+  {
+    $level += $class['level'];
+  }
+  return $level;
+}
+
+function getCharacterProficiencyBonus($character_id)
+{
+  $level = getCharacterLevel($character_id);
+  return getCharacterProficiencyBonusForLevel($level);
 }

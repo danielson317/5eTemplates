@@ -273,6 +273,29 @@ function characterWizardProficiencyForm()
   $field = new FieldHidden('character_id', $character_id);
   $form->addField($field);
 
+  /***********************
+   * Markup
+   ***********************/
+  $languages = array();
+  $character_language_list = getCharacterLanguageList($character_id);
+  foreach($character_language_list as $language_id)
+  {
+    $languages[] = htmlWrap('span', htmlWrap('span', getLanguageList($language_id)) . ' ' . a('(x)', '/ajax/character/language', array('query' => array('operation' => 'delete', 'language_id' => $language_id))), array('class' => array('language'), 'language_id' => $language_id));
+  }
+  // List
+  $markup = htmlWrap('h3', 'Proficiencies');
+  $markup .= lineItem('Language', implode(',', $languages), array('class' => array('language')));
+  $markup .= lineItem('Weapon', '', array('class' => array('weapon')));
+  $markup .= lineItem('Armor', '', array('class' => array('armor')));
+  $markup .= lineItem('Tools', '', array('class' => array('tool')));
+//  $markup .= lineItem('Gods', '', array('class' => array('god')));
+  $markup = htmlWrap('div', $markup, array('class' => array('proficiencies')));
+  $field = new FieldMarkup('proficiency_list', '<none>', $markup);
+  $form->addField($field);
+
+  /***********************
+   * Selections
+   ***********************/
   // Language.
   $field = new FieldMarkup('language_list', 'Languages');
   $form->addField($field);

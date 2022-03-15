@@ -55,7 +55,7 @@ function getRegistry($path = FALSE)
     'unknown' => 'unknown',
 
     // Ajax.
-    'ajax/character/ability' => 'characterabilityUpsertFormAjax',
+    'ajax/character/ability' => 'characterAbilityUpsertFormAjax',
     'ajax/character/class' => 'characterClassUpsertFormAjax',
     'ajax/character/language' => 'characterLanguageUpsertFormAjax',
     'ajax/character/item-proficiency' => 'characterItemProficiencyUpsertFormAjax',

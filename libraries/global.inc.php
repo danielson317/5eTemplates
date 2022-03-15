@@ -331,12 +331,18 @@ function optionList($list, $selected = FALSE)
   return $output;
 }
 
-function lineItem($label, $value)
+function lineItem($label, $value, $attr = array())
 {
   $output = '';
   $output .= htmlWrap('strong', $label . ': ', array('class' => array('label')));
   $output .= htmlWrap('span', $value, array('class' => array('value')));
-  $output = htmlWrap('span', $output, array('class' => 'line-item'));
+
+  if (!isset($attr['class']))
+  {
+    $attr['class'] = array();
+  }
+  $attr['class'][] = 'line-item';
+  $output = htmlWrap('span', $output, $attr);
   $output .= '<br>';
 
   return $output;
