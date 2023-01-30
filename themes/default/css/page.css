@@ -166,9 +166,15 @@ table.print-list .column-2 {
 }
 
 /* line 211, ../scss/page.scss */
+body.print-page {
+  width: 820px;
+  margin: 15px;
+}
+
+/* line 217, ../scss/page.scss */
 .print-card {
-  width: 212px;
-  height: 300px;
+  width: 230px;
+  height: 328px;
   float: left;
   padding: 5px;
   border: 1px solid black;
@@ -177,7 +183,7 @@ table.print-list .column-2 {
   page-break-inside: avoid;
 }
 
-/* line 227, ../scss/page.scss */
+/* line 231, ../scss/page.scss */
 #cover {
   position: fixed;
   top: 0;
@@ -189,7 +195,7 @@ table.print-list .column-2 {
   opacity: 0.2;
 }
 
-/* line 240, ../scss/page.scss */
+/* line 244, ../scss/page.scss */
 #modal {
   position: fixed;
   top: 100px;
@@ -203,24 +209,24 @@ table.print-list .column-2 {
   border-radius: 5px;
   box-shadow: 0 5px 5px 1px #838383;
 }
-/* line 256, ../scss/page.scss */
+/* line 260, ../scss/page.scss */
 #modal #close-modal {
   position: absolute;
   right: 20px;
   top: 10px;
   cursor: pointer;
 }
-/* line 264, ../scss/page.scss */
+/* line 268, ../scss/page.scss */
 #modal h1 {
   font-size: 16px;
   margin: 0;
 }
-/* line 269, ../scss/page.scss */
+/* line 273, ../scss/page.scss */
 #modal .field.submit {
   float: right;
 }
 
-/* line 275, ../scss/page.scss */
+/* line 279, ../scss/page.scss */
 input[name="submit"] {
   background-color: #5C9632;
   padding: 5px;

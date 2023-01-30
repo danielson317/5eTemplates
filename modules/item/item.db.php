@@ -97,7 +97,7 @@ function getItemPager($page = 1)
   $query->addField('thrown', 'thrown', 'iw');
   $query->addField('two_handed', 'two_handed', 'iw');
 
-  // Join Weapon Table.
+  // Join Armor Table.
   $condition = new QueryCondition('id', 'i');
   $condition->setValueField('item_id', 'ia');
   $table = new QueryTable('items_armor', 'ia', QueryTable::LEFT_JOIN, $condition);
@@ -161,7 +161,7 @@ function getItem($item_id)
 {
   GLOBAL $db;
 
-  $query = new SelectQuery('items');
+  $query = new SelectQuery('items', 'i');
 
   // All items.
   $query->addField('id');
@@ -172,6 +172,43 @@ function getItem($item_id)
   $query->addField('description');
   $query->addField('source_id');
   $query->addField('source_location');
+
+  // Join Magic Item Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'im');
+  $table = new QueryTable('items_magic', 'im', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_magic', 'im');
+  $query->addField('rarity_id', 'rarity_id', 'im');
+  $query->addField('attunement', 'attunement', 'im');
+
+  // Join Weapon Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'iw');
+  $table = new QueryTable('items_weapon', 'iw', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_weapon', 'iw');
+  $query->addField('range_id', 'range_id', 'iw');
+  $query->addField('max_range_id', 'max_range_id', 'iw');
+  $query->addField('ammunition', 'ammunition', 'iw');
+  $query->addField('finesse', 'finesse', 'iw');
+  $query->addField('heavy', 'heavy', 'iw');
+  $query->addField('light', 'light', 'iw');
+  $query->addField('loading', 'loading', 'iw');
+  $query->addField('reach', 'reach', 'iw');
+  $query->addField('thrown', 'thrown', 'iw');
+  $query->addField('two_handed', 'two_handed', 'iw');
+
+  // Join Armor Table.
+  $condition = new QueryCondition('id', 'i');
+  $condition->setValueField('item_id', 'ia');
+  $table = new QueryTable('items_armor', 'ia', QueryTable::LEFT_JOIN, $condition);
+  $query->addTable($table);
+  $query->addField('item_id', 'is_armor', 'ia');
+  $query->addField('base_ac', 'base_ac', 'ia');
+  $query->addField('dex_cap', 'dex_cap', 'ia');
+  $query->addField('str_score', 'str_score', 'ia');
+  $query->addField('stealth_disadvantage', 'stealth_disadvantage', 'ia');
 
   $query->addConditionSimple('id', $item_id);
 

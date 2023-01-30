@@ -464,7 +464,6 @@ function itemPrintForm()
   $table->setAttr('class', array('item-print-list', 'print-list'));
   $table->setHeader(array('Qty', 'Name', 'Value', 'Type', 'Description'));
 
-  $item_types = getItemTypeList();
   foreach($items as $item)
   {
     $row = array();
@@ -503,7 +502,7 @@ function itemPrintForm()
 
     $row[] = $item['name'];
     $row[] = $item['value'];
-    $row[] = $item_types[$item['item_type_id']];
+    $row[] = ItemCategory::getList($item['category_id']);
     $row[] = $item['description'];
     $table->addRow($row);
   }
@@ -532,11 +531,11 @@ function itemPrintSubmit()
   $template = new HTMLTemplate();
   $template->addCssFilePath('/themes/default/css/item.css');
   $template->setTitle('Print Items');
+  $template->setBodyAttr(array('class' => array('print-page')));
 
   $output = '';
   $items = $_POST;
   unset($items['print']);
-  $item_types = getItemTypeList();
   foreach($items as $item_id => $qty)
   {
     if (!$qty || $qty < 0)
@@ -546,7 +545,8 @@ function itemPrintSubmit()
     for ($k = 0; $k < $qty; $k++)
     {
       $item = getItem($item_id);
-      $item['type'] = $item_types[$item['item_type_id']];
+      $item['value'] = number_format($item['value'] / 100, 0) . ' GP';
+      $item['type'] = ItemCategory::getList($item['category_id']);;
       $item['attunement'] = $item['attunement'] ? 'A' : '';
       $output .= printItemCard($item);
     }

@@ -8,8 +8,8 @@ class ItemCategory
   const WEAPON = 100;
   const WEAPON_SIMPLE_MELEE = 101;
   const WEAPON_SIMPLE_RANGED = 102;
-  const WEAPON_MARTIAL_MELEE= 103;
-  const WEAPON_MARTIAL_RANGED= 104;
+  const WEAPON_MARTIAL_MELEE = 103;
+  const WEAPON_MARTIAL_RANGED = 104;
 
   // Armor
   const ARMOR = 200;
@@ -45,14 +45,16 @@ class ItemCategory
   const CONSUMABLE_FOOD = 801;
   const CONSUMABLE_DRINK = 802;
   const CONSUMABLE_POTION = 803;
+  const CONSUMABLE_AMMUNITION = 804;
+  const CONSUMABLE_ENCHANTED_ITEM = 805;
 
   // Services
   const SERVICE = 900;
   const SERVICE_TRANSPORT = 901;
   const SERVICE_LODGING = 902;
   const SERVICE_HIRELING = 903;
-  const SERVICE_TAXES = 904; // Tolls, Cover Charge, Property, Even illigitimateEtc
-  const SERVICE_PROFESSIONAL = 905; // Any skilled artisen service.
+  const SERVICE_TAXES = 904; // Tolls, Cover Charge, Property, Even illegitimate, Etc
+  const SERVICE_PROFESSIONAL = 905; // Any skilled artisan service.
 
   // Trinkets
   const TRINKET = 1000;
@@ -88,6 +90,11 @@ class ItemCategory
       ItemCategory::MOUNT => 'Mount or Vehicle',
       ItemCategory::TRADE => 'Trade Good',
       ItemCategory::CONSUMABLE => 'Consumable',
+        ItemCategory::CONSUMABLE_FOOD => 'Food',
+        ItemCategory::CONSUMABLE_DRINK => 'Drink',
+        ItemCategory::CONSUMABLE_POTION => 'Potion',
+        ItemCategory::CONSUMABLE_AMMUNITION => 'Ammunition',
+        ItemCategory::CONSUMABLE_ENCHANTED_ITEM => 'Enchanted Item',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',
@@ -122,6 +129,11 @@ class ItemCategory
       ItemCategory::MOUNT => 'Mount or Vehicle',
       ItemCategory::TRADE => 'Trade Good',
       ItemCategory::CONSUMABLE => 'Consumable',
+        ItemCategory::CONSUMABLE_FOOD => '--Food',
+        ItemCategory::CONSUMABLE_DRINK => '--Drink',
+        ItemCategory::CONSUMABLE_POTION => '--Potion',
+        ItemCategory::CONSUMABLE_AMMUNITION => '--Ammunition',
+        ItemCategory::CONSUMABLE_ENCHANTED_ITEM => '--Enchanted Item',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',

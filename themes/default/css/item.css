@@ -1,4 +1,4 @@
-/* line 5, ../scss/item.scss */
+/* line 6, ../scss/item.scss */
 .print-card.item .name {
   text-align: center;
   font-weight: bold;
@@ -6,42 +6,42 @@
   background-color: #D4B26A;
   padding: 5px;
 }
-/* line 14, ../scss/item.scss */
+/* line 15, ../scss/item.scss */
 .print-card.item .abilities {
   height: 18px;
   background-color: #FFE3AA;
   padding: 5px;
 }
-/* line 20, ../scss/item.scss */
+/* line 21, ../scss/item.scss */
 .print-card.item .abilities .type,
 .print-card.item .abilities .magic,
 .print-card.item .abilities .attunement {
   float: left;
 }
-/* line 26, ../scss/item.scss */
+/* line 27, ../scss/item.scss */
 .print-card.item .abilities .type {
   width: 130px;
 }
-/* line 30, ../scss/item.scss */
+/* line 31, ../scss/item.scss */
 .print-card.item .abilities .value {
   float: right;
   text-align: right;
 }
-/* line 36, ../scss/item.scss */
+/* line 37, ../scss/item.scss */
 .print-card.item .description {
   clear: left;
   float: left;
   padding: 5px;
 }
 
-/* line 48, ../scss/item.scss */
+/* line 49, ../scss/item.scss */
 #items .items {
   margin-left: 20px;
   margin-right: 20px;
   border-top: 2px solid #553900;
   padding-top: 5px;
 }
-/* line 55, ../scss/item.scss */
+/* line 56, ../scss/item.scss */
 #items .items .item {
   float: left;
   clear: left;
@@ -51,54 +51,54 @@
   margin-bottom: 5px;
 }
 
-/* line 70, ../scss/item.scss */
+/* line 71, ../scss/item.scss */
 table.item-print-list .column-3 {
   width: 100px;
   text-align: right;
 }
 
-/* line 79, ../scss/item.scss */
+/* line 80, ../scss/item.scss */
 #item_form h3 {
   margin: 0;
 }
-/* line 83, ../scss/item.scss */
+/* line 84, ../scss/item.scss */
 #item_form h1, #item_form .field.submit {
   float: left;
   margin: 10px 0 0 0;
 }
-/* line 88, ../scss/item.scss */
+/* line 89, ../scss/item.scss */
 #item_form .field.submit {
   clear: none;
   margin: 15px 0 0 10px;
 }
-/* line 93, ../scss/item.scss */
+/* line 94, ../scss/item.scss */
 #item_form .base_group {
   clear: left;
 }
-/* line 97, ../scss/item.scss */
+/* line 98, ../scss/item.scss */
 #item_form .field_group {
   width: 300px;
   margin-right: 10px;
 }
-/* line 102, ../scss/item.scss */
+/* line 103, ../scss/item.scss */
 #item_form .field_group input, #item_form .field_group select, #item_form .field_group textarea {
   max-width: 300px;
   box-sizing: border-box;
 }
-/* line 112, ../scss/item.scss */
+/* line 113, ../scss/item.scss */
 #item_form .magic_group .field.rarity_id, #item_form .magic_group .field.bonus, #item_form .magic_group .field.attunement, #item_form .magic_group .field.attunement_requirements {
   display: none;
 }
-/* line 121, ../scss/item.scss */
+/* line 122, ../scss/item.scss */
 #item_form .weapon_group, #item_form .armor_group {
   display: none;
 }
-/* line 127, ../scss/item.scss */
+/* line 128, ../scss/item.scss */
 #item_form .damage_group .damage_buttons {
   float: right;
   clear: none;
 }
-/* line 132, ../scss/item.scss */
+/* line 133, ../scss/item.scss */
 #item_form .damage_group .damage_table,
 #item_form .damage_group .damage_table table {
   width: 100%;

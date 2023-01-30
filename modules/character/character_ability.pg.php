@@ -45,13 +45,19 @@ function characterAbilityUpsertFormAjax()
   }
   $form->setTitle($title);
 
-  $markup = htmlWrap('span', getCharacterProficiencyBonus($character_id), array('class' => array('pb')));
-  $field = new FieldMarkup('pb', 'Proficiency Bonus', $markup);
-  $form->addField($field);
-
   // Character.
   $field = new FieldHidden('character_id');
   $field->setValue($character_id);
+  $form->addField($field);
+
+  // Proficiency bonus.
+  $markup = htmlWrap('span', getCharacterProficiencyBonus($character['id']), array('class' => array('pb')));
+  $field = new FieldMarkup('pb', 'Proficiency Bonus', $markup);
+  $form->addField($field);
+
+  // Ability Score.
+  $markup = htmlWrap('span', getCharacterProficiencyBonus($character['id']), array('class' => array('pb')));
+  $field = new FieldMarkup('pb', 'Ability', $markup);
   $form->addField($field);
 
   // Ability.

@@ -354,8 +354,7 @@ $(document).ready(function()
             operation: $operation,
             character_id: $wrapper.find('[name="character_id"]').val(),
             skill_id: $wrapper.find('[name="skill_id"]').val(),
-            proficiency: $wrapper.find('[name="proficiency"]').val(),
-            modifier: $wrapper.find('[name="modifier"]').val(),
+            proficiency_multiplier: $wrapper.find('[name="proficiency_multiplier"]').val(),
           };
         $.post(url, values, function ()
         {

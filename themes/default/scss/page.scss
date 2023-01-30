@@ -208,13 +208,17 @@ table.print-list
   }
 }
 
+body.print-page
+{
+  width: 820px;
+  margin: 15px;
+}
+
 .print-card
 {
-  // 247px x 350px - Too tall but desired.
-  // 222px x 315px - 8 in landscape but only 6 in portrait.
-  // 212px x 300px - Too short but works.
-  width: 212px;
-  height: 300px;
+  // 230px x 328px - Size of a pokemon card.
+  width: 230px;
+  height: 328px;
   float: left;
   padding: 5px;
   border: 1px solid black;

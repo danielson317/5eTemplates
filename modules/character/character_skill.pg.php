@@ -49,7 +49,8 @@ function characterSkillUpsertFormAjax()
   }
   $form->setTitle($title);
 
-  $markup = htmlWrap('span', $character['pb'], array('class' => array('pb')));
+  // Proficiency bonus.
+  $markup = htmlWrap('span', getCharacterProficiencyBonus($character['id']), array('class' => array('pb')));
   $field = new FieldMarkup('pb', 'Proficiency Bonus', $markup);
   $form->addField($field);
 
@@ -76,6 +77,11 @@ function characterSkillUpsertFormAjax()
     {
       unset($options[$character_skill['skill_id']]);
     }
+    if (empty($options))
+    {
+      $response['status'] = FALSE;
+      $response['data'] = 'All skills defined.';
+    }
     $field = new FieldSelect('skill_id', 'Skill', $options);
     $form->addField($field);
   }
@@ -86,13 +92,8 @@ function characterSkillUpsertFormAjax()
   }
 
   // Proficiency.
-  $field = new FieldNumber('proficiency', 'Proficiency Multiplier');
+  $field = new FieldNumber('proficiency_multiplier', 'Proficiency Multiplier');
   $field->setValue(0);
-  $form->addField($field);
-
-  // Modifier.
-  $field = new FieldNumber('modifier', 'Modifier');
-  $field->setValue(-1);
   $form->addField($field);
 
   // Submit
