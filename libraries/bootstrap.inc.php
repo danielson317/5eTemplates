@@ -19,21 +19,53 @@ date_default_timezone_set('America/Denver');
 // in the messages and debug statements will actually execute.
 //if (DEBUG)
 //{
-//  assert_options(ASSERT_ACTIVE,   TRUE);
-//  assert_options(ASSERT_BAIL,     TRUE);
-//  assert_options(ASSERT_WARNING,  TRUE);
-//  assert_options(ASSERT_CALLBACK, 'assertFailure');
-//  function errorHandler($severity, $message, $file, $line)
-//  {
-//    assert(FALSE, $message);
-//  }
-//
-//  set_error_handler('errorHandler');
+  assert_options(ASSERT_ACTIVE,   TRUE);
+  assert_options(ASSERT_BAIL,     TRUE);
+  assert_options(ASSERT_WARNING,  TRUE);
+  assert_options(ASSERT_CALLBACK, 'assertFailure');
+  function errorHandler($severity, $message, $file, $line)
+  {
+    assert(FALSE, $message);
+  }
+
+  set_error_handler('errorHandler');
 //}
 //else
 //{
 //  assert_options(ASSERT_ACTIVE,   FALSE);
 //}
+
+/**
+ * @see set_error_handler
+ *
+ * @param        $file
+ * @param        $line
+ * @param        $code
+ * @param string $message
+ */
+function assertFailure($file, $line, $code, $message = '')
+{
+  http_response_code(500);
+  echo '<h1>ASSERT FAILURE: </h1>';
+  echo '<span class="assert-message">' . '<strong>' . 'Location' . ':</strong> ' . $file . ' line ' . $line . '</span><br />';
+  echo '<span class="assert-message">' . '<strong>' . 'Message' . ':</strong> ' . $message . '</span><br />';
+  echo '<pre>';
+  error_log('assert: ' . $file . ' ' . $line . ' ' . $message);
+  $backtrace = debug_backtrace();
+  array_shift($backtrace);
+  array_shift($backtrace);
+  foreach($backtrace AS &$stack_item)
+  {
+    if (isset($stack_item['object']))
+    {
+      unset($stack_item['object']);
+    }
+  }
+  $stack = print_r($backtrace, TRUE);
+  error_log($stack);
+  echo $stack;
+  die('</pre>');
+}
 
 /****************
  * Libraries.

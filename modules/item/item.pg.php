@@ -40,9 +40,9 @@ function itemList()
       'query' => array('id' => $item['id']),
     );
     $group = a($item['name'], '/item', $attr) . htmlSolo('br');
-    $group .= lineItem('Category', ItemCategory::getList($item['category_id']));
+    $group .= lineItem('Category', $item['category_id'] ? ItemCategory::getList($item['category_id']) : '');
     $group .= lineItem('Value', $item['value'] ? itemFormatCost($item['value']) : '-');
-    $group .= lineItem('Weight', itemWeightFormat($item['weight']));
+    $group .= lineItem('Weight', itemWeightFormat((int)$item['weight']));
     if ($item['is_magic'])
     {
       $group .= lineItem('Magical', ItemRarity::getList($item['rarity_id']));
@@ -545,7 +545,7 @@ function itemPrintSubmit()
     for ($k = 0; $k < $qty; $k++)
     {
       $item = getItem($item_id);
-      $item['value'] = number_format($item['value'] / 100, 0) . ' GP';
+      $item['value'] = isset($item['value']) && is_numeric($item['value']) ? number_format($item['value'] / 100, 0) . ' GP' : '-';
       $item['type'] = ItemCategory::getList($item['category_id']);;
       $item['attunement'] = $item['attunement'] ? 'A' : '';
       $output .= printItemCard($item);

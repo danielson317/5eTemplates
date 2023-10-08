@@ -300,6 +300,9 @@ function buildAttr($attr)
 
 function htmlWrap($tag, $content, $attr = array())
 {
+  assert(is_array($attr));
+  assert(is_string($tag));
+//  assert(is_string($content));
   return '<' . $tag . buildAttr($attr) . '>' . $content . '</' . $tag . '>';
 }
 
@@ -605,7 +608,7 @@ function iis($array, $key, $default = '')
 
 function getListItem($list, $id = FALSE, $default = FALSE)
 {
-  if (!$id)
+  if ($id === FALSE)
   {
     return $list;
   }

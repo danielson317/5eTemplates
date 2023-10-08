@@ -17,6 +17,7 @@ class ItemCategory
   const ARMOR_MEDIUM = 202;
   const ARMOR_HEAVY = 203;
   const ARMOR_SHIELD = 204;
+  const ARMOR_ACCESSORY = 205;
 
   // Gear
   const GEAR = 300;
@@ -26,7 +27,11 @@ class ItemCategory
   const GEAR_HOLY_SYMBOL = 304;
 
   // Containers
-  const CONTAINER = 4;
+  const CONTAINER = 400;
+  const CONTAINER_BOTTLES = 401; // Jars, Flasks.
+  const CONTAINER_BAGS = 402; // Backpacks, duffles, pouches, purses
+  const CONTAINER_BOXES = 403; // Shipping crates/boxes/jugs, carried but not put in a bag.
+  const CONTAINER_CHESTS = 404; // 2 Person carry furniture, crates, .
 
   // Tools
   const TOOL = 500;
@@ -47,6 +52,7 @@ class ItemCategory
   const CONSUMABLE_POTION = 803;
   const CONSUMABLE_AMMUNITION = 804;
   const CONSUMABLE_ENCHANTED_ITEM = 805;
+  const CONSUMABLE_SPELL_SCROLL = 806;
 
   // Services
   const SERVICE = 900;
@@ -64,25 +70,34 @@ class ItemCategory
   const TREASURE_GEMSTONE = 1101;
   const TREASURE_ART = 1102;
 
+  // Non Items
+  const NON_ITEM = 9900;
+  const NON_ITEM_STATUS = 9901;
+
   public static function getList($key = FALSE)
   {
     $items = array(
       ItemCategory::WEAPON => 'Weapon',
-        ItemCategory::WEAPON_SIMPLE_MELEE => 'Simple Melee Weapon',
-        ItemCategory::WEAPON_SIMPLE_RANGED => 'Simple Ranged Weapon',
-        ItemCategory::WEAPON_MARTIAL_MELEE => 'Simple Martial Weapon',
-        ItemCategory::WEAPON_MARTIAL_RANGED => 'Simple Ranged Weapon',
+        ItemCategory::WEAPON_SIMPLE_MELEE => 'Simple Melee',
+        ItemCategory::WEAPON_SIMPLE_RANGED => 'Simple Ranged',
+        ItemCategory::WEAPON_MARTIAL_MELEE => 'Martial Melee',
+        ItemCategory::WEAPON_MARTIAL_RANGED => 'Martial Ranged',
       ItemCategory::ARMOR => 'Armor',
         ItemCategory::ARMOR_LIGHT => 'Light Armor',
         ItemCategory::ARMOR_MEDIUM => 'Medium Armor',
         ItemCategory::ARMOR_HEAVY => 'Heavy Armor',
         ItemCategory::ARMOR_SHIELD => 'Shield',
+        ItemCategory::ARMOR_ACCESSORY => 'Accessory',
       ItemCategory::GEAR => 'Adventuring Gear',
         ItemCategory::GEAR_AMMUNITION => 'Ammunition',
         ItemCategory::GEAR_ARCANE_FOCUS => 'Arcane Focus',
         ItemCategory::GEAR_DRUIDIC_FOCUS => 'Druidic Focus',
         ItemCategory::GEAR_HOLY_SYMBOL => 'Holy Symbol',
       ItemCategory::CONTAINER => 'Container',
+        ItemCategory::CONTAINER_BOTTLES => 'Bottles, Jars, Jugs, etc',
+        ItemCategory::CONTAINER_BAGS => 'Sacs, Backpacks, Duffles, Purses, Pouches',
+        ItemCategory::CONTAINER_BOXES => 'Shipping Box Crate, 1 person carry',
+        ItemCategory::CONTAINER_CHESTS => 'Furniture, Shelves, Chests, 2 person carry',
       ItemCategory::TOOL => 'Tool',
         ItemCategory::TOOL_ARTISAN => 'Artisan Tool',
         ItemCategory::TOOL_GAMING => 'Gaming Set',
@@ -95,9 +110,12 @@ class ItemCategory
         ItemCategory::CONSUMABLE_POTION => 'Potion',
         ItemCategory::CONSUMABLE_AMMUNITION => 'Ammunition',
         ItemCategory::CONSUMABLE_ENCHANTED_ITEM => 'Enchanted Item',
+        ItemCategory::CONSUMABLE_SPELL_SCROLL => 'Spell Scroll',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',
+      ItemCategory::NON_ITEM => 'Non Item',
+        ItemCategory::NON_ITEM_STATUS => 'Status Condition',
     );
 
     return getListItem($items, $key);
@@ -109,19 +127,24 @@ class ItemCategory
       ItemCategory::WEAPON => 'Weapon',
         ItemCategory::WEAPON_SIMPLE_MELEE => '--Simple Melee Weapon',
         ItemCategory::WEAPON_SIMPLE_RANGED => '--Simple Ranged Weapon',
-        ItemCategory::WEAPON_MARTIAL_MELEE => '--Simple Martial Weapon',
-        ItemCategory::WEAPON_MARTIAL_RANGED => '--Simple Ranged Weapon',
+        ItemCategory::WEAPON_MARTIAL_MELEE => '--Martial Melee Weapon',
+        ItemCategory::WEAPON_MARTIAL_RANGED => '--Martial Ranged Weapon',
       ItemCategory::ARMOR => 'Armor',
         ItemCategory::ARMOR_LIGHT => '--Light Armor',
         ItemCategory::ARMOR_MEDIUM => '--Medium Armor',
         ItemCategory::ARMOR_HEAVY => '--Heavy Armor',
         ItemCategory::ARMOR_SHIELD => '--Shield',
+        ItemCategory::ARMOR_ACCESSORY => '--Accessory',
       ItemCategory::GEAR => 'Adventuring Gear',
         ItemCategory::GEAR_AMMUNITION => '--Ammunition',
         ItemCategory::GEAR_ARCANE_FOCUS => '--Arcane Focus',
         ItemCategory::GEAR_DRUIDIC_FOCUS => '--Druidic Focus',
         ItemCategory::GEAR_HOLY_SYMBOL => '--Holy Symbol',
       ItemCategory::CONTAINER => 'Container',
+        ItemCategory::CONTAINER_BOTTLES => '--Bottles, Jars, Jugs, etc',
+        ItemCategory::CONTAINER_BAGS => '--Sacs, Backpacks, Duffles, Purses, Pouches',
+        ItemCategory::CONTAINER_BOXES => '--Shipping Box Crate, 1 person carry',
+        ItemCategory::CONTAINER_CHESTS => '--Furniture, Shelves, Chests, 2 person carry',
       ItemCategory::TOOL => 'Tool',
         ItemCategory::TOOL_ARTISAN => '--Artisan Tool',
         ItemCategory::TOOL_GAMING => '--Gaming Set',
@@ -134,9 +157,12 @@ class ItemCategory
         ItemCategory::CONSUMABLE_POTION => '--Potion',
         ItemCategory::CONSUMABLE_AMMUNITION => '--Ammunition',
         ItemCategory::CONSUMABLE_ENCHANTED_ITEM => '--Enchanted Item',
+        ItemCategory::CONSUMABLE_SPELL_SCROLL => '--Spell Scroll',
       ItemCategory::SERVICE => 'Service',
       ItemCategory::TRINKET => 'Trinket',
       ItemCategory::TREASURE => 'Treasure',
+      ItemCategory::NON_ITEM => 'Non Item',
+        ItemCategory::NON_ITEM_STATUS => '--Status Condition',
     );
 
     return getListItem($items, $key);
